@@ -1,24 +1,14 @@
-package net.mat0u5.lifeseries.client;
+package net.mat0u5.lifeseries.client.render;
 
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.text.Text;
 
-public class ClientRenderUtils {
-    public static void onInitialize() {
-        HudRenderCallback.EVENT.register(ClientRenderUtils::renderHud);
-    }
-
-    private static void renderHud(DrawContext context, RenderTickCounter renderTickCounter) {
-        renderHud(context);
-    }
-
-    public static void renderHud(DrawContext context) {
+public class TextRenderer {
+    public static void renderText(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         int yPos = client.getWindow().getScaledHeight() - 10;
         yPos += renderSuperpowerCooldown(context, yPos);

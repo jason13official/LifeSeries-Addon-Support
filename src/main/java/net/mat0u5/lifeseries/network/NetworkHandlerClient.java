@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientHandler;
+import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.series.SeriesList;
@@ -88,6 +89,7 @@ public class NetworkHandlerClient {
 
     public static void handleNumberPacket(String name, double number) {
         int intNumber = (int) number;
+        long longNumber = (long) number;
         if (name.equalsIgnoreCase("hunger_version")) {
             Main.LOGGER.info("[PACKET_CLIENT] Updated hunger shuffle version to "+ intNumber);
             Hunger.shuffleVersion = intNumber;
@@ -95,6 +97,10 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("player_min_mspt")) {
             Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to "+ number);
             TimeDilation.MIN_PLAYER_MSPT = (float) number;
+        }
+        if (name.equalsIgnoreCase("show_vignette")) {
+            Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for "+ longNumber);
+            VignetteRenderer.showVignetteFor(0.5f, longNumber);
         }
     }
 

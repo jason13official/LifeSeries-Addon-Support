@@ -14,10 +14,12 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.PlayerDisguise;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.WitherEntity;
@@ -30,6 +32,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -224,6 +229,15 @@ public class WildLife extends Series {
         if (!source.getType().msgId().equalsIgnoreCase("fall")) return;
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
             ci.cancel();
+        }
+    }
+
+    @Override
+    public void onRightClickEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
+            if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof SuperPunch power) {
+                power.tryRideEntity(entity);
+            }
         }
     }
 }

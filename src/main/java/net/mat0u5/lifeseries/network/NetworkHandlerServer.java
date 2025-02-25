@@ -154,6 +154,11 @@ public class NetworkHandlerServer {
         }
     }
 
+    public static void sendVignette(ServerPlayerEntity player, double durationMillis) {
+        NumberPayload payload = new NumberPayload("show_vignette", durationMillis);
+        ServerPlayNetworking.send(player, payload);
+    }
+
     public static void tryKickFailedHandshake(ServerPlayerEntity player) {
         if (server == null) return;
         if (currentSeries.getSeries() != SeriesList.WILD_LIFE) return;

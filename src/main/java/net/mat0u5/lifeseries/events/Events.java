@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DatapackManager;
@@ -30,6 +31,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -64,6 +66,7 @@ public class Events {
         ServerTickEvents.END_SERVER_TICK.register(Events::onServerTickEnd);
 
         ServerLivingEntityEvents.AFTER_DEATH.register(Events::onEntityDeath);
+        UseEntityCallback.EVENT.register(Events::onRightClickEntity);
     }
 
     private static void onReload(MinecraftServer server, LifecycledResourceManager resourceManager) {
@@ -201,7 +204,22 @@ public class Events {
             return blacklist.onBlockAttack(player,world,pos);
         } catch(Exception e) {
             Main.LOGGER.error(e.getMessage());
-            return ActionResult.PASS;}
+            return ActionResult.PASS;
+        }
+    }
+
+    private static ActionResult onRightClickEntity(PlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+        if (isFakePlayer(player)) return ActionResult.PASS;
+
+        try {
+            if (!Main.isLogicalSide()) return ActionResult.PASS;
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                currentSeries.onRightClickEntity(serverPlayer, world, hand, entity, hitResult);
+            }
+        } catch(Exception e) {
+            Main.LOGGER.error(e.getMessage());
+        }
+        return ActionResult.PASS;
     }
 
     /*

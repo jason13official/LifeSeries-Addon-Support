@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -8,6 +10,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Snails;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.mob.EvokerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -62,4 +65,19 @@ public abstract class EntityMixin {
             }
         }
     }
+
+
+    //? if >= 1.21.2 {
+    /*@WrapOperation(
+            method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
+    )
+    private boolean allowRidingPlayers(EntityType instance, Operation<Boolean> original) {
+        if( instance == EntityType.PLAYER) {
+            return true;
+        } else {
+            return original.call(instance);
+        }
+    }
+    *///?}
 }

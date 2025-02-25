@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.DummyInterface;
@@ -13,8 +15,10 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -69,13 +73,15 @@ public abstract class LivingEntityMixin implements DummyInterface {
     public void isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier[] entityYChecks, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity me = (LivingEntity) (Object) this;
         if (me instanceof CreakingEntity creaking) {
-            OtherUtils.log("overr");
             if (creaking.isTeammate(entity)) cir.setReturnValue(false);
         }
     }
     *///?}
 
 
+    /*
+        Morphing
+     */
     public boolean dummy;
     public PlayerEntity player;
 
@@ -101,5 +107,41 @@ public abstract class LivingEntityMixin implements DummyInterface {
         }
     }
 
+    /*
+        Superpowers
+     */
 
+    @Unique
+    private DamageSource lastDamageSource;
+
+
+    //? if <= 1.21 {
+    @Inject(method = "damage", at = @At("HEAD"))
+    private void captureDamageSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.lastDamageSource = source;
+    }
+    //?} else {
+    /*@Inject(method = "damage", at = @At("HEAD"))
+    private void captureDamageSource(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.lastDamageSource = source;
+    }
+    *///?}
+
+    @ModifyArg(
+            method = "damage",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"),
+            index = 0
+    )
+    private double modifyKnockback(double strength) {
+        if (!Main.isLogicalSide()) return strength;
+        if (lastDamageSource != null) {
+            DamageSource source = lastDamageSource;
+            if (source.getAttacker() instanceof ServerPlayerEntity player) {
+                if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
+                    return 3;
+                }
+            }
+        }
+        return strength;
+    }
 }
