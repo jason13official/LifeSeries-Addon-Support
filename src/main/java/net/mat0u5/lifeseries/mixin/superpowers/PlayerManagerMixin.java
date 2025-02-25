@@ -52,7 +52,7 @@ public class PlayerManagerMixin {
         }
     }    */
 
-    /*
+
     @Redirect(method = "onPlayerConnect", at = @At(value = "NEW", target = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/network/ClientConnection;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/server/network/ConnectedClientData;)Lnet/minecraft/server/network/ServerPlayNetworkHandler;"))
     public ServerPlayNetworkHandler onPlayerConnect(MinecraftServer server, ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData) {
         //TODO compatibility with Fabric Carpet
@@ -62,5 +62,5 @@ public class PlayerManagerMixin {
         else {
             return new ServerPlayNetworkHandler(this.server, connection, player, clientData);
         }
-    }*/
+    }
 }
