@@ -110,6 +110,12 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("mimicry_cooldown")) {
             MainClient.MIMICRY_COOLDOWN_TIMESTAMP = number;
         }
+        if (name.startsWith("player_invisible__")) {
+            try {
+                UUID uuid = UUID.fromString(name.replaceFirst("player_invisible__",""));
+                MainClient.invisiblePlayers.put(uuid, number);
+            }catch(Exception e) {}
+        }
     }
 
     public static void handlePlayerDisguise(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) {

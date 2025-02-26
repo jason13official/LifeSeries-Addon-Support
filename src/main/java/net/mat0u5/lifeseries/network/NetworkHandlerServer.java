@@ -154,6 +154,13 @@ public class NetworkHandlerServer {
         }
     }
 
+    public static void sendPlayerInvisible(UUID uuid, long timestamp) {
+        LongPayload payload = new LongPayload("player_invisible__"+uuid.toString(), timestamp);
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            ServerPlayNetworking.send(player, payload);
+        }
+    }
+
     public static void sendVignette(ServerPlayerEntity player, long durationMillis) {
         LongPayload payload = new LongPayload("show_vignette", durationMillis);
         ServerPlayNetworking.send(player, payload);

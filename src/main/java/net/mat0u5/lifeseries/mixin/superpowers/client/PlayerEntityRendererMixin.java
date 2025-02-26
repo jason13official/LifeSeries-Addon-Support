@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.MorphComponent;
 import net.minecraft.client.MinecraftClient;
@@ -31,6 +32,13 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At("HEAD"), cancellable = true)
     public void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
+        if (MainClient.invisiblePlayers.containsKey(abstractClientPlayerEntity.getUuid())) {
+            long time = MainClient.invisiblePlayers.get(abstractClientPlayerEntity.getUuid());
+            if (time > System.currentTimeMillis() || time == -1) {
+                ci.cancel();
+                return;
+            }
+        }
         if(MORPH_COMPONENT.isProvidedBy(abstractClientPlayerEntity)){
             MorphComponent morphComponent = MORPH_COMPONENT.get(abstractClientPlayerEntity);
             LivingEntity dummy = morphComponent.getDummy();
@@ -50,7 +58,14 @@ public class PlayerEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At("HEAD"), cancellable = true)
     public <E extends Entity> void render(Entity entity, double x, double y, double z, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (entity instanceof PlayerEntity) {
+        if (entity instanceof PlayerEntity playerEntity) {
+            if (MainClient.invisiblePlayers.containsKey(playerEntity.getUuid())) {
+                long time = MainClient.invisiblePlayers.get(playerEntity.getUuid());
+                if (time > System.currentTimeMillis() || time == -1) {
+                    ci.cancel();
+                    return;
+                }
+            }
             if(MORPH_COMPONENT.isProvidedBy(entity)){
                 MorphComponent morphComponent = MORPH_COMPONENT.get(entity);
                 LivingEntity dummy = morphComponent.getDummy();

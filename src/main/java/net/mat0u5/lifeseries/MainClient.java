@@ -29,6 +29,8 @@ public class MainClient implements ClientModInitializer {
     public static HashMap<String, String> playerDisguiseNames = new HashMap<>();
     public static HashMap<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
 
+    public static HashMap<UUID, Long> invisiblePlayers = new HashMap<>();
+
     @Override
     public void onInitializeClient() {
         FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
