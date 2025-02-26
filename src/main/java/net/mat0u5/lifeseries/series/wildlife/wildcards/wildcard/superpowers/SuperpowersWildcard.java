@@ -85,7 +85,7 @@ public class SuperpowersWildcard extends Wildcard {
     }
 
     public static boolean hasActivatedPower(ServerPlayerEntity player, Superpowers superpower) {
-        if (!playerSuperpowers.containsKey(player.getUuid())) return false;
+        if (!hasActivePower(player, superpower)) return false;
         Superpower power = playerSuperpowers.get(player.getUuid());
         if (power instanceof Mimicry mimicry && superpower != Superpowers.MIMICRY) {
             return mimicry.getMimickedPower().active;

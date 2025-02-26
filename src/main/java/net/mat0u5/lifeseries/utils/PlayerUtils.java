@@ -23,6 +23,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -187,6 +188,16 @@ public class PlayerUtils {
             return entityHitResult.getEntity();
         }
 
+        return null;
+    }
+    public static Vec3d getPosLookingAt(ServerPlayerEntity player, double maxDistance) {
+        HitResult blockHit = player.raycast(maxDistance, 1, false);
+        if (Math.sqrt(blockHit.squaredDistanceTo(player)) >= (maxDistance*0.99)) {
+            return null;
+        }
+        if (blockHit instanceof BlockHitResult blockHitResult) {
+            return blockHitResult.getPos();
+        }
         return null;
     }
 
