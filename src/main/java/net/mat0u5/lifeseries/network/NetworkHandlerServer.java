@@ -154,8 +154,8 @@ public class NetworkHandlerServer {
         }
     }
 
-    public static void sendVignette(ServerPlayerEntity player, double durationMillis) {
-        NumberPayload payload = new NumberPayload("show_vignette", durationMillis);
+    public static void sendVignette(ServerPlayerEntity player, long durationMillis) {
+        LongPayload payload = new LongPayload("show_vignette", durationMillis);
         ServerPlayNetworking.send(player, payload);
     }
 

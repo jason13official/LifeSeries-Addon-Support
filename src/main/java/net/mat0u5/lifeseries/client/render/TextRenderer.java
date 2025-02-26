@@ -11,6 +11,7 @@ public class TextRenderer {
     public static void renderText(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         int yPos = client.getWindow().getScaledHeight() - 10;
+        yPos += renderMimicryTimer(context, yPos);
         yPos += renderSuperpowerCooldown(context, yPos);
         yPos += renderTriviaTimer(context, yPos);
     }
@@ -46,6 +47,23 @@ public class TextRenderer {
         MinecraftClient client = MinecraftClient.getInstance();
 
         Text timerText = Text.of("§7Superpower cooldown: §f"+OtherUtils.formatTimeMillis(millisLeft));
+
+        int screenWidth = client.getWindow().getScaledWidth();
+        int x = screenWidth - 10;
+        renderTextLeft(context, timerText, x, y);
+
+        return -client.textRenderer.fontHeight-10;
+    }
+
+    public static int renderMimicryTimer(DrawContext context, int y) {
+        if (MainClient.MIMICRY_COOLDOWN_TIMESTAMP == 0) return 0;
+        long currentMillis = System.currentTimeMillis();
+        if (currentMillis >= MainClient.MIMICRY_COOLDOWN_TIMESTAMP) return 0;
+        long millisLeft = MainClient.MIMICRY_COOLDOWN_TIMESTAMP - currentMillis;
+        if (millisLeft > 10000000) return 0;
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        Text timerText = Text.of("§7Mimic power cooldown: §f"+OtherUtils.formatTimeMillis(millisLeft));
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 10;

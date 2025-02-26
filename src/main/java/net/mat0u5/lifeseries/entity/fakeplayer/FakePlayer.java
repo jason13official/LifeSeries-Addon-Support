@@ -133,7 +133,7 @@ public class FakePlayer extends ServerPlayerEntity {
                 ServerPlayerEntity player = getServer().getPlayerManager().getPlayer(shadow);
                 if (player != null) {
                     if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
-                        if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof AstralProjection projection) {
+                        if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
                             projection.clone = this;
                             triggered = true;
                         }
@@ -167,7 +167,7 @@ public class FakePlayer extends ServerPlayerEntity {
             ServerPlayerEntity player = getServer().getPlayerManager().getPlayer(shadow);
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
-                    if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof AstralProjection projection) {
+                    if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
                         //? if <= 1.21 {
                         projection.onDamageClone(source, amount);
                          //?} else {

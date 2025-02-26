@@ -209,7 +209,7 @@ public class WildLife extends Series {
 
     public static void changedPlayerTeam(ServerPlayerEntity player) {
         if (SuperpowersWildcard.hasActivePower(player, Superpowers.CREAKING)) {
-            if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof Creaking creakingPower) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Creaking creakingPower) {
                 creakingPower.deactivate();
             }
         }
@@ -217,12 +217,12 @@ public class WildLife extends Series {
     @Override
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
-            if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof PlayerDisguise power) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof PlayerDisguise power) {
                 power.onTakeDamage();
             }
         }
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ANIMAL_DISGUISE)) {
-            if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof AnimalDisguise power) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AnimalDisguise power) {
                 power.onTakeDamage();
             }
         }
@@ -235,7 +235,7 @@ public class WildLife extends Series {
     @Override
     public void onRightClickEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
-            if (SuperpowersWildcard.playerSuperpowers.get(player.getUuid()) instanceof SuperPunch power) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof SuperPunch power) {
                 power.tryRideEntity(entity);
             }
         }

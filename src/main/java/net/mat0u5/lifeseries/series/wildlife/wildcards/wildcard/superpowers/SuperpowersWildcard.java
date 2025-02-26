@@ -2,11 +2,12 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class SuperpowersWildcard extends Wildcard {
-    public static HashMap<UUID, Superpower> playerSuperpowers = new HashMap<>();
+    private static HashMap<UUID, Superpower> playerSuperpowers = new HashMap<>();
 
     @Override
     public Wildcards getType() {
@@ -25,7 +26,7 @@ public class SuperpowersWildcard extends Wildcard {
 
     @Override
     public void activate() {
-        resetAllSuperpowers();
+        rollRandomSuperpowers();
         super.activate();
     }
 
@@ -35,10 +36,8 @@ public class SuperpowersWildcard extends Wildcard {
         super.deactivate();
     }
 
-    @Override
-    public void softTick() {
+    public static void onTick() {
         playerSuperpowers.values().forEach(Superpower::tick);
-        super.softTick();
     }
 
     public static void resetAllSuperpowers() {
@@ -61,13 +60,6 @@ public class SuperpowersWildcard extends Wildcard {
         PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
     }
 
-    public static Superpowers getSuperpower(ServerPlayerEntity player) {
-        if (playerSuperpowers.containsKey(player.getUuid())) {
-            return playerSuperpowers.get(player.getUuid()).getSuperpower();
-        }
-        return Superpowers.NONE;
-    }
-
     public static void setSuperpower(ServerPlayerEntity player, Superpowers superpower) {
         if (playerSuperpowers.containsKey(player.getUuid())) {
             playerSuperpowers.get(player.getUuid()).turnOff();
@@ -85,11 +77,40 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static boolean hasActivePower(ServerPlayerEntity player, Superpowers superpower) {
         if (!playerSuperpowers.containsKey(player.getUuid())) return false;
-        return playerSuperpowers.get(player.getUuid()).getSuperpower() == superpower;
+        Superpower power = playerSuperpowers.get(player.getUuid());
+        if (power instanceof Mimicry mimicry && superpower != Superpowers.MIMICRY) {
+            return mimicry.getMimickedPower().getSuperpower() == superpower;
+        }
+        return power.getSuperpower() == superpower;
     }
 
     public static boolean hasActivatedPower(ServerPlayerEntity player, Superpowers superpower) {
         if (!playerSuperpowers.containsKey(player.getUuid())) return false;
-        return playerSuperpowers.get(player.getUuid()).active;
+        Superpower power = playerSuperpowers.get(player.getUuid());
+        if (power instanceof Mimicry mimicry && superpower != Superpowers.MIMICRY) {
+            return mimicry.getMimickedPower().active;
+        }
+        return power.active;
+    }
+
+    public static Superpowers getSuperpower(ServerPlayerEntity player) {
+        if (playerSuperpowers.containsKey(player.getUuid())) {
+            Superpower power = playerSuperpowers.get(player.getUuid());
+            if (power instanceof Mimicry mimicry) {
+                return mimicry.getMimickedPower().getSuperpower();
+            }
+            return power.getSuperpower();
+        }
+        return Superpowers.NONE;
+    }
+
+    @Nullable
+    public static Superpower getSuperpowerInstance(ServerPlayerEntity player) {
+        if (!playerSuperpowers.containsKey(player.getUuid())) return null;
+        Superpower power = playerSuperpowers.get(player.getUuid());
+        if (power instanceof Mimicry mimicry) {
+            return mimicry.getMimickedPower();
+        }
+        return power;
     }
 }

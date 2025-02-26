@@ -89,7 +89,6 @@ public class NetworkHandlerClient {
 
     public static void handleNumberPacket(String name, double number) {
         int intNumber = (int) number;
-        long longNumber = (long) number;
         if (name.equalsIgnoreCase("hunger_version")) {
             Main.LOGGER.info("[PACKET_CLIENT] Updated hunger shuffle version to "+ intNumber);
             Hunger.shuffleVersion = intNumber;
@@ -98,15 +97,18 @@ public class NetworkHandlerClient {
             Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to "+ number);
             TimeDilation.MIN_PLAYER_MSPT = (float) number;
         }
-        if (name.equalsIgnoreCase("show_vignette")) {
-            Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for "+ longNumber);
-            VignetteRenderer.showVignetteFor(0.5f, longNumber);
-        }
     }
 
     public static void handleLongPacket(String name, long number) {
         if (name.equalsIgnoreCase("superpower_cooldown")) {
             MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = number;
+        }
+        if (name.equalsIgnoreCase("show_vignette")) {
+            Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for "+ number);
+            VignetteRenderer.showVignetteFor(0.5f, number);
+        }
+        if (name.equalsIgnoreCase("mimicry_cooldown")) {
+            MainClient.MIMICRY_COOLDOWN_TIMESTAMP = number;
         }
     }
 

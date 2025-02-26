@@ -28,7 +28,7 @@ public enum Superpowers {
     NECROMANCY;
 
     public static List<Superpowers> getImplemented() {
-        return List.of(TIME_CONTROL, CREAKING, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE, ANIMAL_DISGUISE,SUPER_PUNCH);
+        return List.of(TIME_CONTROL, CREAKING, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE, ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY);
     }
 
     @Nullable
@@ -40,6 +40,7 @@ public enum Superpowers {
         if (superpower == PLAYER_DISGUISE) return new PlayerDisguise(player);
         if (superpower == ANIMAL_DISGUISE) return new AnimalDisguise(player);
         if (superpower == SUPER_PUNCH) return new SuperPunch(player);
+        if (superpower == MIMICRY) return new Mimicry(player);
         return null;
     }
 
