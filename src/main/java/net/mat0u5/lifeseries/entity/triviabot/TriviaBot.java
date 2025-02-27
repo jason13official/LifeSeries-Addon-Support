@@ -698,18 +698,19 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         for (ItemStack item : player.getArmorItems()) {
             ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), item.copy(), player);
         }
-        //ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
+        ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultStack();
         ItemStack legs = Items.LEATHER_LEGGINGS.getDefaultStack();
         ItemStack boots = Items.LEATHER_BOOTS.getDefaultStack();
-        //head.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
+        head.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         chest.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         legs.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
         boots.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
-        //player.equipStack(EquipmentSlot.HEAD, head);
+        player.equipStack(EquipmentSlot.HEAD, head);
         player.equipStack(EquipmentSlot.CHEST, chest);
         player.equipStack(EquipmentSlot.LEGS, legs);
         player.equipStack(EquipmentSlot.FEET, boots);
+        player.getInventory().markDirty();
     }
 
     public static List<UUID> cursedHeartPlayers = new ArrayList<>();

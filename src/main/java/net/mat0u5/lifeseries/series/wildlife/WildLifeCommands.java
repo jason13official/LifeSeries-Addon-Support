@@ -141,7 +141,15 @@ public class WildLifeCommands {
 
     public static int setSuperpower(ServerCommandSource source, ServerPlayerEntity player, String name) {
         if (checkBanned(source)) return -1;
+        if (!Superpowers.getImplementedStr().contains(name)) {
+            source.sendError(Text.of("That superpower doesn't exist."));
+            return -1;
+        }
         Superpowers superpower = Superpowers.fromString(name);
+        if (superpower == Superpowers.NONE) {
+            source.sendError(Text.of("That superpower doesn't exist."));
+            return -1;
+        }
         SuperpowersWildcard.setSuperpower(player, superpower);
         source.sendMessage(Text.of("§7Set " + player.getNameForScoreboard()+"'s superpower to: §f" + name));
         return 1;

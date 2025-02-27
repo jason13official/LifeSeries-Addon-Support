@@ -29,7 +29,12 @@ public enum Superpowers {
 
     public static List<Superpowers> getImplemented() {
         return List.of(TIME_CONTROL, CREAKING, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE,
-                ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY, TELEPORTATION, SHADOW_PLAY, INVISIBILITY);
+                ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY, TELEPORTATION, SHADOW_PLAY, INVISIBILITY
+
+                //? if >= 1.21.2 {
+                /*,FLIGHT
+                *///?}
+        );
     }
 
     @Nullable
@@ -45,6 +50,9 @@ public enum Superpowers {
         if (superpower == TELEPORTATION) return new Teleportation(player);
         if (superpower == SHADOW_PLAY) return new ShadowPlay(player);
         if (superpower == INVISIBILITY) return new Invisibility(player);
+        //? if >= 1.21.2 {
+        /*if (superpower == FLIGHT) return new Flight(player);
+        *///?}
         return null;
     }
 

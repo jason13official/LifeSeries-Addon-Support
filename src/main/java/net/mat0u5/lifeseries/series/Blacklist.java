@@ -293,16 +293,23 @@ public class Blacklist {
         }
 
         if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FromSuperpower")) {
+            boolean remove = true;
             if (ItemStackUtils.hasCustomComponentEntry(itemStack, "WindChargeSuperpower")) {
-                boolean remove = true;
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
                     remove = false;
                 }
-                if (remove) {
-                    itemStack.setCount(0);
-                    player.getInventory().updateItems();
-                    return;
+            }
+            //? if >= 1.21.2 {
+            /*if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
+                if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
+                    remove = false;
                 }
+            }
+            *///?}
+            if (remove) {
+                itemStack.setCount(0);
+                player.getInventory().updateItems();
+                return;
             }
             return;
         }

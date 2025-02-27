@@ -85,6 +85,9 @@ public class NetworkHandlerClient {
                 MainClient.CURSE_SLIDING = false;
             }
         }
+        if (name.equalsIgnoreCase("jump") && MinecraftClient.getInstance().player != null) {
+            MinecraftClient.getInstance().player.jump();
+        }
     }
 
     public static void handleNumberPacket(String name, double number) {

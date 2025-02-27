@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -43,7 +44,7 @@ public class WindCharge extends ToggleableSuperpower {
         ServerPlayerEntity player = getPlayer();
         if (player != null) {
             player.playSoundToPlayer(SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST.value(), SoundCategory.MASTER, 0.3f, 1);
-            player.getInventory().markDirty();
+            TaskScheduler.scheduleTask(1, () -> player.getInventory().markDirty());
         }
     }
 

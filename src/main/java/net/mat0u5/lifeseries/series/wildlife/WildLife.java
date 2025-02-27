@@ -232,6 +232,15 @@ public class WildLife extends Series {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
             ci.cancel();
         }
+
+        if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
+                if (power.cancelNextFallDamage) {
+                    power.cancelNextFallDamage = false;
+                    ci.cancel();
+                }
+            }
+        }
     }
 
     @Override
