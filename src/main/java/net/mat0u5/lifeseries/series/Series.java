@@ -458,4 +458,7 @@ public abstract class Series extends Session {
 
     public void onRightClickEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
     }
+
+    public void onAttackEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+    }
 }

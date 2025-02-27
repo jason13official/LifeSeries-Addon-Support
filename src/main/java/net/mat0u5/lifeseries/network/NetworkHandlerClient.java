@@ -113,7 +113,12 @@ public class NetworkHandlerClient {
         if (name.startsWith("player_invisible__")) {
             try {
                 UUID uuid = UUID.fromString(name.replaceFirst("player_invisible__",""));
-                MainClient.invisiblePlayers.put(uuid, number);
+                if (number == 0) {
+                    MainClient.invisiblePlayers.remove(uuid);
+                }
+                else {
+                    MainClient.invisiblePlayers.put(uuid, number);
+                }
             }catch(Exception e) {}
         }
     }

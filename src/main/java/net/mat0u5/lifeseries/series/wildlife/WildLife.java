@@ -11,10 +11,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.PlayerDisguise;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
@@ -226,6 +223,11 @@ public class WildLife extends Series {
                 power.onTakeDamage();
             }
         }
+        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
+                power.onTakeDamage();
+            }
+        }
         if (!source.getType().msgId().equalsIgnoreCase("fall")) return;
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
             ci.cancel();
@@ -237,6 +239,15 @@ public class WildLife extends Series {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof SuperPunch power) {
                 power.tryRideEntity(entity);
+            }
+        }
+    }
+
+    @Override
+    public void onAttackEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.INVISIBILITY)) {
+            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Invisibility power) {
+                power.onAttack();
             }
         }
     }

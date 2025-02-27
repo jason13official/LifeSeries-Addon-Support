@@ -103,8 +103,8 @@ public class Teleportation extends Superpower {
     public void spawnTeleportParticles(ServerWorld world, Vec3d pos) {
         world.spawnParticles(
                 ParticleTypes.PORTAL,
-                pos.getX(), pos.getY(), pos.getZ(),
-                40, 0.3, 1, 0.3, 0
+                pos.getX(), pos.getY()+0.9, pos.getZ(),
+                40, 0.3, 0.5, 0.3, 0
         );
     }
     public void playTeleportSound(ServerWorld world, Vec3d pos) {

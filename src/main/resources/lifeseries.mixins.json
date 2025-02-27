@@ -37,8 +37,6 @@
     "client.SoundSystemMixin",
     "superpowers.client.AbstractClientPlayerEntityMixin",
     "superpowers.client.EntityRendererMixin",
-    "superpowers.client.ParticleAccessor",
-    "superpowers.client.ParticleManagerMixin",
     "superpowers.client.PlayerEntityRendererMixin"
   ]
 }
