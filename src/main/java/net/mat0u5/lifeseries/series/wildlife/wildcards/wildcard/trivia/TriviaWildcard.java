@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
+import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -195,11 +196,11 @@ public class TriviaWildcard extends Wildcard {
         }
         if (TriviaBot.cursedHeartPlayers.contains(player.getUuid())) {
             TriviaBot.cursedHeartPlayers.remove(player.getUuid());
-            currentSeries.resetMaxPlayerHealth(player);
+            AttributeUtils.resetMaxPlayerHealth(player);
         }
         if (TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
             TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
-            currentSeries.resetPlayerJumpHeight(player);
+            AttributeUtils.resetPlayerJumpHeight(player);
         }
 
         ServerPlayNetworking.send(player, new StringPayload("curse_sliding", "false"));

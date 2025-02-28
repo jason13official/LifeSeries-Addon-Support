@@ -13,9 +13,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PermissionManager;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -34,8 +32,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
@@ -195,13 +192,10 @@ public class WildLife extends Series {
 
         TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
         TriviaBot.cursedHeartPlayers.remove(player.getUuid());
-        resetMaxPlayerHealth(player);
+        AttributeUtils.resetMaxPlayerHealth(player);
 
         TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH)).setBaseValue(0.41999998688697815);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(0.41999998688697815);*/
+        AttributeUtils.resetPlayerJumpHeight(player);
     }
 
     public static void changedPlayerTeam(ServerPlayerEntity player) {
@@ -229,15 +223,13 @@ public class WildLife extends Series {
             }
         }
         if (!source.getType().msgId().equalsIgnoreCase("fall")) return;
-        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
-            ci.cancel();
-        }
 
         if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
             if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                 if (power.cancelNextFallDamage) {
                     power.cancelNextFallDamage = false;
                     ci.cancel();
+                    return;
                 }
             }
         }

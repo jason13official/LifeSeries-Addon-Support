@@ -1,7 +1,9 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.DataComponentTypes;
@@ -33,9 +35,13 @@ public class WindCharge extends ToggleableSuperpower {
     @Override
     public void activate() {
         super.activate();
-        if (getPlayer() != null) getPlayer().playSoundToPlayer(SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.MASTER, 0.3f, 1);
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        player.playSoundToPlayer(SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.MASTER, 0.3f, 1);
+        AttributeUtils.setSafeFallHeight(player, 100000);
         giveMace();
         giveWindCharge();
+        NetworkHandlerServer.sendVignette(player, 300);
     }
 
     @Override
@@ -45,6 +51,7 @@ public class WindCharge extends ToggleableSuperpower {
         if (player != null) {
             player.playSoundToPlayer(SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST.value(), SoundCategory.MASTER, 0.3f, 1);
             TaskScheduler.scheduleTask(1, () -> player.getInventory().markDirty());
+            AttributeUtils.resetSafeFallHeight(player);
         }
     }
 

@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -419,12 +418,7 @@ public abstract class Series extends Session {
     }
 
     public void onPlayerJoin(ServerPlayerEntity player) {
-        if (getSeries() != SeriesList.SECRET_LIFE && !(player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid()))) {
-            resetMaxPlayerHealth(player);
-        }
-        if (!TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
-            resetPlayerJumpHeight(player);
-        }
+        AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> {
             PlayerUtils.applyResourcepack(player.getUuid());
@@ -438,20 +432,6 @@ public abstract class Series extends Session {
         }
     }
 
-    public void resetMaxPlayerHealth(ServerPlayerEntity player) {
-        double health = seriesConfig.getOrCreateDouble("max_player_health", 20.0d);
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(health);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(health);*/
-    }
-
-    public void resetPlayerJumpHeight(ServerPlayerEntity player) {
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH)).setBaseValue(0.41999998688697815);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(0.41999998688697815);*/
-    }
 
     public void onPlayerDisconnect(ServerPlayerEntity player) {
     }

@@ -108,7 +108,7 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("show_vignette")) {
             Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for "+ number);
-            VignetteRenderer.showVignetteFor(0.5f, number);
+            VignetteRenderer.showVignetteFor(0.35f, number);
         }
         if (name.equalsIgnoreCase("mimicry_cooldown")) {
             MainClient.MIMICRY_COOLDOWN_TIMESTAMP = number;

@@ -4,16 +4,31 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.entry.RegistryEntry;
+
+import java.util.Map;
 
 public class ClientEvents {
-    public static void onClientTick() {
+    public static void onClientTickStart() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientPlayerEntity player = client.player;
+
+        if (player != null) {
+            tryTripleJump(client, player);
+        }
+    }
+    public static void onClientTickEnd() {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
 
@@ -56,5 +71,46 @@ public class ClientEvents {
             }
             *///?}
         }
+    }
+
+    private static int jumpedInAir = 0;
+    private static int jumpCooldown = 0;
+    private static boolean lastJumping = false;
+    public static void tryTripleJump(MinecraftClient client, ClientPlayerEntity player) {
+        if (jumpCooldown > 0) {
+            jumpCooldown--;
+        }
+        if (player.isOnGround()) {
+            jumpedInAir = 0;
+            return;
+        }
+
+        if (jumpedInAir >= 3) return;
+
+        boolean shouldJump = false;
+        //? if <= 1.21 {
+        boolean holdingJump = player.input.jumping;
+        //?} else {
+        /*boolean holdingJump = player.input.playerInput.jump();1
+        *///?}
+
+        if (!lastJumping && holdingJump) {
+            shouldJump = true;
+        }
+        lastJumping = holdingJump;
+        if (!shouldJump) return;
+        if (jumpCooldown > 0) return;
+
+        boolean canTripleJump = false;
+        for (Map.Entry<RegistryEntry<StatusEffect>, StatusEffectInstance> entry : player.getActiveStatusEffects().entrySet()) {
+            if (entry.getKey() != StatusEffects.JUMP_BOOST) continue;
+            StatusEffectInstance jumpBoost = entry.getValue();
+            if (jumpBoost.getAmplifier() != 2) continue;
+            if (jumpBoost.getDuration() > 220 || jumpBoost.getDuration() < 200) continue;
+            canTripleJump = true;
+        }
+        if (!canTripleJump) return;
+        jumpedInAir++;
+        player.jump();
     }
 }

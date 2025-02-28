@@ -67,6 +67,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.Attr;
 
 import java.util.*;
 
@@ -717,19 +718,13 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public void curse_hearts(ServerPlayerEntity player) {
         cursedHeartPlayers.add(player.getUuid());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(newHealth);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MAX_HEALTH)).setBaseValue(newHealth);*/
+        AttributeUtils.setMaxPlayerHealth(player, newHealth);
     }
 
     public static List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
     public void curse_moonjump(ServerPlayerEntity player) {
         cursedMoonJumpPlayers.add(player.getUuid());
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH)).setBaseValue(0.76);
-        //?} else
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(0.76);*/
+        AttributeUtils.setJumpStrength(player, 0.76);
     }
 
     public void curse_beeswarm(ServerPlayerEntity player) {

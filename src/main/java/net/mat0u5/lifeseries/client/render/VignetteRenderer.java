@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 
 public class VignetteRenderer {
@@ -43,8 +44,9 @@ public class VignetteRenderer {
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         //?} else {
-        /*context.drawTexture(RenderLayer::getVignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
-                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), 0xFFffffff);
+        /*int color = ColorHelper.fromFloats(1.0F, darkness, darkness, darkness);
+        context.drawTexture(RenderLayer::getVignette, VIGNETTE_TEXTURE, 0, 0, 0.0F, 0.0F,
+                context.getScaledWindowWidth(), context.getScaledWindowHeight(), context.getScaledWindowWidth(), context.getScaledWindowHeight(), color);
         *///?}
     }
 

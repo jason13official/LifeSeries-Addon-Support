@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 /*
-    Used code from https://github.com/gnembon/fabric-carpet
+    Used and modified code from https://github.com/gnembon/fabric-carpet
  */
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayerEntity {

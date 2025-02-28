@@ -9,8 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ClientPlayerEntity.class, priority = 1)
 public class ClientPlayerEntityMixin {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void tickHead(CallbackInfo ci) {
+        ClientEvents.onClientTickStart();
+    }
     @Inject(method = "tick", at = @At("TAIL"))
-    private void tick(CallbackInfo ci) {
-        ClientEvents.onClientTick();
+    private void tickTail(CallbackInfo ci) {
+        ClientEvents.onClientTickEnd();
     }
 }

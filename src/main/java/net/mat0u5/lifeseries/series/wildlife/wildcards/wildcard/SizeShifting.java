@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -67,18 +68,10 @@ public class SizeShifting extends Wildcard {
             if (MORPH_COMPONENT.maybeGet(player).get().isMorphed()) return;
         }
 
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_SCALE)).setBaseValue(size);
-         //?} else {
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.SCALE)).setBaseValue(size);
-        *///?}
+        AttributeUtils.setScale(player, size);
     }
     public static void setPlayerSizeUnchecked(ServerPlayerEntity player, double size) {
-        //? if <=1.21 {
-        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_SCALE)).setBaseValue(size);
-        //?} else {
-        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.SCALE)).setBaseValue(size);
-         *///?}
+        AttributeUtils.setScale(player, size);
     }
 
     public static void resetSizesTick(boolean isActive) {

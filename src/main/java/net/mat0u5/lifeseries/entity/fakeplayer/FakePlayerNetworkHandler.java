@@ -14,7 +14,7 @@ import net.minecraft.text.TranslatableTextContent;
 import java.util.Set;
 
 /*
-    Used code from https://github.com/gnembon/fabric-carpet
+    Used and modified code from https://github.com/gnembon/fabric-carpet
  */
 public class FakePlayerNetworkHandler extends ServerPlayNetworkHandler {
     public FakePlayerNetworkHandler(MinecraftServer server, ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData) {
