@@ -57,8 +57,8 @@ public class AstralProjection extends ToggleableSuperpower {
     }
 
     @Override
-    public int deactivateCooldown() {
-        return 5;
+    public int deactivateCooldownMillis() {
+        return 5000;
     }
 
     public void resetParams() {

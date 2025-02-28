@@ -47,7 +47,8 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void rollRandomSuperpowers() {
         resetAllSuperpowers();
-        List<Superpowers> implemented = Superpowers.getImplemented();
+        List<Superpowers> implemented = new java.util.ArrayList<>(Superpowers.getImplemented());
+        Collections.shuffle(implemented);
         int pos = 0;
         List<ServerPlayerEntity> allPlayers = currentSeries.getAlivePlayers();
         Collections.shuffle(allPlayers);

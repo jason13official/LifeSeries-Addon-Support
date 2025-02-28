@@ -38,8 +38,8 @@ public class Flight extends Superpower {
     }
 
     @Override
-    public int getCooldownSeconds() {
-        return 45;
+    public int getCooldownMillis() {
+        return 45000;
     }
 
     @Override

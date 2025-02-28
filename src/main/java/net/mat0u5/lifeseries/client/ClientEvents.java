@@ -91,7 +91,7 @@ public class ClientEvents {
         //? if <= 1.21 {
         boolean holdingJump = player.input.jumping;
         //?} else {
-        /*boolean holdingJump = player.input.playerInput.jump();1
+        /*boolean holdingJump = player.input.playerInput.jump();
         *///?}
 
         if (!lastJumping && holdingJump) {

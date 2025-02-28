@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.entity.mob.CreeperEntity;
@@ -119,6 +120,9 @@ public class TimeDilation extends Wildcard {
                 serverTickManager.setTickRate(currentRate + (step * finalI));
             });
         }
+        TaskScheduler.scheduleTask(ticks+1, () -> {
+            serverTickManager.setTickRate(rate);
+        });
     }
 
     public static void setWorldSpeed(float rate) {

@@ -21,21 +21,21 @@ public abstract class ToggleableSuperpower extends Superpower {
         }
     }
 
-    public int activateCooldown() {
-        return 0;
+    public int activateCooldownMillis() {
+        return 50;
     }
 
-    public int deactivateCooldown() {
-        return 1;
+    public int deactivateCooldownMillis() {
+        return 1000;
     }
 
     public void activate() {
         active = true;
-        cooldown(activateCooldown());
+        cooldown(activateCooldownMillis());
     }
 
     public void deactivate() {
         active = false;
-        cooldown(deactivateCooldown());
+        cooldown(deactivateCooldownMillis());
     }
 }

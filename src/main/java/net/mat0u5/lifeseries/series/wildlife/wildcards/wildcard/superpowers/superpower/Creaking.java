@@ -105,8 +105,8 @@ public class Creaking extends ToggleableSuperpower {
     }
 
     @Override
-    public int deactivateCooldown() {
-        return 10;
+    public int deactivateCooldownMillis() {
+        return 10000;
     }
 
     public BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {

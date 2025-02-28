@@ -25,8 +25,8 @@ public class Mimicry extends Superpower {
     }
 
     @Override
-    public int getCooldownSeconds() {
-        return 300;
+    public int getCooldownMillis() {
+        return 300000;
     }
 
     @Override

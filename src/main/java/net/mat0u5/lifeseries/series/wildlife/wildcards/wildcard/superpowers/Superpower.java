@@ -22,8 +22,8 @@ public abstract class Superpower {
 
     public abstract Superpowers getSuperpower();
 
-    public int getCooldownSeconds() {
-        return 1;
+    public int getCooldownMillis() {
+        return 1000;
     }
 
     public void tick() {}
@@ -38,7 +38,7 @@ public abstract class Superpower {
 
     public void activate() {
         active = true;
-        cooldown(getCooldownSeconds());
+        cooldown(getCooldownMillis());
     }
 
     public void deactivate() {
@@ -50,11 +50,8 @@ public abstract class Superpower {
         deactivate();
     }
 
-    public void cooldown(int seconds) {
-        cooldown = System.currentTimeMillis()+ (seconds* 1000L);
-        if (System.currentTimeMillis() < (cooldown - 100)) {
-            sendCooldownPacket();
-        }
+    public void cooldown(int millis) {
+        cooldown = System.currentTimeMillis() + millis;
     }
 
     public void sendCooldownPacket() {

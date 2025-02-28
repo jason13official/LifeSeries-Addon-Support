@@ -23,8 +23,8 @@ public class ShadowPlay extends Superpower {
     }
 
     @Override
-    public int getCooldownSeconds() {
-        return 60;
+    public int getCooldownMillis() {
+        return 60000;
     }
 
     @Override

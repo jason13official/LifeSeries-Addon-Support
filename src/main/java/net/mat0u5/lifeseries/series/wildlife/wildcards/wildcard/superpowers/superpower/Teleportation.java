@@ -31,8 +31,8 @@ public class Teleportation extends Superpower {
     }
 
     @Override
-    public int getCooldownSeconds() {
-        return 5;
+    public int getCooldownMillis() {
+        return 5000;
     }
 
     @Override
