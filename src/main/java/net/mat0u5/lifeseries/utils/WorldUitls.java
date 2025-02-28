@@ -43,17 +43,10 @@ public class WorldUitls {
         return isSolidBlockBelow && isNonCollisionAbove;
     }
 
-    public static void summonHarmlessLightning(ServerWorld world, ServerPlayerEntity player) {
-        Vec3d playerPos = player.getPos();
-
-        // Create a new lightning entity
+    public static void summonHarmlessLightning(ServerWorld world, Vec3d pos) {
         LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
-        lightning.setPos(playerPos.x, playerPos.y, playerPos.z);
-
-        // Prevent the lightning from dealing damage or causing fire
+        lightning.setPos(pos.x, pos.y, pos.z);
         lightning.setCosmetic(true);
-
-        // Spawn the lightning entity in the world
         world.spawnEntity(lightning);
     }
 }

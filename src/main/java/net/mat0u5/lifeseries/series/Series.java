@@ -188,9 +188,10 @@ public abstract class Series extends Session {
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
+        Integer livesBefore = getPlayerLives(player);
         ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
         if (lives <= 0) {
-            playerLostAllLives(player);
+            playerLostAllLives(player, livesBefore);
         }
         else if (player.isSpectator()) {
             player.changeGameMode(GameMode.SURVIVAL);
@@ -239,16 +240,18 @@ public abstract class Series extends Session {
 
 
     private HashMap<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
-    public void playerLostAllLives(ServerPlayerEntity player) {
+    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
         player.changeGameMode(GameMode.SPECTATOR);
-        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
-        WorldUitls.summonHarmlessLightning(player.getServerWorld(), player);
         Vec3d pos = player.getPos();
         HashMap<Vec3d, List<Float>> info = new HashMap<>();
         info.put(pos, List.of(player.getYaw(),player.getPitch()));
         respawnPositions.put(player.getUuid(), info);
         dropItemsOnLastDeath(player);
-        showDeathTitle(player);
+        if (livesBefore > 0) {
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
+            WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
+            showDeathTitle(player);
+        }
         Stats.onPlayerLostAllLives(player);
     }
 

@@ -103,10 +103,11 @@ public class LimitedLife extends Series {
 
     @Override
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
+        Integer livesBefore = getPlayerLives(player);
         Formatting colorBefore = player.getScoreboardTeam().getColor();
         ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
         if (lives <= 0) {
-            playerLostAllLives(player);
+            playerLostAllLives(player, livesBefore);
         }
         Formatting colorNow = getColorForLives(lives);
         if (colorBefore != colorNow) {
@@ -306,8 +307,8 @@ public class LimitedLife extends Series {
     }
 
     @Override
-    public void playerLostAllLives(ServerPlayerEntity player) {
-        super.playerLostAllLives(player);
+    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
+        super.playerLostAllLives(player, livesBefore);
         boogeymanManager.playerLostAllLives(player);
     }
 

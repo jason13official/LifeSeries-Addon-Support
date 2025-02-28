@@ -46,8 +46,8 @@ public abstract class Superpower {
     }
 
     public void turnOff() {
-        //Fully deactivate superpower.
         deactivate();
+        NetworkHandlerServer.sendLongPacket(getPlayer(), "superpower_cooldown", 0);
     }
 
     public void cooldown(int millis) {

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -21,7 +22,10 @@ public class AttributeUtils {
 
     public static void resetAttributesOnPlayerJoin(ServerPlayerEntity player) {
 
-        if (currentSeries.getSeries() != SeriesList.SECRET_LIFE && !(player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid()))) {
+        if (currentSeries.getSeries() != SeriesList.SECRET_LIFE &&
+            !(player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) &&
+            !(player.getMaxHealth() == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid()))
+        ) {
             resetMaxPlayerHealth(player);
         }
         if (!TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {

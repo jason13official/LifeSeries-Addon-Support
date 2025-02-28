@@ -55,8 +55,8 @@ public class LastLife extends Series {
     }
 
     @Override
-    public void playerLostAllLives(ServerPlayerEntity player) {
-        super.playerLostAllLives(player);
+    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
+        super.playerLostAllLives(player, livesBefore);
         boogeymanManager.playerLostAllLives(player);
     }
 
