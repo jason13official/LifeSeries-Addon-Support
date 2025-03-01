@@ -1,11 +1,13 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.DummyInterface;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.*;
@@ -136,12 +138,22 @@ public abstract class LivingEntityMixin implements DummyInterface {
         if (!Main.isLogicalSide()) return strength;
         if (lastDamageSource != null) {
             DamageSource source = lastDamageSource;
-            if (source.getAttacker() instanceof ServerPlayerEntity player) {
-                if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH)) {
+            if (source.getAttacker() instanceof ServerPlayerEntity attacker && source.getType().msgId().equalsIgnoreCase("player")) {
+                if (SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
                     return 3;
                 }
             }
         }
         return strength;
+    }
+
+
+    @Inject(method = "jump", at = @At("TAIL"))
+    private void onJump(CallbackInfo ci) {
+        if (!Main.isClient()) return;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof ClientPlayerEntity) {
+            ClientEvents.onClientJump();
+        }
     }
 }

@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
-import net.minecraft.entity.player.PlayerPosition;
+import net.minecraft.entity.player.*;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;

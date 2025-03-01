@@ -22,6 +22,8 @@
     "SpawnGroupMixin",
     "SpawnHelperMixin",
     "superpowers.AdvancedExplosionBehaviorMixin",
+    "superpowers.EnchantmentHelperMixin",
+    "superpowers.EnderPearlEntityMixin",
     "superpowers.PlayerManagerMixin",
     "superpowers.SavePropertiesMixin",
     "superpowers.SleepManagerMixin",

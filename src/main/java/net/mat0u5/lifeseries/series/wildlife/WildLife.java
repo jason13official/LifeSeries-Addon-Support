@@ -222,14 +222,13 @@ public class WildLife extends Series {
                 power.onTakeDamage();
             }
         }
-        if (!source.getType().msgId().equalsIgnoreCase("fall")) return;
-
-        if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
-            if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
-                if (power.cancelNextFallDamage) {
-                    power.cancelNextFallDamage = false;
-                    ci.cancel();
-                    return;
+        if (source.getType().msgId().equalsIgnoreCase("fall")) {
+            if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
+                if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
+                    if (power.cancelNextFallDamage) {
+                        power.cancelNextFallDamage = false;
+                        ci.cancel();
+                    }
                 }
             }
         }

@@ -20,14 +20,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import java.util.Map;
 
 public class ClientEvents {
-    public static void onClientTickStart() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
-
-        if (player != null) {
-            tryTripleJump(client, player);
-        }
-    }
     public static void onClientTickEnd() {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
@@ -35,6 +27,7 @@ public class ClientEvents {
         spawnInvisibilityParticles(client);
         if (player != null) {
             sendPackets(client, player);
+            tryTripleJump(client, player);
         }
         ClientKeybinds.tick();
     }
@@ -73,6 +66,13 @@ public class ClientEvents {
         }
     }
 
+    public static void onClientJump() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientPlayerEntity player = client.player;
+        if (player == null) return;
+        jumpCooldown = 5;
+    }
+
     private static int jumpedInAir = 0;
     private static int jumpCooldown = 0;
     private static boolean lastJumping = false;
@@ -85,7 +85,7 @@ public class ClientEvents {
             return;
         }
 
-        if (jumpedInAir >= 3) return;
+        if (jumpedInAir >= 2) return;
 
         boolean shouldJump = false;
         //? if <= 1.21 {
