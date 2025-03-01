@@ -58,7 +58,7 @@ public class Necromancy extends Superpower {
                 List<ServerPlayerEntity> deadPlayers = getDeadPlayers();
                 for (ServerPlayerEntity deadPlayer : deadPlayers) {
                     BlockPos tpTo = getCloseBlockPos(updatedPlayer.getServerWorld(), updatedPlayer.getBlockPos(), 3);
-                    //?if <= 1.21 {
+                    //? if <= 1.21 {
                     deadPlayer.teleport(updatedPlayer.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
                     //?} else {
                     /*deadPlayer.teleport(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);

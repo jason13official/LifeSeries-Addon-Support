@@ -1,12 +1,15 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
+import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -14,6 +17,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Set;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
@@ -48,6 +53,23 @@ public class ServerPlayNetworkHandlerMixin {
         ServerPlayerEntity player = handler.player;
         if (currentSeries instanceof WildLife) {
             WildcardManager.onUseItem(player);
+        }
+    }
+
+    //? if <= 1.21 {
+    @Inject(method = "requestTeleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
+    public void requestTeleport(double x, double y, double z, float yaw, float pitch, Set<PositionFlag> flags, CallbackInfo ci) {
+    //?} else {
+    /*@Inject(method = "requestTeleport(Lnet/minecraft/entity/player/PlayerPosition;Ljava/util/Set;)V", at = @At("TAIL"))
+    public void requestTeleport(PlayerPosition pos, Set<PositionFlag> flags, CallbackInfo ci) {
+    *///?}
+        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
+        ServerPlayerEntity player = handler.getPlayer();
+        if (player instanceof FakePlayer) {
+            if (player.getServerWorld().getPlayerByUuid(player.getUuid()) != null) {
+                handler.syncWithPlayerPosition();
+                player.getServerWorld().getChunkManager().updatePosition(player);
+            }
         }
     }
 }

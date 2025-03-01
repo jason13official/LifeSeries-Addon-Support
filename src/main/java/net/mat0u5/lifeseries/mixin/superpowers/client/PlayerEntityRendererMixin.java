@@ -20,7 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 
 /*
-    Used and modified code from https://gitlab.nexusrealms.de/Farpo/riftmorph
+ * This file includes code from the RiftMorph project: https://gitlab.nexusrealms.de/Farpo/riftmorph
+ *
+ * Used and modified under the MIT License.
  */
 
 //? if <= 1.21 {

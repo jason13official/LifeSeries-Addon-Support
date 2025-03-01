@@ -15,6 +15,7 @@
     "PlayerEntityMixin",
     "PlayerInventoryMixin",
     "RecipeManagerMixin",
+    "ServerCommonNetworkHandlerMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
     "SpawnEggItemMixin",
@@ -31,6 +32,7 @@
   },
   "client": [
     "client.BlockMixin",
+    "client.ClientCommonNetworkHandlerMixin",
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayNetworkHandlerMixin",
     "client.MinecraftClientMixin",

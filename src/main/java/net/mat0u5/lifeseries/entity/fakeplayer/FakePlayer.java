@@ -1,11 +1,9 @@
 package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,7 +11,6 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.packet.c2s.common.SyncedClientOptions;
 import net.minecraft.network.packet.s2c.play.EntitySetHeadYawS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -32,7 +29,9 @@ import net.minecraft.world.World;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 /*
-    Used and modified code from https://github.com/gnembon/fabric-carpet
+ * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
+ *
+ * Used and modified under the MIT License.
  */
 @SuppressWarnings("EntityConstructor")
 public class FakePlayer extends ServerPlayerEntity {

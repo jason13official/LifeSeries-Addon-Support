@@ -87,7 +87,6 @@ public class AstralProjection extends ToggleableSuperpower {
                 GameMode.SURVIVAL, false, inv, player.getUuid(), player.getDisplayName()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
-            System.out.println("TEss_" + name);
             NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
         });
     }

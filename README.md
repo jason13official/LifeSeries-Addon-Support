@@ -106,12 +106,21 @@ This command **always** available
 <summary>/wildcard</summary>
 
 *This command is only available when playing Wild Life.*
-- `/wildcard list` - Shows a list of all possible wildcards
-- `/wildcard listActive` - Shows a list of all **active** wildcards
+- `/wildcard list` - Shows a list of all possible wildcards.
+- `/wildcard listActive` - Shows a list of all **active** wildcards.
 - `/wildcard activate <wildcard>` - Activates Wildcard with the name `<wildcard>`
 - `/wildcard deactivate <wildcard>` - Deactivates Wildcard with the name `<wildcard>`
 </details>
 
+<details open>
+<summary>/wildcard</summary>
+
+*This command is only available when playing Wild Life.*
+- `/superpower resetAll` - Resets all superpowers.
+- `/superpower setRandom` - Assigns a random superpower to all online players.
+- `/superpower get <player>` - Shows you `<player>`'s superpower.
+- `/superpower set <player> <power>` - Sets `<player>`'s superpower to `<power>`.
+</details>
 
 <details open>
 <summary>/boogeyman</summary>
