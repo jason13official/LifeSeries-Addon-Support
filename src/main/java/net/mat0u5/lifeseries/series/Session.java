@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.utils.WorldUitls;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -89,8 +88,7 @@ public class Session {
     public boolean canStartSession() {
         if (!validTime()) return false;
         if (statusStarted()) return false;
-        if (statusPaused()) return false;
-        return true;
+        return !statusPaused();
     }
 
     public void setSessionLength(int lengthTicks) {
@@ -209,8 +207,9 @@ public class Session {
 
         if (playerX < minX || playerX > maxX || playerZ < minZ || playerZ > maxZ) {
             // Clamp player position inside the border
-            double clampedX = Math.max(minX, Math.min(maxX, playerX));
-            double clampedZ = Math.max(minZ, Math.min(maxZ, playerZ));
+
+            double clampedX = Math.clamp(playerX, minX, maxX);
+            double clampedZ = Math.clamp(playerZ, minZ, maxZ);
             double safeY = WorldUitls.findSafeY(player.getWorld(), new Vec3d(clampedX, player.getY(), clampedZ));
 
             // Teleport player inside the world border
@@ -222,7 +221,7 @@ public class Session {
             *///?}
         }
     }
-    public static HashMap<UUID, Integer> skipTimer = new HashMap<>();
+    public static final Map<UUID, Integer> skipTimer = new HashMap<>();
     public void displayTimers(MinecraftServer server) {
         String message = "";
         if (statusNotStarted()) {

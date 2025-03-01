@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.series;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.secretlife.Task;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -19,7 +18,7 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class Stats {
 
-    public static List<String> messages = new ArrayList<>();
+    public static final List<String> messages = new ArrayList<>();
 
     public static void deactivateWildcard(Wildcards type) {
         addMessageWithTime("Deactivated Wildcard: " + type);

@@ -49,7 +49,7 @@ public class ClaimKillCommand {
                     ))
                 )
                 .then(literal("validate")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("killer", EntityArgumentType.player())
                         .then(argument("victim", EntityArgumentType.player())
                             .executes(context -> claimCreditAccept(

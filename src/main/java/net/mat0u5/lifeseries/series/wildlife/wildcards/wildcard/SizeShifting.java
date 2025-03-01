@@ -2,17 +2,10 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.AttributeUtils;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
-
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 import static net.mat0u5.lifeseries.Main.currentSeries;

@@ -35,11 +35,9 @@ public class ConfirmAnswerScreen extends Screen {
         int centerX = (this.width - BG_WIDTH) / 2;
         int centerY = (this.height - BG_HEIGHT) / 2;
 
-        // "Submit" button (using default button look)
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
-                            // Handle answer submission logic here
-                            this.client.setScreen(null);
+                            if (this.client != null) this.client.setScreen(null);
                             Trivia.sendAnswer(answerIndex);
                         })
                         .position(centerX + 9, centerY + BG_HEIGHT - 25)
@@ -47,10 +45,9 @@ public class ConfirmAnswerScreen extends Screen {
                         .build()
         );
 
-        // "Cancel" button returns to the quiz screen
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Cancel"), btn -> {
-                            this.client.setScreen(parent);
+                            if (this.client != null) this.client.setScreen(parent);
                         })
                         .position(centerX + 79, centerY + BG_HEIGHT - 25)
                         .size(60, 20)

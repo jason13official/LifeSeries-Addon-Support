@@ -16,7 +16,6 @@ import net.minecraft.util.Formatting;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class LastLifeLivesManager {
     public SessionAction actionChooseLives = new SessionAction(
@@ -56,12 +55,10 @@ public class LastLifeLivesManager {
         }
         PlayerUtils.sendTitleToPlayers(players, Text.literal("You will have...").formatted(Formatting.GRAY), 10, 40, 10);
         int delay = 60;
-        TaskScheduler.scheduleTask(delay, ()->{
-            lifeRoll( 0, -1, lives);
-        });
+        TaskScheduler.scheduleTask(delay, ()-> lifeRoll( 0, -1, lives));
     }
 
-    public void lifeRoll(int currentStep, int lastNum,  HashMap<ServerPlayerEntity, Integer> lives) {
+    public void lifeRoll(int currentStep, int lastNum,  Map<ServerPlayerEntity, Integer> lives) {
         int delay = 1;
         if (currentStep >= 30) delay = 2;
         if (currentStep >= 50) delay = 4;
@@ -101,9 +98,7 @@ public class LastLifeLivesManager {
                 PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.UI_BUTTON_CLICK.value());
-            TaskScheduler.scheduleTask(delay, ()->{
-                lifeRoll( currentStep+1, -1, lives);
-            });
+            TaskScheduler.scheduleTask(delay, ()-> lifeRoll( currentStep+1, -1, lives));
             return;
         }
         if (currentStep == 81) {
@@ -132,8 +127,6 @@ public class LastLifeLivesManager {
         int finalDisplayLives = displayLives;
         PlayerUtils.sendTitleToPlayers(lives.keySet(), currentSeries.getFormattedLives(finalDisplayLives), 0, 25, 0);
         PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.UI_BUTTON_CLICK.value());
-        TaskScheduler.scheduleTask(delay, ()->{
-            lifeRoll( currentStep+1, finalDisplayLives, lives);
-        });
+        TaskScheduler.scheduleTask(delay, ()-> lifeRoll( currentStep+1, finalDisplayLives, lives));
     }
 }

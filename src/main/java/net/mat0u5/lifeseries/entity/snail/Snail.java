@@ -224,10 +224,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 }
             }
             else {
-                if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA)) {
-                    despawn();
-                }
-                else if (age >= 36000) {
+                if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA) || age >= 36000) {
                     despawn();
                 }
             }
@@ -270,7 +267,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void chunkLoading() {
         if (getWorld() instanceof ServerWorld world) {
-            if ((--this.chunkTicketExpiryTicks <= 0L)) {
+            if (--this.chunkTicketExpiryTicks <= 0L) {
                 world.resetIdleTimeout();
                 this.chunkTicketExpiryTicks = addTicket(world) - 20L;
             }
@@ -443,7 +440,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
-        if (groundPathFinder != null) this.groundPathFinder.teleport(world, this.getX(), pos.getY()+1, this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
+        if (groundPathFinder != null) this.groundPathFinder.teleport(world, this.getX(), pos.getY() + 1.0, this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
         //?} else {
         /*if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
         BlockPos pos = getGroundBlock();
@@ -696,7 +693,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     mutable.set(p, q, r);
                     FluidState fluidState = this.getWorld().getFluidState(mutable);
                     if (fluidState.isIn(tag)) {
-                        double e = (double)((float)q + fluidState.getHeight(this.getWorld(), mutable));
+                        double e = q + fluidState.getHeight(this.getWorld(), mutable);
                         if (e >= box.minY) {
                             d = Math.max(e - box.minY, d);
                         }

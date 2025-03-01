@@ -79,15 +79,11 @@ public class Superspeed extends ToggleableSuperpower {
     public static void slowlySetSpeed(ServerPlayerEntity player, double speed, int ticks) {
         if (server == null) return;
         double currentSpeed = AttributeUtils.getMovementSpeed(player);
-        double step = (speed - currentSpeed) / ((double) ticks);
+        double step = (speed - currentSpeed) / ticks;
         for (int i = 0; i < ticks; i++) {
             int finalI = i;
-            TaskScheduler.scheduleTask(i, () -> {
-                AttributeUtils.setMovementSpeed(player, currentSpeed + (step * finalI));
-            });
+            TaskScheduler.scheduleTask(i, () -> AttributeUtils.setMovementSpeed(player, currentSpeed + (step * finalI)));
         }
-        TaskScheduler.scheduleTask(ticks+1, () -> {
-            AttributeUtils.setMovementSpeed(player, speed);
-        });
+        TaskScheduler.scheduleTask(ticks+1, () -> AttributeUtils.setMovementSpeed(player, speed));
     }
 }

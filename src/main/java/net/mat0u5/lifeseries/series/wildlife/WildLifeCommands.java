@@ -8,10 +8,8 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Snails;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -43,7 +41,7 @@ public class WildLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("wildcard")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("list")
                     .executes(context -> listWildcards(
                         context.getSource())
@@ -74,7 +72,7 @@ public class WildLifeCommands {
         dispatcher.register(
             literal("snailname")
                 .then(literal("set")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .then(argument("name", StringArgumentType.greedyString())
                             .executes(context -> setSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player"), StringArgumentType.getString(context, "name")))
@@ -82,7 +80,7 @@ public class WildLifeCommands {
                     )
                 )
                 .then(literal("reset")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> resetSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
                     )
@@ -95,7 +93,7 @@ public class WildLifeCommands {
         );
         dispatcher.register(
             literal("superpower")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("set")
                     .then(argument("player", EntityArgumentType.player())
                         .then(argument("superpower", StringArgumentType.string())

@@ -2,20 +2,14 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SnailFlyGoal extends Goal {
 
     @NotNull
-    private Snail mob;
-    @Nullable
-    private Path path;
+    private final Snail mob;
 
     public SnailFlyGoal(@NotNull Snail mob) {
         this.mob = mob;
@@ -42,12 +36,8 @@ public class SnailFlyGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        /*if (mob.isOnGround() && mob.flying) {
-            mob.flying = false;
-        }*/
         if (!mob.flying) return false;
-        if (mob.getBoundPlayer() == null) return false;
-        return true;
+        return mob.getBoundPlayer() != null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.entity.fakeplayer;
 
 import com.mojang.authlib.GameProfile;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
@@ -38,17 +39,16 @@ public class FakePlayer extends ServerPlayerEntity {
     private static final Set<String> spawning = new HashSet<>();
     public Runnable fixStartingPosition = () -> {};
     private UUID shadow;
-    private Text customDisplayName;
 
     public static CompletableFuture<FakePlayer> createFake(
             String username, MinecraftServer server, Vec3d pos, double yaw, double pitch,
              RegistryKey<World> dimensionId, GameMode gamemode, boolean flying, PlayerInventory inv,
-            UUID shadow, Text displayName) {
+            UUID shadow) {
         ServerWorld worldIn = server.getWorld(dimensionId);
         UserCache.setUseRemote(false);
         GameProfile gameprofile;
         try {
-            gameprofile = server.getUserCache().findByName(username).orElse(null);
+            gameprofile = Objects.requireNonNull(server.getUserCache()).findByName(username).orElse(null);
         }
         finally {
             UserCache.setUseRemote(server.isDedicated() && server.isRemote());
@@ -96,7 +96,6 @@ public class FakePlayer extends ServerPlayerEntity {
             instance.currentScreenHandler.sendContentUpdates();
 
             instance.shadow = shadow;
-            instance.customDisplayName = displayName;
             instance.clearStatusEffects();
             instance.setOnFire(false);
             instance.setFireTicks(0);
@@ -153,7 +152,9 @@ public class FakePlayer extends ServerPlayerEntity {
             super.tick();
             playerTick();
         }
-        catch (NullPointerException ignored) {}
+        catch (NullPointerException e) {
+            Main.LOGGER.error(e.getMessage());
+        }
     }
 
     @Override

@@ -5,11 +5,9 @@ import net.mat0u5.lifeseries.series.*;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.ScoreboardUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.world.GameMode;
 
 import java.util.*;
 
@@ -87,8 +85,7 @@ public class LastLife extends Series {
         Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
         Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
         if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
-        if (attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured)) return true;
-        return false;
+        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
 
     @Override

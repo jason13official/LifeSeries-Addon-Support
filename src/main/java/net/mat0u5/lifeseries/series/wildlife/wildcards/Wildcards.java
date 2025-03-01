@@ -19,15 +19,7 @@ public enum Wildcards {
     CALLBACK;
 
     public static Wildcards getFromString(String wildcard) {
-        if (wildcard.equalsIgnoreCase("size_shifting")) return SIZE_SHIFTING;
-        if (wildcard.equalsIgnoreCase("hunger")) return HUNGER;
-        if (wildcard.equalsIgnoreCase("snails")) return SNAILS;
-        if (wildcard.equalsIgnoreCase("time_dilation")) return TIME_DILATION;
-        if (wildcard.equalsIgnoreCase("trivia")) return TRIVIA;
-        if (wildcard.equalsIgnoreCase("mob_swap")) return MOB_SWAP;
-        if (wildcard.equalsIgnoreCase("superpowers")) return SUPERPOWERS;
-        if (wildcard.equalsIgnoreCase("callback")) return CALLBACK;
-        return NULL;
+        return Enum.valueOf(Wildcards.class, wildcard.toUpperCase());
     }
 
     public static Wildcard getInstance(Wildcards wildcard) {
@@ -38,33 +30,16 @@ public enum Wildcards {
         if (wildcard == Wildcards.TRIVIA) return new TriviaWildcard();
         if (wildcard == Wildcards.MOB_SWAP) return new MobSwap();
         if (wildcard == Wildcards.SUPERPOWERS) return new SuperpowersWildcard();
-        if (wildcard == Wildcards.CALLBACK) return null;
+        if (wildcard == Wildcards.CALLBACK) return new Callback();
         return null;
-    }
-
-    public static String getStringName(Wildcards wildcard) {
-        if (wildcard == Wildcards.SIZE_SHIFTING) return "size_shifting";
-        if (wildcard == Wildcards.HUNGER) return "hunger";
-        if (wildcard == Wildcards.SNAILS) return "snails";
-        if (wildcard == Wildcards.TIME_DILATION) return "time_dilation";
-        if (wildcard == Wildcards.TRIVIA) return "trivia";
-        if (wildcard == Wildcards.MOB_SWAP) return "mob_swap";
-        if (wildcard == Wildcards.SUPERPOWERS) return "superpowers";
-        if (wildcard == Wildcards.CALLBACK) return "callback";
-        return "null";
     }
 
     public static List<String> getWildcards() {
         return List.of("size_shifting","hunger","snails","time_dilation","trivia","mob_swap","superpowers","callback");
     }
 
-    public static List<String> getNonActiveWildcards() {
-        List<String> result = new ArrayList<>(getWildcards());
-        for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
-            String name = getStringName(wildcard);
-            result.remove(name);
-        }
-        return result;
+    public static String getStringName(Wildcards wildcard) {
+        return wildcard.toString().toLowerCase();
     }
 
     public static List<String> getActiveWildcards() {

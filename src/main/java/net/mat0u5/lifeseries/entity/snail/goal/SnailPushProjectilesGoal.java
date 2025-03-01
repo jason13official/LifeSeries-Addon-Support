@@ -1,10 +1,8 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.nbt.NbtCompound;
@@ -47,11 +45,10 @@ public final class SnailPushProjectilesGoal extends Goal {
         for (ProjectileEntity projectile : projectiles) {
             NbtCompound empty = new NbtCompound();
             NbtCompound nbt = projectile.writeNbt(empty);
-            if (nbt.contains("inGround")) {
-                if (nbt.getBoolean("inGround")) {
-                    continue;
-                }
+            if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
+                continue;
             }
+
             Entity sender = projectile.getOwner();
             if (sender instanceof LivingEntity target) {
                 if (target instanceof Snail) {
@@ -69,9 +66,8 @@ public final class SnailPushProjectilesGoal extends Goal {
                 double time = horizontalDistance / speed;
                 double velocityY = dy / time + 0.5 * 0.05 * time;
 
-                double norm = Math.sqrt(dx * dx + dz * dz);
-                double velocityX = (dx / norm) * speed;
-                double velocityZ = (dz / norm) * speed;
+                double velocityX = (dx / horizontalDistance) * speed;
+                double velocityZ = (dz / horizontalDistance) * speed;
 
                 projectile.setVelocity(velocityX, velocityY, velocityZ, 1.6F, 0.0F);
                 projectile.setOwner(mob);

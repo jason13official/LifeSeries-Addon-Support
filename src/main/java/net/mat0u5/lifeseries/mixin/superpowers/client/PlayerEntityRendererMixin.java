@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.MorphComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

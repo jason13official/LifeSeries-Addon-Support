@@ -27,12 +27,6 @@ public final class SnailBlockInteractGoal extends Goal {
 
         BlockPos blockPos = mob.getBlockPos();
 
-        /*
-        if (isTrapdoor(blockPos) && !isTrapdoorOpen(blockPos)) {
-            return true;
-        }
-        */
-
         BlockPos blockBelow = blockPos.down();
         return isTrapdoor(blockBelow) && isTrapdoorOpen(blockBelow);
     }
@@ -43,7 +37,7 @@ public final class SnailBlockInteractGoal extends Goal {
         //openTrapdoor(blockPos, true);
 
         BlockPos blockBelow = blockPos.down();
-        openTrapdoor(blockBelow, false);
+        openTrapdoor(blockBelow);
     }
 
     @Override
@@ -60,12 +54,12 @@ public final class SnailBlockInteractGoal extends Goal {
         return this.mob.getWorld().getBlockState(blockPos).get(TrapdoorBlock.OPEN);
     }
 
-    private void openTrapdoor(BlockPos blockPos, boolean open) {
+    private void openTrapdoor(BlockPos blockPos) {
         if (!isTrapdoor(blockPos)) return;
         World world = mob.getWorld();
         if (world == null) return;
-        if (isTrapdoorOpen(blockPos) == open) return;
-        this.mob.getWorld().setBlockState(blockPos, this.mob.getWorld().getBlockState(blockPos).with(TrapdoorBlock.OPEN, open));
+        if (!isTrapdoorOpen(blockPos)) return;
+        this.mob.getWorld().setBlockState(blockPos, this.mob.getWorld().getBlockState(blockPos).with(TrapdoorBlock.OPEN, false));
     }
 
     private BlockState getBlockState(BlockPos blockPos) {

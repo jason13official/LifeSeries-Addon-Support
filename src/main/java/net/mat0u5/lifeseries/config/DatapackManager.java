@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -19,11 +18,11 @@ public class DatapackManager {
                 Path datapackPath = datapackFolder.resolve(datapackName);
                 if (Files.exists(datapackPath) && Files.isRegularFile(datapackPath)) {
                     Files.delete(datapackPath);
-                    Main.LOGGER.info("[LifeSeries] Deleted datapack: " + datapackName);
+                    Main.LOGGER.info("[LifeSeries] Deleted datapack: {}", datapackName);
                 }
             }
         } catch (Exception e) {
-            Main.LOGGER.error("Error deleting datapacks: " + e.getMessage(), e);
+            Main.LOGGER.error("Error deleting datapacks: {}", e.getMessage());
         }
     }
 

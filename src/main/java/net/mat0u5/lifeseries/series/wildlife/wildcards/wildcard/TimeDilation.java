@@ -2,21 +2,13 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.NetworkThreadUtils;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerTickManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameRules;
-
-import javax.print.attribute.standard.MediaSize;
-import java.util.Iterator;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -113,16 +105,12 @@ public class TimeDilation extends Wildcard {
         if (server == null) return;
         ServerTickManager serverTickManager = server.getTickManager();
         float currentRate = serverTickManager.getTickRate();
-        float step = (rate - currentRate) / ((float) ticks);
+        float step = (rate - currentRate) / (ticks);
         for (int i = 0; i < ticks; i++) {
             int finalI = i;
-            TaskScheduler.scheduleTask(i, () -> {
-                serverTickManager.setTickRate(currentRate + (step * finalI));
-            });
+            TaskScheduler.scheduleTask(i, () -> serverTickManager.setTickRate(currentRate + (step * finalI)));
         }
-        TaskScheduler.scheduleTask(ticks+1, () -> {
-            serverTickManager.setTickRate(rate);
-        });
+        TaskScheduler.scheduleTask(ticks+1, () -> serverTickManager.setTickRate(rate));
     }
 
     public static void setWorldSpeed(float rate) {

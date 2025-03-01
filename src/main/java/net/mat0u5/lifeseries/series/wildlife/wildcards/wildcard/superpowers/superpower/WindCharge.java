@@ -8,17 +8,13 @@ import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.UnbreakableComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class WindCharge extends ToggleableSuperpower {
@@ -57,12 +53,11 @@ public class WindCharge extends ToggleableSuperpower {
 
     private void giveWindCharge() {
         ServerPlayerEntity player = getPlayer();
-        if (player != null) {
-            if (!player.getInventory().containsAny(Set.of(Items.WIND_CHARGE))) {
+        if (player != null && !player.getInventory().containsAny(Set.of(Items.WIND_CHARGE))) {
                 ItemStack windCharge = new ItemStack(Items.WIND_CHARGE, 4);
                 player.getInventory().insertStack(windCharge);
             }
-        }
+
     }
 
     private void giveMace() {

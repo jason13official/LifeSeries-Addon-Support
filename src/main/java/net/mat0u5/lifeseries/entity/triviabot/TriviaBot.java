@@ -256,7 +256,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void chunkLoading() {
         if (getWorld() instanceof ServerWorld world) {
-            if ((--this.chunkTicketExpiryTicks <= 0L)) {
+            if (--this.chunkTicketExpiryTicks <= 0L) {
                 world.resetIdleTimeout();
                 this.chunkTicketExpiryTicks = addTicket(world) - 20L;
             }
@@ -538,6 +538,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         );
         int curse = world.random.nextInt(9);
         switch (curse) {
+            default:
             case 0:
                 curse_hunger(player);
                 break;
@@ -685,7 +686,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         player.addStatusEffect(statusEffectInstance);
     }
 
-    public static List<UUID> cursedGigantificationPlayers = new ArrayList<>();
+    public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
     public void curse_gigantification(ServerPlayerEntity player) {
         cursedGigantificationPlayers.add(player.getUuid());
         SizeShifting.setPlayerSizeUnchecked(player, 5);
@@ -714,14 +715,14 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         player.getInventory().markDirty();
     }
 
-    public static List<UUID> cursedHeartPlayers = new ArrayList<>();
+    public static final List<UUID> cursedHeartPlayers = new ArrayList<>();
     public void curse_hearts(ServerPlayerEntity player) {
         cursedHeartPlayers.add(player.getUuid());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
         AttributeUtils.setMaxPlayerHealth(player, newHealth);
     }
 
-    public static List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
+    public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
     public void curse_moonjump(ServerPlayerEntity player) {
         cursedMoonJumpPlayers.add(player.getUuid());
         AttributeUtils.setJumpStrength(player, 0.76);

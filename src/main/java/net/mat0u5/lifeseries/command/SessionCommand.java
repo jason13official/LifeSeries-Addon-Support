@@ -7,14 +7,12 @@ import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.List;
 
@@ -25,6 +23,7 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class SessionCommand {
+    private static final String INVALID_TIME_FORMAT_ERROR = "Invalid time format. Use h, m, s for hours, minutes, and seconds.";
 
     public static boolean isAllowed() {
         return currentSeries.getSeries() != SeriesList.UNASSIGNED;
@@ -42,26 +41,26 @@ public class SessionCommand {
         dispatcher.register(
             literal("session")
                 .then(literal("start")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> SessionCommand.startSession(
                         context.getSource()
                     ))
                 )
                 .then(literal("stop")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> SessionCommand.stopSession(
                         context.getSource()
                     ))
                 )
                 .then(literal("pause")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> SessionCommand.pauseSession(
                         context.getSource()
                     ))
                 )
                 .then(literal("timer")
                     .then(literal("set")
-                        .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("time", StringArgumentType.string())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("1h","1h30m","2h"), builder))
                             .executes(context -> SessionCommand.setTime(
@@ -70,7 +69,7 @@ public class SessionCommand {
                         )
                     )
                     .then(literal("add")
-                        .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("time", StringArgumentType.string())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                             .executes(context -> SessionCommand.addTime(
@@ -79,7 +78,7 @@ public class SessionCommand {
                         )
                     )
                     .then(literal("fastforward")
-                        .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("time", StringArgumentType.string())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
                             .executes(context -> SessionCommand.skipTime(
@@ -88,7 +87,7 @@ public class SessionCommand {
                         )
                     )
                     .then(literal("remove")
-                        .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                             .then(argument("time", StringArgumentType.string())
                                     .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
                                     .executes(context -> SessionCommand.removeTime(
@@ -113,8 +112,6 @@ public class SessionCommand {
 
     public static int getTime(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
-        final ServerPlayerEntity self = source.getPlayer();
 
         if (!currentSession.validTime()) {
             source.sendError(Text.of("The session time has not been set yet."));
@@ -131,7 +128,6 @@ public class SessionCommand {
 
     public static int displayTimer(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         final ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
@@ -144,7 +140,6 @@ public class SessionCommand {
 
     public static int startSession(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
 
         if (!currentSession.validTime()) {
             source.sendError(Text.of("The session time is not set! Use '/session timer set <time>' to set the session time."));
@@ -168,7 +163,6 @@ public class SessionCommand {
 
     public static int stopSession(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
             source.sendError(Text.of("The session has not yet started!"));
@@ -182,7 +176,6 @@ public class SessionCommand {
 
     public static int pauseSession(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
             source.sendError(Text.of("The session has not yet started!"));
@@ -199,7 +192,7 @@ public class SessionCommand {
 
         int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == -1) {
-            source.sendError(Text.literal("Invalid time format. Use h, m, s for hours, minutes, and seconds."));
+            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.passedTime+=totalTicks;
@@ -212,7 +205,7 @@ public class SessionCommand {
 
         int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == -1) {
-            source.sendError(Text.literal("Invalid time format. Use h, m, s for hours, minutes, and seconds."));
+            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.setSessionLength(totalTicks);
@@ -226,7 +219,7 @@ public class SessionCommand {
 
         int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == -1) {
-            source.sendError(Text.literal("Invalid time format. Use h, m, s for hours, minutes, and seconds."));
+            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.addSessionLength(totalTicks);
@@ -240,7 +233,7 @@ public class SessionCommand {
 
         int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
         if (totalTicks == -1) {
-            source.sendError(Text.literal("Invalid time format. Use h, m, s for hours, minutes, and seconds."));
+            source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
         currentSession.removeSessionLength(totalTicks);

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
@@ -12,7 +11,6 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.WardenEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -22,7 +20,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
@@ -239,7 +236,7 @@ public abstract class Series extends Session {
     }
 
 
-    private HashMap<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
+    private final HashMap<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
     public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
         player.changeGameMode(GameMode.SPECTATOR);
         Vec3d pos = player.getPos();
@@ -276,13 +273,11 @@ public abstract class Series extends Session {
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
         if (isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
-        return false;
+        return attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false));
     }
 
     public List<ServerPlayerEntity> getNonRedPlayers() {
         List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
-        if (players == null) return new ArrayList<>();
         if (players.isEmpty()) return new ArrayList<>();
         List<ServerPlayerEntity> nonRedPlayers = new ArrayList<>();
         for (ServerPlayerEntity player : players) {
@@ -296,7 +291,6 @@ public abstract class Series extends Session {
 
     public List<ServerPlayerEntity> getAlivePlayers() {
         List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
-        if (players == null) return new ArrayList<>();
         if (players.isEmpty()) return new ArrayList<>();
         List<ServerPlayerEntity> alivePlayers = new ArrayList<>();
         for (ServerPlayerEntity player : players) {
@@ -326,18 +320,16 @@ public abstract class Series extends Session {
     public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         Stats.onPlayerDeath(player, source);
         boolean killedByPlayer = false;
-        if (source != null) {
-            if (source.getAttacker() instanceof ServerPlayerEntity) {
-                if (player != source.getAttacker()) {
-                    onPlayerKilledByPlayer(player, (ServerPlayerEntity) source.getAttacker());
-                    killedByPlayer = true;
-                }
+        if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
+            if (player != source.getAttacker()) {
+                onPlayerKilledByPlayer(player, serverAttacker);
+                killedByPlayer = true;
             }
         }
         if (player.getPrimeAdversary() != null && !killedByPlayer) {
-            if (player.getPrimeAdversary() instanceof ServerPlayerEntity) {
+            if (player.getPrimeAdversary() instanceof ServerPlayerEntity serverAdversary) {
                 if (player != player.getPrimeAdversary()) {
-                    onPlayerKilledByPlayer(player, (ServerPlayerEntity) player.getPrimeAdversary());
+                    onPlayerKilledByPlayer(player, serverAdversary);
                     killedByPlayer = true;
                 }
             }
@@ -423,9 +415,7 @@ public abstract class Series extends Session {
     public void onPlayerJoin(ServerPlayerEntity player) {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
-        TaskScheduler.scheduleTask(2, () -> {
-            PlayerUtils.applyResourcepack(player.getUuid());
-        });
+        TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {

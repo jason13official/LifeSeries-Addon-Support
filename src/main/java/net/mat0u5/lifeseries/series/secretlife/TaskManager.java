@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.StringListManager;
 import net.mat0u5.lifeseries.series.SessionAction;
@@ -65,7 +64,7 @@ public class TaskManager {
     public static List<String> easyTasks;
     public static List<String> hardTasks;
     public static List<String> redTasks;
-    public static Random rnd = new Random();
+    public static final Random rnd = new Random();
 
     public static void initialize() {
         usedTasksConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");
@@ -192,7 +191,7 @@ public class TaskManager {
         });
         TaskScheduler.scheduleTask(70, () -> {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("2").formatted(Formatting.RED),0,35,0);
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.of(Identifier.of("minecraft","secretlife_task")));
+            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.of(Identifier.ofVanilla("secretlife_task")));
         });
         TaskScheduler.scheduleTask(105, () -> {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("1").formatted(Formatting.RED),0,35,0);
@@ -289,9 +288,7 @@ public class TaskManager {
                     series.itemSpawner.spawnRandomItemForPlayer(server.getOverworld(), spawnPos, player);
                 });
             }
-            TaskScheduler.scheduleTask(3*itemsNum+20, () -> {
-                secretKeeperBeingUsed = false;
-            });
+            TaskScheduler.scheduleTask(3*itemsNum+20, () -> secretKeeperBeingUsed = false);
         }
     }
 
@@ -388,9 +385,7 @@ public class TaskManager {
                 PlayerUtils.playSoundToPlayers(List.of(player), SoundEvents.UI_BUTTON_CLICK.value());
                 PlayerUtils.sendTitle(player, Text.literal("Accept your fate").formatted(Formatting.RED).formatted(Formatting.BOLD),20,30,0);
             });
-            TaskScheduler.scheduleTask(200, () -> {
-                AnimationUtils.playTotemAnimation(player);
-            });
+            TaskScheduler.scheduleTask(200, () -> AnimationUtils.playTotemAnimation(player));
             TaskScheduler.scheduleTask(240, () -> {
                 assignRandomTaskToPlayer(player, newType);
                 secretKeeperBeingUsed = false;
@@ -442,9 +437,7 @@ public class TaskManager {
             }
         });
         if (series.isOnLastLife(player, false)) {
-            TaskScheduler.scheduleTask(120, () -> {
-                chooseTasks(List.of(player), TaskType.RED);
-            });
+            TaskScheduler.scheduleTask(120, () -> chooseTasks(List.of(player), TaskType.RED));
         }
     }
 
@@ -476,19 +469,10 @@ public class TaskManager {
     }
 
     public static boolean alreadyHasPos(BlockPos pos) {
-        if (successButtonPos != null) {
-            if (successButtonPos.equals(pos)) return true;
-        }
-        if (rerollButtonPos != null) {
-            if (rerollButtonPos.equals(pos)) return true;
-        }
-        if (failButtonPos != null) {
-            if (failButtonPos.equals(pos)) return true;
-        }
-        if (itemSpawnerPos != null) {
-            if (itemSpawnerPos.equals(pos)) return true;
-        }
-        return false;
+        if (successButtonPos != null && successButtonPos.equals(pos)) return true;
+        if (rerollButtonPos != null && rerollButtonPos.equals(pos)) return true;
+        if (failButtonPos != null && failButtonPos.equals(pos)) return true;
+        return itemSpawnerPos != null && itemSpawnerPos.equals(pos);
     }
 
     public static void positionFound(BlockPos pos, boolean fromButton) {

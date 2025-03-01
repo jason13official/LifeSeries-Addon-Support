@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.entity.pathfinder;
 import de.tomalbrc.bil.api.AnimatedEntity;
 import de.tomalbrc.bil.api.AnimatedEntityHolder;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.control.FlightMoveControl;

@@ -82,11 +82,9 @@ public class Mimicry extends Superpower {
     public void tick() {
         if (mimic == null) return;
         if (System.currentTimeMillis() >= cooldown) {
-            if (mimic != null) {
-                mimic.turnOff();
-                NetworkHandlerServer.sendLongPacket(getPlayer(), "superpower_cooldown", System.currentTimeMillis()-1000);
-                mimic = null;
-            }
+            mimic.turnOff();
+            NetworkHandlerServer.sendLongPacket(getPlayer(), "superpower_cooldown", System.currentTimeMillis()-1000);
+            mimic = null;
         }
         if (mimic == null) return;
         mimic.tick();

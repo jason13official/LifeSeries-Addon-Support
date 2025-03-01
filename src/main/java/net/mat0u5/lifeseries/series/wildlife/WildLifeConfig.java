@@ -2,12 +2,8 @@ package net.mat0u5.lifeseries.series.wildlife;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 
 import java.util.List;
-
-import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(

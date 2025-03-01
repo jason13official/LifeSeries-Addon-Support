@@ -11,11 +11,11 @@ public class ScoreboardUtils {
         createObjective(name, name, ScoreboardCriterion.DUMMY);
     }
 
-    public static ScoreboardObjective createObjective(String name, String displayName, ScoreboardCriterion criterion) {
-        if (server == null) return null;
+    public static void createObjective(String name, String displayName, ScoreboardCriterion criterion) {
+        if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
-        if (scoreboard.getNullableObjective(name) != null) return null;
-        return scoreboard.addObjective(name, criterion, Text.literal(displayName), criterion.getDefaultRenderType(), false, null);
+        if (scoreboard.getNullableObjective(name) != null) return;
+        scoreboard.addObjective(name, criterion, Text.literal(displayName), criterion.getDefaultRenderType(), false, null);
     }
 
     public static void removeObjective(String name) {

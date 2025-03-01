@@ -3,10 +3,8 @@ package net.mat0u5.lifeseries.series.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.secretlife.TaskManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -16,10 +14,8 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWil
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -76,8 +72,7 @@ public class WildLife extends Series {
         if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
 
         if (isOnSpecificLives(attacker, 2, false) && isOnAtLeastLives(victim, 4, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 4, false)) return true;
-        return false;
+        return attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 4, false);
     }
 
     @Override

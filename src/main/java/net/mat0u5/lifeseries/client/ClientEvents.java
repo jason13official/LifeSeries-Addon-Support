@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
@@ -26,8 +25,8 @@ public class ClientEvents {
 
         spawnInvisibilityParticles(client);
         if (player != null) {
-            sendPackets(client, player);
-            tryTripleJump(client, player);
+            sendPackets(player);
+            tryTripleJump(player);
         }
         ClientKeybinds.tick();
     }
@@ -52,7 +51,7 @@ public class ClientEvents {
         }
     }
 
-    public static void sendPackets(MinecraftClient client, ClientPlayerEntity player) {
+    public static void sendPackets(ClientPlayerEntity player) {
         if (MainClient.clientCurrentSeries == SeriesList.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
             if (player.input.jumping) {
@@ -76,7 +75,7 @@ public class ClientEvents {
     private static int jumpedInAir = 0;
     private static int jumpCooldown = 0;
     private static boolean lastJumping = false;
-    public static void tryTripleJump(MinecraftClient client, ClientPlayerEntity player) {
+    private static void tryTripleJump(ClientPlayerEntity player) {
         if (jumpCooldown > 0) {
             jumpCooldown--;
         }
@@ -101,16 +100,19 @@ public class ClientEvents {
         if (!shouldJump) return;
         if (jumpCooldown > 0) return;
 
-        boolean canTripleJump = false;
+        if (!hasTripleJumpEffect(player)) return;
+        jumpedInAir++;
+        player.jump();
+    }
+
+    private static boolean hasTripleJumpEffect(ClientPlayerEntity player) {
         for (Map.Entry<RegistryEntry<StatusEffect>, StatusEffectInstance> entry : player.getActiveStatusEffects().entrySet()) {
             if (entry.getKey() != StatusEffects.JUMP_BOOST) continue;
             StatusEffectInstance jumpBoost = entry.getValue();
             if (jumpBoost.getAmplifier() != 2) continue;
             if (jumpBoost.getDuration() > 220 || jumpBoost.getDuration() < 200) continue;
-            canTripleJump = true;
+            return true;
         }
-        if (!canTripleJump) return;
-        jumpedInAir++;
-        player.jump();
+        return false;
     }
 }

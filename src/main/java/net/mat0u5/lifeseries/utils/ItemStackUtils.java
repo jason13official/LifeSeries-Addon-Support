@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;

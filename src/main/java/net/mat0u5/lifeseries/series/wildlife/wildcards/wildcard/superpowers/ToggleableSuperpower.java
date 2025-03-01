@@ -8,6 +8,7 @@ public abstract class ToggleableSuperpower extends Superpower {
         super(player);
     }
 
+    @Override
     public void onKeyPressed() {
         if (System.currentTimeMillis() < cooldown) {
             sendCooldownPacket();
@@ -29,11 +30,13 @@ public abstract class ToggleableSuperpower extends Superpower {
         return 1000;
     }
 
+    @Override
     public void activate() {
         active = true;
         cooldown(activateCooldownMillis());
     }
 
+    @Override
     public void deactivate() {
         active = false;
         cooldown(deactivateCooldownMillis());

@@ -28,7 +28,7 @@ public class SpawnGroupMixin {
         if (group.getName().equalsIgnoreCase("monster") || group.getName().equalsIgnoreCase("creature")) {
             if (currentSeries instanceof WildLife) {
                 if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) return;
-                MobSwap.getSpawnCapacity(group, capacity, cir);
+                MobSwap.getSpawnCapacity(group, cir);
             }
         }
     }

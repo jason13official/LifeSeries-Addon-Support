@@ -18,14 +18,15 @@ import net.minecraft.util.Formatting;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static net.mat0u5.lifeseries.Main.*;
 
 public class WildcardManager {
-    public static HashMap<Wildcards, Wildcard> activeWildcards = new HashMap<>();
-    public static Random rnd = new Random();
-    public static SessionAction wildcardNotice = new SessionAction(OtherUtils.secondsToTicks(30)) {
+    public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
+    public static final Random rnd = new Random();
+    public static final SessionAction wildcardNotice = new SessionAction(OtherUtils.secondsToTicks(30)) {
         @Override
         public void trigger() {
             if (activeWildcards.isEmpty()) {
@@ -33,7 +34,7 @@ public class WildcardManager {
             }
         }
     };
-    public static SessionAction startWildcards = new SessionAction(OtherUtils.secondsToTicks(150),"§7Activate Wildcard §f[00:02:30]", "Activate Wildcard") {
+    public static final SessionAction startWildcards = new SessionAction(OtherUtils.secondsToTicks(150),"§7Activate Wildcard §f[00:02:30]", "Activate Wildcard") {
         @Override
         public void trigger() {
             if (activeWildcards.isEmpty()) {
@@ -59,7 +60,9 @@ public class WildcardManager {
 
     public static void resetWildcardsOnPlayerJoin(ServerPlayerEntity player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
-            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) SizeShifting.setPlayerSize(player, 1);
+            if (SizeShifting.getPlayerSize(player) != 1 && !TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) {
+                SizeShifting.setPlayerSize(player, 1);
+            }
         }
         if (!isActiveWildcard(Wildcards.HUNGER)) {
             player.removeStatusEffect(StatusEffects.HUNGER);
@@ -67,9 +70,7 @@ public class WildcardManager {
         if (!isActiveWildcard(Wildcards.TRIVIA)) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
-        TaskScheduler.scheduleTask(20, () -> {
-            Hunger.updateInventory(player);
-        });
+        TaskScheduler.scheduleTask(20, () -> Hunger.updateInventory(player));
         MORPH_COMPONENT.maybeGet(player).ifPresent(morphComponent -> morphComponent.setMorph(null));
     }
 

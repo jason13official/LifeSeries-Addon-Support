@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.c2s.common.ResourcePackStatusC2SPacket;
@@ -55,7 +54,7 @@ public class ClientCommonNetworkHandlerMixin {
             }
         }
         if (!banned) return;
-        Main.LOGGER.info("Skipping resourcepack download (" + url + ")");
+        Main.LOGGER.info("Skipping resourcepack download ({})", url);
         this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.ACCEPTED));
         this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.DOWNLOADED));
         this.connection.send(new ResourcePackStatusC2SPacket(uuid, ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));

@@ -1,12 +1,9 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.mixin.ItemMixin;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -27,7 +24,6 @@ import net.minecraft.text.Text;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.currentSession;
 
 
@@ -39,7 +35,7 @@ import net.minecraft.item.consume.UseAction;
 *///?}
 
 public class Hunger extends Wildcard {
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
     public static int SWITCH_DELAY = 36000;
     public static int shuffleVersion = 0;
     private static boolean shuffledBefore = false;
@@ -121,7 +117,7 @@ public class Hunger extends Wildcard {
     @Override
     public void tick() {
         if (currentSession.sessionLength == null || currentSession.sessionLength - currentSession.passedTime > 6000) {
-            int currentVersion = (int) Math.floor(currentSession.passedTime / (double) SWITCH_DELAY);
+            int currentVersion = (int) Math.floor(currentSession.passedTime / SWITCH_DELAY);
             if (lastVersion != currentVersion) {
                 lastVersion = currentVersion;
                 newFoodRules();

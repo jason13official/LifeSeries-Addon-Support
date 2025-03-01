@@ -62,8 +62,8 @@ public class Events {
             return Events.onBlockAttack((ServerPlayerEntity) player, world, pos);
         });
         UseBlockCallback.EVENT.register(Events::onBlockUse);
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> onPlayerJoin(server, handler.getPlayer()));
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> onPlayerDisconnect(server, handler.getPlayer()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> onPlayerJoin(handler.getPlayer()));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> onPlayerDisconnect(handler.getPlayer()));
         ServerTickEvents.END_SERVER_TICK.register(Events::onServerTickEnd);
 
         ServerLivingEntityEvents.AFTER_DEATH.register(Events::onEntityDeath);
@@ -78,7 +78,7 @@ public class Events {
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
-    private static void onPlayerJoin(MinecraftServer server, ServerPlayerEntity player) {
+    private static void onPlayerJoin(ServerPlayerEntity player) {
         if (isFakePlayer(player)) return;
 
         try {
@@ -88,7 +88,7 @@ public class Events {
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
-    private static void onPlayerFinishJoining(MinecraftServer server, ServerPlayerEntity player) {
+    private static void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (isFakePlayer(player)) return;
 
         try {
@@ -98,7 +98,7 @@ public class Events {
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
-    private static void onPlayerDisconnect(MinecraftServer server, ServerPlayerEntity player) {
+    private static void onPlayerDisconnect(ServerPlayerEntity player) {
         if (isFakePlayer(player)) return;
 
         try {
@@ -109,7 +109,7 @@ public class Events {
     private static void onServerStopping(MinecraftServer server) {
         try {
             UpdateChecker.shutdownExecutor();
-        }catch (Exception e) {}
+        }catch (Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
     private static void onServerStarting(MinecraftServer server) {
@@ -139,7 +139,7 @@ public class Events {
             }
             OtherUtils.onTick();
         }catch(Exception e) {
-            e.printStackTrace();
+            Main.LOGGER.error(e.getMessage());
         }
     }
 
@@ -148,8 +148,8 @@ public class Events {
 
         try {
             if (!Main.isLogicalSide()) return;
-            if (entity instanceof ServerPlayerEntity) {
-                Events.onPlayerDeath((ServerPlayerEntity) entity, source);
+            if (entity instanceof ServerPlayerEntity player) {
+                Events.onPlayerDeath(player, source);
                 return;
             }
             onMobDeath(entity, source);
@@ -240,9 +240,9 @@ public class Events {
     /*
         Non-events
      */
-    public static HashMap<UUID, Vec3d> joiningPlayers = new HashMap<>();
-    public static HashMap<UUID, Float> joiningPlayersYaw = new HashMap<>();
-    public static HashMap<UUID, Float> joiningPlayersPitch = new HashMap<>();
+    private static final Map<UUID, Vec3d> joiningPlayers = new HashMap<>();
+    private static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
+    private static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayerEntity player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
@@ -256,7 +256,7 @@ public class Events {
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
             if (player.getPos().equals(entry.getValue())) continue;
-            onPlayerFinishJoining(player.server, player);
+            onPlayerFinishJoining(player);
             finishedJoining(player.getUuid());
             return;
         }
@@ -266,7 +266,7 @@ public class Events {
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
             if (player.getYaw() == entry.getValue()) continue;
-            onPlayerFinishJoining(player.server, player);
+            onPlayerFinishJoining(player);
             finishedJoining(player.getUuid());
             return;
         }
@@ -276,7 +276,7 @@ public class Events {
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
             if (player.getPitch() == entry.getValue()) continue;
-            onPlayerFinishJoining(player.server, player);
+            onPlayerFinishJoining(player);
             finishedJoining(player.getUuid());
             return;
         }

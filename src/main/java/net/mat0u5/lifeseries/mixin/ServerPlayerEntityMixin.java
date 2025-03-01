@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
@@ -21,14 +20,12 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = ServerPlayerEntity.class, priority = 1)
 public class ServerPlayerEntityMixin {
-    @Inject(method = "getRespawnTarget", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getRespawnTarget", at = @At("HEAD"))
     private void getRespawnTarget(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
         if (!Main.isLogicalSide()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         UUID uuid = player.getUuid();
-        TaskScheduler.scheduleTask(1, () -> {
-            currentSeries.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid)));
-        });
+        TaskScheduler.scheduleTask(1, () -> currentSeries.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid))));
     }
 
     @Inject(method = "openHandledScreen", at = @At("HEAD"))
@@ -36,7 +33,7 @@ public class ServerPlayerEntityMixin {
         if (!Main.isLogicalSide()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         if (blacklist != null) {
-            TaskScheduler.scheduleTask(1, () -> player.currentScreenHandler.getStacks().forEach((itemStack) -> blacklist.processItemStack(player, itemStack)));
+            TaskScheduler.scheduleTask(1, () -> player.currentScreenHandler.getStacks().forEach(itemStack -> blacklist.processItemStack(player, itemStack)));
         }
     }
 }

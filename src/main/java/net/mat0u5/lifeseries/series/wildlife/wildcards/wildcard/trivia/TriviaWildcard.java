@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
@@ -10,7 +9,6 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.AttributeUtils;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
@@ -26,14 +24,14 @@ public class TriviaWildcard extends Wildcard {
     private static final Map<UUID, Queue<Integer>> playerSpawnQueue = new HashMap<>();
     private static final Map<UUID, Integer> spawnedBotsFor = new HashMap<>();
     private static boolean globalScheduleInitialized = false;
-    public static HashMap<UUID, TriviaBot> bots = new HashMap<>();
+    public static Map<UUID, TriviaBot> bots = new HashMap<>();
     public static int activatedAt = -1;
     public static int TRIVIA_BOTS_PER_PLAYER = 5;
     public static int MIN_BOT_DELAY = 8400;
     public static TriviaQuestionManager easyTrivia;
     public static TriviaQuestionManager normalTrivia;
     public static TriviaQuestionManager hardTrivia;
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
 
     @Override
     public Wildcards getType() {

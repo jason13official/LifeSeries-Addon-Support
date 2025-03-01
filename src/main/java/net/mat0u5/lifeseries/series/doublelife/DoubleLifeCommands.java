@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -36,7 +35,7 @@ public class DoubleLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("soulmate")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("get")
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> getSoulmate(context.getSource(), EntityArgumentType.getPlayer(context, "player")))

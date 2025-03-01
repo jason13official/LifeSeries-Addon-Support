@@ -17,7 +17,6 @@ public class ModRegistries {
         registerEvents();
         TextUtils.setEmotes();
 
-        SoundRegistry.registerSounds();
         MobRegistry.registerMobs();
     }
 

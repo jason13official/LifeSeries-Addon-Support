@@ -3,12 +3,10 @@ package net.mat0u5.lifeseries.series.secretlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.utils.AnimationUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -47,13 +45,13 @@ public class SecretLifeCommands {
             literal("health")
                 .executes(context -> showHealth(context.getSource()))
                 .then(literal("sync")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> syncHealth(
                         context.getSource())
                     )
                 )
                 .then(literal("add")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> healthManager(
                             context.getSource(), EntityArgumentType.getPlayer(context, "player"), 1, false)
@@ -66,7 +64,7 @@ public class SecretLifeCommands {
                     )
                 )
                 .then(literal("remove")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> healthManager(
                             context.getSource(), EntityArgumentType.getPlayer(context, "player"), -1, false)
@@ -79,7 +77,7 @@ public class SecretLifeCommands {
                     )
                 )
                 .then(literal("set")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .then(argument("amount", DoubleArgumentType.doubleArg(0))
                             .executes(context -> healthManager(
@@ -89,7 +87,7 @@ public class SecretLifeCommands {
                     )
                 )
                 .then(literal("get")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> getHealthFor(
                             context.getSource(), EntityArgumentType.getPlayer(context, "player"))
@@ -97,7 +95,7 @@ public class SecretLifeCommands {
                     )
                 )
                 .then(literal("reset")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> resetHealth(
                             context.getSource(), EntityArgumentType.getPlayer(context, "player"))
@@ -105,7 +103,7 @@ public class SecretLifeCommands {
                     )
                 )
                 .then(literal("resetAll")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> resetAllHealth(
                         context.getSource())
                     )
@@ -113,7 +111,7 @@ public class SecretLifeCommands {
         );
         dispatcher.register(
             literal("task")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(literal("succeed")
                             .then(argument("player", EntityArgumentType.player())
                                     .executes(context -> succeedTask(
@@ -160,7 +158,7 @@ public class SecretLifeCommands {
         );
         dispatcher.register(
             literal("secretlife")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("changeLocations")
                     .executes(context -> changeLocations(
                         context.getSource())
@@ -178,7 +176,6 @@ public class SecretLifeCommands {
 
     public static int clearTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         int removedFrom = 0;
         for (ServerPlayerEntity player : targets) {
             if (TaskManager.removePlayersTaskBook(player)) removedFrom++;
@@ -189,14 +186,12 @@ public class SecretLifeCommands {
 
     public static int assignTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         TaskManager.chooseTasks(targets.stream().toList(), null);
         return 1;
     }
 
     public static int succeedTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
         TaskManager.succeedTask(target);
         return 1;
@@ -204,7 +199,6 @@ public class SecretLifeCommands {
 
     public static int failTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
         TaskManager.failTask(target);
         return 1;
@@ -212,16 +206,14 @@ public class SecretLifeCommands {
 
     public static int rerollTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
         TaskManager.rerollTask(target);
         return 1;
     }
 
-    public static List<UUID> playersGiven = new ArrayList<>();
+    public static final List<UUID> playersGiven = new ArrayList<>();
     public static int gift(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         final ServerPlayerEntity self = source.getPlayer();
         if (self == null) return -1;
         if (target == null) return -1;
@@ -261,7 +253,6 @@ public class SecretLifeCommands {
     public static int showHealth(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        MinecraftServer server = source.getServer();
         final ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
@@ -284,7 +275,6 @@ public class SecretLifeCommands {
         if (target == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeries;
-        MinecraftServer server = source.getServer();
         if (!secretLife.isAlive(target)) {
             source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" is dead.")));
             return -1;
@@ -298,7 +288,6 @@ public class SecretLifeCommands {
 
     public static int syncHealth(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         SecretLife secretLife = (SecretLife) currentSeries;
         secretLife.syncAllPlayerHealth();
         return 1;
@@ -306,7 +295,6 @@ public class SecretLifeCommands {
 
     public static int healthManager(ServerCommandSource source, ServerPlayerEntity target, double amount, boolean setNotGive) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeries;
@@ -326,7 +314,6 @@ public class SecretLifeCommands {
 
     public static int resetHealth(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeries;
@@ -338,7 +325,6 @@ public class SecretLifeCommands {
 
     public static int resetAllHealth(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
 
         SecretLife secretLife = (SecretLife) currentSeries;
         secretLife.resetAllPlayerHealth();

@@ -6,24 +6,18 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -48,81 +42,83 @@ public class MobSwap extends Wildcard {
     public static int mobcapAnimal = -1;
     public static double bossChance = 0;
     public static boolean fastAnimalSpawn = false;
-    public static List<Integer> eggSounds = List.of(0, 20, 35, 48, 59, 70, 80, 89, 97, 104, 110, 115, 119, 122, 124, 126, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140);
-    private static Random rnd = new Random();
+    public static final List<Integer> eggSounds = List.of(0, 20, 35, 48, 59, 70, 80, 89, 97, 104, 110, 115, 119, 122, 124, 126, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140);
+    private static final Random rnd = new Random();
 
-    public static HashMap<EntityType<?>, Integer> entityEntries = new HashMap<>() {{
-        put(EntityType.ALLAY, 1);
-        put(EntityType.BAT, 2);
-        put(EntityType.CAT, 3);
-        put(EntityType.CHICKEN, 4);
-        put(EntityType.RABBIT, 5);
-        put(EntityType.SQUID, 6);
-        put(EntityType.TROPICAL_FISH, 7);
-        put(EntityType.TURTLE, 8);
-        put(EntityType.COD, 9);
-        put(EntityType.COW, 10);
+    public static final Map<EntityType<?>, Integer> entityEntries = new HashMap<>();
 
-        put(EntityType.DONKEY, 11);
-        put(EntityType.GLOW_SQUID, 12);
-        put(EntityType.MOOSHROOM, 13);
-        put(EntityType.MULE, 14);
-        put(EntityType.PIG, 15);
-        put(EntityType.SHEEP, 16);
-        put(EntityType.SNIFFER, 17);
-        put(EntityType.WANDERING_TRADER, 19);
+    public static void initializeEntityEntries() {
+        entityEntries.put(EntityType.ALLAY, 1);
+        entityEntries.put(EntityType.BAT, 2);
+        entityEntries.put(EntityType.CAT, 3);
+        entityEntries.put(EntityType.CHICKEN, 4);
+        entityEntries.put(EntityType.RABBIT, 5);
+        entityEntries.put(EntityType.SQUID, 6);
+        entityEntries.put(EntityType.TROPICAL_FISH, 7);
+        entityEntries.put(EntityType.TURTLE, 8);
+        entityEntries.put(EntityType.COD, 9);
+        entityEntries.put(EntityType.COW, 10);
 
-        put(EntityType.FROG, 20);
-        put(EntityType.CAMEL, 20);
-        put(EntityType.HORSE, 22);
-        put(EntityType.OCELOT, 24);
-        put(EntityType.PARROT, 26);
-        put(EntityType.AXOLOTL, 28);
-        put(EntityType.FOX, 30);
-        put(EntityType.GOAT, 32);
-        put(EntityType.PANDA, 34);
-        put(EntityType.LLAMA, 36);
-        put(EntityType.DOLPHIN, 38);
-        put(EntityType.BEE, 40);
-        put(EntityType.WOLF, 42);
-        put(EntityType.TRADER_LLAMA, 44);
+        entityEntries.put(EntityType.DONKEY, 11);
+        entityEntries.put(EntityType.GLOW_SQUID, 12);
+        entityEntries.put(EntityType.MOOSHROOM, 13);
+        entityEntries.put(EntityType.MULE, 14);
+        entityEntries.put(EntityType.PIG, 15);
+        entityEntries.put(EntityType.SHEEP, 16);
+        entityEntries.put(EntityType.SNIFFER, 17);
+        entityEntries.put(EntityType.WANDERING_TRADER, 19);
 
-        put(EntityType.POLAR_BEAR, 45);
-        put(EntityType.PIGLIN, 48);
-        put(EntityType.ZOMBIFIED_PIGLIN, 50);
-        put(EntityType.SILVERFISH, 52);
-        put(EntityType.SLIME, 54);
-        put(EntityType.SPIDER, 56);
-        put(EntityType.ENDERMAN, 58);
-        put(EntityType.PHANTOM, 60);
-        put(EntityType.PILLAGER, 62);
+        entityEntries.put(EntityType.FROG, 20);
+        entityEntries.put(EntityType.CAMEL, 20);
+        entityEntries.put(EntityType.HORSE, 22);
+        entityEntries.put(EntityType.OCELOT, 24);
+        entityEntries.put(EntityType.PARROT, 26);
+        entityEntries.put(EntityType.AXOLOTL, 28);
+        entityEntries.put(EntityType.FOX, 30);
+        entityEntries.put(EntityType.GOAT, 32);
+        entityEntries.put(EntityType.PANDA, 34);
+        entityEntries.put(EntityType.LLAMA, 36);
+        entityEntries.put(EntityType.DOLPHIN, 38);
+        entityEntries.put(EntityType.BEE, 40);
+        entityEntries.put(EntityType.WOLF, 42);
+        entityEntries.put(EntityType.TRADER_LLAMA, 44);
 
-        put(EntityType.CAVE_SPIDER, 64);
-        put(EntityType.DROWNED, 66);
-        put(EntityType.HOGLIN, 68);
-        put(EntityType.HUSK, 70);
-        put(EntityType.SKELETON, 72);
-        put(EntityType.STRAY, 74);
-        put(EntityType.ZOMBIE, 76);
-        put(EntityType.ZOMBIE_VILLAGER, 78);
+        entityEntries.put(EntityType.POLAR_BEAR, 45);
+        entityEntries.put(EntityType.PIGLIN, 48);
+        entityEntries.put(EntityType.ZOMBIFIED_PIGLIN, 50);
+        entityEntries.put(EntityType.SILVERFISH, 52);
+        entityEntries.put(EntityType.SLIME, 54);
+        entityEntries.put(EntityType.SPIDER, 56);
+        entityEntries.put(EntityType.ENDERMAN, 58);
+        entityEntries.put(EntityType.PHANTOM, 60);
+        entityEntries.put(EntityType.PILLAGER, 62);
 
-        put(EntityType.CREEPER, 80);
-        put(EntityType.GUARDIAN, 82);
-        put(EntityType.WITCH, 84);
-        put(EntityType.EVOKER, 86);
-        put(EntityType.BLAZE, 88);
-        put(EntityType.ENDERMITE, 90);
-        put(EntityType.GHAST, 92);
-        put(EntityType.MAGMA_CUBE, 94);
-        put(EntityType.VEX, 96);
-        put(EntityType.WITHER_SKELETON, 98);
-        put(EntityType.ILLUSIONER, 100);
-        put(EntityType.PIGLIN_BRUTE, 102);
-        put(EntityType.SHULKER, 104);
-        put(EntityType.VINDICATOR, 106);
-        put(EntityType.ZOGLIN, 108);
-        put(EntityType.RAVAGER, 110);
-    }};
+        entityEntries.put(EntityType.CAVE_SPIDER, 64);
+        entityEntries.put(EntityType.DROWNED, 66);
+        entityEntries.put(EntityType.HOGLIN, 68);
+        entityEntries.put(EntityType.HUSK, 70);
+        entityEntries.put(EntityType.SKELETON, 72);
+        entityEntries.put(EntityType.STRAY, 74);
+        entityEntries.put(EntityType.ZOMBIE, 76);
+        entityEntries.put(EntityType.ZOMBIE_VILLAGER, 78);
+
+        entityEntries.put(EntityType.CREEPER, 80);
+        entityEntries.put(EntityType.GUARDIAN, 82);
+        entityEntries.put(EntityType.WITCH, 84);
+        entityEntries.put(EntityType.EVOKER, 86);
+        entityEntries.put(EntityType.BLAZE, 88);
+        entityEntries.put(EntityType.ENDERMITE, 90);
+        entityEntries.put(EntityType.GHAST, 92);
+        entityEntries.put(EntityType.MAGMA_CUBE, 94);
+        entityEntries.put(EntityType.VEX, 96);
+        entityEntries.put(EntityType.WITHER_SKELETON, 98);
+        entityEntries.put(EntityType.ILLUSIONER, 100);
+        entityEntries.put(EntityType.PIGLIN_BRUTE, 102);
+        entityEntries.put(EntityType.SHULKER, 104);
+        entityEntries.put(EntityType.VINDICATOR, 106);
+        entityEntries.put(EntityType.ZOGLIN, 108);
+        entityEntries.put(EntityType.RAVAGER, 110);
+    }
 
     @Override
     public Wildcards getType() {
@@ -151,6 +147,7 @@ public class MobSwap extends Wildcard {
         mobsLeftDiv = 0;
         bossChance = 0;
         swaps = -1;
+        initializeEntityEntries();
         super.activate();
     }
 
@@ -169,7 +166,7 @@ public class MobSwap extends Wildcard {
         }
         while (lastTime < currentSession.sessionLength) {
             float sessionProgress = ((float) lastTime) / (currentSession.sessionLength);
-            sessionProgress = Math.max(0, Math.min(1, sessionProgress));
+            sessionProgress = Math.clamp(sessionProgress, 0, 1);
             lastTime += (int) (MAX_DELAY - sessionProgress * (MAX_DELAY - MIN_DELAY));
             if (lastTime > (currentSession.passedTime - activatedAt) && lastTime < (currentSeries.sessionLength-MIN_DELAY)) {
                 triggerTimes.add(lastTime);
@@ -237,7 +234,7 @@ public class MobSwap extends Wildcard {
         if (server == null) return;
         for (ServerWorld world : server.getWorlds()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach((entity) -> {
+            world.iterateEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof PlayerEntity) return;
                 if (entity instanceof Snail) return;
@@ -267,7 +264,7 @@ public class MobSwap extends Wildcard {
         if (server == null) return;
         for (ServerWorld world : server.getWorlds()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach((entity) -> {
+            world.iterateEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof PlayerEntity) return;
                 if (entity instanceof Snail) return;
@@ -328,7 +325,7 @@ public class MobSwap extends Wildcard {
         if (server == null) return;
         for (ServerWorld world : server.getWorlds()) {
             List<Entity> toKill = new ArrayList<>();
-            world.iterateEntities().forEach((entity) -> {
+            world.iterateEntities().forEach(entity -> {
                 if (!(entity instanceof LivingEntity)) return;
                 if (entity instanceof PlayerEntity) return;
                 if (entity instanceof Snail) return;
@@ -352,7 +349,7 @@ public class MobSwap extends Wildcard {
         }
     }
 
-    public static void getSpawnCapacity(SpawnGroup group, int initialCapacity, CallbackInfoReturnable<Integer> cir) {
+    public static void getSpawnCapacity(SpawnGroup group, CallbackInfoReturnable<Integer> cir) {
         if (group.getName().equalsIgnoreCase("monster") && mobcapMonster >= 0) {
             cir.setReturnValue(mobcapMonster);
         }

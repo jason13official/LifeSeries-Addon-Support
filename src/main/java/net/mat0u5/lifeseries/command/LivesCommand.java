@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -36,13 +35,13 @@ public class LivesCommand {
             literal("lives")
             .executes(context -> showLives(context.getSource()))
             .then(literal("reload")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .executes(context -> reloadLives(
                     context.getSource())
                 )
             )
             .then(literal("add")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(argument("player", EntityArgumentType.player())
                     .executes(context -> lifeManager(
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"), 1, false)
@@ -55,7 +54,7 @@ public class LivesCommand {
                 )
             )
             .then(literal("remove")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(argument("player", EntityArgumentType.player())
                     .executes(context -> lifeManager(
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"), -1, false)
@@ -68,7 +67,7 @@ public class LivesCommand {
                 )
             )
             .then(literal("set")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(argument("player", EntityArgumentType.player())
                     .then(argument("amount", IntegerArgumentType.integer(0))
                         .executes(context -> lifeManager(
@@ -78,7 +77,7 @@ public class LivesCommand {
                 )
             )
             .then(literal("get")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(argument("player", EntityArgumentType.player())
                     .executes(context -> getLivesFor(
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"))
@@ -86,7 +85,7 @@ public class LivesCommand {
                 )
             )
             .then(literal("reset")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("player", EntityArgumentType.player())
                             .executes(context -> resetLives(
                                     context.getSource(), EntityArgumentType.getPlayer(context, "player"))
@@ -94,7 +93,7 @@ public class LivesCommand {
                     )
             )
             .then(literal("resetAll")
-                    .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> resetAllLives(
                             context.getSource())
                     )
@@ -105,7 +104,6 @@ public class LivesCommand {
     public static int showLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        MinecraftServer server = source.getServer();
         final ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
@@ -127,7 +125,6 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        MinecraftServer server = source.getServer();
         if (!currentSeries.hasAssignedLives(target)) {
             source.sendError(Text.of(target.getNameForScoreboard()+" has not been assigned any lives."));
             return -1;
@@ -142,14 +139,12 @@ public class LivesCommand {
 
     public static int reloadLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         currentSeries.reloadAllPlayerTeams();
         return 1;
     }
 
     public static int lifeManager(ServerCommandSource source, ServerPlayerEntity target, int amount, boolean setNotGive) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
 
         if (setNotGive) {
@@ -169,7 +164,6 @@ public class LivesCommand {
 
     public static int resetLives(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
         if (target == null) return -1;
 
         currentSeries.resetPlayerLife(target);
@@ -180,7 +174,6 @@ public class LivesCommand {
 
     public static int resetAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        MinecraftServer server = source.getServer();
 
         currentSeries.resetAllPlayerLives();
 

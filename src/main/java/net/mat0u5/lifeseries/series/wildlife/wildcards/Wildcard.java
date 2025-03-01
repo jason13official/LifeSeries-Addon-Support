@@ -16,7 +16,7 @@ public abstract class Wildcard {
         WildLife series = getSeries();
         if (series == null) return;
         active = true;
-        Main.LOGGER.info("[WildLife] Activated Wildcard: " + getType());
+        Main.LOGGER.info("[WildLife] Activated Wildcard: {}", getType());
         Stats.activateWildcard(getType());
     }
 
@@ -24,7 +24,7 @@ public abstract class Wildcard {
         WildLife series = getSeries();
         if (series == null) return;
         active = false;
-        Main.LOGGER.info("[WildLife] Dectivated Wildcard: " + getType());
+        Main.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getType());
         Stats.deactivateWildcard(getType());
     }
 

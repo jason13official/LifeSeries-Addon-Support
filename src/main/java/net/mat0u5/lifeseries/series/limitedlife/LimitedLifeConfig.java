@@ -5,8 +5,6 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.seriesConfig;
-
 public class LimitedLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",

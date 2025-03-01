@@ -18,7 +18,6 @@ public final class SnailPushEntitiesGoal extends Goal {
     @NotNull
     private final Snail mob;
     private int lastPushTime = 20;
-    private final int pushDelay = 20;
     private List<Entity> pushAway = new ArrayList<>();
 
     public SnailPushEntitiesGoal(@NotNull Snail mob) {
@@ -33,6 +32,7 @@ public final class SnailPushEntitiesGoal extends Goal {
         }
 
         lastPushTime++;
+        int pushDelay = 20;
         if (lastPushTime < pushDelay) {
             return false;
         }
@@ -43,7 +43,7 @@ public final class SnailPushEntitiesGoal extends Goal {
         pushAway.addAll(world.getEntitiesByClass(TntMinecartEntity.class, mob.getBoundingBox().expand(8.0), entity -> mob.squaredDistanceTo(entity) < 64.0));
         pushAway.addAll(world.getEntitiesByClass(PotionEntity.class, mob.getBoundingBox().expand(8.0), entity -> mob.squaredDistanceTo(entity) < 64.0));
 
-        return pushAway != null && !pushAway.isEmpty();
+        return !pushAway.isEmpty();
     }
 
     @Override

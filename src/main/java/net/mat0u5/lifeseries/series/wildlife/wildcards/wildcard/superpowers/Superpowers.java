@@ -72,6 +72,6 @@ public enum Superpowers {
     }
 
     public static Superpowers fromString(String superpower) {
-        return Superpowers.valueOf(Superpowers.class, superpower.toUpperCase());
+        return Enum.valueOf(Superpowers.class, superpower.toUpperCase());
     }
 }

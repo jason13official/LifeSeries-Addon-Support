@@ -37,7 +37,7 @@ public class QuizScreen extends Screen {
     };
 
     private final List<List<OrderedText>> answers = new ArrayList<>();
-    private String DIFFICULTY = "Difficulty: null";
+    private String difficulty = "Difficulty: null";
     private long timerSeconds = 120;
     private final List<Rectangle> answerRects = new ArrayList<>();
 
@@ -88,16 +88,16 @@ public class QuizScreen extends Screen {
         }
         switch (Trivia.difficulty) {
             case 1:
-                DIFFICULTY = "Difficulty: Easy";
+                difficulty = "Difficulty: Easy";
                 break;
             case 2:
-                DIFFICULTY = "Difficulty: Medium";
+                difficulty = "Difficulty: Medium";
                 break;
             case 3:
-                DIFFICULTY = "Difficulty: Hard";
+                difficulty = "Difficulty: Hard";
                 break;
             default:
-                DIFFICULTY = "Difficulty: null";
+                difficulty = "Difficulty: null";
         }
     }
 
@@ -115,7 +115,7 @@ public class QuizScreen extends Screen {
         if (button == 0) { // Left-click
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
-                    this.client.setScreen(new ConfirmAnswerScreen(this, i));
+                    if (this.client != null) this.client.setScreen(new ConfirmAnswerScreen(this, i));
                     return true;
                 }
             }
@@ -134,7 +134,6 @@ public class QuizScreen extends Screen {
         int centerX = (startX + endX) / 2;
         int fifth1 = startX + (BG_WIDTH / 5);
         int fifth2 = startX + (BG_WIDTH / 5) * 2;
-        int fifth3 = startX + (BG_WIDTH / 5) * 3;
         int fifth4 = startX + (BG_WIDTH / 5) * 4;
         int questionX = startX + 10;
         int questionWidth = (fifth2-10) - questionX;
@@ -187,7 +186,7 @@ public class QuizScreen extends Screen {
         else drawTextCenter(context, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
 
         // Difficulty
-        drawTextCenter(context, Text.of(DIFFICULTY), centerX, maxY);
+        drawTextCenter(context, Text.of(difficulty), centerX, maxY);
 
         // Questions
         drawTextCenter(context, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
@@ -246,24 +245,23 @@ public class QuizScreen extends Screen {
         if (client.world == null) return;
         if (client.player == null) return;
         for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class, client.player.getBoundingBox().expand(5), entity->true)) {
-            //TODO this draws all
             drawEntity(context, x-30, y-55, x+30, y+85, size, 0.0625F, mouseX, mouseY, entity);
         }
     }
     public static void drawEntity(DrawContext context, int x1, int y1, int x2, int y2, int size, float f, float mouseX, float mouseY, Entity entity) {
-        float g = (float)(x1 + x2) / 2.0F;
-        float h = (float)(y1 + y2) / 2.0F;
+        float g = (x1 + x2) / 2.0F;
+        float h = (y1 + y2) / 2.0F;
         context.enableScissor(x1, y1, x2, y2);
         Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
         Quaternionf quaternionf2 = (new Quaternionf()).rotateX(0);
         quaternionf.mul(quaternionf2);
-        float p = 1;//entity.getScale
+        float p = 1;
         float l = entity.getYaw();
         float m = entity.getPitch();
         entity.setYaw(180);
         entity.setPitch(0);
         Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f * p, 0.0F);
-        float q = (float)size / p;
+        float q = size / p;
         drawEntity(context, g, h, q, vector3f, quaternionf, quaternionf2, entity);
         entity.setYaw(l);
         entity.setPitch(m);
@@ -272,7 +270,7 @@ public class QuizScreen extends Screen {
 
     public static void drawEntity(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, Entity entity) {
         context.getMatrices().push();
-        context.getMatrices().translate((double)x, (double)y, 50.0);
+        context.getMatrices().translate(x, y, 50.0);
         context.getMatrices().scale(size, size, -size);
         context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
         context.getMatrices().multiply(quaternionf);

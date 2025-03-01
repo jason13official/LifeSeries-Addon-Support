@@ -3,8 +3,6 @@ package net.mat0u5.lifeseries.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.SessionStatus;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -113,6 +111,7 @@ public class UpdateChecker {
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 }

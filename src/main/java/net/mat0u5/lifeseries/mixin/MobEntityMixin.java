@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;

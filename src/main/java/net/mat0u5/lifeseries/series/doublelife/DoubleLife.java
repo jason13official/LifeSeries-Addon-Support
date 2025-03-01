@@ -11,18 +11,14 @@ import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.command.WorldBorderCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.border.WorldBorder;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -112,9 +108,8 @@ public class DoubleLife extends Series {
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         if (isAllowedToAttack(killer, victim)) return;
         ServerPlayerEntity soulmate = getSoulmate(victim);
-        if (soulmate != null) {
-            if (soulmate == killer) return;
-        }
+        if (soulmate != null && soulmate == killer) return;
+
         OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
                 +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
     }
@@ -153,8 +148,7 @@ public class DoubleLife extends Series {
     public boolean hasSoulmate(ServerPlayerEntity player) {
         if (player == null) return false;
         UUID playerUUID = player.getUuid();
-        if (!soulmates.containsKey(playerUUID)) return false;
-        return true;
+        return soulmates.containsKey(playerUUID);
     }
 
     public boolean isSoulmateOnline(ServerPlayerEntity player) {
@@ -355,7 +349,7 @@ public class DoubleLife extends Series {
         Integer soulmateLives = getPlayerLives(soulmate);
         Integer playerLives = getPlayerLives(player);
         if (soulmateLives != null && playerLives != null)  {
-            if (soulmateLives != playerLives) {
+            if (!Objects.equals(soulmateLives, playerLives)) {
                 int minLives = Math.min(soulmateLives,playerLives);
                 setPlayerLives(player, minLives);
                 setPlayerLives(soulmate, minLives);
@@ -398,7 +392,7 @@ public class DoubleLife extends Series {
     }
 
     public Map<UUID, UUID> getAllSoulmates() {
-        Map<UUID, UUID> soulmates = new HashMap<>();
+        Map<UUID, UUID> loadedSoulmates = new HashMap<>();
         List<String> list = soulmateConfig.load();
         for (String str : list) {
             try {
@@ -407,10 +401,10 @@ public class DoubleLife extends Series {
                 if (split.length != 2) continue;
                 UUID key = UUID.fromString(split[0]);
                 UUID value = UUID.fromString(split[1]);
-                soulmates.put(key, value);
-                soulmates.put(value, key);
-            }catch(Exception e) {}
+                loadedSoulmates.put(key, value);
+                loadedSoulmates.put(value, key);
+            }catch(Exception ignored) {}
         }
-        return soulmates;
+        return loadedSoulmates;
     }
 }

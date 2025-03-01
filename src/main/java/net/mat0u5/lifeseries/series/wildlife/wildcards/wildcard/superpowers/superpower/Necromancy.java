@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -24,7 +23,7 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class Necromancy extends Superpower {
-    public static List<UUID> ressurectedPlayers = new ArrayList<>();
+    public static final List<UUID> ressurectedPlayers = new ArrayList<>();
 
     public Necromancy(ServerPlayerEntity player) {
         super(player);

@@ -138,17 +138,17 @@ public class LimitedLife extends Series {
     @Override
     public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         if (source != null) {
-            if (source.getAttacker() instanceof ServerPlayerEntity) {
+            if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
                 if (player != source.getAttacker()) {
-                    onPlayerKilledByPlayer(player, (ServerPlayerEntity) source.getAttacker());
+                    onPlayerKilledByPlayer(player, serverAttacker);
                     return;
                 }
             }
         }
         if (player.getPrimeAdversary() != null) {
-            if (player.getPrimeAdversary() instanceof ServerPlayerEntity) {
+            if (player.getPrimeAdversary() instanceof ServerPlayerEntity serverAdversary) {
                 if (player != player.getPrimeAdversary()) {
-                    onPlayerKilledByPlayer(player, (ServerPlayerEntity) player.getPrimeAdversary());
+                    onPlayerKilledByPlayer(player, serverAdversary);
                     return;
                 }
             }
@@ -250,8 +250,7 @@ public class LimitedLife extends Series {
         Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
         Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
         if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
-        if (attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured)) return true;
-        return false;
+        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
 
     @Override

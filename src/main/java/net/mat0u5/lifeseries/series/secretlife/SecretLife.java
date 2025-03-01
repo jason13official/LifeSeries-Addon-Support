@@ -7,7 +7,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
@@ -118,12 +117,12 @@ public class SecretLife extends Series {
         itemSpawner.addItem(pot3, 10);
 
         //Enchanted Books
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.PROTECTION, 3), 10);
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3), 10);
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.SILK_TOUCH, 1), 10);
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.FORTUNE, 3), 10);
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.LOOTING, 3), 10);
-        itemSpawner.addItem(ItemStackUtils.createEnchantedBook(Enchantments.EFFICIENCY, 4), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.PROTECTION, 3)), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 3)), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.SILK_TOUCH, 1)), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FORTUNE, 3)), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.LOOTING, 3)), 10);
+        itemSpawner.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.EFFICIENCY, 4)), 10);
 
 
         //Spawn Eggs
@@ -208,9 +207,7 @@ public class SecretLife extends Series {
         }
 
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUuid())) {
-            TaskScheduler.scheduleTask(100, () -> {
-                TaskManager.chooseTasks(List.of(player), null);
-            });
+            TaskScheduler.scheduleTask(100, () -> TaskManager.chooseTasks(List.of(player), null));
         }
     }
 
@@ -276,8 +273,7 @@ public class SecretLife extends Series {
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
         if (currentSeries.isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && (currentSeries.isOnLastLife(victim, false))) return true;
-        return false;
+        return attacker.getPrimeAdversary() == victim && (currentSeries.isOnLastLife(victim, false));
     }
 
     @Override

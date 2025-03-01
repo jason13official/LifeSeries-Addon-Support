@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 //? if <=1.21 {
 import net.minecraft.recipe.RecipeManager;
@@ -22,7 +21,7 @@ import java.util.Map;
 @Mixin(value = RecipeManager.class, priority = 1)
 public class RecipeManagerMixin {
 
-    @Inject(method = "apply", at = @At("HEAD"))
+    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
     private void applyMixin(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
         if (!Main.isLogicalSide()) return;
         if (blacklist == null) return;

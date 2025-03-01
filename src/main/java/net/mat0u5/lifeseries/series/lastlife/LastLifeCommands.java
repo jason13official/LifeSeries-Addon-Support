@@ -4,17 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.AnimationUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.scoreboard.ScoreHolder;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.world.GameMode;
 
 import java.util.Collection;
 
@@ -41,7 +37,7 @@ public class LastLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("lastlife")
-                .requires(source -> ((isAdmin(source.getPlayer()) || (source.getEntity() == null))))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("rollLives")
                     .executes(context -> LastLifeCommands.assignRandomLives(
                         context.getSource(), PlayerUtils.getAllPlayers()
@@ -64,7 +60,6 @@ public class LastLifeCommands {
     public static int assignRandomLives(ServerCommandSource source, Collection<ServerPlayerEntity> players) {
         if (checkBanned(source)) return -1;
 
-        MinecraftServer server = source.getServer();
         ((LastLife) currentSeries).livesManager.assignRandomLives(players);
         return 1;
     }
@@ -72,9 +67,8 @@ public class LastLifeCommands {
     public static int giftLife(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
 
-        MinecraftServer server = source.getServer();
         final ServerPlayerEntity self = source.getPlayer();
-        if (self == null) return -1;;
+        if (self == null) return -1;
         if (target == null) return -1;
         if (!currentSeries.isAlive(self)) {
             source.sendError(Text.of("You do not have any lives to give."));
@@ -103,9 +97,7 @@ public class LastLifeCommands {
         currentSeries.removePlayerLife(self);
         ((LastLife) currentSeries).addToLifeNoUpdate(target);
         AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(40, () -> {
-            ((LastLife)currentSeries).livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target);
-        });
+        TaskScheduler.scheduleTask(40, () -> ((LastLife)currentSeries).livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target));
 
         return 1;
     }

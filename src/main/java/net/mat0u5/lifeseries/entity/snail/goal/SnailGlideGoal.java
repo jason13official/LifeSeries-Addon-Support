@@ -1,10 +1,8 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 

@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class ItemSpawner {
     HashMap<ItemStack, Integer> lootTable = new HashMap<>();
+    private static final Random random = new Random();
     public void addItem(ItemStack item, int weight) {
         lootTable.put(item.copy(), weight);
     }
@@ -21,7 +22,6 @@ public class ItemSpawner {
 
         int totalWeight = lootTable.values().stream().mapToInt(Integer::intValue).sum();
 
-        Random random = new Random();
         int randomWeight = random.nextInt(totalWeight);
 
         for (Map.Entry<ItemStack, Integer> entry : lootTable.entrySet()) {

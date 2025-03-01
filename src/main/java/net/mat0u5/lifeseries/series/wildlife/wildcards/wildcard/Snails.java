@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -20,8 +19,8 @@ import static net.mat0u5.lifeseries.Main.server;
 public class Snails extends Wildcard {
     public static StringListConfig snailNameConfig;
 
-    public static HashMap<UUID, Snail> snails = new HashMap<>();
-    public static HashMap<UUID, String> snailNames = new HashMap<>();
+    public static Map<UUID, Snail> snails = new HashMap<>();
+    public static Map<UUID, String> snailNames = new HashMap<>();
     int ticks = 0;
 
     @Override
@@ -80,12 +79,11 @@ public class Snails extends Wildcard {
         List<Entity> toKill = new ArrayList<>();
         for (ServerWorld world : server.getWorlds()) {
             for (Entity entity : world.iterateEntities()) {
-                if (entity instanceof Snail snail) {
-                    if (!snail.fromTrivia) {
+                if (entity instanceof Snail snail && !snail.fromTrivia) {
                         toKill.add(entity);
                     }
-                }
-                if (entity instanceof PathFinder pf) {
+
+                if (entity instanceof PathFinder) {
                     toKill.add(entity);
                 }
             }

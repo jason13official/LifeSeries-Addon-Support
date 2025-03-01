@@ -21,7 +21,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.*;
 
@@ -29,7 +28,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class NetworkHandlerServer {
-    public static List<UUID> handshakeSuccessful = new ArrayList<>();
+    public static final List<UUID> handshakeSuccessful = new ArrayList<>();
 
     public static void registerPackets() {
         PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
@@ -50,23 +49,17 @@ public class NetworkHandlerServer {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> {
-                handleHandshakeResponse(player, payload.modVersionStr(), payload.modVersion());
-            });
+            server.execute(() -> handleHandshakeResponse(player, payload.modVersionStr(), payload.modVersion()));
         });
         ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> {
-                handleNumberPacket(player, payload.name(), payload.number());
-            });
+            server.execute(() -> handleNumberPacket(player, payload.name(), payload.number()));
         });
         ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> {
-                handleStringPacket(player, payload.name(),payload.value());
-            });
+            server.execute(() -> handleStringPacket(player, payload.name(),payload.value()));
         });
     }
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {

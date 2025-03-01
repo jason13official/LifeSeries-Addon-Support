@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.entity.snail.goal;
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public final class SnailStartFlyingGoal extends Goal {

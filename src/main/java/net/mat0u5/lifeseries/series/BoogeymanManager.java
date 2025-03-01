@@ -130,7 +130,7 @@ public class BoogeymanManager {
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("1").formatted(Formatting.RED),0,35,0);
         });
         TaskScheduler.scheduleTask(90, () -> {
-            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_wait")));
+            PlayerUtils.playSoundToPlayers(allowedPlayers, SoundEvent.of(Identifier.ofVanilla("lastlife_boogeyman_wait")));
             PlayerUtils.sendTitleToPlayers(allowedPlayers, Text.literal("You are...").formatted(Formatting.YELLOW),10,50,20);
         });
         TaskScheduler.scheduleTask(180, () -> boogeymenChooseRandom(allowedPlayers, currentChance));

@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.utils.morph;
 
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -10,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
@@ -24,7 +21,7 @@ import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
  */
 public class MorphComponent implements AutoSyncedComponent, ClientTickingComponent {
 
-    private PlayerEntity player;
+    private final PlayerEntity player;
     @Nullable
     private EntityType<?> morph = null;
     private boolean shouldMorph = false;
@@ -38,7 +35,7 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
         shouldMorph = morph != null;
         this.morph = morph;
     }
-    public boolean isMorphed(){
+    public boolean isMorphed() {
         return (morph != null) && shouldMorph;
     }
 
@@ -49,7 +46,7 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
 
     @Override
     public void clientTick() {
-        if(isMorphed()){
+        if(isMorphed() && morph != null){
             if(dummy == null || dummy.getType() != morph){
                 //? if <= 1.21 {
                 Entity entity = morph.create(player.getWorld());

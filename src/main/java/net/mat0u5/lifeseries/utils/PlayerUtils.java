@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.client.ClientHandler;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
@@ -26,10 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;

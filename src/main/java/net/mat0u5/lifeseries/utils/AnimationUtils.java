@@ -1,16 +1,10 @@
 package net.mat0u5.lifeseries.utils;
 
-import de.tomalbrc.bil.api.AnimatedHolder;
-import de.tomalbrc.bil.api.Animator;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.command.ParticleCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector3f;
@@ -18,14 +12,14 @@ import org.joml.Vector3f;
 import java.awt.*;
 
 public class AnimationUtils {
-    public static int SPIRAL_DURATION = 175;
+    private static int spiralDuration = 175;
     public static void playTotemAnimation(ServerPlayerEntity player) {
         //The animation lasts about 40 ticks.
         player.networkHandler.sendPacket(new EntityStatusS2CPacket(player, (byte) 35));
     }
 
     public static void createSpiral(ServerPlayerEntity player, int duration) {
-        SPIRAL_DURATION = duration;
+        spiralDuration = duration;
         TaskScheduler.scheduleTask(1, () -> startSpiral(player));
     }
 
@@ -41,7 +35,7 @@ public class AnimationUtils {
         processSpiral(player, step+2);
         processSpiral(player, step+3);
 
-        if (step <= SPIRAL_DURATION) {
+        if (step <= spiralDuration) {
             TaskScheduler.scheduleTask(1, () -> runSpiralStep(player, step + 4));
         }
     }
@@ -71,16 +65,14 @@ public class AnimationUtils {
     public static void createGlyphAnimation(ServerWorld world, Vec3d target, int duration) {
         if (world == null || target == null || duration <= 0) return;
 
-        int steps = duration; // Animation duration in ticks
         double radius = 7.5; // Radius of the glyph starting positions
 
-        for (int step = 0; step < steps; step++) {
-            int currentStep = step;
-            TaskScheduler.scheduleTask(step, () -> spawnGlyphParticles(world, target, radius, currentStep, steps));
+        for (int step = 0; step < duration; step++) {
+            TaskScheduler.scheduleTask(step, () -> spawnGlyphParticles(world, target, radius));
         }
     }
 
-    private static void spawnGlyphParticles(ServerWorld world, Vec3d target, double radius, int step, int totalSteps) {
+    private static void spawnGlyphParticles(ServerWorld world, Vec3d target, double radius) {
         int particlesPerTick = 50; // Number of glyphs spawned per tick
         Random random = world.getRandom();
 
@@ -125,8 +117,7 @@ public class AnimationUtils {
         Random random = world.getRandom();
 
         for (int step = 0; step < duration; step++) {
-            int currentStep = step;
-            TaskScheduler.scheduleTask(currentStep, () -> {
+            TaskScheduler.scheduleTask(step, () -> {
                 // Spawn particles in a spherical pattern for the current step
                 for (int i = 0; i < 50; i++) { // 50 particles per tick
                     double theta = random.nextDouble() * 2 * Math.PI; // Angle in the XY plane

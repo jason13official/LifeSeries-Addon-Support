@@ -4,22 +4,18 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class SuperpowersWildcard extends Wildcard {
-    private static HashMap<UUID, Superpower> playerSuperpowers = new HashMap<>();
+    private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
 
     @Override
     public Wildcards getType() {
@@ -50,11 +46,10 @@ public class SuperpowersWildcard extends Wildcard {
     public static void rollRandomSuperpowers() {
         resetAllSuperpowers();
         List<Superpowers> implemented = new java.util.ArrayList<>(Superpowers.getImplemented());
-        if (implemented.contains(Superpowers.NECROMANCY)) {
-            if (!Necromancy.shouldBeIncluded()) {
-                implemented.remove(Superpowers.NECROMANCY);
-            }
+        if (implemented.contains(Superpowers.NECROMANCY) && !Necromancy.shouldBeIncluded()) {
+            implemented.remove(Superpowers.NECROMANCY);
         }
+
         Collections.shuffle(implemented);
         int pos = 0;
         List<ServerPlayerEntity> allPlayers = currentSeries.getAlivePlayers();

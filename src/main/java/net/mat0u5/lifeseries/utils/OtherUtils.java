@@ -7,7 +7,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
-import net.minecraft.util.DateTimeFormatters;
 import net.minecraft.util.Identifier;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ import java.util.regex.Pattern;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class OtherUtils {
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
     private static HashMap<Text, Integer> cooldown = new HashMap<>();
 
     public static void broadcastMessage(Text message) {
@@ -93,7 +92,7 @@ public class OtherUtils {
     }
 
     public static String formatTimeMillis(long millis) {
-        long totalSeconds = (long) Math.ceil((double) millis / 1000.0);
+        long totalSeconds = (long) Math.ceil(millis / 1000.0);
         long hours = totalSeconds / 3600;
         long minutes = (totalSeconds % 3600) / 60;
         long seconds = (totalSeconds % 60);

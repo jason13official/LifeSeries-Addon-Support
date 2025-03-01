@@ -5,9 +5,7 @@ import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.morph.MorphComponent;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
 import net.minecraft.enchantment.effect.entity.ReplaceDiskEnchantmentEffect;
 import net.minecraft.entity.EntityDimensions;
@@ -15,7 +13,6 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -82,7 +79,7 @@ public abstract class PlayerEntityMixin {
     }
 
     @Unique
-    private static ReplaceDiskEnchantmentEffect frostWalker =  new ReplaceDiskEnchantmentEffect(EnchantmentLevelBasedValue.constant(5.0F), EnchantmentLevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(new BlockPredicate[]{BlockPredicate.matchingBlockTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchingBlocks(new Block[]{Blocks.WATER}), BlockPredicate.matchingFluids(new Fluid[]{Fluids.WATER}), BlockPredicate.unobstructed()})), BlockStateProvider.of(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
+    private static final ReplaceDiskEnchantmentEffect frostWalker =  new ReplaceDiskEnchantmentEffect(EnchantmentLevelBasedValue.constant(5.0F), EnchantmentLevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchingBlockTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchingBlocks(Blocks.WATER), BlockPredicate.matchingFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.of(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
     @Inject(method = "travel", at = @At("HEAD"))
     private void travel(Vec3d movementInput, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;

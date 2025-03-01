@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;

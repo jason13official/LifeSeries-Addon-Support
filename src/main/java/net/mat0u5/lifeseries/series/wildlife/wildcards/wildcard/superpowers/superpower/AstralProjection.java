@@ -84,7 +84,7 @@ public class AstralProjection extends ToggleableSuperpower {
         PlayerInventory inv = player.getInventory();
 
         FakePlayer.createFake(fakePlayerName, player.server, startedPos, startedLooking[0], startedLooking[1], player.server.getOverworld().getRegistryKey(),
-                GameMode.SURVIVAL, false, inv, player.getUuid(), player.getDisplayName()).thenAccept((fakePlayer) -> {
+                GameMode.SURVIVAL, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
             NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
