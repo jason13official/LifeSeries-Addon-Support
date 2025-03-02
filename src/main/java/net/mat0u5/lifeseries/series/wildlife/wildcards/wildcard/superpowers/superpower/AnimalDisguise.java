@@ -27,6 +27,12 @@ public class AnimalDisguise extends ToggleableSuperpower {
         return Superpowers.ANIMAL_DISGUISE;
     }
     List<EntityType<?>> defaultRandom = List.of(EntityType.COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.PIG);
+    List<EntityType<?>> bannedEntities = List.of(
+            EntityType.PLAYER, EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.ARMOR_STAND, EntityType.GOAT,EntityType.VEX,
+            EntityType.ALLAY, EntityType.PHANTOM, EntityType.DOLPHIN, EntityType.COD, EntityType.TROPICAL_FISH, EntityType.SALMON,
+            EntityType.TADPOLE, EntityType.BEE, EntityType.HORSE, EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE,
+            EntityType.AXOLOTL, EntityType.SILVERFISH, EntityType.ENDERMITE, EntityType.BLAZE, EntityType.BREEZE
+    );
 
     @Override
     public void activate() {
@@ -38,9 +44,10 @@ public class AnimalDisguise extends ToggleableSuperpower {
         EntityType<?> morph = null;
         if (lookingAt != null)  {
             if (lookingAt instanceof LivingEntity livingEntity &&
-                    !(lookingAt instanceof PlayerEntity)
-            ) {
-                morph = lookingAt.getType();
+                    !(lookingAt instanceof PlayerEntity)) {
+                if (!bannedEntities.contains(lookingAt.getType())) {
+                    morph = lookingAt.getType();
+                }
             }
         }
         if (morph == null) {

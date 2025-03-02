@@ -1,13 +1,12 @@
 package net.mat0u5.lifeseries.utils.morph;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
@@ -34,6 +33,27 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
     public void setMorph(EntityType<?> morph){
         shouldMorph = morph != null;
         this.morph = morph;
+        if (player != null) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                if (morph == null) {
+                    SizeShifting.setPlayerSizeUnchecked(serverPlayer, 1);
+                }
+                else {
+                    //? if <= 1.21 {
+                    Entity entity = morph.create(player.getWorld());
+                    //?} else {
+                    /*Entity entity = morph.create(player.getWorld(), SpawnReason.COMMAND);
+                    *///?}
+                    if (entity != null) {
+                        EntityDimensions dimensions = entity.getDimensions(EntityPose.STANDING);
+                        double scaleY = dimensions.height() / PlayerEntity.STANDING_DIMENSIONS.height();
+                        double scaleX = dimensions.width() / PlayerEntity.STANDING_DIMENSIONS.width();
+                        double scale = Math.clamp(Math.min(scaleX, scaleY), 0.1, 1.0);
+                        if (scale != player.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);
+                    }
+                }
+            }
+        }
     }
     public boolean isMorphed() {
         return (morph != null) && shouldMorph;

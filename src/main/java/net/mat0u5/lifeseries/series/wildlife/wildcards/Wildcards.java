@@ -19,7 +19,10 @@ public enum Wildcards {
     CALLBACK;
 
     public static Wildcards getFromString(String wildcard) {
-        return Enum.valueOf(Wildcards.class, wildcard.toUpperCase());
+        try {
+            return Enum.valueOf(Wildcards.class, wildcard.toUpperCase());
+        } catch(Exception e) {}
+        return Wildcards.NULL;
     }
 
     public static Wildcard getInstance(Wildcards wildcard) {

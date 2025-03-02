@@ -65,10 +65,11 @@ public abstract class PlayerEntityMixin {
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         if(MORPH_COMPONENT.isProvidedBy(player)) {
+            float scaleRatio = 1 / player.getScale();
             MorphComponent morphComponent = MORPH_COMPONENT.get(player);
             LivingEntity dummy = morphComponent.getDummy();
             if (morphComponent.isMorphed() && dummy != null){
-                cir.setReturnValue(dummy.getDimensions(EntityPose.STANDING));
+                cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
             }
         }
     }

@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers;
 
+import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,9 @@ public enum Superpowers {
     }
 
     public static Superpowers fromString(String superpower) {
-        return Enum.valueOf(Superpowers.class, superpower.toUpperCase());
+        try {
+            return Enum.valueOf(Superpowers.class, superpower.toUpperCase());
+        } catch(Exception e) {}
+        return Superpowers.NONE;
     }
 }

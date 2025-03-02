@@ -29,7 +29,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
 
     @Override
     public int deactivateCooldownMillis() {
-        return 20000;
+        return 10000;
     }
 
     @Override

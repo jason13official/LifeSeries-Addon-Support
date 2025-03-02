@@ -40,6 +40,7 @@
     "client.MinecraftClientMixin",
     "client.SoundSystemMixin",
     "superpowers.client.AbstractClientPlayerEntityMixin",
+    "superpowers.client.CameraMixin",
     "superpowers.client.EntityRendererMixin",
     "superpowers.client.PlayerEntityRendererMixin"
   ]
