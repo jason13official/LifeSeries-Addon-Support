@@ -62,7 +62,7 @@ public class NetworkHandlerClient {
             Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
 
             if (!MainClient.clientActiveWildcards.contains(Wildcards.TIME_DILATION) && newList.contains(Wildcards.TIME_DILATION)) {
-                MainClient.TIME_DILATION_TIMESTAMP = System.currentTimeMillis();
+                if (!newList.contains(Wildcards.CALLBACK)) MainClient.TIME_DILATION_TIMESTAMP = System.currentTimeMillis();
             }
             MainClient.clientActiveWildcards = newList;
         }

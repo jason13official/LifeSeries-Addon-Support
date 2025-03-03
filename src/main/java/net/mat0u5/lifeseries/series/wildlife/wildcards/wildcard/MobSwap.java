@@ -179,14 +179,21 @@ public class MobSwap extends Wildcard {
         swaps++;
         if (swaps < 1) return;
 
+        int spawnMobs;
+        if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+            spawnMobs = (int) (SPAWN_MOBS / 1.5);
+        }
+        else {
+            spawnMobs = SPAWN_MOBS;
+        }
 
         float progress = ((float) currentSession.passedTime - activatedAt) / (currentSession.sessionLength - activatedAt);
         if (progress > 0.7) {
             if (mobsLeftDiv == 0) {
                 mobsLeftDiv = lastDiv;
             }
-            if (SPAWN_MOBS != 0) {
-                int totalMobsLeft = mobsLeftDiv * SPAWN_MOBS;
+            if (spawnMobs != 0) {
+                int totalMobsLeft = mobsLeftDiv * spawnMobs;
                 bossChance = (2.0 / totalMobsLeft) * BOSS_CHANCE_MULTIPLIER;
             }
         }
@@ -199,11 +206,11 @@ public class MobSwap extends Wildcard {
         mobcapAnimal = 0;
 
         TaskScheduler.scheduleTask(120, () -> {
-            mobcapAnimal = SPAWN_MOBS;
+            mobcapAnimal = spawnMobs;
             fastAnimalSpawn = true;
         });
 
-        int timeForSpawning = Math.max(120, (int)(SPAWN_MOBS/2.5));
+        int timeForSpawning = Math.max(120, (int)(spawnMobs/2.5));
 
         for (int i = timeForSpawning; i > 120; i -= 20) {
             TaskScheduler.scheduleTask(i, () -> {

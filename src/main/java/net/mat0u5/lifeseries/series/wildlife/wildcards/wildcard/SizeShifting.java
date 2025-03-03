@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
@@ -17,6 +18,9 @@ public class SizeShifting extends Wildcard {
 
     public static double MIN_SIZE = 0.25;
     public static double MAX_SIZE = 3;
+
+    public static double MIN_SIZE_NERFED = 0.6;
+    public static double MAX_SIZE_NERFED = 1.5;
 
     public static double SIZE_CHANGE_MULTIPLIER = 1;
     public static double SIZE_CHANGE_STEP = 0.0015;
@@ -55,6 +59,11 @@ public class SizeShifting extends Wildcard {
         if (size > MAX_SIZE_HARD) size = MAX_SIZE_HARD;
         if (size < MIN_SIZE) size = MIN_SIZE;
         if (size > MAX_SIZE) size = MAX_SIZE;
+
+        if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+            if (size < MIN_SIZE_NERFED) size = MIN_SIZE_NERFED;
+            if (size > MAX_SIZE_NERFED) size = MAX_SIZE_NERFED;
+        }
 
 
         if (MORPH_COMPONENT.maybeGet(player).isPresent()) {

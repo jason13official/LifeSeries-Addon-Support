@@ -55,7 +55,8 @@ public class WildcardManager {
         //activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
         //activeWildcards.put(Wildcards.SNAILS, new Snails());
         //activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
-        activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
+        //activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
+        activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
     }
 
     public static void resetWildcardsOnPlayerJoin(ServerPlayerEntity player) {
@@ -90,13 +91,6 @@ public class WildcardManager {
     }
 
     public static void fadedWildcard() {
-        if (activeWildcards.containsKey(Wildcards.TIME_DILATION)) {
-            TaskScheduler.scheduleTask(5, () -> {
-                OtherUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
-            });
-            return;
-        }
         OtherUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
     }
@@ -142,6 +136,40 @@ public class WildcardManager {
         }
     }
 
+    private static final List<String> allColorCodes = List.of("_","9","a","b","c","d","e");
+    public static void showRainbowCryptTitle(String text) {
+        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+        String colorCrypt = "§r§6§l§k";
+        String colorNormal = "§r§6§l";
+        String cryptedText = "";
+        for (Character character : text.toCharArray()) {
+            cryptedText += "<"+character;
+        }
+
+        float pos = 0;
+        for (int i = 0; i < text.length()+24; i++) {
+            pos += 2;
+            String newCryptedText = cryptedText;
+            if (cryptedText.contains("<")) {
+                String[] split = cryptedText.split("<");
+                int timesRemaining = split.length;
+                int random = rnd.nextInt(1, timesRemaining);
+                split[random] = ">"+split[random];
+                cryptedText = String.join("<", split).replaceAll("<>", colorNormal);
+                newCryptedText =  cryptedText.replaceAll("<",colorCrypt);
+            }
+
+            while (newCryptedText.contains("§6")) {
+                String randomColor = "§" + allColorCodes.get(rnd.nextInt(allColorCodes.size()));
+                newCryptedText = newCryptedText.replaceFirst("§6", randomColor);
+            }
+
+            newCryptedText = newCryptedText.replaceAll("§_","§6");
+            String finalCryptedText = newCryptedText;
+            TaskScheduler.scheduleTask((int) pos, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(finalCryptedText),0,4,4));
+        }
+    }
+
     public static void tick() {
         SuperpowersWildcard.onTick();
         for (Wildcard wildcard : activeWildcards.values()) {
@@ -169,6 +197,12 @@ public class WildcardManager {
     public static void onSessionEnd() {
         if (!activeWildcards.isEmpty()) {
             fadedWildcard();
+        }
+        if (isActiveWildcard(Wildcards.CALLBACK)) {
+            if (activeWildcards.get(Wildcards.CALLBACK) instanceof Callback callback) {
+                callback.deactivate();
+                activeWildcards.remove(Wildcards.CALLBACK);
+            }
         }
         for (Wildcard wildcard : activeWildcards.values()) {
             wildcard.deactivate();

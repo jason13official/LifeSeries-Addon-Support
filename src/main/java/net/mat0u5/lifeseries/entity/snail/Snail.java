@@ -258,7 +258,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public boolean isNerfed() {
-        return fromTrivia;
+        if (fromTrivia) return true;
+        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
     }
 
     public void setFromTrivia() {

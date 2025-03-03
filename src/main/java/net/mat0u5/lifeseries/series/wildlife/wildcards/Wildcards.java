@@ -37,20 +37,42 @@ public enum Wildcards {
         return null;
     }
 
-    public static List<String> getWildcards() {
-        return List.of("size_shifting","hunger","snails","time_dilation","trivia","mob_swap","superpowers","callback");
+    public static List<Wildcards> getWildcards() {
+        return List.of(
+            SIZE_SHIFTING, HUNGER, SNAILS, TIME_DILATION, TRIVIA, MOB_SWAP, SUPERPOWERS, CALLBACK
+        );
+    }
+
+    public static List<String> getWildcardsStr() {
+        List<String> result = new ArrayList<>();
+        for (Wildcards wildcard : getWildcards()) {
+            String name = getStringName(wildcard);
+            result.add(name);
+        }
+        return result;
     }
 
     public static String getStringName(Wildcards wildcard) {
         return wildcard.toString().toLowerCase();
     }
 
-    public static List<String> getActiveWildcards() {
+    public static List<Wildcards> getActiveWildcards() {
+        return new ArrayList<>(WildcardManager.activeWildcards.keySet());
+    }
+
+    public static List<Wildcards> getInactiveWildcards() {
+        List<Wildcards> result = new ArrayList<>(getWildcards());
+        result.removeAll(getActiveWildcards());
+        return result;
+    }
+
+    public static List<String> getActiveWildcardsStr() {
         List<String> result = new ArrayList<>();
-        for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
+        for (Wildcards wildcard : getActiveWildcards()) {
             String name = getStringName(wildcard);
             result.add(name);
         }
         return result;
     }
+
 }

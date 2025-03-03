@@ -54,7 +54,7 @@ public class WildLifeCommands {
                 )
                 .then(literal("activate")
                     .then(argument("wildcard", StringArgumentType.string())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getWildcards(), builder))
+                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getWildcardsStr(), builder))
                         .executes(context -> activateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
@@ -62,7 +62,7 @@ public class WildLifeCommands {
                 )
                 .then(literal("deactivate")
                     .then(argument("wildcard", StringArgumentType.string())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getActiveWildcards(), builder))
+                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getActiveWildcardsStr(), builder))
                         .executes(context -> deactivateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
@@ -218,17 +218,17 @@ public class WildLifeCommands {
 
     public static int listWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        source.sendMessage(Text.of("§7Available Wildcards: §f" + String.join(", ", Wildcards.getWildcards())));
+        source.sendMessage(Text.of("§7Available Wildcards: §f" + String.join(", ", Wildcards.getWildcardsStr())));
         return 1;
     }
 
     public static int listActiveWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        if (Wildcards.getActiveWildcards().isEmpty()) {
+        if (Wildcards.getActiveWildcardsStr().isEmpty()) {
             source.sendMessage(Text.of("§7There are no active Wildcards right now. \nA Wildcard will be randomly selected when the session starts, or you can use §r'/wildcard activate <wildcard>'§7 to activate a specific Wildcard."));
             return 1;
         }
-        source.sendMessage(Text.of("§7Activated Wildcards: " + String.join(", ", Wildcards.getActiveWildcards())));
+        source.sendMessage(Text.of("§7Activated Wildcards: " + String.join(", ", Wildcards.getActiveWildcardsStr())));
         return 1;
     }
 }

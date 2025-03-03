@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -16,7 +17,12 @@ public class TimeDilation extends Wildcard {
     public static float MIN_TICK_RATE = 1;
     public static float NORMAL_TICK_RATE = 20;
     public static float MAX_TICK_RATE = 100;
+
+    public static float MIN_TICK_RATE_NERFED = 10;
+    public static float MAX_TICK_RATE_NERFED = 30;
+
     public static float MIN_PLAYER_MSPT = 25.0F;
+
     public static int updateRate = 100;
     public static int lastDiv = -1;
     public static int activatedAt = -1;
@@ -32,7 +38,7 @@ public class TimeDilation extends Wildcard {
         if (server == null) return;
         ServerTickManager serverTickManager = server.getTickManager();
         float rate = serverTickManager.getTickRate();
-        if (rate > 20 && server != null) {
+        if (rate > 20) {
             if (rate > 30) {
                 adjustCreeperFuseTimes();
             }
@@ -56,12 +62,21 @@ public class TimeDilation extends Wildcard {
         if (!active) return;
         float sessionPassedTime = ((float) currentSession.passedTime - activatedAt);
         if (sessionPassedTime < 0) return;
-        if (sessionPassedTime > 3600 && sessionPassedTime < 3700) OtherUtils.executeCommand("weather clear");
+        if (sessionPassedTime > 3600 && sessionPassedTime < 3700 && !isNerfed()) OtherUtils.executeCommand("weather clear");
         int currentDiv = (int) ((currentSession.passedTime) / updateRate);
         if (lastDiv != currentDiv) {
             lastDiv = currentDiv;
 
             float progress = ((float) currentSession.passedTime - activatedAt) / (currentSession.sessionLength - activatedAt);
+            if (isNerfed()) {
+                progress = ((float) currentSession.passedTime - activatedAt) / (20*60*5);
+                if (progress >= 1 && !Callback.allWildcardsPhaseReached) {
+                    deactivate();
+                    WildcardManager.fadedWildcard();
+                    return;
+                }
+            }
+            progress = Math.clamp(progress, 0, 1);
             /*
             if (progress < 0.492f) {
                 progress = 0.311774f * (float) Math.pow(progress, 0.7);
@@ -72,31 +87,31 @@ public class TimeDilation extends Wildcard {
             */
             float rate;
             if (progress < 0.5f) {
-                rate = MIN_TICK_RATE + (NORMAL_TICK_RATE - MIN_TICK_RATE) * (progress * 2);
+                rate = getMinTickRate() + (NORMAL_TICK_RATE - getMinTickRate()) * (progress * 2);
             }
             else {
-                rate = NORMAL_TICK_RATE + (MAX_TICK_RATE - NORMAL_TICK_RATE) * (progress * 2 - 1);
+                rate = NORMAL_TICK_RATE + (getMaxTickRate() - NORMAL_TICK_RATE) * (progress * 2 - 1);
             }
-            rate = Math.min(rate, MAX_TICK_RATE);
+            rate = Math.min(rate, getMaxTickRate());
             setWorldSpeed(rate);
         }
     }
 
     @Override
     public void deactivate() {
+        super.deactivate();
         setWorldSpeed(NORMAL_TICK_RATE);
         lastDiv = -1;
         OtherUtils.executeCommand("/execute as @e[type=minecraft:creeper] run data modify entity @s Fuse set value 30s");
-        super.deactivate();
     }
 
     @Override
     public void activate() {
-        TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
+        if (!isNerfed()) TaskScheduler.scheduleTask(50, () -> OtherUtils.executeCommand("weather rain"));
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = (int) currentSession.passedTime + 400;
             lastDiv = -1;
-            slowlySetWorldSpeed(MIN_TICK_RATE, 18);
+            slowlySetWorldSpeed(getMinTickRate(), 18);
             TaskScheduler.scheduleTask(19, super::activate);
         });
     }
@@ -131,5 +146,19 @@ public class TimeDilation extends Wildcard {
         float tickRate = serverTickManager.getTickRate();
         short fuseTime = (short) (20 * (tickRate / 20.0f));
         OtherUtils.executeCommand("/execute as @e[type=minecraft:creeper] run data modify entity @s Fuse set value "+fuseTime+"s");
+    }
+
+    public static float getMaxTickRate() {
+        if (isNerfed()) return MAX_TICK_RATE_NERFED;
+        return MAX_TICK_RATE;
+    }
+
+    public static float getMinTickRate() {
+        if (isNerfed()) return MIN_TICK_RATE_NERFED;
+        return MIN_TICK_RATE;
+    }
+
+    public static boolean isNerfed() {
+        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
     }
 }
