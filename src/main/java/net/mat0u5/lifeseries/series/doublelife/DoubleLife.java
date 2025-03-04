@@ -357,8 +357,7 @@ public class DoubleLife extends Series {
         }
     }
 
-    public void canFoodHeal(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+    public void canFoodHeal(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
         boolean orig =  player.getHealth() > 0.0F && player.getHealth() < player.getMaxHealth();
         if (!orig) {
             cir.setReturnValue(false);
@@ -366,10 +365,10 @@ public class DoubleLife extends Series {
         }
 
         DoubleLife doubleLife = ((DoubleLife) currentSeries);
-        if (!doubleLife.hasSoulmate(serverPlayer)) return;
-        if (!doubleLife.isSoulmateOnline(serverPlayer)) return;
-        if (doubleLife.isMainSoulmate(serverPlayer)) return;
-        ServerPlayerEntity soulmate = doubleLife.getSoulmate(serverPlayer);
+        if (!doubleLife.hasSoulmate(player)) return;
+        if (!doubleLife.isSoulmateOnline(player)) return;
+        if (doubleLife.isMainSoulmate(player)) return;
+        ServerPlayerEntity soulmate = doubleLife.getSoulmate(player);
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
 
