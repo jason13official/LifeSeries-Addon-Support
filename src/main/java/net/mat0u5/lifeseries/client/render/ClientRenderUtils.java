@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 
 public class ClientRenderUtils {
+    public static boolean isGameFullyFrozen = false;
     public static void onInitialize() {
         HudRenderCallback.EVENT.register(ClientRenderUtils::renderText);
     }

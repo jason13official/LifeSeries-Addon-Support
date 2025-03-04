@@ -120,6 +120,12 @@ public class NetworkHandlerServer {
         ServerPlayNetworking.send(player, payload);
     }
 
+    public static void sendLongPackets(String name, long number) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            sendLongPacket(player, name, number);
+        }
+    }
+
     public static void sendUpdatePacketTo(ServerPlayerEntity player) {
         if (currentSeries instanceof WildLife) {
             sendNumberPacket(player, "hunger_version", Hunger.shuffleVersion);

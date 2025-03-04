@@ -66,6 +66,15 @@ public enum Wildcards {
         return result;
     }
 
+    public static List<String> getInactiveWildcardsStr() {
+        List<String> result = new ArrayList<>();
+        for (Wildcards wildcard : getInactiveWildcards()) {
+            String name = getStringName(wildcard);
+            result.add(name);
+        }
+        return result;
+    }
+
     public static List<String> getActiveWildcardsStr() {
         List<String> result = new ArrayList<>();
         for (Wildcards wildcard : getActiveWildcards()) {

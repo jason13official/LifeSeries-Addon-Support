@@ -60,10 +60,6 @@ public class NetworkHandlerClient {
                 newList.add(Wildcards.getFromString(wildcardStr));
             }
             Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
-
-            if (!MainClient.clientActiveWildcards.contains(Wildcards.TIME_DILATION) && newList.contains(Wildcards.TIME_DILATION)) {
-                if (!newList.contains(Wildcards.CALLBACK)) MainClient.TIME_DILATION_TIMESTAMP = System.currentTimeMillis();
-            }
             MainClient.clientActiveWildcards = newList;
         }
         if (name.equalsIgnoreCase("curse_sliding")) {
@@ -112,6 +108,9 @@ public class NetworkHandlerClient {
                     MainClient.invisiblePlayers.put(uuid, number);
                 }
             }catch(Exception ignored) {}
+        }
+        if (name.equalsIgnoreCase("time_dilation")) {
+            MainClient.TIME_DILATION_TIMESTAMP = number;
         }
     }
 

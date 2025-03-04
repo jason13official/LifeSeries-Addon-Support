@@ -67,6 +67,7 @@ public class Callback extends Wildcard {
                 Wildcard wildcardInstance = WildcardManager.activeWildcards.get(Wildcards.TIME_DILATION);
                 wildcardInstance.deactivate();
                 WildcardManager.activeWildcards.remove(Wildcards.TIME_DILATION);
+                NetworkHandlerServer.sendUpdatePackets();
             }
             preAllWildcardsPhaseReached = true;
             return;
@@ -161,6 +162,8 @@ public class Callback extends Wildcard {
             }
             WildcardManager.showRainbowCryptTitle("All wildcards are active!");
         });
+        TaskScheduler.scheduleTask(92, NetworkHandlerServer::sendUpdatePackets);
+
     }
 
     public void deactivateAllWildcards() {
@@ -171,6 +174,7 @@ public class Callback extends Wildcard {
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
+        NetworkHandlerServer.sendUpdatePackets();
     }
     private Wildcards lastActivatedWildcard;
     public void activateRandomWildcard() {
@@ -191,6 +195,7 @@ public class Callback extends Wildcard {
         wildcardInstance.deactivate();
         WildcardManager.activeWildcards.remove(wildcard);
         WildcardManager.fadedWildcard();
+        NetworkHandlerServer.sendUpdatePackets();
     }
 
     public Wildcards getRandomInactiveWildcard() {

@@ -19,6 +19,8 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.util.List;
+
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.utils.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -53,16 +55,16 @@ public class WildLifeCommands {
                     )
                 )
                 .then(literal("activate")
-                    .then(argument("wildcard", StringArgumentType.string())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getWildcardsStr(), builder))
+                    .then(argument("wildcard", StringArgumentType.greedyString())
+                        .suggests((context, builder) -> CommandSource.suggestMatching(suggestionsActivateWildcard(), builder))
                         .executes(context -> activateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
                     )
                 )
                 .then(literal("deactivate")
-                    .then(argument("wildcard", StringArgumentType.string())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(Wildcards.getActiveWildcardsStr(), builder))
+                    .then(argument("wildcard", StringArgumentType.greedyString())
+                        .suggests((context, builder) -> CommandSource.suggestMatching(suggestionsDeactivateWildcard(), builder))
                         .executes(context -> deactivateWildcard(
                             context.getSource(), StringArgumentType.getString(context, "wildcard"))
                         )
@@ -114,6 +116,17 @@ public class WildLifeCommands {
                     )
                 )
         );
+    }
+    public static List<String> suggestionsDeactivateWildcard() {
+        List<String> allWildcards = Wildcards.getActiveWildcardsStr();
+        allWildcards.add("*");
+        return allWildcards;
+    }
+
+    public static List<String> suggestionsActivateWildcard() {
+        List<String> allWildcards = Wildcards.getInactiveWildcardsStr();
+        allWildcards.add("*");
+        return allWildcards;
     }
 
     public static int setRandomSuperpowers(ServerCommandSource source) {
@@ -175,6 +188,11 @@ public class WildLifeCommands {
 
     public static int deactivateWildcard(ServerCommandSource source, String wildcardName) {
         if (checkBanned(source)) return -1;
+        if (wildcardName.equalsIgnoreCase("*")) {
+            WildcardManager.onSessionEnd();
+            source.sendMessage(Text.of("§7Deactivated all wildcards."));
+            return 1;
+        }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
             source.sendError(Text.of("That Wildcard doesn't exist."));
@@ -196,6 +214,28 @@ public class WildLifeCommands {
 
     public static int activateWildcard(ServerCommandSource source, String wildcardName) {
         if (checkBanned(source)) return -1;
+        if (wildcardName.equalsIgnoreCase("*")) {
+            List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
+            for (Wildcards wildcard : inactiveWildcards) {
+                if (wildcard == Wildcards.CALLBACK) continue;
+                Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
+                if (wildcardInstance == null) continue;
+                WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
+            }
+
+            WildcardManager.showDots();
+            TaskScheduler.scheduleTask(90, () -> {
+                for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
+                    if (wildcard.active) continue;
+                    wildcard.activate();
+                }
+                WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+            });
+            NetworkHandlerServer.sendUpdatePackets();
+
+            source.sendMessage(Text.of("§7Activated all wildcards (Except Callback)."));
+            return 1;
+        }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
         if (wildcard == Wildcards.NULL) {
             source.sendError(Text.of("That Wildcard doesn't exist."));
