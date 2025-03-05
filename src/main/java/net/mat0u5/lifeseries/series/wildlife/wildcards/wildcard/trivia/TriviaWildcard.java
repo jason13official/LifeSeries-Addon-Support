@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
@@ -14,6 +15,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 
 import java.io.IOException;
 import java.util.*;
@@ -176,6 +179,8 @@ public class TriviaWildcard extends Wildcard {
             bot.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
             bot.teleportAbovePlayer(10, 50);
+            player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);
+            NetworkHandlerServer.sendNumberPacket(player, "fake_thunder", 7);
         }
     }
 

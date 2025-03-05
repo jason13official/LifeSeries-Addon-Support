@@ -12,10 +12,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class MainClient implements ClientModInitializer {
 
@@ -26,10 +23,12 @@ public class MainClient implements ClientModInitializer {
     public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
     public static boolean CURSE_SLIDING = false;
 
-    public static HashMap<String, String> playerDisguiseNames = new HashMap<>();
-    public static HashMap<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
+    public static Map<String, String> playerDisguiseNames = new HashMap<>();
+    public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
 
-    public static HashMap<UUID, Long> invisiblePlayers = new HashMap<>();
+    public static Map<UUID, Long> invisiblePlayers = new HashMap<>();
+
+    public static int snailAir = 300;
 
     @Override
     public void onInitializeClient() {

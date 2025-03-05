@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +71,7 @@ public final class SnailPushProjectilesGoal extends Goal {
                 double velocityZ = (dz / horizontalDistance) * speed;
 
                 projectile.setVelocity(velocityX, velocityY, velocityZ, 1.6F, 0.0F);
-                projectile.setOwner(mob);
+                if (!(projectile instanceof TridentEntity)) projectile.setOwner(mob);
 
                 playSound = true;
             }

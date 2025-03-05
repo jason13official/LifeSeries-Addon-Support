@@ -65,7 +65,7 @@ public class NetworkHandlerServer {
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {
         int intValue = (int) value;
         if (name.equalsIgnoreCase("trivia_answer")) {
-            Main.LOGGER.info("[PACKET_SERVER] Received trivia answer (from "+player.getNameForScoreboard()+"): "+ intValue);
+            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received trivia answer (from "+player.getNameForScoreboard()+"): "+ intValue);
             TriviaWildcard.handleAnswer(player, intValue);
         }
     }
@@ -79,7 +79,7 @@ public class NetworkHandlerServer {
     }
 
     public static void handleHandshakeResponse(ServerPlayerEntity player, String modVersionStr, int modVersion) {
-        Main.LOGGER.info("[PACKET_SERVER] Received handshake (from "+player.getNameForScoreboard()+"): {"+modVersionStr+", "+modVersion+"}");
+        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received handshake (from "+player.getNameForScoreboard()+"): {"+modVersionStr+", "+modVersion+"}");
         handshakeSuccessful.add(player.getUuid());
     }
 
@@ -88,7 +88,7 @@ public class NetworkHandlerServer {
      */
     public static void sendTriviaPacket(ServerPlayerEntity player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
-        Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
+        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
         ServerPlayNetworking.send(player, triviaQuestionPacket);
     }
 
@@ -98,25 +98,22 @@ public class NetworkHandlerServer {
         HandshakePayload payload = new HandshakePayload(modVersionStr, modVersion);
         ServerPlayNetworking.send(player, payload);
         handshakeSuccessful.remove(player.getUuid());
-        Main.LOGGER.info("[PACKET_SERVER] Sending handshake to "+player.getNameForScoreboard()+": {"+modVersionStr+", "+modVersion+"}");
+        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending handshake to "+player.getNameForScoreboard()+": {"+modVersionStr+", "+modVersion+"}");
     }
 
     public static void sendStringPacket(ServerPlayerEntity player, String name, String value) {
         StringPayload payload = new StringPayload(name, value);
-        Main.LOGGER.info("[PACKET_SERVER] Sending string packet to "+player.getNameForScoreboard()+": {"+name+": "+value+"}");
         ServerPlayNetworking.send(player, payload);
     }
 
     public static void sendNumberPacket(ServerPlayerEntity player, String name, double number) {
         NumberPayload payload = new NumberPayload(name, number);
-        Main.LOGGER.info("[PACKET_SERVER] Sending number packet to "+player.getNameForScoreboard()+": {"+name+": "+number+"}");
         ServerPlayNetworking.send(player, payload);
     }
 
     public static void sendLongPacket(ServerPlayerEntity player, String name, long number) {
         if (player == null) return;
         LongPayload payload = new LongPayload(name, number);
-        Main.LOGGER.info("[PACKET_SERVER] Sending long packet to "+player.getNameForScoreboard()+": {"+name+": "+number+"}");
         ServerPlayNetworking.send(player, payload);
     }
 

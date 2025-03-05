@@ -44,6 +44,11 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             attackCooldown2--;
             return false;
         }
+
+        if (attackCooldown <= 4) {
+            return true;
+        }
+
         ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
         if (boundPlayer == null) {
             return false;

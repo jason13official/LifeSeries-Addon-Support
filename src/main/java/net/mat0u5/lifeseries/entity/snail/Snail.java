@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -81,6 +82,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public int nullPlayerChecks = 0;
     public Text snailName;
     private long chunkTicketExpiryTicks = 0L;
+    private int lastAir = 0;
 
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
@@ -246,8 +248,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 updateNavigationTarget();
             }
         }
-        if (getAir() == 0 && SHOULD_DROWN_PLAYER && !fromTrivia) {
-            damageFromDrowning();
+
+        if (SHOULD_DROWN_PLAYER && !fromTrivia && getBoundPlayer() != null) {
+            int currentAir = getAir();
+            if (lastAir != currentAir) {
+                lastAir = currentAir;
+                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", lastAir);
+            }
+            if (currentAir == 0) damageFromDrowning();
         }
 
         handleHighVelocity();

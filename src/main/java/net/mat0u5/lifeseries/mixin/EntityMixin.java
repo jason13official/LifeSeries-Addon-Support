@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
@@ -28,21 +29,31 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 public abstract class EntityMixin {
     @Inject(method = "getAir", at = @At("HEAD"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        if (!Main.isLogicalSide()) return; //TODO
-        if (Snail.SHOULD_DROWN_PLAYER) {
-            if (currentSeries instanceof WildLife) {
-                if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
-                    Entity entity = (Entity) (Object) this;
-                    if (entity instanceof PlayerEntity player) {
-                        if (!Snails.snails.containsKey(player.getUuid())) return;
-                        Snail snail = Snails.snails.get(player.getUuid());
-                        if (snail == null) return;
-                        int snailAir = snail.getAir();
-                        int initialAir = entity.getDataTracker().get(EntityTrackedData.AIR);
-                        if (snailAir < initialAir) {
-                            cir.setReturnValue(snailAir);
+        if (Main.isLogicalSide()) {
+            if (Snail.SHOULD_DROWN_PLAYER) {
+                if (currentSeries instanceof WildLife) {
+                    if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
+                        Entity entity = (Entity) (Object) this;
+                        if (entity instanceof PlayerEntity player) {
+                            if (!Snails.snails.containsKey(player.getUuid())) return;
+                            Snail snail = Snails.snails.get(player.getUuid());
+                            if (snail == null) return;
+                            int snailAir = snail.getAir();
+                            int initialAir = entity.getDataTracker().get(EntityTrackedData.AIR);
+                            if (snailAir < initialAir) {
+                                cir.setReturnValue(snailAir);
+                            }
                         }
                     }
+                }
+            }
+        }
+        else if (MainClient.snailAir != 300) {
+            Entity entity = (Entity) (Object) this;
+            if (entity instanceof PlayerEntity player) {
+                int initialAir = player.getDataTracker().get(EntityTrackedData.AIR);
+                if (MainClient.snailAir < initialAir) {
+                    cir.setReturnValue(MainClient.snailAir);
                 }
             }
         }
