@@ -80,7 +80,7 @@ public class LimitedLife extends Series {
         if (lives == null) return Formatting.GRAY;
         if (lives >= YELLOW_TIME) return Formatting.GREEN;
         if (lives >= RED_TIME) return Formatting.YELLOW;
-        if (lives >= 1) return Formatting.DARK_RED;
+        if (lives >= 1) return Formatting.RED;
         return Formatting.DARK_GRAY;
     }
 

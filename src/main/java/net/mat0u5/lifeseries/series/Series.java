@@ -29,6 +29,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
@@ -84,7 +85,7 @@ public abstract class Series extends Session {
         TeamUtils.createTeam("Dead", Formatting.DARK_GRAY);
         TeamUtils.createTeam("Unassigned", Formatting.GRAY);
 
-        TeamUtils.createTeam("Red", Formatting.DARK_RED);
+        TeamUtils.createTeam("Red", Formatting.RED);
         TeamUtils.createTeam("Yellow", Formatting.YELLOW);
         TeamUtils.createTeam("Green", Formatting.GREEN);
         TeamUtils.createTeam("DarkGreen", Formatting.DARK_GREEN);
@@ -94,7 +95,7 @@ public abstract class Series extends Session {
 
     public Formatting getColorForLives(Integer lives) {
         if (lives == null) return Formatting.GRAY;
-        if (lives == 1) return Formatting.DARK_RED;
+        if (lives == 1) return Formatting.RED;
         if (lives == 2) return Formatting.YELLOW;
         if (lives == 3) return Formatting.GREEN;
         if (lives >= 4) return Formatting.DARK_GREEN;
@@ -365,6 +366,9 @@ public abstract class Series extends Session {
     }
 
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
+    }
+
+    public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
     }
 
     public void onPlayerHeal(ServerPlayerEntity player, float amount) {

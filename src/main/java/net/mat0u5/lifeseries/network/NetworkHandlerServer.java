@@ -170,12 +170,7 @@ public class NetworkHandlerServer {
         if (currentSeries.getSeries() != SeriesList.WILD_LIFE) return;
         if (handshakeSuccessful.contains(player.getUuid())) return;
         Text disconnectText = Text.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
-                Text.literal("Click to download on Modrinth.")
-                        .styled(style -> style
-                                .withColor(Formatting.BLUE)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/life-series"))
-                                .withUnderline(true)
-                        ));
+                Text.literal("§9§nThe Life Series mod is available on Modrinth."));
         player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
     }
 

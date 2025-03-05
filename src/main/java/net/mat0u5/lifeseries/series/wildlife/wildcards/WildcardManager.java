@@ -208,6 +208,7 @@ public class WildcardManager {
             wildcard.deactivate();
         }
         activeWildcards.clear();
+        SuperpowersWildcard.resetAllSuperpowers();
         NetworkHandlerServer.sendUpdatePackets();
     }
 

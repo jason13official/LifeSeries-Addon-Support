@@ -49,6 +49,19 @@ public abstract class PlayerEntityMixin {
         }
     }
 
+    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    //? if <= 1.21 {
+    private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
+    /*private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    *///?}
+        if (!Main.isLogicalSide()) return;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            currentSeries.onPrePlayerDamage(serverPlayer, source, amount, cir);
+        }
+    }
+
     @Inject(method = "canFoodHeal", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;

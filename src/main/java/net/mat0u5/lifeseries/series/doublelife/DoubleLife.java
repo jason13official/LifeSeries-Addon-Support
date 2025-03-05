@@ -291,15 +291,17 @@ public class DoubleLife extends Series {
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
 
-        //? if <=1.21 {
-        DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
-                .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
-        soulmate.damage(damageSource, 0.0000001F);
-         //?} else {
-        /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
-                .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
-        soulmate.damage(soulmate.getServerWorld(), damageSource, 0.0000001F);
-        *///?}
+        if (soulmate.hurtTime == 0) {
+            //? if <=1.21 {
+            DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+                    .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
+            soulmate.damage(damageSource, 0.0000001F);
+            //?} else {
+            /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+                    .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
+            soulmate.damage(soulmate.getServerWorld(), damageSource, 0.0000001F);
+            *///?}
+        }
 
         float newHealth = player.getHealth();
         if (newHealth <= 0.0F) newHealth = 0.01F;

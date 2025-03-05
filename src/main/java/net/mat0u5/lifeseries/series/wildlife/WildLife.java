@@ -27,6 +27,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
@@ -200,6 +201,7 @@ public class WildLife extends Series {
             }
         }
     }
+
     @Override
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
         if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.PLAYER_DISGUISE)) {
@@ -217,13 +219,24 @@ public class WildLife extends Series {
                 power.onTakeDamage();
             }
         }
+    }
+
+    @Override
+    public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (source.getType().msgId().equalsIgnoreCase("fall")) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.cancelNextFallDamage) {
                         power.cancelNextFallDamage = false;
-                        ci.cancel();
+                        cir.setReturnValue(false);
+                        return;
                     }
+                }
+            }
+            if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPER_PUNCH) && player.hasVehicle()) {
+                if (player.getVehicle() instanceof ServerPlayerEntity) {
+                    cir.setReturnValue(false);
+                    return;
                 }
             }
         }
