@@ -228,6 +228,7 @@ public class DoubleLife extends Series {
         if (server == null) return;
         List<ServerPlayerEntity> players = getNonAssignedPlayers();
         if (players.isEmpty()) return;
+        if (players.size() == 1) return;
         PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
 
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {

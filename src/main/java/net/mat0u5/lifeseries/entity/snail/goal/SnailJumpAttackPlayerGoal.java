@@ -21,6 +21,10 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.dontAttackFor > 0) {
+            return false;
+        }
+
         ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
         if (boundPlayer == null) {
             return false;
@@ -117,8 +121,20 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
                 previousTargetPosition.getZ() - mob.getZ()
         );
 
-        //Vec3d targetVelocity = boundPlayer.getPos().subtract(previousTargetPosition);
-        //Vec3d expectedTargetPos = relativeTargetPos.add(targetVelocity.multiply(3));
+        if (boundPlayer.getRandom().nextInt(3) == 0) {
+            //Harder attack variant
+            relativeTargetPos = new Vec3d(
+                    boundPlayer.getX() - mob.getX(),
+                    boundPlayer.getY() - mob.getY(),
+                    boundPlayer.getZ() - mob.getZ()
+            );
+        }
+
+        if (boundPlayer.getRandom().nextInt(6) == 0) {
+            //EVEN harder attack variant
+            Vec3d targetVelocity = boundPlayer.getPos().subtract(previousTargetPosition);
+            relativeTargetPos = relativeTargetPos.add(targetVelocity.multiply(3));
+        }
 
         Vec3d attackVector = mobVelocity;
         if (relativeTargetPos.lengthSquared() > 0.0001) {

@@ -222,6 +222,7 @@ public class TriviaWildcard extends Wildcard {
             }
         }
         toKill.forEach(Entity::discard);
+        //TODO stop the timers
     }
 
     public static void killAllTriviaSnails() {

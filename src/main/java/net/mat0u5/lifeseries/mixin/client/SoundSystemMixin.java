@@ -17,7 +17,15 @@ import java.util.List;
 @Mixin(value = SoundSystem.class, priority = 1)
 public class SoundSystemMixin {
     @Unique
-    private static final List<String> nonAdjustedSounds =List.of("block.beacon.deactivate");
+    private static final List<String> nonAdjustedSounds = List.of(
+            "block.beacon.deactivate",
+            "wildlife_time_slow_down",
+            "wildlife_time_speed_up",
+            "wildlife_trivia_intro",
+            "wildlife_trivia_suspense_easy",
+            "wildlife_trivia_suspense_normal",
+            "wildlife_trivia_suspense_hard"
+    );
     @Inject(method = "getAdjustedPitch", at = @At("HEAD"), cancellable = true)
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
         String name = sound.getId().getPath();

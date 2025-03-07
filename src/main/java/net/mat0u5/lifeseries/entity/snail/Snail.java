@@ -75,6 +75,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public boolean mining;
     public boolean setNavigation = false;
     public boolean fromTrivia = false;
+    public int dontAttackFor = 0;
     @Nullable
     public PathFinder groundPathFinder;
     @Nullable
@@ -207,6 +208,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void tick() {
         super.tick();
 
+        if (dontAttackFor > 0) {
+            dontAttackFor--;
+        }
+
         if (nullPlayerChecks > 1000 && !fromTrivia) {
             despawn();
         }
@@ -272,6 +277,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void setFromTrivia() {
         fromTrivia = true;
+        dontAttackFor = 100;
+        playAttackSound();
     }
 
     public void chunkLoading() {
@@ -833,7 +840,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         playRandomSound("throw", 0.25f, 1, 7);
     }
 
-    private int soundCooldown = 20;
+    private int soundCooldown = 0;
     public void playRandomSound(String name, float volume, int from, int to) {
         if (soundCooldown > 0) return;
         soundCooldown = 20;

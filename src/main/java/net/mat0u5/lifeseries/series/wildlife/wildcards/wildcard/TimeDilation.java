@@ -5,11 +5,14 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.server.ServerTickManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 
 import static net.mat0u5.lifeseries.Main.*;
@@ -113,6 +116,7 @@ public class TimeDilation extends Wildcard {
         TaskScheduler.scheduleTask(115, () -> {
             activatedAt = (int) currentSession.passedTime + 400;
             lastDiv = -1;
+            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.of(Identifier.ofVanilla("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
             if (!isNerfed()) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets("time_dilation", System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);

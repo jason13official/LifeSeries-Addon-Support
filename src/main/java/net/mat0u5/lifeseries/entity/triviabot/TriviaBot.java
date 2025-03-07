@@ -44,6 +44,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.PlaySoundFromEntityS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -53,6 +54,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -67,7 +69,6 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.Attr;
 
 import java.util.*;
 
@@ -379,7 +380,6 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     public void teleportTo(ServerWorld world, double x, double y, double z) {
-        //TODO make sure sounds still work after teleporting
         this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
         AnimationUtils.spawnTeleportParticles((ServerWorld) getWorld(), getPos());
         Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
@@ -467,9 +467,42 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return getY() - belowBlock.getY() - 1;
     }
 
+    private int introSoundCooldown = 0;
+    private boolean playedCountdownSound = false;
     public void playSounds() {
-        //TODO
+        if (introSoundCooldown > 0) introSoundCooldown--;
+
+        if (introSoundCooldown == 0 && !interactedWith) {
+            OtherUtils.log("IntroSoundPlayyy");
+            SoundEvent sound = SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_intro"));
+            PlayerUtils.playSoundWithSourceToPlayers(PlayerUtils.getAllPlayers(), this, sound, SoundCategory.NEUTRAL, 1, 1);
+            introSoundCooldown = 830;
+        }
+        if (!playedCountdownSound && interactedWith && !submittedAnswer && !ranOutOfTime) {
+            OtherUtils.log("CountdownSoundPlay_"+difficulty);
+            if (difficulty == 1) {
+                PlayerUtils.playSoundWithSourceToPlayers(
+                        PlayerUtils.getAllPlayers(), this,
+                        SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_suspense_easy")),
+                        SoundCategory.NEUTRAL, 1, 1);
+            }
+            if (difficulty == 2) {
+                PlayerUtils.playSoundWithSourceToPlayers(
+                        PlayerUtils.getAllPlayers(), this,
+                        SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_suspense_normal")),
+                        SoundCategory.NEUTRAL, 1, 1);
+            }
+            if (difficulty == 3) {
+                PlayerUtils.playSoundWithSourceToPlayers(
+                        PlayerUtils.getAllPlayers(), this,
+                        SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_suspense_hard")),
+                        SoundCategory.NEUTRAL, 1, 1);
+            }
+            playedCountdownSound = true;
+        }
+
     }
+
 
     /*
         Trivia stuff
@@ -540,31 +573,31 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         switch (curse) {
             default:
             case 0:
-                curse_hunger(player);
+                curseHunger(player);
                 break;
             case 1:
-                curse_ravager(player);
+                curseRavager(player);
                 break;
             case 2:
-                curse_infestation(player);
+                curseInfestation(player);
                 break;
             case 3:
-                curse_gigantification(player);
+                curseGigantification(player);
                 break;
             case 4:
-                curse_slippery_ground(player);
+                curseSlipperyGround(player);
                 break;
             case 5:
-                curse_binding_armor(player);
+                curseBindingArmor(player);
                 break;
             case 6:
-                curse_hearts(player);
+                curseHearts(player);
                 break;
             case 7:
-                curse_moonjump(player);
+                curseMoonjump(player);
                 break;
             case 8:
-                curse_beeswarm(player);
+                curseBeeswarm(player);
                 break;
             /* TODO
             case 9:
@@ -671,32 +704,32 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         Curses
      */
 
-    public void curse_hunger(ServerPlayerEntity player) {
+    public void curseHunger(ServerPlayerEntity player) {
         StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 18000, 2);
         player.addStatusEffect(statusEffectInstance);
     }
 
-    public void curse_ravager(ServerPlayerEntity player) {
+    public void curseRavager(ServerPlayerEntity player) {
         BlockPos spawnPos = getBlockPosNearTarget(player.getServerWorld(), getBlockPos(), 5);
         EntityType.RAVAGER.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
     }
 
-    public void curse_infestation(ServerPlayerEntity player) {
+    public void curseInfestation(ServerPlayerEntity player) {
         StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.INFESTED, 18000, 0);
         player.addStatusEffect(statusEffectInstance);
     }
 
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
-    public void curse_gigantification(ServerPlayerEntity player) {
+    public void curseGigantification(ServerPlayerEntity player) {
         cursedGigantificationPlayers.add(player.getUuid());
         SizeShifting.setPlayerSizeUnchecked(player, 5);
     }
 
-    public void curse_slippery_ground(ServerPlayerEntity player) {
+    public void curseSlipperyGround(ServerPlayerEntity player) {
         ServerPlayNetworking.send(player, new StringPayload("curse_sliding", "true"));
     }
 
-    public void curse_binding_armor(ServerPlayerEntity player) {
+    public void curseBindingArmor(ServerPlayerEntity player) {
         for (ItemStack item : player.getArmorItems()) {
             ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), item.copy(), player);
         }
@@ -716,19 +749,19 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     public static final List<UUID> cursedHeartPlayers = new ArrayList<>();
-    public void curse_hearts(ServerPlayerEntity player) {
+    public void curseHearts(ServerPlayerEntity player) {
         cursedHeartPlayers.add(player.getUuid());
         double newHealth = Math.max(player.getMaxHealth()-7, 1);
         AttributeUtils.setMaxPlayerHealth(player, newHealth);
     }
 
     public static final List<UUID> cursedMoonJumpPlayers = new ArrayList<>();
-    public void curse_moonjump(ServerPlayerEntity player) {
+    public void curseMoonjump(ServerPlayerEntity player) {
         cursedMoonJumpPlayers.add(player.getUuid());
         AttributeUtils.setJumpStrength(player, 0.76);
     }
 
-    public void curse_beeswarm(ServerPlayerEntity player) {
+    public void curseBeeswarm(ServerPlayerEntity player) {
         BlockPos spawnPos = getBlockPosNearTarget(player.getServerWorld(), getBlockPos(), 1);
         BeeEntity bee1 = EntityType.BEE.spawn((ServerWorld) getWorld(), spawnPos, SpawnReason.COMMAND);
         BeeEntity bee2 = EntityType.BEE.spawn((ServerWorld) getWorld(), spawnPos, SpawnReason.COMMAND);
