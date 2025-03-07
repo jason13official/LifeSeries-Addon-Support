@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.Stats;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -149,7 +150,9 @@ public class LivesCommand {
 
         if (setNotGive) {
             currentSeries.setPlayerLives(target,amount);
-            source.sendMessage(Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s lives to " + amount + ".")));
+            Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s lives to " + amount + "."));
+            source.sendMessage(finalText);
+            Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         else {
             currentSeries.addToPlayerLives(target,amount);
@@ -157,7 +160,9 @@ public class LivesCommand {
             String pt2 = " "+Math.abs(amount)+" ";
             String pt3 = Math.abs(amount)==1?"life":"lives";
             String pt4 = amount >= 0 ? " to " : " from ";
-            source.sendMessage(Text.of(pt1+pt2+pt3+pt4).copy().append(target.getStyledDisplayName()).append("."));
+            Text finalText = Text.of(pt1+pt2+pt3+pt4).copy().append(target.getStyledDisplayName()).append(".");
+            source.sendMessage(finalText);
+            Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         return 1;
     }
@@ -169,6 +174,7 @@ public class LivesCommand {
         currentSeries.resetPlayerLife(target);
 
         source.sendMessage(Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
+        Stats.resetLives(target);
         return 1;
     }
 
@@ -178,6 +184,7 @@ public class LivesCommand {
         currentSeries.resetAllPlayerLives();
 
         source.sendMessage(Text.literal("Reset everyone's lives."));
+        Stats.resetAllLives();
         return 1;
     }
 }

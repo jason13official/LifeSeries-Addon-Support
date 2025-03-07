@@ -6,10 +6,12 @@ import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.AttributeUtils;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
@@ -88,8 +90,12 @@ public class TriviaWildcard extends Wildcard {
         int availableTime = sessionEnd - sessionStart;
 
         List<ServerPlayerEntity> players = currentSeries.getAlivePlayers();
+        if (players.isEmpty()) return;
+
         int numPlayers = players.size();
         int desiredTotalSpawns = numPlayers * TRIVIA_BOTS_PER_PLAYER;
+
+        if (desiredTotalSpawns == 0) return;
 
         int interval = availableTime / desiredTotalSpawns;
         if (numPlayers * interval < MIN_BOT_DELAY) {
@@ -176,6 +182,7 @@ public class TriviaWildcard extends Wildcard {
         resetPlayerOnBotSpawn(player);
         TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(player.getServerWorld(), player.getBlockPos().add(0,50,0), SpawnReason.COMMAND);
         if (bot != null) {
+            Stats.newTriviaBot(player);
             bot.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
             bot.teleportAbovePlayer(10, 50);
@@ -207,8 +214,7 @@ public class TriviaWildcard extends Wildcard {
         }
 
         ServerPlayNetworking.send(player, new StringPayload("curse_sliding", "false"));
-
-
+        NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");
     }
 
     public static void killAllBots() {
@@ -222,7 +228,9 @@ public class TriviaWildcard extends Wildcard {
             }
         }
         toKill.forEach(Entity::discard);
-        //TODO stop the timers
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");
+        }
     }
 
     public static void killAllTriviaSnails() {

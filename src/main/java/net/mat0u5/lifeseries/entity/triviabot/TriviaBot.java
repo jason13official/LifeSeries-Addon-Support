@@ -224,6 +224,12 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 }
             }
             if (interactedWith && getRemainingTime() <= 0) {
+                if (!ranOutOfTime) {
+                    ServerPlayerEntity boundPlayer = getBoundPlayer();
+                    if (boundPlayer != null) {
+                        NetworkHandlerServer.sendStringPacket(boundPlayer, "reset_trivia", "true");
+                    }
+                }
                 ranOutOfTime = true;
             }
             if (snailTransformation > 33) {
@@ -473,13 +479,11 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (introSoundCooldown > 0) introSoundCooldown--;
 
         if (introSoundCooldown == 0 && !interactedWith) {
-            OtherUtils.log("IntroSoundPlayyy");
             SoundEvent sound = SoundEvent.of(Identifier.ofVanilla("wildlife_trivia_intro"));
             PlayerUtils.playSoundWithSourceToPlayers(PlayerUtils.getAllPlayers(), this, sound, SoundCategory.NEUTRAL, 1, 1);
             introSoundCooldown = 830;
         }
         if (!playedCountdownSound && interactedWith && !submittedAnswer && !ranOutOfTime) {
-            OtherUtils.log("CountdownSoundPlay_"+difficulty);
             if (difficulty == 1) {
                 PlayerUtils.playSoundWithSourceToPlayers(
                         PlayerUtils.getAllPlayers(), this,

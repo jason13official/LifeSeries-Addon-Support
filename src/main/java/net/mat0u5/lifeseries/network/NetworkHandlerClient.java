@@ -73,6 +73,9 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("jump") && MinecraftClient.getInstance().player != null) {
             MinecraftClient.getInstance().player.jump();
         }
+        if (name.equalsIgnoreCase("reset_trivia")) {
+            Trivia.resetTrivia();
+        }
     }
 
     public static void handleNumberPacket(String name, double number) {

@@ -98,11 +98,13 @@ public class Session {
     public void addSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
         sessionLength += lengthTicks;
+        Stats.addSessionLength(lengthTicks);
     }
 
     public void removeSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
         sessionLength -= lengthTicks;
+        Stats.removeSessionLength(lengthTicks);
     }
 
     public String getSessionLength() {

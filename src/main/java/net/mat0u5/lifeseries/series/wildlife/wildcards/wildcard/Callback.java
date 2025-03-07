@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -122,6 +123,7 @@ public class Callback extends Wildcard {
 
     @Override
     public void deactivate() {
+        Stats.endingIsYours();
         deactivateAllWildcards();
         TaskScheduler.scheduleTask(50, this::showEndingTitles);
         super.deactivate();

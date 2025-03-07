@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series;
 
 import net.mat0u5.lifeseries.series.secretlife.Task;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
@@ -17,8 +18,67 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class Stats {
-
     public static final List<String> messages = new ArrayList<>();
+
+    public static void resetAllLives() {
+        addMessageWithTime("[COMMAND] Reset everyone's lives.");
+    }
+
+    public static void resetLives(ServerPlayerEntity player) {
+        addMessageWithTime("[COMMAND] Reset " + player.getNameForScoreboard() + " lives.");
+    }
+
+    public static void cureBoogey(ServerPlayerEntity player) {
+        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is now cured from being the boogeyman.");
+    }
+
+    public static void failBoogey(ServerPlayerEntity player) {
+        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " has been marked as a failed boogeyman.");
+    }
+
+    public static void removeBoogey(ServerPlayerEntity player) {
+        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is no longer a boogeyman.");
+    }
+
+    public static void addBoogey(ServerPlayerEntity player) {
+        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is now a boogeyman.");
+    }
+
+    public static void boogeyClear() {
+        addMessageWithTime("[COMMAND] All boogeymen have been cleared.");
+    }
+
+    public static void fastForward(int ticks) {
+        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been fast forwarded.");
+    }
+
+    public static void removeSessionLength(int ticks) {
+        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been added to the session time.");
+    }
+
+    public static void addSessionLength(int ticks) {
+        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been added to the session time.");
+    }
+
+    public static void newSuperpower(ServerPlayerEntity player, Superpowers superpower) {
+        addMessageWithTime(player.getNameForScoreboard() + " has been assigned the " + Superpowers.getString(superpower) + " superpower.");
+    }
+
+    public static void newTriviaBot(ServerPlayerEntity player) {
+        addMessageWithTime("Spawned trivia bot for " + player.getNameForScoreboard());
+    }
+
+    public static void endingIsYours() {
+        addMessageWithTime("The ending is yours... Make it WILD.");
+    }
+
+    public static void newHungerRule() {
+        addMessageWithTime("[Wildcard] Food has been randomized.");
+    }
+
+    public static void mobSwap() {
+        addMessageWithTime("[Wildcard] Mobs have been swapped.");
+    }
 
     public static void deactivateWildcard(Wildcards type) {
         addMessageWithTime("Deactivated Wildcard: " + type);

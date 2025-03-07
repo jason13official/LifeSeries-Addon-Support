@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -178,6 +179,8 @@ public class MobSwap extends Wildcard {
     public void mobSwap() {
         swaps++;
         if (swaps < 1) return;
+
+        Stats.mobSwap();
 
         int spawnMobs;
         if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.Boogeyman;
 import net.mat0u5.lifeseries.series.BoogeymanManager;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.lastlife.LastLife;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
 import net.minecraft.command.CommandRegistryAccess;
@@ -103,6 +104,7 @@ public class BoogeymanCommand {
             return -1;
         }
         bm.playerFailBoogeyman(target);
+        Stats.failBoogey(target);
 
         return 1;
     }
@@ -121,6 +123,7 @@ public class BoogeymanCommand {
         bm.cure(target);
 
         source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now cured.")));
+        Stats.cureBoogey(target);
 
         return 1;
     }
@@ -140,6 +143,7 @@ public class BoogeymanCommand {
         bm.addBoogeymanManually(target);
 
         source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now a boogeyman.")));
+        Stats.addBoogey(target);
 
         return 1;
     }
@@ -159,6 +163,7 @@ public class BoogeymanCommand {
         bm.removeBoogeymanManually(target);
 
         source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is no longer a boogeyman.")));
+        Stats.removeBoogey(target);
 
         return 1;
     }
@@ -184,6 +189,7 @@ public class BoogeymanCommand {
 
         bm.resetBoogeymen();
         source.sendMessage(Text.of("All boogeymen have been cleared"));
+        Stats.boogeyClear();
 
         return 1;
     }

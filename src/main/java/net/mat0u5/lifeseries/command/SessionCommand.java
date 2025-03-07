@@ -196,7 +196,7 @@ public class SessionCommand {
             return -1;
         }
         currentSession.passedTime+=totalTicks;
-
+        Stats.fastForward(totalTicks);
         return 1;
     }
 

@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ public abstract class Superpower {
     private final UUID playerUUID;
     public Superpower(ServerPlayerEntity player) {
         playerUUID = player.getUuid();
+        Stats.newSuperpower(player, getSuperpower());
     }
 
     @Nullable
