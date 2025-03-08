@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -65,11 +66,13 @@ public class ClientEvents {
         }
     }
 
-    public static void onClientJump() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
-        if (player == null) return;
-        jumpCooldown = 5;
+    public static void onClientJump(Entity entity) {
+        if (entity instanceof ClientPlayerEntity) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            ClientPlayerEntity player = client.player;
+            if (player == null) return;
+            jumpCooldown = 5;
+        }
     }
 
     private static int jumpedInAir = 0;
