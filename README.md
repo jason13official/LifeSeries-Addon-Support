@@ -110,6 +110,7 @@ This command **always** available
 - `/wildcard listActive` - Shows a list of all **active** wildcards.
 - `/wildcard activate <wildcard>` - Activates Wildcard with the name `<wildcard>`
 - `/wildcard deactivate <wildcard>` - Deactivates Wildcard with the name `<wildcard>`
+- `/wildcard choose` - Lets you choose the wildcard that will be used in the session via a GUI.
 </details>
 
 <details open>

@@ -70,6 +70,11 @@ public class WildLifeCommands {
                         )
                     )
                 )
+                .then(literal("choose")
+                    .executes(context -> chooseWildcard(
+                        context.getSource())
+                    )
+                )
         );
         dispatcher.register(
             literal("snailname")
@@ -117,6 +122,14 @@ public class WildLifeCommands {
                 )
         );
     }
+
+    public static int chooseWildcard(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        if (source.getPlayer() == null) return -1;
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_wildcards", "true");
+        return 1;
+    }
+
     public static List<String> suggestionsDeactivateWildcard() {
         List<String> allWildcards = Wildcards.getActiveWildcardsStr();
         allWildcards.add("*");

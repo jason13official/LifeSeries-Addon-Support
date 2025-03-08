@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
@@ -75,6 +76,14 @@ public class NetworkHandlerServer {
         }
         if (name.equalsIgnoreCase("superpower_key") && currentSeries.getSeries() == SeriesList.WILD_LIFE) {
             SuperpowersWildcard.pressedSuperpowerKey(player);
+        }
+        if (PermissionManager.isAdmin(player)) {
+            if (name.equalsIgnoreCase("selected_wildcard")) {
+                Wildcards wildcard = Wildcards.getFromString(value);
+                if (wildcard != null && wildcard != Wildcards.NULL) {
+                    WildcardManager.chosenWildcard(wildcard);
+                }
+            }
         }
     }
 

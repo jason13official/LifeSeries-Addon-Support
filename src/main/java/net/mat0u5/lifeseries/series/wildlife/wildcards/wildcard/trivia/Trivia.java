@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.gui.ConfirmAnswerScreen;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.gui.QuizScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.ConfirmAnswerScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
 import net.minecraft.client.MinecraftClient;

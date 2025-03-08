@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.gui;
+package net.mat0u5.lifeseries.client.gui.trivia;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;

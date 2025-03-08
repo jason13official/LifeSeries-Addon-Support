@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientHandler;
+import net.mat0u5.lifeseries.client.gui.ChooseWildcardScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
@@ -75,6 +77,9 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("reset_trivia")) {
             Trivia.resetTrivia();
+        }
+        if (name.equalsIgnoreCase("select_wildcards") && Main.isClient()) {
+            MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
     }
 
@@ -167,5 +172,9 @@ public class NetworkHandlerClient {
 
     public static void pressSuperpowerKey() {
         ClientPlayNetworking.send(new StringPayload("superpower_key", "true"));
+    }
+
+    public static void sendStringPacket(String name, String value) {
+        ClientPlayNetworking.send(new StringPayload(name, value));
     }
 }

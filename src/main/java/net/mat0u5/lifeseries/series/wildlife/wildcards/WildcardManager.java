@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.entity.effect.StatusEffects;
@@ -43,20 +44,32 @@ public class WildcardManager {
         }
     };
 
+    public static Wildcards chosenWildcard = null;
+
     public static WildLife getSeries() {
         if (currentSeries instanceof WildLife wildLife) return wildLife;
         return null;
     }
 
+    public static void chosenWildcard(Wildcards wildcard) {
+        OtherUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " has been selected for this session."));
+        OtherUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
+        WildcardManager.chosenWildcard = wildcard;
+    }
+
     public static void chooseRandomWildcard() {
-        //TODO
-        //activeWildcards.put(Wildcards.SIZE_SHIFTING, new SizeShifting());
-        //activeWildcards.put(Wildcards.HUNGER, new Hunger());
-        //activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
-        //activeWildcards.put(Wildcards.SNAILS, new Snails());
-        //activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
-        //activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
-        activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
+        if (chosenWildcard != null) {
+            activeWildcards.put(chosenWildcard, Wildcards.getInstance(chosenWildcard));
+            return;
+        }
+        int index = rnd.nextInt(7);
+        if (index == 0) activeWildcards.put(Wildcards.SIZE_SHIFTING, new SizeShifting());
+        if (index == 1) activeWildcards.put(Wildcards.HUNGER, new Hunger());
+        if (index == 2) activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
+        if (index == 3) activeWildcards.put(Wildcards.SNAILS, new Snails());
+        if (index == 4) activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
+        if (index == 5) activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
+        if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
     }
 
     public static void resetWildcardsOnPlayerJoin(ServerPlayerEntity player) {
@@ -191,7 +204,13 @@ public class WildcardManager {
     }
 
     public static void onSessionStart() {
-
+        if (chosenWildcard == null) {
+            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                if (PermissionManager.isAdmin(player)) {
+                    NetworkHandlerServer.sendStringPacket(player, "select_wildcards", "true");
+                }
+            }
+        }
     }
 
     public static void onSessionEnd() {
@@ -210,6 +229,7 @@ public class WildcardManager {
         activeWildcards.clear();
         SuperpowersWildcard.resetAllSuperpowers();
         NetworkHandlerServer.sendUpdatePackets();
+        chosenWildcard = null;
     }
 
     public static boolean isActiveWildcard(Wildcards wildcard) {

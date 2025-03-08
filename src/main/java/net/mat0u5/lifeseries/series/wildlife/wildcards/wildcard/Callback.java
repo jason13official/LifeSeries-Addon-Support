@@ -38,7 +38,7 @@ public class Callback extends Wildcard {
     public void tick() {
         if (currentSession.sessionLength == null) return;
 
-        double sessionProgress = (currentSession.passedTime-activatedAt) / (currentSession.sessionLength+activatedAt);
+        double sessionProgress = (currentSession.passedTime-activatedAt) / (currentSession.sessionLength-activatedAt);
 
         if (nextActivationTick == -1) {
             nextActivationTick = (int) currentSession.passedTime + 20 * 60 * 5; // First activation after 5 minutes
@@ -123,9 +123,13 @@ public class Callback extends Wildcard {
 
     @Override
     public void deactivate() {
-        Stats.endingIsYours();
         deactivateAllWildcards();
-        TaskScheduler.scheduleTask(50, this::showEndingTitles);
+        TaskScheduler.scheduleTask(50, () -> {
+            if (currentSession.statusStarted()) {
+                Stats.endingIsYours();
+                showEndingTitles();
+            }
+        });
         super.deactivate();
     }
 
