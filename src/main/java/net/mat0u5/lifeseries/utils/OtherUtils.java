@@ -200,19 +200,6 @@ public class OtherUtils {
         return time.format(formatter);
     }
 
-    public static int getModVersionInt(String string) {
-        string = string.replaceAll("^\\D+", "");
-
-        String[] parts = string.split("\\.");
-
-        int major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
-        int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-        int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-        int build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
-
-        return (major * 100000) + (minor * 10000) + (patch * 1000) + build;
-    }
-
     public static void reloadServerNoUpdate() {
         Events.skipNextTickReload = true;
         reloadServer();

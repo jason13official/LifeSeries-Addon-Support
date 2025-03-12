@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.network;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
@@ -16,6 +17,8 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWil
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.VersionControl;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -50,7 +53,7 @@ public class NetworkHandlerServer {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> handleHandshakeResponse(player, payload.modVersionStr(), payload.modVersion()));
+            server.execute(() -> handleHandshakeResponse(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
@@ -66,7 +69,7 @@ public class NetworkHandlerServer {
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {
         int intValue = (int) value;
         if (name.equalsIgnoreCase("trivia_answer")) {
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received trivia answer (from "+player.getNameForScoreboard()+"): "+ intValue);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received trivia answer (from "+player.getNameForScoreboard()+"): "+ intValue);
             TriviaWildcard.handleAnswer(player, intValue);
         }
     }
@@ -87,8 +90,38 @@ public class NetworkHandlerServer {
         }
     }
 
-    public static void handleHandshakeResponse(ServerPlayerEntity player, String modVersionStr, int modVersion) {
-        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received handshake (from "+player.getNameForScoreboard()+"): {"+modVersionStr+", "+modVersion+"}");
+    public static void handleHandshakeResponse(ServerPlayerEntity player, HandshakePayload payload) {
+        String clientVersionStr = payload.modVersionStr();
+        String clientCompatibilityStr = payload.compatibilityStr();
+
+        int clientVersion = payload.modVersion();
+        int clientCompatibility = payload.compatibility();
+
+
+        String serverVersionStr = Main.MOD_VERSION;
+        String serverCompatibilityStr = VersionControl.compatibilityMin();
+
+        int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
+        int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
+
+        //Check if client version is compatible with the server version
+        if (clientVersion < serverCompatibility) {
+            Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                    "Update the client version to at least version "+serverCompatibilityStr);
+            player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
+            return;
+        }
+
+        //Check if server version is compatible with the client version
+        if (serverVersion < clientCompatibility) {
+            Text disconnectText = Text.literal("[Life Series Mod] Server-Client version mismatch!\n" +
+                    "The client version is too new for the server.\n" +
+                    "Either update the server, or downgrade the client version to " + serverVersionStr);
+            player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
+            return;
+        }
+
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received handshake (from "+player.getNameForScoreboard()+"): {"+payload.modVersionStr()+", "+payload.modVersion()+"}");
         handshakeSuccessful.add(player.getUuid());
     }
 
@@ -97,17 +130,21 @@ public class NetworkHandlerServer {
      */
     public static void sendTriviaPacket(ServerPlayerEntity player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
-        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
         ServerPlayNetworking.send(player, triviaQuestionPacket);
     }
 
     public static void sendHandshake(ServerPlayerEntity player) {
-        String modVersionStr = Main.MOD_VERSION;
-        int modVersion = OtherUtils.getModVersionInt(modVersionStr);
-        HandshakePayload payload = new HandshakePayload(modVersionStr, modVersion);
+        String serverVersionStr = Main.MOD_VERSION;
+        String serverCompatibilityStr = VersionControl.compatibilityMin();
+
+        int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
+        int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
+
+        HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
         ServerPlayNetworking.send(player, payload);
         handshakeSuccessful.remove(player.getUuid());
-        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending handshake to "+player.getNameForScoreboard()+": {"+modVersionStr+", "+modVersion+"}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending handshake to "+player.getNameForScoreboard()+": {"+serverVersionStr+", "+serverVersion+"}");
     }
 
     public static void sendStringPacket(ServerPlayerEntity player, String name, String value) {

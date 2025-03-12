@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
@@ -66,7 +67,7 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-        if (Main.isDevVersion()) {
+        if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lifeseries")
                     .then(literal("test")

@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.network;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientHandler;
 import net.mat0u5.lifeseries.client.gui.ChooseWildcardScreen;
-import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
@@ -13,7 +13,6 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class NetworkHandlerClient {
         });
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
-            client.execute(NetworkHandlerClient::respondHandshake);
+            client.execute(() -> handleHandshake(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
@@ -50,7 +49,7 @@ public class NetworkHandlerClient {
     
     public static void handleStringPacket(String name, String value) {
         if (name.equalsIgnoreCase("currentSeries")) {
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current series to {}", value);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current series to {}", value);
             MainClient.clientCurrentSeries = SeriesList.getSeriesFromStringName(value);
             if (Main.isClient()) {
                 ClientHandler.checkSecretLifeClient();
@@ -61,7 +60,7 @@ public class NetworkHandlerClient {
             for (String wildcardStr : value.split("__")) {
                 newList.add(Wildcards.getFromString(wildcardStr));
             }
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
             MainClient.clientActiveWildcards = newList;
         }
         if (name.equalsIgnoreCase("curse_sliding")) {
@@ -86,11 +85,11 @@ public class NetworkHandlerClient {
     public static void handleNumberPacket(String name, double number) {
         int intNumber = (int) number;
         if (name.equalsIgnoreCase("hunger_version")) {
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated hunger shuffle version to {}", intNumber);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated hunger shuffle version to {}", intNumber);
             Hunger.shuffleVersion = intNumber;
         }
         if (name.equalsIgnoreCase("player_min_mspt")) {
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", number);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", number);
             TimeDilation.MIN_PLAYER_MSPT = (float) number;
         }
         if (name.equalsIgnoreCase("snail_air")) {
@@ -106,7 +105,7 @@ public class NetworkHandlerClient {
             MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP = number;
         }
         if (name.equalsIgnoreCase("show_vignette")) {
-            if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", number);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Showing vignette for {}", number);
             VignetteRenderer.showVignetteFor(0.35f, number);
         }
         if (name.equalsIgnoreCase("mimicry_cooldown")) {
@@ -149,21 +148,25 @@ public class NetworkHandlerClient {
         }
     }
 
+    public static void handleHandshake(HandshakePayload payload) {
+        String clientVersionStr = Main.MOD_VERSION;
+        String clientCompatibilityStr = VersionControl.compatibilityMin();
+
+        int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
+        int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
+
+        HandshakePayload sendPayload = new HandshakePayload(clientVersionStr, clientVersion, clientCompatibilityStr, clientCompatibility);
+        ClientPlayNetworking.send(sendPayload);
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sent handshake");
+    }
+
     /*
         Sending
      */
 
     public static void sendTriviaAnswer(int answer) {
-        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);
         ClientPlayNetworking.send(new NumberPayload("trivia_answer", answer));
-    }
-
-    public static void respondHandshake() {
-        String modVersionStr = Main.MOD_VERSION;
-        int modVersion = OtherUtils.getModVersionInt(modVersionStr);
-        HandshakePayload payload = new HandshakePayload(modVersionStr, modVersion);
-        ClientPlayNetworking.send(payload);
-        if (Main.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sent handshake: {"+modVersionStr+", "+modVersion+"}");
     }
 
     public static void sendHoldingJumpPacket() {

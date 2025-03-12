@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
@@ -63,7 +64,7 @@ public class UpdateChecker {
             return;
         }
         TaskScheduler.scheduleTask(98, () -> {
-            if (!Main.isDevVersion()) {
+            if (!VersionControl.isDevVersion()) {
                 Text discordText = Text.literal("§7Click ").append(
                         Text.literal("here")
                                 .styled(style -> style
