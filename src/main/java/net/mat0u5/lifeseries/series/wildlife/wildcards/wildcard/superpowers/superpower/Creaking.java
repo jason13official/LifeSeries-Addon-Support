@@ -2,15 +2,10 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TeamUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.HuskEntity;
-import net.minecraft.entity.mob.MagmaCubeEntity;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +16,6 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
@@ -54,17 +48,7 @@ public class Creaking extends ToggleableSuperpower {
         TeamUtils.createTeam(newTeamName, playerTeam.getColor());
         createdTeams.add(newTeamName);
 
-        //? if <= 1.21 {
-        for (int i = 0; i < 2; i++) {
-            BlockPos spawnPos =  getCloseBlockPos(player.getServerWorld(), player.getBlockPos(), 6);
-            HuskEntity entity = EntityType.HUSK.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
-            if (entity != null) {
-                Objects.requireNonNull(entity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)).setBaseValue(0.5);
-                createdEntities.add(entity.getUuid());
-                makeFriendly(newTeamName, entity, player);
-            }
-        }
-        //?} else {
+        //? if >= 1.21.2 {
         /*for (int i = 0; i < 3; i++) {
             BlockPos spawnPos =  getCloseBlockPos(player.getServerWorld(), player.getBlockPos(), 6);
             Entity entity = EntityType.CREAKING.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);

@@ -29,11 +29,11 @@ public enum Superpowers {
     NECROMANCY;
 
     public static List<Superpowers> getImplemented() {
-        return List.of(TIME_CONTROL, CREAKING, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE,
+        return List.of(TIME_CONTROL, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE,
                 ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY, TELEPORTATION, SHADOW_PLAY, INVISIBILITY,
                 TRIPLE_JUMP, SUPERSPEED, NECROMANCY
                 //? if >= 1.21.2 {
-                /*,FLIGHT
+                /*, CREAKING, FLIGHT
                 *///?}
         );
     }
@@ -41,7 +41,6 @@ public enum Superpowers {
     @Nullable
     public static Superpower getInstance(ServerPlayerEntity player, Superpowers superpower) {
         if (superpower == TIME_CONTROL) return new TimeControl(player);
-        if (superpower == CREAKING) return new Creaking(player);
         if (superpower == WIND_CHARGE) return new WindCharge(player);
         if (superpower == ASTRAL_PROJECTION) return new AstralProjection(player);
         if (superpower == PLAYER_DISGUISE) return new PlayerDisguise(player);
@@ -55,7 +54,8 @@ public enum Superpowers {
         if (superpower == SUPERSPEED) return new Superspeed(player);
         if (superpower == NECROMANCY) return new Necromancy(player);
         //? if >= 1.21.2 {
-        /*if (superpower == FLIGHT) return new Flight(player);
+        /*if (superpower == CREAKING) return new Creaking(player);
+        if (superpower == FLIGHT) return new Flight(player);
         *///?}
         return null;
     }

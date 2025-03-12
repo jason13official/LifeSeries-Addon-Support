@@ -25,6 +25,10 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return false;
         }
 
+        if (mob.flying || mob.gliding) {
+            return false;
+        }
+
         ServerPlayerEntity boundPlayer = mob.getBoundPlayer();
         if (boundPlayer == null) {
             return false;

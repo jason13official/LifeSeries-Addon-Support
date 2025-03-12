@@ -63,10 +63,12 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
     public static final Model MODEL = BbModelLoader.load(ID);
+    public static final Identifier TRIVIA_ID = Identifier.of(Main.MOD_ID, "trivia_snail");
+    public static final Model TRIVIA_MODEL = BbModelLoader.load(TRIVIA_ID);
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 
-    private final EntityHolder<Snail> holder;
+    private EntityHolder<Snail> holder = null;
     public UUID boundPlayerUUID;
     public boolean attacking;
     public boolean flying;
@@ -96,10 +98,18 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public Snail(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
-        this.holder = new LivingEntityHolder<>(this, MODEL);
-        EntityAttachment.ofTicking(holder, this);
         setInvulnerable(true);
         setPersistent();
+    }
+    public void createHolder() {
+        if (!fromTrivia) {
+            this.holder = new LivingEntityHolder<>(this, MODEL);
+            EntityAttachment.ofTicking(holder, this);
+        }
+        else {
+            this.holder = new LivingEntityHolder<>(this, TRIVIA_MODEL);
+            EntityAttachment.ofTicking(holder, this);
+        }
     }
 
     public int getJumpRangeSquared() {
@@ -207,6 +217,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     @Override
     public void tick() {
         super.tick();
+
+        if (this.holder == null && age > 2) {
+            createHolder();
+        }
 
         if (dontAttackFor > 0) {
             dontAttackFor--;
@@ -370,6 +384,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     private int flyAnimation = 0;
     public void updateAnimations() {
+        if (holder == null) return;
         AnimationHandler.updateHurtVariant(this, holder);
         Animator animator = holder.getAnimator();
         if (flyAnimation < 0) {
