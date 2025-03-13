@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
@@ -20,12 +21,20 @@ import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.DisconnectionInfo;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
@@ -41,6 +50,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ImagePayload.ID, ImagePayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -48,6 +58,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ImagePayload.ID, ImagePayload.CODEC);
     }
     public static void registerServerReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
@@ -161,6 +172,17 @@ public class NetworkHandlerServer {
         if (player == null) return;
         LongPayload payload = new LongPayload(name, number);
         ServerPlayNetworking.send(player, payload);
+    }
+
+    public static void sendImagePacket(ServerPlayerEntity player, ImagePayload payload) {
+        if (player == null) return;
+        ServerPlayNetworking.send(player, payload);
+    }
+
+    public static void sendImagePackets(ImagePayload payload) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            ServerPlayNetworking.send(player, payload);
+        }
     }
 
     public static void sendLongPackets(String name, long number) {

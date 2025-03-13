@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;

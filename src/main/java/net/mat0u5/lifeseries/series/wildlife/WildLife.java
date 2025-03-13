@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.*;

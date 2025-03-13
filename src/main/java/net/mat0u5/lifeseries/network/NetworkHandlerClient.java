@@ -3,8 +3,9 @@ package net.mat0u5.lifeseries.network;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
-import net.mat0u5.lifeseries.client.ClientHandler;
+import net.mat0u5.lifeseries.client.ClientResourcePacks;
 import net.mat0u5.lifeseries.client.gui.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.network.packets.*;
@@ -45,6 +46,16 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handlePlayerDisguise(payload.name(),payload.hiddenUUID(), payload.hiddenName(), payload.shownUUID(), payload.shownName()));
         });
+        ClientPlayNetworking.registerGlobalReceiver(ImagePayload.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            client.execute(() -> handleImagePacket(payload.name(), payload));
+        });
+    }
+
+    public static void handleImagePacket(String name, ImagePayload payload) {
+        if (name.equalsIgnoreCase("snail_skin")) {
+            SnailSkinsClient.handleSnailSkin(payload);
+        }
     }
     
     public static void handleStringPacket(String name, String value) {
@@ -52,7 +63,7 @@ public class NetworkHandlerClient {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current series to {}", value);
             MainClient.clientCurrentSeries = SeriesList.getSeriesFromStringName(value);
             if (Main.isClient()) {
-                ClientHandler.checkClientPacks();
+                ClientResourcePacks.checkClientPacks();
             }
         }
         if (name.equalsIgnoreCase("activeWildcards")) {

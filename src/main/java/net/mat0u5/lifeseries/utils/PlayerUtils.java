@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.client.ClientHandler;
+import net.mat0u5.lifeseries.client.ClientResourcePacks;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
@@ -120,7 +120,7 @@ public class PlayerUtils {
 
     public static void applyResourcepack(UUID uuid) {
         if (Main.isClient()) {
-            ClientHandler.applyResourcepack(uuid);
+            ClientResourcePacks.applyResourcepack(uuid);
             return;
         }
         if (NetworkHandlerServer.handshakeSuccessful.contains(uuid)) return;

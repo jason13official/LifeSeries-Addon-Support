@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.mat0u5.lifeseries.series.secretlife.TaskManager;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -246,6 +247,7 @@ public class Events {
     public static void playerStartJoining(ServerPlayerEntity player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
+        SnailSkinsServer.sendStoredImages(player);
         joiningPlayers.put(player.getUuid(), player.getPos());
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());
         joiningPlayersPitch.put(player.getUuid(), player.getPitch());
