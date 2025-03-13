@@ -21,7 +21,13 @@ public class VersionControl {
         return (major * 100000) + (minor * 10000) + (patch * 1000) + build;
     }
 
-    public static String compatibilityMin() {
+    public static String clientCmpatibilityMin() {
+        //This is the version that the SERVER needs to have for the current client.
+        return "dev-1.2.2.86";
+    }
+
+    public static String serverCompatibilityMin() {
+        //This is the version that the CLIENT needs to have for the current server.
         return "dev-1.2.2.86";
     }
 }

@@ -99,7 +99,7 @@ public class NetworkHandlerServer {
 
 
         String serverVersionStr = Main.MOD_VERSION;
-        String serverCompatibilityStr = VersionControl.compatibilityMin();
+        String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
 
         int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
         int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
@@ -136,7 +136,7 @@ public class NetworkHandlerServer {
 
     public static void sendHandshake(ServerPlayerEntity player) {
         String serverVersionStr = Main.MOD_VERSION;
-        String serverCompatibilityStr = VersionControl.compatibilityMin();
+        String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
 
         int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
         int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);

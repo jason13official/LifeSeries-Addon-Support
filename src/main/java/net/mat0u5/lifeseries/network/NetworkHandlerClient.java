@@ -150,7 +150,7 @@ public class NetworkHandlerClient {
 
     public static void handleHandshake(HandshakePayload payload) {
         String clientVersionStr = Main.MOD_VERSION;
-        String clientCompatibilityStr = VersionControl.compatibilityMin();
+        String clientCompatibilityStr = VersionControl.clientCmpatibilityMin();
 
         int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
         int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);
