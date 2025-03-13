@@ -35,6 +35,7 @@ public class MainClient implements ClientModInitializer {
         FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
             ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "lifeseries"), container, Text.translatable("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
             ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "secretlife"), container, Text.translatable("Secret Life Resourcepack"), ResourcePackActivationType.NORMAL);
+            ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "snailtextures"), container, Text.translatable("Snail Textures"), ResourcePackActivationType.ALWAYS_ENABLED);
         });
 
         NetworkHandlerClient.registerClientReceiver();

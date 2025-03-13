@@ -52,7 +52,7 @@ public class NetworkHandlerClient {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current series to {}", value);
             MainClient.clientCurrentSeries = SeriesList.getSeriesFromStringName(value);
             if (Main.isClient()) {
-                ClientHandler.checkSecretLifeClient();
+                ClientHandler.checkClientPacks();
             }
         }
         if (name.equalsIgnoreCase("activeWildcards")) {

@@ -7,6 +7,10 @@ import de.tomalbrc.bil.core.holder.entity.living.LivingEntityHolder;
 import de.tomalbrc.bil.core.model.Model;
 import de.tomalbrc.bil.file.loader.BbModelLoader;
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
+import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment;
+import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement;
+import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
+import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
@@ -17,10 +21,10 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
-import net.mat0u5.lifeseries.utils.AnimationUtils;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.control.MoveControl;
@@ -33,6 +37,8 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
@@ -68,7 +74,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 
-    private EntityHolder<Snail> holder = null;
+    public EntityHolder<Snail> holder = null;
+    public EntityAttachment attachment = null;
     public UUID boundPlayerUUID;
     public boolean attacking;
     public boolean flying;
@@ -101,15 +108,96 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         setInvulnerable(true);
         setPersistent();
     }
+    
     public void createHolder() {
         if (!fromTrivia) {
             this.holder = new LivingEntityHolder<>(this, MODEL);
-            EntityAttachment.ofTicking(holder, this);
+            this.attachment = EntityAttachment.ofTicking(holder, this);
         }
         else {
             this.holder = new LivingEntityHolder<>(this, TRIVIA_MODEL);
-            EntityAttachment.ofTicking(holder, this);
+            this.attachment = EntityAttachment.ofTicking(holder, this);
         }
+    }
+    
+    public void setSnailSkin(int index) {
+        if (index >= 0) {
+            // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
+            List<VirtualElement> elements = holder.getElements();
+            for (VirtualElement element : elements) {
+                if (element instanceof ItemDisplayElement itemDisplayElement) {
+                    ItemStack currentItem = itemDisplayElement.getItem();
+                    //? if <= 1.21 {
+                    CustomModelDataComponent modelDataComponent = currentItem.get(DataComponentTypes.CUSTOM_MODEL_DATA);
+                    if (modelDataComponent == null) continue;
+                    int oldValue = modelDataComponent.value();
+                    if (oldValue > 10000) {
+                        oldValue = (oldValue - 9999) % 10;
+                    }
+                    int newValue = 9999 + oldValue + index * 10;
+                    CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
+                    currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
+                    //?} else {
+                    /*Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
+                    if (customModelComponent == null) continue;
+                    int modelIndex = 0;
+                    int oldCMD = 0;
+
+                    String path = customModelComponent.getPath().replaceAll("snail/","");
+
+                    if (customModelComponent.getNamespace().equalsIgnoreCase("bil")) {
+                        if (path.startsWith("e4d04078")) modelIndex = 1;
+                        else if (path.startsWith("bfab22f7")) modelIndex = 2;
+                        else if (path.startsWith("795d5ecc")) modelIndex = 3;
+                        else if (path.startsWith("f10b7849")) modelIndex = 4;
+                        else if (path.startsWith("b19373c3")) modelIndex = 5;
+                        else if (path.startsWith("6106e834")) modelIndex = 6;
+                        else if (path.startsWith("21270a34")) modelIndex = 7;
+                        else if (path.startsWith("579f1e4f")) modelIndex = 8;
+                        else if (path.startsWith("b2a5becb")) modelIndex = 9;
+                        oldCMD = modelIndex+1;
+                    }
+                    else if (path.startsWith("body") && path.contains("_")) {
+                        try {
+                            String[] split = path.split("_");
+                            modelIndex = Integer.parseInt(split[0].replaceAll("body",""));
+                            oldCMD = Integer.parseInt(split[1]);
+                        }catch(Exception e) {
+                            continue;
+                        }
+                    }
+
+                    if (modelIndex <= 0 || oldCMD <= 0) continue;
+
+                    if (oldCMD > 10000) {
+                        oldCMD = (oldCMD - 9999) % 10;
+                    }
+                    int newCMD = 9999 + oldCMD + index * 10;
+                    *///?}
+
+                    //? if = 1.21.2 {
+                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "snail/body"+modelIndex+"_"+newCMD);
+                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
+                    *///?} else if >= 1.21.4 {
+                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
+                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
+                    *///?}
+
+                    ItemStack newItem = Items.GOLDEN_HORSE_ARMOR.getDefaultStack();
+                    newItem.applyComponentsFrom(currentItem.getComponents());
+                    itemDisplayElement.setItem(newItem);
+                }
+            }
+        }
+        else {
+            this.holder = new LivingEntityHolder<>(this, MODEL);
+        }
+        updateModel();
+    }
+
+    public void updateModel() {
+        if (attachment != null) this.attachment.destroy();
+        TaskScheduler.scheduleTask(5, () -> this.attachment = EntityAttachment.ofTicking(this.holder, this));
     }
 
     public int getJumpRangeSquared() {
@@ -522,6 +610,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
             AnimationUtils.spawnTeleportParticles(world, getPos());
             this.chunkTicketExpiryTicks = 0L;
+
+            updateModel();
         }
     }
 

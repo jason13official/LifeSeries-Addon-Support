@@ -2,11 +2,16 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
+import eu.pb4.polymer.virtualentity.api.attachment.HolderAttachment;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -71,14 +76,17 @@ public class LifeSeriesCommand {
             dispatcher.register(
                 literal("lifeseries")
                     .then(literal("test")
-                            .executes(context -> test(context.getSource()))
+                        .executes(context -> test(context.getSource()))
+                    )
+                    .then(literal("test1")
+                        .executes(context -> test1(context.getSource()))
                     )
                     .then(literal("test2")
-                            .executes(context -> test2(context.getSource()))
+                        .executes(context -> test2(context.getSource()))
                     )
-                        .then(literal("test3")
-                                .executes(context -> test3(context.getSource()))
-                        )
+                    .then(literal("test3")
+                        .executes(context -> test3(context.getSource()))
+                    )
             );
         }
     }
@@ -171,23 +179,46 @@ public class LifeSeriesCommand {
     public static int test(ServerCommandSource source) {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
+
+        if (!Snails.snails.containsKey(player.getUuid())) return -1;
+        Snail snail = Snails.snails.get(player.getUuid());
+        snail.updateModel();
+
+        return 1;
+    }
+
+    public static int test1(ServerCommandSource source) {
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) return -1;
+
+        if (!Snails.snails.containsKey(player.getUuid())) return -1;
+        Snail snail = Snails.snails.get(player.getUuid());
+        snail.setSnailSkin(-1);
         source.sendMessage(Text.of("Test Command 1"));
-        TriviaWildcard.spawnBotFor(player);
+
         return 1;
     }
 
     public static int test2(ServerCommandSource source) {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
-        source.sendMessage(Text.of("Test Command 2"));
-        TriviaWildcard.killAllBots();
+
+        if (!Snails.snails.containsKey(player.getUuid())) return -1;
+        Snail snail = Snails.snails.get(player.getUuid());
+        snail.setSnailSkin(0);
+        source.sendMessage(Text.of("Test Command 1"));
+
         return 1;
     }
     public static int test3(ServerCommandSource source) {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
-        source.sendMessage(Text.of("Test Command 3"));
-        WildcardManager.showRainbowCryptTitle("All wildcards are active!");
+
+        if (!Snails.snails.containsKey(player.getUuid())) return -1;
+        Snail snail = Snails.snails.get(player.getUuid());
+        snail.setSnailSkin(1);
+        source.sendMessage(Text.of("Test Command 2"));
+
         return 1;
     }
 }

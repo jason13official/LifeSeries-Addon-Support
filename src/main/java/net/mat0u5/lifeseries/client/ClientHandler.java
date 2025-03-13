@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
+import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
@@ -17,6 +18,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 @Environment(EnvType.CLIENT)
 public class ClientHandler {
     private static final String SECRET_LIFE_RESOURCEPACK = "lifeseries:secretlife";
+    private static final String SNAILS_RESOURCEPACK = "lifeseries:snailtextures";
     public static void applyResourcepack(UUID uuid) {
         if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
                 if (MinecraftClient.getInstance().player.getUuid().equals(uuid)) {
@@ -26,6 +28,13 @@ public class ClientHandler {
                     else {
                         disableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
                     }
+                    /*
+                    if (currentSeries instanceof WildLife) {
+                        enableClientResourcePack(SNAILS_RESOURCEPACK);
+                    }
+                    else {
+                        disableClientResourcePack(SNAILS_RESOURCEPACK);
+                    }*/
                 }
                 else {
                     PlayerUtils.applyServerResourcepack(uuid);
@@ -34,13 +43,20 @@ public class ClientHandler {
 
     }
 
-    public static void checkSecretLifeClient() {
+    public static void checkClientPacks() {
         if (Main.isClient() && !Main.isLogicalSide() && MainClient.clientCurrentSeries == SeriesList.SECRET_LIFE) {
             enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
         }
         else {
             disableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
         }
+        /*
+        if (Main.isClient() && !Main.isLogicalSide() && MainClient.clientCurrentSeries == SeriesList.WILD_LIFE) {
+            enableClientResourcePack(SNAILS_RESOURCEPACK);
+        }
+        else {
+            disableClientResourcePack(SNAILS_RESOURCEPACK);
+        }*/
     }
 
     // Enable a resource pack
