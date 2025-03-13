@@ -17,6 +17,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.*;
@@ -117,8 +118,17 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             this.attachment = EntityAttachment.ofTicking(holder, this);
         }
     }
-    
+
     public void setSnailSkin(int index) {
+        setSnailSkin(0,index);
+    }
+    public void setSnailSkin(int tryNumber, int index) {
+        if (holder == null) {
+            if (tryNumber < 5) {
+                TaskScheduler.scheduleTask(5, () -> setSnailSkin(tryNumber+1, index));
+            }
+            return;
+        }
         if (index >= 0) {
             // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
             List<VirtualElement> elements = holder.getElements();
@@ -193,9 +203,17 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         updateModel();
     }
 
+    public void updateSkin(ServerPlayerEntity player) {
+        if (player == null) return;
+        String playerNameLower = player.getNameForScoreboard().toLowerCase();
+        if (SnailSkinsServer.indexedSkins.containsKey(playerNameLower)) {
+            setSnailSkin(SnailSkinsServer.indexedSkins.get(playerNameLower));
+        }
+    }
+
     public void updateModel() {
         if (attachment != null) this.attachment.destroy();
-        TaskScheduler.scheduleTask(5, () -> this.attachment = EntityAttachment.ofTicking(this.holder, this));
+        if (this.holder != null) TaskScheduler.scheduleTask(5, () -> this.attachment = EntityAttachment.ofTicking(this.holder, this));
     }
 
     public int getJumpRangeSquared() {

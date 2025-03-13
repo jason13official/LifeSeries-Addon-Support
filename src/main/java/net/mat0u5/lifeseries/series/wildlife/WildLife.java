@@ -166,6 +166,7 @@ public class WildLife extends Series {
         Snails.loadConfig();
         Snails.loadSnailNames();
         Snails.reloadSnailNames();
+        Snails.reloadSnailSkins();
         TriviaWildcard.reload();
     }
 

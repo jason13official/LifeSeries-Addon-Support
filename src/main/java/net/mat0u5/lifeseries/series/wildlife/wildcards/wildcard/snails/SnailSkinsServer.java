@@ -47,6 +47,7 @@ public class SnailSkinsServer {
 
     public static Map<String, Integer> indexedSkins = new HashMap<>();
     public static int currentIndex = 0;
+
     public static void sendStoredImages(ServerPlayerEntity player) {
         File folder = new File("./config/lifeseries/wildlife/snailskins/");
         if (folder == null) return;
@@ -69,11 +70,12 @@ public class SnailSkinsServer {
             if (!file.isFile()) continue;
             String name = file.getName().toLowerCase();
             if (!name.endsWith(".png")) continue;
-            if (!indexedSkins.containsKey(name)) {
-                indexedSkins.put(name, currentIndex);
+            String replacedName = name.toLowerCase().replaceAll(".png","");
+            if (!indexedSkins.containsKey(replacedName)) {
+                indexedSkins.put(replacedName, currentIndex);
                 currentIndex++;
             }
-            int imageIndex = indexedSkins.get(name);
+            int imageIndex = indexedSkins.get(replacedName);
             sendImageToClient(player, "snail_skin", imageIndex, (totalFiles-1), file.toPath());
         }
     }
