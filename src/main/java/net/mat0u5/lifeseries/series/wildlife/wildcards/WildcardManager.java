@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.TimeControl;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
@@ -53,7 +54,7 @@ public class WildcardManager {
     }
 
     public static void chosenWildcard(Wildcards wildcard) {
-        OtherUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " has been selected for this session."));
+        OtherUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " wildcard has been selected for this session."));
         OtherUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
         WildcardManager.chosenWildcard = wildcard;
     }
@@ -194,6 +195,13 @@ public class WildcardManager {
         SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
         if (!isActiveWildcard(Wildcards.MOB_SWAP) && server != null && server.getTicks() % 200 == 0) {
             MobSwap.killMobSwapMobs();
+        }
+
+        if (TimeControl.changedSpeedFor > 0) TimeControl.changedSpeedFor--;
+        if (!isActiveWildcard(Wildcards.TIME_DILATION) && TimeControl.changedSpeedFor <= 0) {
+            if (TimeDilation.getWorldSpeed() != 20) {
+                TimeDilation.setWorldSpeed(20);
+            }
         }
     }
 

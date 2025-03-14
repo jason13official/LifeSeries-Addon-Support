@@ -42,7 +42,6 @@ public class LimitedLife extends Series {
 
     @Override
     public void displayTimers(MinecraftServer server) {
-        //This function is called once every second, so we can
         String message = "";
         if (statusNotStarted()) {
             message = "Session has not started";
@@ -58,11 +57,6 @@ public class LimitedLife extends Series {
         }
 
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (statusStarted() && isAlive(player)) {
-                // One second has passed - remove a players life
-                removePlayerLife(player);
-            }
-
             MutableText fullMessage = Text.literal("");
             if (displayTimer.contains(player.getUuid())) {
                 fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
@@ -72,6 +66,21 @@ public class LimitedLife extends Series {
                 fullMessage.append(getFormattedLives(getPlayerLives(player)));
             }
             player.sendMessage(fullMessage, true);
+        }
+    }
+
+    private int secondCounter = 0;
+    @Override
+    public void tickSessionOn(MinecraftServer server) {
+        super.tickSessionOn(server);
+        secondCounter--;
+        if (secondCounter <= 0) {
+            secondCounter = 20;
+            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                if (statusStarted() && isAlive(player)) {
+                    removePlayerLife(player);
+                }
+            }
         }
     }
 

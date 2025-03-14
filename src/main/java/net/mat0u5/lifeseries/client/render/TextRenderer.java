@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.client.ClientKeybinds;
 import net.mat0u5.lifeseries.mixin.client.MinecraftClientMixin;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -93,14 +94,19 @@ public class TextRenderer {
         return -client.textRenderer.fontHeight-7;
     }
 
+    private static long lastPressed = 0;
     public static int renderSuperpowerCooldown(MinecraftClient client, DrawContext context, int y) {
+        if (ClientKeybinds.superpower != null && ClientKeybinds.superpower.isPressed()) lastPressed = System.currentTimeMillis();
+
         if (MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
         if (currentMillis >= MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) return 0;
         long millisLeft = MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP - currentMillis;
         if (millisLeft > 10000000) return 0;
 
-        Text timerText = Text.of("§7Superpower cooldown: §f"+OtherUtils.formatTimeMillis(millisLeft));
+        boolean keyPressed = (System.currentTimeMillis() - lastPressed) < 500;
+
+        Text timerText = Text.of((keyPressed?"§c§n":"§7")+"Superpower cooldown:§f "+OtherUtils.formatTimeMillis(millisLeft));
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;

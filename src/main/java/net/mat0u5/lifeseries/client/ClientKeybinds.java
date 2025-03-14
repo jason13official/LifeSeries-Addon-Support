@@ -7,7 +7,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientKeybinds {
-    private static KeyBinding superpower;
+    public static KeyBinding superpower;
     public static void tick() {
         while (superpower.wasPressed()) {
             NetworkHandlerClient.pressSuperpowerKey();

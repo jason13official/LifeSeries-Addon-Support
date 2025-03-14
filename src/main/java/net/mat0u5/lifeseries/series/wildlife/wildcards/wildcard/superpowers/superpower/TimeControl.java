@@ -11,6 +11,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 public class TimeControl extends Superpower {
+    public static int changedSpeedFor = 0;
     public TimeControl(ServerPlayerEntity player) {
         super(player);
     }
@@ -30,6 +31,7 @@ public class TimeControl extends Superpower {
         super.activate();
         float previousSpeed = TimeDilation.getWorldSpeed();
         if (previousSpeed <= 4) return;
+        changedSpeedFor += 90;
         TimeDilation.slowlySetWorldSpeed(4, 20);
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.of(Identifier.ofVanilla("wildlife_time_slow_down")));
         TaskScheduler.scheduleTask(70, () -> {
