@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.client.MinecraftClient;
@@ -178,7 +179,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        SnailSkinsServer.sendStoredImages(player);
+        TriviaWildcard.spawnBotFor(player);
 
         return 1;
     }

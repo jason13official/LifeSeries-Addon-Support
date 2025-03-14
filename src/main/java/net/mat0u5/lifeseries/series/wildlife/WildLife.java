@@ -73,8 +73,8 @@ public class WildLife extends Series {
         if (isOnLastLife(attacker, false)) return true;
         if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
 
-        if (isOnSpecificLives(attacker, 2, false) && isOnAtLeastLives(victim, 4, false)) return true;
-        return attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 4, false);
+        if (isOnSpecificLives(attacker, 2, false) && isOnAtLeastLives(victim, 3, false)) return true;
+        return attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 3, false);
     }
 
     @Override

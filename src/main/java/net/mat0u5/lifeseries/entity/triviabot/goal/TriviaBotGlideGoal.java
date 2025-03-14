@@ -46,7 +46,7 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        return mob.getBoundPlayer() != null && mob.getDistanceToGroundBlock() >= 1;
+        return mob.getDistanceToGroundBlock() >= 1;
     }
 
     @Override

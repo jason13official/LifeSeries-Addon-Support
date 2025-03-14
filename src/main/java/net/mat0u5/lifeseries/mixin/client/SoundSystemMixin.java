@@ -22,9 +22,8 @@ public class SoundSystemMixin {
             "wildlife_time_slow_down",
             "wildlife_time_speed_up",
             "wildlife_trivia_intro",
-            "wildlife_trivia_suspense_easy",
-            "wildlife_trivia_suspense_normal",
-            "wildlife_trivia_suspense_hard"
+            "wildlife_trivia_suspense",
+            "wildlife_trivia_suspense_end"
     );
     @Inject(method = "getAdjustedPitch", at = @At("HEAD"), cancellable = true)
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {

@@ -16,9 +16,8 @@ public class ClientSounds {
     public static final Map<UUID, SoundInstance> trackedEntitySounds = new HashMap<>();
     private static final List<String> trackedSounds = List.of(
             "wildlife_trivia_intro",
-            "wildlife_trivia_suspense_easy",
-            "wildlife_trivia_suspense_normal",
-            "wildlife_trivia_suspense_hard",
+            "wildlife_trivia_suspense",
+            "wildlife_trivia_suspense_end",
             "wildlife_trivia_analyzing"
     );
     public static void onSoundPlay(SoundInstance sound) {

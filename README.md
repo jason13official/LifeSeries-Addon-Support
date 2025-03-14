@@ -15,11 +15,18 @@ This includes automated lives tracking, automated team colors, automated session
 Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want to submit any bugs / give suggestions.
 ## Features
 
-Currently, the first five seasons of the Life Series are implemented. The latest season, Wild Life, is much more complicated, but it is planned to be released.
+This mod contains every single season of the Life Series, so Third Life, Last Life, Double Life, Limited Life, Secret Life, and even Wild Life!
 
 | Third Life | Last Life | Double Life | Limited Life | Secret Life | | Wild Life   |
 |------------|-----------|-------------|--------------|-------------|-|-------------|
-| Completed  | Completed | Completed   | Completed    | Completed | | In Progress |
+| Completed  | Completed | Completed   | Completed    | Completed | | Completed |
+
+## Wild Life
+To play Wild Life, the mod must be installed on the server **and on the client** - every player needs to have the mod installed in order to play.<br>
+This is because Wild Life contains features which would be impossible to do without client-side modifications.<br>
+As far as I know, this is the *only* full re-creation of Wild Life that exists, and it took a lot of work to make, so enjoy!<br>
+*NOTE: Wild Life modifies core mechanics of the minecraft game, and using other complex mods or modded clients (Lunar Client, etc.), might cause some of the features not to work properly!!*
+
 -----
 ## Usage
 ### Selecting a series
@@ -44,6 +51,8 @@ On series where bookshelves are banned, the enchantment table has been modified 
 - Currently, you can modify these (check the config files themselves for more info):
   - Default number of lives, the blacklists, Clamped enchants, spawn egg drop rates, if players drop items when they lose their last life ** and much, much more**.
   - Tasks in Secret Life (`config/lifeseries/secretlife/` folder) - there are three files, where you can modify / add / remove the easy, hard and red tasks.
+  - Snail names and skins in Wild Life.
+  - I can't mention it all, or we'd be here all day long :)
 
 ## Commands & Subcommands
 Unless specified otherwise (using "*No permissions required.*"), all commands can only be used by opped players (permissionLevel >= 2)

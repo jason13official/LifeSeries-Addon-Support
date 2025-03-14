@@ -335,30 +335,45 @@
             }
         ]
     },
-    "wildlife_trivia_suspense_easy": {
+    "wildlife_trivia_suspense": {
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_suspense_easy",
+                "name": "wildlife/trivia/triviabot_suspense",
                 "stream": true
             }
         ]
     },
-    "wildlife_trivia_suspense_normal": {
+    "wildlife_trivia_suspense_end": {
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_suspense_normal",
+                "name": "wildlife/trivia/triviabot_suspense_end",
                 "stream": true
             }
         ]
     },
-    "wildlife_trivia_suspense_hard": {
+    "wildlife_trivia_analyzing": {
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "wildlife/trivia/triviabot_suspense_hard",
-                "stream": true
+                "name": "wildlife/trivia/triviabot_analyzing"
+            }
+        ]
+    },
+    "wildlife_trivia_correct": {
+        "sounds": [
+            {
+                "attenuation_distance": 32,
+                "name": "wildlife/trivia/triviabot_correct"
+            }
+        ]
+    },
+    "wildlife_trivia_incorrect": {
+        "sounds": [
+            {
+                "attenuation_distance": 32,
+                "name": "wildlife/trivia/triviabot_incorrect"
             }
         ]
     }

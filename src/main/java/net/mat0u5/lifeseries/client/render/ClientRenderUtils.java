@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.mat0u5.lifeseries.client.ClientSounds;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 
