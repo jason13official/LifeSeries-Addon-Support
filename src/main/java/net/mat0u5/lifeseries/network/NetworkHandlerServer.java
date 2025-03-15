@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.network;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.client.config.BooleanObject;
+import net.mat0u5.lifeseries.client.config.DoubleObject;
+import net.mat0u5.lifeseries.client.config.IntegerObject;
+import net.mat0u5.lifeseries.client.config.StringObject;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
@@ -19,26 +21,14 @@ import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.DisconnectionInfo;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class NetworkHandlerServer {
     public static final List<UUID> handshakeSuccessful = new ArrayList<>();
@@ -51,6 +41,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ImagePayload.ID, ImagePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
@@ -59,6 +50,7 @@ public class NetworkHandlerServer {
         PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(PlayerDisguisePayload.ID, PlayerDisguisePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ImagePayload.ID, ImagePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ConfigPayload.ID, ConfigPayload.CODEC);
     }
     public static void registerServerReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
@@ -76,7 +68,57 @@ public class NetworkHandlerServer {
             MinecraftServer server = context.server();
             server.execute(() -> handleStringPacket(player, payload.name(),payload.value()));
         });
+        ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
+            ServerPlayerEntity player = context.player();
+            MinecraftServer server = context.server();
+            server.execute(() -> handleConfigPacket(player, payload));
+        });
     }
+
+    public static boolean updatedConfigThisTick = false;
+    public static void handleConfigPacket(ServerPlayerEntity player, ConfigPayload payload) {
+        if (PermissionManager.isAdmin(player)) {
+            String configType = payload.configType();
+            int index = payload.index();
+            String id = payload.id();
+            String name = payload.name();
+            String description = payload.description();
+            List<String> args = payload.args();
+
+            if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
+                seriesConfig.setProperty(id, args.getFirst());
+                updatedConfigThisTick = true;
+                return;
+            }
+            if (configType.equalsIgnoreCase("boolean") && !args.isEmpty()) {
+                seriesConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
+                updatedConfigThisTick = true;
+                return;
+            }
+            if (configType.equalsIgnoreCase("double") && !args.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(args.getFirst());
+                    seriesConfig.setProperty(id, String.valueOf(value));
+                    updatedConfigThisTick = true;
+                    return;
+                }catch(Exception e){}
+            }
+            if (configType.equalsIgnoreCase("integer") && !args.isEmpty()) {
+                try {
+                    int value = Integer.parseInt(args.getFirst());
+                    seriesConfig.setProperty(id, String.valueOf(value));
+                    updatedConfigThisTick = true;
+                    return;
+                }catch(Exception e){}
+            }
+        }
+    }
+
+    public static void onUpdatedConfig() {
+        updatedConfigThisTick = false;
+        OtherUtils.broadcastMessageToAdmins(Text.of("§7Config Updated. Run §f'/lifeseries reload'§7 to apply the changes."));
+    }
+
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {
         int intValue = (int) value;
         if (name.equalsIgnoreCase("trivia_answer")) {
@@ -97,6 +139,9 @@ public class NetworkHandlerServer {
                 if (wildcard != null && wildcard != Wildcards.NULL) {
                     WildcardManager.chosenWildcard(wildcard);
                 }
+            }
+            if (name.equalsIgnoreCase("request_config")) {
+                seriesConfig.sendConfigTo(player);
             }
         }
     }
@@ -143,6 +188,11 @@ public class NetworkHandlerServer {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
         if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
         ServerPlayNetworking.send(player, triviaQuestionPacket);
+    }
+
+    public static void sendConfig(ServerPlayerEntity player, String configType, String id, int index, String name, String description, List<String> args) {
+        ConfigPayload configPacket = new ConfigPayload(configType, id, index, name, description, args);
+        ServerPlayNetworking.send(player, configPacket);
     }
 
     public static void sendHandshake(ServerPlayerEntity player) {

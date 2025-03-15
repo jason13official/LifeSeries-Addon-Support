@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.client.render.ClientRenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 

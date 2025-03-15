@@ -139,6 +139,9 @@ public class Events {
                 Main.currentSession.tick(server);
             }
             OtherUtils.onTick();
+            if (NetworkHandlerServer.updatedConfigThisTick) {
+                NetworkHandlerServer.onUpdatedConfig();
+            }
         }catch(Exception e) {
             Main.LOGGER.error(e.getMessage());
         }

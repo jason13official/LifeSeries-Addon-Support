@@ -1,12 +1,15 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.series.secretlife.SecretLifeConfig;
 import net.mat0u5.lifeseries.series.thirdlife.ThirdLifeConfig;
 import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
+import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -224,5 +227,11 @@ public abstract class ConfigManager {
             return Integer.parseInt(value);
         } catch (Exception ignored) {}
         return defaultValue;
+    }
+
+    /*
+        Other
+     */
+    public void sendConfigTo(ServerPlayerEntity player) {
     }
 }

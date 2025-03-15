@@ -46,6 +46,7 @@ A similar feature to the item blacklist is enchantment clamping, which limits sp
 On series where bookshelves are banned, the enchantment table has been modified a little bit to give all enchantments (because in vanilla its impossible to get some without bookshelves), and its also possible to get higher levels on some enchants directly from the table (like efficiency, unbreaking, fortune,...)
 
 ### Config
+- Using `/lifeseries config` while having the Life Series mod installed client-side, along with the Cloth Config mod will open a GUI for you to edit the config from in-game.<br>
 - The config files are all located in the `config/lifeseries/*` folder. There are files for every series, where you can modify the gameplay for each one of them.<br>
 - Reload the config using `/lifeseries reload` or simply the vanilla `/reload`
 - Currently, you can modify these (check the config files themselves for more info):
@@ -62,6 +63,7 @@ Unless specified otherwise (using "*No permissions required.*"), all commands ca
 
 This command **always** available
 - `/lifeseries series` - Shows the selected series
+- `/lifeseries config` - Opens the mod's config GUI (client-side mod required).
 - `/lifeseries version` - Shows the mod's version
 - `/lifeseries credits` - Shows the mod's credits
 - `/lifeseries setSeries <series>` - Changes the Series, only works if no series has been selected

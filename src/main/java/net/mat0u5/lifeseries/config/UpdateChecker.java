@@ -43,8 +43,11 @@ public class UpdateChecker {
 
                     versionName = json.get("tag_name").getAsString();
 
+                    int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
+                    int updateVersionNumber = VersionControl.getModVersionInt(versionName);
+
                     // Compare the current version with the latest version
-                    if (!Main.MOD_VERSION.equalsIgnoreCase(versionName)) {
+                    if (currentVersionNumber < updateVersionNumber) {
                         Main.LOGGER.info("New version found: "+versionName);
                         updateAvailable = true;
                     }

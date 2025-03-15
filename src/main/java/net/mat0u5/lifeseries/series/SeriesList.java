@@ -12,6 +12,16 @@ public enum SeriesList {
     SECRET_LIFE,
     WILD_LIFE;
 
+    public static String getFormattedStringNameFromSeries(SeriesList series) {
+        if (series == THIRD_LIFE) return "Third Life";
+        if (series == LAST_LIFE) return "Last Life";
+        if (series == DOUBLE_LIFE) return "Double Life";
+        if (series == LIMITED_LIFE) return "Limited Life";
+        if (series == SECRET_LIFE) return "Secret Life";
+        if (series == WILD_LIFE) return "Wild Life";
+        return "unassigned";
+    }
+
     public static String getStringNameFromSeries(SeriesList series) {
         if (series == THIRD_LIFE) return "thirdlife";
         if (series == LAST_LIFE) return "lastlife";

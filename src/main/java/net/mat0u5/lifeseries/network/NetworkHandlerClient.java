@@ -1,8 +1,13 @@
 package net.mat0u5.lifeseries.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.client.ClientTaskScheduler;
+import net.mat0u5.lifeseries.client.config.ClientsideConfig;
+import net.mat0u5.lifeseries.client.gui.ConfigScreen;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
@@ -15,6 +20,8 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +57,14 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handleImagePacket(payload.name(), payload));
         });
+        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            client.execute(() -> handleConfigPacket(payload));
+        });
+    }
+
+    public static void handleConfigPacket(ConfigPayload payload) {
+        ClientsideConfig.handleConfigPacket(payload);
     }
 
     public static void handleImagePacket(String name, ImagePayload payload) {
@@ -90,6 +105,18 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("select_wildcards") && Main.isClient()) {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
+        }
+        if (name.equalsIgnoreCase("open_config")) {
+            if (FabricLoader.getInstance().isModLoaded("cloth-config")) {
+                ClientsideConfig.load();
+                ClientTaskScheduler.scheduleTask(20, () -> {
+                    MinecraftClient.getInstance().setScreen(ConfigScreen.create(MinecraftClient.getInstance().currentScreen));
+                });
+            }
+            else if (MinecraftClient.getInstance().player != null){
+                MinecraftClient.getInstance().player.sendMessage(Text.of(""), false);
+                MinecraftClient.getInstance().player.sendMessage(Text.of("§cPlease install the Cloth Config mod (client-side) to modify the config from in-game."), false);
+            }
         }
     }
 
@@ -174,6 +201,11 @@ public class NetworkHandlerClient {
     /*
         Sending
      */
+
+    public static void sendConfigUpdate(String configType, String id, int index, String name, String description, List<String> args) {
+        ConfigPayload configPacket = new ConfigPayload(configType, id, index, name, description, args);
+        ClientPlayNetworking.send(configPacket);
+    }
 
     public static void sendTriviaAnswer(int answer) {
         if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Sending trivia answer: {}", answer);

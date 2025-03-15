@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
@@ -120,6 +121,10 @@ public class LifeSeriesCommand {
 
     public static int config(ServerCommandSource source) {
         source.sendMessage(Text.of("§7 The life series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
+
+        if (source.getPlayer() != null) {
+            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
+        }
         return 1;
     }
 

@@ -30,6 +30,7 @@ public class ClientEvents {
             tryTripleJump(player);
         }
         ClientKeybinds.tick();
+        ClientTaskScheduler.onClientTick();
     }
 
     public static void spawnInvisibilityParticles(MinecraftClient client) {
