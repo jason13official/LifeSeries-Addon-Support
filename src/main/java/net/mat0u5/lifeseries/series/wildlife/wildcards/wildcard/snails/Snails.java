@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +22,7 @@ public class Snails extends Wildcard {
 
     public static Map<UUID, Snail> snails = new HashMap<>();
     public static Map<UUID, String> snailNames = new HashMap<>();
-    int ticks = 0;
+    long ticks = 0;
 
     @Override
     public Wildcards getType() {
@@ -57,6 +58,9 @@ public class Snails extends Wildcard {
                         snails.remove(playerUUID);
                         spawnSnailFor(player);
                     }
+                    else {
+                        OtherUtils.log(snail.getBlockX() + "_" + snail.getBlockY() + "_" + snail.getBlockZ());
+                    }
                 }
                 else {
                     spawnSnailFor(player);
@@ -66,6 +70,7 @@ public class Snails extends Wildcard {
     }
 
     public void spawnSnailFor(ServerPlayerEntity player) {
+        OtherUtils.log("spawnSnailFor_" + player.getNameForScoreboard());
         Snail snail = MobRegistry.SNAIL.spawn(player.getServerWorld(), player.getBlockPos().add(0,20,0), SpawnReason.COMMAND);
         if (snail != null) {
             snail.setBoundPlayer(player);
@@ -102,7 +107,7 @@ public class Snails extends Wildcard {
     public static void reloadSnailSkins() {
         for (Snail snail : snails.values()) {
             if (snail == null) return;
-            snail.updateSkin(snail.getBoundPlayer());
+            snail.updateSkin(snail.getActualBoundPlayer());
         }
     }
 

@@ -184,7 +184,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        TriviaWildcard.spawnBotFor(player);
+        source.sendMessage(Text.of("Test Command"));
 
         return 1;
     }
@@ -193,9 +193,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (!Snails.snails.containsKey(player.getUuid())) return -1;
-        Snail snail = Snails.snails.get(player.getUuid());
-        snail.setSnailSkin(-1);
         source.sendMessage(Text.of("Test Command 1"));
 
         return 1;
@@ -205,9 +202,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (!Snails.snails.containsKey(player.getUuid())) return -1;
-        Snail snail = Snails.snails.get(player.getUuid());
-        snail.setSnailSkin(0);
         source.sendMessage(Text.of("Test Command 1"));
 
         return 1;
@@ -216,9 +210,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (!Snails.snails.containsKey(player.getUuid())) return -1;
-        Snail snail = Snails.snails.get(player.getUuid());
-        snail.setSnailSkin(1);
         source.sendMessage(Text.of("Test Command 2"));
 
         return 1;

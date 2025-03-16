@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.AttributeUtils;
@@ -91,9 +92,10 @@ public class TriviaWildcard extends Wildcard {
 
         List<ServerPlayerEntity> players = currentSeries.getAlivePlayers();
         if (players.isEmpty()) return;
+        if (isBuffed()) Collections.shuffle(players);
 
         int numPlayers = players.size();
-        int desiredTotalSpawns = numPlayers * TRIVIA_BOTS_PER_PLAYER;
+        int desiredTotalSpawns = numPlayers * getBotsPerPlayer();
 
         if (desiredTotalSpawns == 0) return;
 
@@ -137,7 +139,7 @@ public class TriviaWildcard extends Wildcard {
                     else {
                         spawnedBotsFor.put(player.getUuid(), 1);
                     }
-                    if (spawnedBotsFor.get(player.getUuid()) <= TRIVIA_BOTS_PER_PLAYER) {
+                    if (spawnedBotsFor.get(player.getUuid()) <= getBotsPerPlayer()) {
                         spawnBotFor(player);
                     }
                 }
@@ -339,5 +341,14 @@ public class TriviaWildcard extends Wildcard {
         TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
         usedHardQuestions.add(result.getQuestion());
         return result;
+    }
+
+    public static int getBotsPerPlayer() {
+        if (isBuffed()) return TRIVIA_BOTS_PER_PLAYER*2;
+        return TRIVIA_BOTS_PER_PLAYER;
+    }
+
+    public static boolean isBuffed() {
+        return WildcardManager.isActiveWildcard(Wildcards.CALLBACK);
     }
 }

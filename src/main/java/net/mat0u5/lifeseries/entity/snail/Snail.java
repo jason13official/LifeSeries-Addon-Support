@@ -90,7 +90,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public PathFinder pathFinder;
     public int nullPlayerChecks = 0;
     public Text snailName;
-    private long chunkTicketExpiryTicks = 0L;
     private int lastAir = 0;
 
     public static final float MOVEMENT_SPEED = 0.35f;
@@ -122,6 +121,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void setSnailSkin(int index) {
         setSnailSkin(0,index);
     }
+
     public void setSnailSkin(int tryNumber, int index) {
         if (holder == null) {
             if (tryNumber < 5) {
@@ -401,10 +401,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void chunkLoading() {
         if (getWorld() instanceof ServerWorld world) {
-            if (--this.chunkTicketExpiryTicks <= 0L) {
-                world.resetIdleTimeout();
-                this.chunkTicketExpiryTicks = addTicket(world) - 20L;
-            }
+            addTicket(world);
         }
     }
 
@@ -489,7 +486,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     private int flyAnimation = 0;
     public void updateAnimations() {
         if (holder == null) return;
-        AnimationHandler.updateHurtVariant(this, holder);
         Animator animator = holder.getAnimator();
         if (flyAnimation < 0) {
             flyAnimation++;
@@ -625,9 +621,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
             this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
             AnimationUtils.spawnTeleportParticles(world, getPos());
-            this.chunkTicketExpiryTicks = 0L;
 
-            updateModel();
+            TaskScheduler.scheduleTask(5, this::updateModel);
         }
     }
 
@@ -778,6 +773,11 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (player.isSpectator()) return null;
         if (player.isDead()) return null;
         return player;
+    }
+    @Nullable
+    public ServerPlayerEntity getActualBoundPlayer() {
+        if (server == null) return null;
+        return PlayerUtils.getPlayer(boundPlayerUUID);
     }
 
     /*

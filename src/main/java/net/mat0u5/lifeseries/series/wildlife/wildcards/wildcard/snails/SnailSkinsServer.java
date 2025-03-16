@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ResourceHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ImagePayload;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -14,8 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SnailSkinsServer {
@@ -50,7 +51,6 @@ public class SnailSkinsServer {
 
     public static void sendStoredImages(ServerPlayerEntity player) {
         File folder = new File("./config/lifeseries/wildlife/snailskins/");
-        if (folder == null) return;
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 Main.LOGGER.error("Failed to create folder {}", folder);
@@ -63,12 +63,14 @@ public class SnailSkinsServer {
         for (File file : files) {
             if (!file.isFile()) continue;
             String name = file.getName().toLowerCase();
+            if (name.equalsIgnoreCase("example.png")) continue;
             if (!name.endsWith(".png")) continue;
             totalFiles++;
         }
         for (File file : files) {
             if (!file.isFile()) continue;
             String name = file.getName().toLowerCase();
+            if (name.equalsIgnoreCase("example.png")) continue;
             if (!name.endsWith(".png")) continue;
             String replacedName = name.toLowerCase().replaceAll(".png","");
             if (!indexedSkins.containsKey(replacedName)) {
@@ -79,6 +81,23 @@ public class SnailSkinsServer {
             sendImageToClient(player, "snail_skin", imageIndex, (totalFiles-1), file.toPath());
         }
     }
+
+    public static List<String> getAllSkins() {
+        List<String> result = new ArrayList<>();
+        File folder = new File("./config/lifeseries/wildlife/snailskins/");
+        File[] files = folder.listFiles();
+        if (files == null) return result;
+        for (File file : files) {
+            if (!file.isFile()) continue;
+            String name = file.getName().toLowerCase();
+            if (name.equalsIgnoreCase("example.png")) continue;
+            if (!name.endsWith(".png")) continue;
+            String replacedName = name.replaceAll(".png","");
+            result.add(replacedName);
+        }
+        return result;
+    }
+
     public static void sendStoredImages() {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             sendStoredImages(player);
@@ -90,7 +109,15 @@ public class SnailSkinsServer {
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 Main.LOGGER.error("Failed to create folder {}", folder);
+                return;
             }
         }
+        ResourceHandler handler = new ResourceHandler();
+
+        Path modelResult = new File("./config/lifeseries/wildlife/snailskins/snail.bbmodel").toPath();
+        handler.copyBundledSingleFile("/model/" + Main.MOD_ID + "/snail.bbmodel", modelResult);
+
+        Path textureResult = new File("./config/lifeseries/wildlife/snailskins/example.png").toPath();
+        handler.copyBundledSingleFile("/model/" + Main.MOD_ID + "/texture/example.png", textureResult);
     }
 }

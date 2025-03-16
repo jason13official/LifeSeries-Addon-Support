@@ -185,8 +185,10 @@ This command **always** available
   - `/soulmate resetAll` - Resets all soulmates.
   - `/soulmate rollRandom` - Rolls random soulmates from the list of online players.
   - 
-- `/snailname` - *These commands are only available when playing Wild Life.*
-  - `/snailname get <player>` - Shows you the name of `<player>`'s snail.
-  - `/snailname set <player> <name>` - Sets the name of `<player>`'s snail to `<name>`.
-  - `/snailname reset <player>` - Resets the name of `<player>`'s snail back to `<player>'s Snail`.
+- `/snail` - *These commands are only available when playing Wild Life.*
+  - `/snail names get <player>` - Shows you the name of `<player>`'s snail.
+  - `/snail names set <player> <name>` - Sets the name of `<player>`'s snail to `<name>`.
+  - `/snail names reset <player>` - Resets the name of `<player>`'s snail back to `<player>'s Snail`.
+  - `/snail textures list` - Shows a list of uploaded snail textures.
+  - `/snail textures info` - Shows you how to create and upload snail textures.
 </details>

@@ -41,6 +41,7 @@ public class Hunger extends Wildcard {
     public static int shuffleVersion = 0;
     private static boolean shuffledBefore = false;
     private static int lastVersion = -1;
+    private static long ticks = 0;
 
     private static final List<RegistryEntry<StatusEffect>> effects = List.of(
             StatusEffects.SPEED,
@@ -122,6 +123,14 @@ public class Hunger extends Wildcard {
             if (lastVersion != currentVersion) {
                 lastVersion = currentVersion;
                 newFoodRules();
+            }
+        }
+        ticks++;
+        if (ticks % 20 == 0) {
+            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                if (!player.hasStatusEffect(StatusEffects.HUNGER)) {
+                    addHunger(player);
+                }
             }
         }
     }

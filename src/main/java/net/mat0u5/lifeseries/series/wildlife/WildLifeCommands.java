@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -19,6 +20,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.io.File;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
@@ -77,24 +79,35 @@ public class WildLifeCommands {
                 )
         );
         dispatcher.register(
-            literal("snailname")
-                .then(literal("set")
-                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                    .then(argument("player", EntityArgumentType.player())
-                        .then(argument("name", StringArgumentType.greedyString())
-                            .executes(context -> setSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player"), StringArgumentType.getString(context, "name")))
+            literal("snail")
+                .then(literal("names")
+                    .then(literal("set")
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                        .then(argument("player", EntityArgumentType.player())
+                            .then(argument("name", StringArgumentType.greedyString())
+                                .executes(context -> setSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player"), StringArgumentType.getString(context, "name")))
+                            )
+                        )
+                    )
+                    .then(literal("reset")
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                        .then(argument("player", EntityArgumentType.player())
+                            .executes(context -> resetSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                        )
+                    )
+                    .then(literal("get")
+                        .then(argument("player", EntityArgumentType.player())
+                            .executes(context -> getSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
                         )
                     )
                 )
-                .then(literal("reset")
-                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                    .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> resetSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                .then(literal("textures")
+                    .executes(context -> getSnailTexturesInfo(context.getSource()))
+                    .then(literal("list")
+                            .executes(context -> getSnailTextures(context.getSource()))
                     )
-                )
-                .then(literal("get")
-                    .then(argument("player", EntityArgumentType.player())
-                        .executes(context -> getSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
+                    .then(literal("info")
+                        .executes(context -> getSnailTexturesInfo(context.getSource()))
                     )
                 )
         );
@@ -121,6 +134,31 @@ public class WildLifeCommands {
                     )
                 )
         );
+    }
+
+    public static int getSnailTexturesInfo(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+
+        source.sendMessage(Text.of("To create your custom snail textures, you must first open the snail model (§7./config/lifeseries/wildlife/snailskins/snail.bbmodel§f) in Blockbench."));
+        source.sendMessage(Text.of("After that, you should hide the parachute and propeller layers, as they just get in the way and should not be edited anyways."));
+        source.sendMessage(Text.of("Then, after you edit the skin however you wish, export it, and put it in the folder (§7./config/lifeseries/wildlife/snailskins/§f). Then reload, and it should be finished"));
+        TaskScheduler.scheduleTask(80, () -> {
+            source.sendMessage(Text.of("This is a pretty complicated process and it requires Blockbench knowledge. If you have any questions, join the discord or google it."));
+        });
+
+
+        return 1;
+    }
+
+    public static int getSnailTextures(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        List<String> textures = SnailSkinsServer.getAllSkins();
+        if (textures.isEmpty()) {
+            source.sendMessage(Text.of("§7No snail skins have been added yet. Run §f'/snail textures info'§7 to learn how to add them."));
+            return -1;
+        }
+        source.sendMessage(Text.of("§7The following skins have been found: §f" + String.join(", ", textures)));
+        return 1;
     }
 
     public static int chooseWildcard(ServerCommandSource source) {
