@@ -31,7 +31,7 @@ public class Necromancy extends Superpower {
 
     @Override
     public Superpowers getSuperpower() {
-        return null;
+        return Superpowers.NECROMANCY;
     }
 
     @Override
