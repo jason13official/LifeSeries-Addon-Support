@@ -115,7 +115,7 @@ public class QuizScreen extends Screen {
         if (button == 0) { // Left-click
             for (int i = 0; i < answerRects.size(); i++) {
                 if (answerRects.get(i).contains(mouseX, mouseY)) {
-                    if (this.client != null) this.client.setScreen(new ConfirmAnswerScreen(this, i));
+                    if (this.client != null) this.client.setScreen(new ConfirmQuizAnswerScreen(this, i));
                     return true;
                 }
             }

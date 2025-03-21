@@ -39,6 +39,13 @@ public enum SeriesList {
         if (name.equalsIgnoreCase("limitedlife")) return LIMITED_LIFE;
         if (name.equalsIgnoreCase("secretlife")) return SECRET_LIFE;
         if (name.equalsIgnoreCase("wildlife")) return WILD_LIFE;
+
+        if (name.equalsIgnoreCase("Third Life")) return THIRD_LIFE;
+        if (name.equalsIgnoreCase("Last Life")) return LAST_LIFE;
+        if (name.equalsIgnoreCase("Double Life")) return DOUBLE_LIFE;
+        if (name.equalsIgnoreCase("Limited Life")) return LIMITED_LIFE;
+        if (name.equalsIgnoreCase("Secret Life")) return SECRET_LIFE;
+        if (name.equalsIgnoreCase("Wild Life")) return WILD_LIFE;
         return UNASSIGNED;
     }
 

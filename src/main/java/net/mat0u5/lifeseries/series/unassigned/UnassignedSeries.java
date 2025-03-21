@@ -1,9 +1,12 @@
 package net.mat0u5.lifeseries.series.unassigned;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
@@ -26,6 +29,11 @@ public class UnassignedSeries extends Series {
     @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
         TaskScheduler.scheduleTask(100, this::broadcastNotice);
+    }
+    @Override
+    public void onPlayerFinishJoining(ServerPlayerEntity player) {
+        super.onPlayerFinishJoining(player);
+        NetworkHandlerServer.sendStringPacket(player, "select_series", "");
     }
 
     @Override

@@ -57,6 +57,10 @@ public class LifeSeriesCommand {
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> reload(context.getSource()))
                 )
+                .then(literal("chooseSeries")
+                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                        .executes(context -> chooseSeries(context.getSource()))
+                )
                 .then(literal("setSeries")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(argument("series", StringArgumentType.string())
@@ -91,6 +95,12 @@ public class LifeSeriesCommand {
         }
     }
 
+    public static int chooseSeries(ServerCommandSource source) {
+        if (source.getPlayer() == null) return -1;
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_series", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+        return 1;
+    }
+
     public static int setSeries(ServerCommandSource source, String setTo, boolean confirmed) {
         if (!ALLOWED_SERIES_NAMES.contains(setTo)) {
             source.sendError(Text.of("That is not a valid series!"));
@@ -105,7 +115,7 @@ public class LifeSeriesCommand {
                 setSeriesFinal(source, setTo);
             }
             else {
-                source.sendMessage(Text.of("WARNING: you already have a selected series, are you sure you want to change to a different one?"));
+                source.sendMessage(Text.of("WARNING: you have already selected a series, changing it might cause some saved data to be lost (lives, ...)"));
                 source.sendMessage(Text.literal("If you are sure, use '")
                         .append(Text.literal("/lifeseries setSeries <series>").formatted(Formatting.GRAY))
                         .append(Text.literal(" confirm").formatted(Formatting.GREEN)).append(Text.of("'")));

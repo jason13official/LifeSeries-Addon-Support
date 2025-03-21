@@ -25,6 +25,7 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.*;
 
@@ -142,6 +143,12 @@ public class NetworkHandlerServer {
             }
             if (name.equalsIgnoreCase("request_config")) {
                 seriesConfig.sendConfigTo(player);
+            }
+            if (name.equalsIgnoreCase("set_series")) {
+                SeriesList newSeries = SeriesList.getSeriesFromStringName(value);
+                if (newSeries == SeriesList.UNASSIGNED) return;
+                OtherUtils.broadcastMessageToAdmins(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
+                Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries));
             }
         }
     }

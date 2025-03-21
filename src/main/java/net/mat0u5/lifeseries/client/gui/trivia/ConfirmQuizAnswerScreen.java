@@ -9,7 +9,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class ConfirmAnswerScreen extends Screen {
+public class ConfirmQuizAnswerScreen extends Screen {
     private static final Identifier BACKGROUND_TEXTURE = Identifier.of("lifeseries","textures/gui/trivia_answer.png");
 
     public static final int TEXT_COLOR = 0x3c3c3c;
@@ -20,7 +20,7 @@ public class ConfirmAnswerScreen extends Screen {
     private final QuizScreen parent;
     private final int answerIndex;
 
-    public ConfirmAnswerScreen(QuizScreen parent, int answerIndex) {
+    public ConfirmQuizAnswerScreen(QuizScreen parent, int answerIndex) {
         super(Text.literal("Confirm Answer"));
         this.parent = parent;
         this.answerIndex = answerIndex;
@@ -32,15 +32,15 @@ public class ConfirmAnswerScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        int centerX = (this.width - BG_WIDTH) / 2;
-        int centerY = (this.height - BG_HEIGHT) / 2;
+        int startX = (this.width - BG_WIDTH) / 2;
+        int startY = (this.height - BG_HEIGHT) / 2;
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
                             Trivia.sendAnswer(answerIndex);
                         })
-                        .position(centerX + 9, centerY + BG_HEIGHT - 25)
+                        .position(startX + 9, startY + BG_HEIGHT - 25)
                         .size(60, 20)
                         .build()
         );
@@ -49,7 +49,7 @@ public class ConfirmAnswerScreen extends Screen {
                 ButtonWidget.builder(Text.literal("Cancel"), btn -> {
                             if (this.client != null) this.client.setScreen(parent);
                         })
-                        .position(centerX + 79, centerY + BG_HEIGHT - 25)
+                        .position(startX + 79, startY + BG_HEIGHT - 25)
                         .size(60, 20)
                         .build()
         );

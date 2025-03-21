@@ -63,11 +63,12 @@ Unless specified otherwise (using "*No permissions required.*"), all commands ca
 
 This command **always** available
 - `/lifeseries series` - Shows the selected series
-- `/lifeseries config` - Opens the mod's config GUI (client-side mod required).
+- `/lifeseries config` - Opens the mod's config GUI (Life Series mod on client-side required).
 - `/lifeseries version` - Shows the mod's version
 - `/lifeseries credits` - Shows the mod's credits
 - `/lifeseries setSeries <series>` - Changes the Series, only works if no series has been selected
   - `/lifeseries setSeries <series> confirm` - Changes the Series, can override the current series
+- `/lifeseries chooseSeries` - Opens a series select GUI (Life Series mod on client-side required).
 </details>
 
 <details open>

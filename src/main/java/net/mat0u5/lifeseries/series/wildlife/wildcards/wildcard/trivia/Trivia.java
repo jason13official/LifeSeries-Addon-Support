@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.client.gui.trivia.ConfirmAnswerScreen;
+import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
@@ -47,7 +47,7 @@ public class Trivia {
 
     public static void closeGui() {
         if (MinecraftClient.getInstance().currentScreen == null) return;
-        if (MinecraftClient.getInstance().currentScreen instanceof QuizScreen || MinecraftClient.getInstance().currentScreen instanceof ConfirmAnswerScreen) {
+        if (MinecraftClient.getInstance().currentScreen instanceof QuizScreen || MinecraftClient.getInstance().currentScreen instanceof ConfirmQuizAnswerScreen) {
             MinecraftClient.getInstance().setScreen(null);
         }
     }
