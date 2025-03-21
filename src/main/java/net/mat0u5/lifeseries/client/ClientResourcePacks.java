@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
@@ -38,7 +39,7 @@ public class ClientResourcePacks {
     }
 
     public static void checkClientPacks() {
-        if (Main.isClient() && !Main.isLogicalSide() && MainClient.clientCurrentSeries == SeriesList.SECRET_LIFE) {
+        if (Main.isClient() && MainClient.clientCurrentSeries == SeriesList.SECRET_LIFE) {
             enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
         }
         else {

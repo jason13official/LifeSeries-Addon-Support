@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.EvokerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ public abstract class EntityMixin {
                 if (currentSeries instanceof WildLife) {
                     if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
                         Entity entity = (Entity) (Object) this;
-                        if (entity instanceof PlayerEntity player) {
+                        if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
                             if (!Snails.snails.containsKey(player.getUuid())) return;
                             Snail snail = Snails.snails.get(player.getUuid());
                             if (snail == null) return;
@@ -48,9 +49,9 @@ public abstract class EntityMixin {
                 }
             }
         }
-        else if (MainClient.snailAir != 300) {
+        else if (MainClient.snailAir < 300) {
             Entity entity = (Entity) (Object) this;
-            if (entity instanceof PlayerEntity player) {
+            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
                 int initialAir = player.getDataTracker().get(EntityTrackedData.AIR);
                 if (MainClient.snailAir < initialAir) {
                     cir.setReturnValue(MainClient.snailAir);

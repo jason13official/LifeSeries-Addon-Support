@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ResourceHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ImagePayload;
+import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class SnailSkinsServer {
     public static void sendImageToClient(ServerPlayerEntity player, String name, int index, int maxIndex, Path imagePath) {
@@ -50,6 +53,7 @@ public class SnailSkinsServer {
     public static int currentIndex = 0;
 
     public static void sendStoredImages(ServerPlayerEntity player) {
+        if (currentSeries.getSeries() != SeriesList.WILD_LIFE) return;
         File folder = new File("./config/lifeseries/wildlife/snailskins/");
         if (!folder.exists()) {
             if (!folder.mkdirs()) {

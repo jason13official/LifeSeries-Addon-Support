@@ -387,6 +387,7 @@ public class TaskManager {
             });
             TaskScheduler.scheduleTask(200, () -> AnimationUtils.playTotemAnimation(player));
             TaskScheduler.scheduleTask(240, () -> {
+                removePlayersTaskBook(player);
                 assignRandomTaskToPlayer(player, newType);
                 secretKeeperBeingUsed = false;
             });

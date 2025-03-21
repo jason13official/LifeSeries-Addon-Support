@@ -33,6 +33,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -374,9 +375,12 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
         if (SHOULD_DROWN_PLAYER && !fromTrivia && getBoundPlayer() != null) {
             int currentAir = getAir();
+            if (getBoundPlayer().hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+                currentAir = getMaxAir();
+            }
             if (lastAir != currentAir) {
                 lastAir = currentAir;
-                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", lastAir);
+                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", currentAir);
             }
             if (currentAir == 0) damageFromDrowning();
         }
@@ -465,6 +469,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void damageFromDrowning() {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
+        if (player.isDead()) return;
         //? if <=1.21 {
         DamageSource damageSource = new DamageSource( player.getServerWorld().getRegistryManager()
                 .get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.DROWN));

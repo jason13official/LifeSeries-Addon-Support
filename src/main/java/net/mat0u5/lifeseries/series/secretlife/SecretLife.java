@@ -188,6 +188,7 @@ public class SecretLife extends Series {
             player.removeStatusEffect(StatusEffects.HEALTH_BOOST);
         }
         syncPlayerHealth(player);
+        TaskScheduler.scheduleTask(10, () -> syncPlayerHealth(player));
     }
 
     @Override
@@ -292,6 +293,7 @@ public class SecretLife extends Series {
     }
 
     public void setPlayerHealth(ServerPlayerEntity player, double health) {
+        if (player == null) return;
         if (health < 0.1) health = 0.1;
         AttributeUtils.setMaxPlayerHealth(player, health);
         if (player.getMaxHealth() > player.getHealth() && !player.isDead()) {
