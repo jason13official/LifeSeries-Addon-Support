@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
@@ -8,7 +10,6 @@ import net.mat0u5.lifeseries.utils.AttributeUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class SizeShifting extends Wildcard {
@@ -66,8 +67,8 @@ public class SizeShifting extends Wildcard {
         }
 
 
-        if (MORPH_COMPONENT.maybeGet(player).isPresent()) {
-            if (MORPH_COMPONENT.maybeGet(player).get().isMorphed()) return;
+        if (DependencyManager.cardinalComponentsLoaded()) {
+           if (!CardinalComponentsDependency.allowPlayerSizeChange(player)) return;
         }
 
         AttributeUtils.setScale(player, size);

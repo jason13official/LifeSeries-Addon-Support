@@ -149,8 +149,9 @@ public class NetworkHandlerServer {
             if (PermissionManager.isAdmin(player) || currentSeries.getSeries() == SeriesList.UNASSIGNED) {
                 SeriesList newSeries = SeriesList.getSeriesFromStringName(value);
                 if (newSeries == SeriesList.UNASSIGNED) return;
-                OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
-                Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries));
+                if (Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries))) {
+                    OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
+                }
             }
         }
     }

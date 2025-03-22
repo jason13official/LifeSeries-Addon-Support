@@ -24,7 +24,7 @@
 		"fabric-datagen": [
 			"net.mat0u5.lifeseries.MainDataGenerator"
 		],
-		"cardinal-components-entity": ["net.mat0u5.lifeseries.Main"]
+		"cardinal-components-entity": ["net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency"]
 	},
 	"mixins": [
 		"lifeseries.mixins.json"
@@ -36,6 +36,9 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
+		"cardinal-components": ">=6.0.0",
+		"bil": ">=1.1.10",
+		"polymer-bundled": ">=0.10.0",
 		"cloth-config": ">=10.0.0"
 	},
 	"custom": {

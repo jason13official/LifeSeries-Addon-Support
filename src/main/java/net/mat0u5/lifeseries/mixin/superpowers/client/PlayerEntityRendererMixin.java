@@ -1,7 +1,8 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.utils.morph.MorphComponent;
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 
 /*
  * This file includes code from the RiftMorph project: https://gitlab.nexusrealms.de/Farpo/riftmorph
@@ -40,14 +40,9 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
                 return;
             }
         }
-        if(MORPH_COMPONENT.isProvidedBy(abstractClientPlayerEntity)){
-            MorphComponent morphComponent = MORPH_COMPONENT.get(abstractClientPlayerEntity);
-            LivingEntity dummy = morphComponent.getDummy();
-            if(morphComponent.isMorphed() && dummy != null){
-                MinecraftClient.getInstance().getEntityRenderDispatcher().render(
-                        dummy, 0, 0, 0, f, g, matrixStack, vertexConsumerProvider, i);
-                ci.cancel();
-            }
+
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            CardinalComponentsDependency.replaceRendering(abstractClientPlayerEntity, f, g, matrixStack, vertexConsumerProvider, i, ci);
         }
 
     }
@@ -67,14 +62,8 @@ public class PlayerEntityRendererMixin {
                     return;
                 }
             }
-            if(MORPH_COMPONENT.isProvidedBy(entity)){
-                MorphComponent morphComponent = MORPH_COMPONENT.get(entity);
-                LivingEntity dummy = morphComponent.getDummy();
-                if(morphComponent.isMorphed() && dummy != null){
-                    MinecraftClient.getInstance().getEntityRenderDispatcher().render(
-                            dummy, x, y, z, tickDelta, matrices, vertexConsumers, light);
-                    ci.cancel();
-                }
+            if (DependencyManager.cardinalComponentsLoaded()) {
+                CardinalComponentsDependency.render(entity, x, y, z, tickDelta, matrices, vertexConsumers, light, ci);
             }
         }
     }

@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.client.config.ClientsideConfig;
 import net.mat0u5.lifeseries.client.gui.ConfigScreen;
 import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
 import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
@@ -109,7 +110,7 @@ public class NetworkHandlerClient {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
         if (name.equalsIgnoreCase("open_config")) {
-            if (FabricLoader.getInstance().isModLoaded("cloth-config")) {
+            if (DependencyManager.clothConfigLoaded()) {
                 ClientsideConfig.load();
                 ClientTaskScheduler.scheduleTask(20, () -> {
                     MinecraftClient.getInstance().setScreen(ConfigScreen.create(MinecraftClient.getInstance().currentScreen));

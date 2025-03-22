@@ -3,18 +3,12 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
-import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -134,8 +128,9 @@ public class LifeSeriesCommand {
     }
 
     public static void setSeriesFinal(ServerCommandSource source, String setTo) {
-        OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
-        Main.changeSeriesTo(setTo);
+        if (Main.changeSeriesTo(setTo)) {
+            OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
+        }
     }
 
     public static int config(ServerCommandSource source) {

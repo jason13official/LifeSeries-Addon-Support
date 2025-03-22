@@ -1,17 +1,14 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
-import net.mat0u5.lifeseries.utils.morph.MorphComponent;
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 
 @Mixin(Camera.class)
 public class CameraMixin {
@@ -27,17 +24,8 @@ public class CameraMixin {
             index = 0
     )
     private float modifyEntityScale(float originalDistance) {
-        if (focusedEntity instanceof PlayerEntity player && MORPH_COMPONENT.isProvidedBy(player)) {
-            MorphComponent morphComponent = MORPH_COMPONENT.get(player);
-            if (morphComponent.isMorphed()) {
-                LivingEntity dummy = morphComponent.getDummy();
-                if (dummy != null) {
-                    float playerHeight = PlayerEntity.STANDING_DIMENSIONS.height();
-                    float morphedHeight = dummy.getDimensions(EntityPose.STANDING).height();
-                    float heightScale = morphedHeight / playerHeight;
-                    return heightScale * 4.0F;
-                }
-            }
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            return CardinalComponentsDependency.modifyEntityScale(focusedEntity, originalDistance);
         }
         return originalDistance;
     }

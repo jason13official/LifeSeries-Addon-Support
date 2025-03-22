@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards;
 
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SessionAction;
@@ -87,7 +89,10 @@ public class WildcardManager {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
         TaskScheduler.scheduleTask(20, () -> Hunger.updateInventory(player));
-        MORPH_COMPONENT.maybeGet(player).ifPresent(morphComponent -> morphComponent.setMorph(null));
+
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            CardinalComponentsDependency.resetWildcardsOnPlayerJoin(player);
+        }
     }
 
     public static void activateWildcards() {

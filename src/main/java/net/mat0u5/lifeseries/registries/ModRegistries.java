@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.registries;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.mat0u5.lifeseries.command.*;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLifeCommands;
 import net.mat0u5.lifeseries.series.lastlife.LastLifeCommands;
@@ -17,7 +18,7 @@ public class ModRegistries {
         registerEvents();
         TextUtils.setEmotes();
 
-        MobRegistry.registerMobs();
+        if (DependencyManager.polymerLoaded()) MobRegistry.registerMobs();
     }
 
     private static void registerCommands() {

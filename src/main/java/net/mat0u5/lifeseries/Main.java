@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries;
 
-import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 
@@ -9,6 +8,8 @@ import net.mat0u5.lifeseries.client.ClientResourcePacks;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.config.UpdateChecker;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.dependencies.PolymerDependency;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
@@ -23,28 +24,22 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.morph.MorphComponent;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
-import org.ladysnake.cca.api.v3.component.ComponentKey;
-import org.ladysnake.cca.api.v3.component.ComponentRegistryV3;
-import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
-import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
-import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 
-public class Main implements ModInitializer, EntityComponentInitializer {
-	public static final ComponentKey<MorphComponent> MORPH_COMPONENT =
-			ComponentRegistryV3.INSTANCE.getOrCreate(Identifier.of("lifeseries","morph"), MorphComponent.class);
-	public static final String MOD_VERSION = "dev-1.2.2.99";
+public class Main implements ModInitializer {
+	public static final String MOD_VERSION = "dev-1.2.2.100";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -64,8 +59,9 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkinsServer.createConfig();
 
-		PolymerResourcePackUtils.addModAssets(MOD_ID);
-		PolymerResourcePackUtils.markAsRequired();
+		if (DependencyManager.polymerLoaded()) {
+			PolymerDependency.onInitialize();
+		}
 
 		config = new MainConfig();
 		String series = config.getOrCreateProperty("currentSeries", "unassigned");
@@ -78,11 +74,6 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 
 		NetworkHandlerServer.registerPackets();
 		NetworkHandlerServer.registerServerReceiver();
-	}
-
-	@Override
-	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-		registry.registerForPlayers(MORPH_COMPONENT, MorphComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
 	}
 
 
@@ -120,7 +111,13 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 			currentSeries = new SecretLife();
 		}
 		if (series.equalsIgnoreCase("wildlife")) {
-			currentSeries = new WildLife();
+			if (DependencyManager.polymerLoaded() && DependencyManager.wildLifeModsLoaded()) {
+				currentSeries = new WildLife();
+			}
+			else {
+				currentSeries = new UnassignedSeries();
+				changeSeriesTo("unassigned");
+			}
 		}
 		currentSession = currentSeries;
 		seriesConfig = currentSeries.getConfig();
@@ -146,7 +143,51 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 		SnailSkinsServer.sendStoredImages();
 	}
 
-	public static void changeSeriesTo(String changeTo) {
+	public static boolean changeSeriesTo(String changeTo) {
+		if (changeTo.equalsIgnoreCase("wildlife")) {
+			boolean success = true;
+			if (!DependencyManager.polymerLoaded()) {
+				success = false;
+				OtherUtils.broadcastMessage(
+						Text.literal("§cYou must install the ").append(
+								Text.literal("Polymer mod")
+										.styled(style -> style
+												.withColor(Formatting.BLUE)
+												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/polymer"))
+												.withUnderline(true)
+										)
+						).append(Text.of(" §cto play Wild Life."))
+				);
+			}
+			if (!DependencyManager.blockbenchImportLibraryLoaded()) {
+				success = false;
+				OtherUtils.broadcastMessage(
+						Text.literal("§cYou must install the ").append(
+								Text.literal("Blockbench Import Library mod")
+										.styled(style -> style
+												.withColor(Formatting.BLUE)
+												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/blockbench-import-library"))
+												.withUnderline(true)
+										)
+						).append(Text.of(" §cto play Wild Life."))
+				);
+			}
+			if (!DependencyManager.cardinalComponentsLoaded()) {
+				success = false;
+				OtherUtils.broadcastMessage(
+						Text.literal("§cYou must install the ").append(
+								Text.literal("Cardinal Components API mod")
+										.styled(style -> style
+												.withColor(Formatting.BLUE)
+												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/cardinal-components-api"))
+												.withUnderline(true)
+										)
+						).append(Text.of(" §cto play Wild Life."))
+				);
+			}
+			if (!success) return false;
+		}
+
 		config.setProperty("currentSeries", changeTo);
 		currentSeries.resetAllPlayerLives();
 		Main.parseSeries(changeTo);
@@ -159,5 +200,6 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 			NetworkHandlerServer.sendStringPacket(player, "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
 		}
 		Stats.resetStats();
+		return true;
 	}
 }

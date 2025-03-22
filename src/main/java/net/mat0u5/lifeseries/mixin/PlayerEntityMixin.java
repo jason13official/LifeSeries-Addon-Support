@@ -1,10 +1,11 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.morph.MorphComponent;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
 import net.minecraft.enchantment.effect.entity.ReplaceDiskEnchantmentEffect;
@@ -31,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = PlayerEntity.class, priority = 1)
@@ -77,13 +77,8 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "getBaseDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if(MORPH_COMPONENT.isProvidedBy(player)) {
-            float scaleRatio = 1 / player.getScale();
-            MorphComponent morphComponent = MORPH_COMPONENT.get(player);
-            LivingEntity dummy = morphComponent.getDummy();
-            if (morphComponent.isMorphed() && dummy != null){
-                cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
-            }
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            CardinalComponentsDependency.getBaseDimensions(player, pose, cir);
         }
     }
 

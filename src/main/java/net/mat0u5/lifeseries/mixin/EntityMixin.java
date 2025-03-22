@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -28,11 +27,11 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin {
-    @Inject(method = "getAir", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (Main.isLogicalSide()) {
-            if (Snail.SHOULD_DROWN_PLAYER) {
-                if (currentSeries instanceof WildLife) {
+            if (currentSeries instanceof WildLife) {
+                if (Snail.SHOULD_DROWN_PLAYER) {
                     if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
                         Entity entity = (Entity) (Object) this;
                         if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
@@ -40,7 +39,7 @@ public abstract class EntityMixin {
                             Snail snail = Snails.snails.get(player.getUuid());
                             if (snail == null) return;
                             int snailAir = snail.getAir();
-                            int initialAir = entity.getDataTracker().get(EntityTrackedData.AIR);
+                            int initialAir = cir.getReturnValue();
                             if (snailAir < initialAir) {
                                 cir.setReturnValue(snailAir);
                             }
@@ -52,7 +51,7 @@ public abstract class EntityMixin {
         else if (MainClient.snailAir < 300) {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                int initialAir = player.getDataTracker().get(EntityTrackedData.AIR);
+                int initialAir = cir.getReturnValue();
                 if (MainClient.snailAir < initialAir) {
                     cir.setReturnValue(MainClient.snailAir);
                 }

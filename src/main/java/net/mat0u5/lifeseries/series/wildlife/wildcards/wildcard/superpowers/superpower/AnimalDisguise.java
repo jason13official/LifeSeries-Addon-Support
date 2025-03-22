@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
@@ -12,8 +14,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
 import java.util.List;
-
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
 
 
 public class AnimalDisguise extends ToggleableSuperpower {
@@ -56,8 +56,10 @@ public class AnimalDisguise extends ToggleableSuperpower {
         player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
 
         EntityType<?> finalMorph = morph;
-        MORPH_COMPONENT.maybeGet(player).ifPresent(morphComponent -> morphComponent.setMorph(finalMorph));
-        MORPH_COMPONENT.sync(player);
+
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            CardinalComponentsDependency.setMorph(player, finalMorph);
+        }
     }
 
     @Override
@@ -67,9 +69,9 @@ public class AnimalDisguise extends ToggleableSuperpower {
         if (player == null) return;
         player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
 
-        MORPH_COMPONENT.maybeGet(player).ifPresent(morphComponent -> morphComponent.setMorph(null));
-        MORPH_COMPONENT.sync(player);
-
+        if (DependencyManager.cardinalComponentsLoaded()) {
+            CardinalComponentsDependency.resetMorph(player);
+        }
     }
 
     public void onTakeDamage() {

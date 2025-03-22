@@ -34,8 +34,7 @@ dependencies {
  modImplementation include("de.tomalbrc:blockbench-import-library:${project.blockbench_import_library_version}")
  modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cardinal_components_api_version}")
  modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}")
-
- modImplementation ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") //Cannot include in the jar, because of the License issues.
+ modImplementation include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")
 }
 loom {
  runConfigs.all {

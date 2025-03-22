@@ -13,6 +13,8 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import static net.mat0u5.lifeseries.Main.currentSeries;
+
 public class UnassignedSeries extends Series {
     @Override
     public SeriesList getSeries() {
@@ -43,6 +45,7 @@ public class UnassignedSeries extends Series {
     }
 
     public void broadcastNotice() {
+        if (currentSeries.getSeries() != SeriesList.UNASSIGNED) return;
         OtherUtils.broadcastMessage(Text.literal("[LifeSeries] You must select a series with ").formatted(Formatting.RED)
                 .append(Text.literal("'/lifeseries setSeries <series>'").formatted(Formatting.GRAY)), 120);
         OtherUtils.broadcastMessage(Text.literal("You must have §noperator permissions§r to use most commands in this mod.").formatted(Formatting.RED), 120);

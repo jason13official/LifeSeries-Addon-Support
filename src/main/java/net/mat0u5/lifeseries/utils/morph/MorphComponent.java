@@ -12,7 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
-import static net.mat0u5.lifeseries.Main.MORPH_COMPONENT;
+import static net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency.MORPH_COMPONENT;
+
 /*
  * This file includes code from the RiftMorph project: https://gitlab.nexusrealms.de/Farpo/riftmorph
  *

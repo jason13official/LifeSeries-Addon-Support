@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils;
 
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -23,13 +24,15 @@ public class AttributeUtils {
     public static void resetAttributesOnPlayerJoin(ServerPlayerEntity player) {
 
         if (currentSeries.getSeries() != SeriesList.SECRET_LIFE &&
-            !(player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) &&
+            !(DependencyManager.wildLifeModsLoaded() && player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) &&
             !(player.getMaxHealth() == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid()))
         ) {
             resetMaxPlayerHealth(player);
         }
-        if (!TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
-            resetPlayerJumpHeight(player);
+        if (DependencyManager.wildLifeModsLoaded()) {
+            if (!TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
+                resetPlayerJumpHeight(player);
+            }
         }
         if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP) &&
             !SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
