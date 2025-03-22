@@ -187,8 +187,7 @@ public class SecretLife extends Series {
         if (player.hasStatusEffect(StatusEffects.HEALTH_BOOST)) {
             player.removeStatusEffect(StatusEffects.HEALTH_BOOST);
         }
-        syncPlayerHealth(player);
-        TaskScheduler.scheduleTask(10, () -> syncPlayerHealth(player));
+        TaskScheduler.scheduleTask(1, () -> syncPlayerHealth(player));
     }
 
     @Override
@@ -296,20 +295,22 @@ public class SecretLife extends Series {
         if (player == null) return;
         if (health < 0.1) health = 0.1;
         AttributeUtils.setMaxPlayerHealth(player, health);
-        if (player.getMaxHealth() > player.getHealth() && !player.isDead()) {
-            player.setHealth(player.getMaxHealth());
+        if (health > player.getHealth() && !player.isDead()) {
+            player.setHealth((float) health);
         }
     }
 
     public double getPlayerHealth(ServerPlayerEntity player) {
-        return player.getMaxHealth();
+        return AttributeUtils.getMaxPlayerHealth(player);
     }
 
     public double getRoundedHealth(ServerPlayerEntity player) {
-        return Math.floor(player.getMaxHealth()*10)/10.0;
+        return Math.floor(getPlayerHealth(player)*100)/100.0;
     }
 
     public void syncPlayerHealth(ServerPlayerEntity player) {
+        if (player == null) return;
+        if (player.isDead()) return;
         setPlayerHealth(player, player.getHealth());
     }
 

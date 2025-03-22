@@ -63,14 +63,7 @@ public class SnailSkinsServer {
         }
         File[] files = folder.listFiles();
         if (files == null) return;
-        int totalFiles = 0;
-        for (File file : files) {
-            if (!file.isFile()) continue;
-            String name = file.getName().toLowerCase();
-            if (name.equalsIgnoreCase("example.png")) continue;
-            if (!name.endsWith(".png")) continue;
-            totalFiles++;
-        }
+        int maxIndex = 0;
         for (File file : files) {
             if (!file.isFile()) continue;
             String name = file.getName().toLowerCase();
@@ -82,7 +75,16 @@ public class SnailSkinsServer {
                 currentIndex++;
             }
             int imageIndex = indexedSkins.get(replacedName);
-            sendImageToClient(player, "snail_skin", imageIndex, (totalFiles-1), file.toPath());
+            maxIndex = Math.max(maxIndex,imageIndex);
+        }
+        for (File file : files) {
+            if (!file.isFile()) continue;
+            String name = file.getName().toLowerCase();
+            if (name.equalsIgnoreCase("example.png")) continue;
+            if (!name.endsWith(".png")) continue;
+            String replacedName = name.toLowerCase().replaceAll(".png","");
+            int imageIndex = indexedSkins.get(replacedName);
+            sendImageToClient(player, "snail_skin", imageIndex, maxIndex, file.toPath());
         }
     }
 

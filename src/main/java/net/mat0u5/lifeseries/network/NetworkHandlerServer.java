@@ -290,10 +290,17 @@ public class NetworkHandlerServer {
     public static void tryKickFailedHandshake(ServerPlayerEntity player) {
         if (server == null) return;
         if (currentSeries.getSeries() != SeriesList.WILD_LIFE) return;
-        if (handshakeSuccessful.contains(player.getUuid())) return;
+        if (wasHandshakeSuccessful(player)) return;
         Text disconnectText = Text.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
                 Text.literal("§9§nThe Life Series mod is available on Modrinth."));
         player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
     }
 
+    public static boolean wasHandshakeSuccessful(ServerPlayerEntity player) {
+        return wasHandshakeSuccessful(player.getUuid());
+    }
+
+    public static boolean wasHandshakeSuccessful(UUID uuid) {
+        return NetworkHandlerServer.handshakeSuccessful.contains(uuid);
+    }
 }

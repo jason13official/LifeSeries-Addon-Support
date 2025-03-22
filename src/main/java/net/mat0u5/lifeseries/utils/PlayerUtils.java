@@ -123,7 +123,7 @@ public class PlayerUtils {
             ClientResourcePacks.applyResourcepack(uuid);
             return;
         }
-        if (NetworkHandlerServer.handshakeSuccessful.contains(uuid)) return;
+        if (NetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
         applyServerResourcepack(uuid);
     }
     public static void applyServerResourcepack(UUID uuid) {

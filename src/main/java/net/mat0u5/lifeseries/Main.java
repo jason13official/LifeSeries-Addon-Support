@@ -25,6 +25,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.morph.MorphComponent;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -38,11 +39,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Main implements ModInitializer, EntityComponentInitializer {
 	public static final ComponentKey<MorphComponent> MORPH_COMPONENT =
 			ComponentRegistryV3.INSTANCE.getOrCreate(Identifier.of("lifeseries","morph"), MorphComponent.class);
-	public static final String MOD_VERSION = "dev-1.2.2.97";
+	public static final String MOD_VERSION = "dev-1.2.2.98";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -90,7 +92,12 @@ public class Main implements ModInitializer, EntityComponentInitializer {
 
 	public static boolean isLogicalSide() {
 		if (!isClient()) return true;
-		return ClientResourcePacks.isRunningIntegratedServer();
+		return MainClient.isRunningIntegratedServer();
+	}
+
+	public static boolean isClientPlayer(UUID uuid) {
+		if (!isClient()) return false;
+		return MainClient.isClientPlayer(uuid);
 	}
 
 	public static void parseSeries(String series) {

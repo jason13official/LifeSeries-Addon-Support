@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.client.render.ClientRenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -40,5 +41,18 @@ public class MainClient implements ClientModInitializer {
         NetworkHandlerClient.registerClientReceiver();
         ClientRenderUtils.onInitialize();
         ClientKeybinds.registerKeybinds();
+    }
+
+    public static boolean isRunningIntegratedServer() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return false;
+        return client.isIntegratedServerRunning();
+    }
+
+    public static boolean isClientPlayer(UUID uuid) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return false;
+        if (client.player == null) return false;
+        return client.player.getUuid().equals(uuid);
     }
 }

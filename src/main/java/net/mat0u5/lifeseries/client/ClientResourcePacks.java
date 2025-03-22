@@ -76,10 +76,4 @@ public class ClientResourcePacks {
             }
         }
     }
-
-    public static boolean isRunningIntegratedServer() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null) return false;
-        return client.isIntegratedServerRunning();
-    }
 }

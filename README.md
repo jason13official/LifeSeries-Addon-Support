@@ -30,8 +30,10 @@ As far as I know, this is the *only* full re-creation of Wild Life that exists, 
 -----
 ## Usage
 ### Selecting a series
-After first starting a server with this mod installed, you will need to choose the series you want. You can do this with the `/lifeseries setSeries <series>` command. Don't worry, you don't have to remember all of this, you will be given instructions in chat ;) <br>
-After you select your series, you must restart the server.
+After first starting a server with this mod installed, you will need to choose the series you want.<br>
+You can do this with the `/lifeseries chooseSeries` command (or with the `/lifeseries setSeries <series>` command, if you don't have the mod installed client-side)<br>
+Don't worry, you don't have to remember all of this, you will be given instructions in chat ;) <br>
+
 
 ### Starting a session
 To start a session, you must first set its length using `/session timer set <time>`. The `<time>` field is a string, which includes the hours, minutes and seconds you want the session to last - example valid values: `30m`,`1h`, `1h45m`, `2h35m20s` <br>
@@ -66,9 +68,9 @@ This command **always** available
 - `/lifeseries config` - Opens the mod's config GUI (Life Series mod on client-side required).
 - `/lifeseries version` - Shows the mod's version
 - `/lifeseries credits` - Shows the mod's credits
+- `/lifeseries chooseSeries` - Opens the series select GUI (Life Series mod on client-side required).
 - `/lifeseries setSeries <series>` - Changes the Series, only works if no series has been selected
   - `/lifeseries setSeries <series> confirm` - Changes the Series, can override the current series
-- `/lifeseries chooseSeries` - Opens a series select GUI (Life Series mod on client-side required).
 </details>
 
 <details open>
@@ -187,9 +189,10 @@ This command **always** available
   - `/soulmate rollRandom` - Rolls random soulmates from the list of online players.
   - 
 - `/snail` - *These commands are only available when playing Wild Life.*
-  - `/snail names get <player>` - Shows you the name of `<player>`'s snail.
+  - `/snail names get <player>` - Shows you the name of `<player>`'s snail. *No permissions required.*
   - `/snail names set <player> <name>` - Sets the name of `<player>`'s snail to `<name>`.
   - `/snail names reset <player>` - Resets the name of `<player>`'s snail back to `<player>'s Snail`.
+  - `/snail names request <name>` - Used when non-admin players want to request their snail name to be set to `<name>`. *No permissions required.*
   - `/snail textures list` - Shows a list of uploaded snail textures.
   - `/snail textures info` - Shows you how to create and upload snail textures.
 </details>

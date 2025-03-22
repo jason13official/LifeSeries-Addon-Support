@@ -38,7 +38,10 @@ public class LifeSeriesCommand {
             literal("lifeseries")
                 .executes(context -> defaultCommand(context.getSource()))
                 .then(literal("worlds")
-                    .executes(context -> getWorlds(context.getSource()))
+                        .executes(context -> getWorlds(context.getSource()))
+                )
+                .then(literal("credits")
+                        .executes(context -> getCredits(context.getSource()))
                 )
                 .then(literal("discord")
                     .executes(context -> getDiscord(context.getSource()))
@@ -97,6 +100,11 @@ public class LifeSeriesCommand {
 
     public static int chooseSeries(ServerCommandSource source) {
         if (source.getPlayer() == null) return -1;
+        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the series GUI."));
+            source.sendError(Text.of("§7Use the §f'/lifeseries setSeries <series>'§7 command instead."));
+            return -1;
+        }
         NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_series", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
         return 1;
     }
@@ -184,9 +192,10 @@ public class LifeSeriesCommand {
     }
 
     public static int getCredits(ServerCommandSource source) {
-        source.sendMessage(Text.of("The Life Series was originally created by Grian" +
-                ", and this mod aims to implement every season of the Life Series. "));
-        source.sendMessage(Text.of("This mod was created by Mat0u5."));
+        source.sendMessage(Text.of("§7The Life Series was originally created by §fGrian" +
+                ", and this mod, created by §fMat0u5, aims to recreate every single season one-to-one."));
+        source.sendMessage(Text.of("§7This mod uses sounds created by Oli (TheOrionSound), and uses recreated snail model (first created by Danny), and a recreated trivia bot model (first created by Hoffen)."));
+        source.sendMessage(Text.of("§7This mod bundles other mods to improve the experience, such as Polymer, Blockbench Import Library, Cardinal Components API, and supports client-side configuration with Cloth Config."));
         return 1;
     }
 

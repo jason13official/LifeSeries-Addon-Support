@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkin
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -18,7 +19,9 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.io.File;
 import java.util.List;
@@ -100,8 +103,14 @@ public class WildLifeCommands {
                             .executes(context -> getSnailName(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
                         )
                     )
+                    .then(literal("request")
+                        .then(argument("name", StringArgumentType.greedyString())
+                                .executes(context -> requestSnailName(context.getSource(), StringArgumentType.getString(context, "name")))
+                        )
+                    )
                 )
                 .then(literal("textures")
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> getSnailTexturesInfo(context.getSource()))
                     .then(literal("list")
                             .executes(context -> getSnailTextures(context.getSource()))
@@ -136,6 +145,23 @@ public class WildLifeCommands {
         );
     }
 
+    public static int requestSnailName(ServerCommandSource source, String name) {
+        if (checkBanned(source)) return -1;
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) return -1;
+
+        OtherUtils.broadcastMessageToAdmins(Text.of("§7" + player.getNameForScoreboard() + " requests their snail name to be §f\""+name+"\"§7."));
+        Text adminText = Text.literal("§7Click ").append(
+                Text.literal("here")
+                        .styled(style -> style
+                                .withColor(Formatting.BLUE)
+                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/snail names set " + player.getNameForScoreboard() + " "+name))
+                                .withUnderline(true)
+                        )).append(Text.of("§7 to accept."));
+        OtherUtils.broadcastMessageToAdmins(adminText);
+        return 1;
+    }
+
     public static int getSnailTexturesInfo(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
@@ -164,6 +190,10 @@ public class WildLifeCommands {
     public static int chooseWildcard(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         if (source.getPlayer() == null) return -1;
+        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the wildcard GUI."));
+            return -1;
+        }
         NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_wildcards", "true");
         return 1;
     }
