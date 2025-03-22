@@ -24,6 +24,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class Necromancy extends Superpower {
     public static final List<UUID> ressurectedPlayers = new ArrayList<>();
+    private List<UUID> perPlayerRessurections = new ArrayList<>();
 
     public Necromancy(ServerPlayerEntity player) {
         super(player);
@@ -65,7 +66,8 @@ public class Necromancy extends Superpower {
                     deadPlayer.changeGameMode(GameMode.SURVIVAL);
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
                     WorldUitls.summonHarmlessLightning(deadPlayer.getServerWorld(), deadPlayer.getPos());
-                    ressurectedPlayers.add(player.getUuid());
+                    ressurectedPlayers.add(deadPlayer.getUuid());
+                    perPlayerRessurections.add(deadPlayer.getUuid());
                 }
             }
         });
@@ -76,10 +78,14 @@ public class Necromancy extends Superpower {
     public void deactivate() {
         super.deactivate();
         for (ServerPlayerEntity player : getDeadPlayers()) {
-            WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
-            player.changeGameMode(GameMode.SPECTATOR);
+            if (player.isSpectator()) continue;
+            if (perPlayerRessurections.contains(player.getUuid())) {
+                WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
+                player.changeGameMode(GameMode.SPECTATOR);
+            }
         }
         ressurectedPlayers.clear();
+        perPlayerRessurections.clear();
     }
 
     public BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {

@@ -79,9 +79,10 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-        if (VersionControl.isDevVersion()) {
+        if (VersionControl.isDevVersion() && false) {
             dispatcher.register(
                 literal("lifeseries")
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(literal("test")
                         .executes(context -> test(context.getSource()))
                     )
@@ -125,7 +126,7 @@ public class LifeSeriesCommand {
             else {
                 source.sendMessage(Text.of("WARNING: you have already selected a series, changing it might cause some saved data to be lost (lives, ...)"));
                 source.sendMessage(Text.literal("If you are sure, use '")
-                        .append(Text.literal("/lifeseries setSeries <series>").formatted(Formatting.GRAY))
+                        .append(Text.literal("/lifeseries chooseSeries").formatted(Formatting.GRAY))
                         .append(Text.literal(" confirm").formatted(Formatting.GREEN)).append(Text.of("'")));
             }
         }
@@ -133,7 +134,7 @@ public class LifeSeriesCommand {
     }
 
     public static void setSeriesFinal(ServerCommandSource source, String setTo) {
-        source.sendMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
+        OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
         Main.changeSeriesTo(setTo);
     }
 
@@ -177,6 +178,9 @@ public class LifeSeriesCommand {
 
     public static int getSeries(ServerCommandSource source) {
         source.sendMessage(Text.of("Current series: "+ SeriesList.getStringNameFromSeries(currentSeries.getSeries())));
+        if (source.getPlayer() != null) {
+            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+        }
         return 1;
     }
 

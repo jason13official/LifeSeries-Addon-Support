@@ -11,6 +11,8 @@ import net.minecraft.text.Text;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class ThirdLife extends Series {
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives";
     @Override
     public SeriesList getSeries() {
         return SeriesList.THIRD_LIFE;
@@ -34,10 +36,10 @@ public class ThirdLife extends Series {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Third Life commands: §r/lifeseries, /session, /claimkill, /lives"));
+            player.sendMessage(Text.of("§7Third Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
-            player.sendMessage(Text.of("§7Third Life non-admin commands: §r/claimkill, /lives"));
+            player.sendMessage(Text.of("§7Third Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
     }

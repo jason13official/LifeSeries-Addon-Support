@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -181,22 +182,22 @@ public class QuizScreen extends Screen {
         while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
-        if (timerSeconds <= 5) drawTextCenter(context, Text.of(minutesStr + ":" + secondsStr), centerX, minY, 0xFFbf2222);
-        else if (timerSeconds <= 30) drawTextCenter(context, Text.of(minutesStr + ":" + secondsStr), centerX, minY, 0xFFd6961a);
-        else drawTextCenter(context, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, 0xFFbf2222, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, 0xFFd6961a, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        else RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
 
         // Difficulty
-        drawTextCenter(context, Text.of(difficulty), centerX, maxY);
+        RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(difficulty), centerX, maxY);
 
         // Questions
-        drawTextCenter(context, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
+        RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
         List<OrderedText> wrappedQuestion = this.textRenderer.wrapLines(Text.literal(Trivia.question), questionWidth);
         for (int i = 0; i < wrappedQuestion.size(); i++) {
             context.drawText(this.textRenderer, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight, TEXT_COLOR, false);
         }
 
         // Answers
-        drawTextCenter(context, Text.literal("Answers").formatted(Formatting.UNDERLINE), fifth4, minY);
+        RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Answers").formatted(Formatting.UNDERLINE), fifth4, minY);
         for (int i = 0; i < Trivia.answers.size(); i++) {
             Rectangle rect = answerRects.get(i);
             int borderColor = ANSWER_COLORS[i % ANSWER_COLORS.length];
@@ -224,21 +225,7 @@ public class QuizScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
     }
 
-    public void drawTextCenter(DrawContext context, Text text, int x, int y) {
-        drawTextCenter(context, text, x, y, TEXT_COLOR);
-    }
 
-    public void drawTextCenter(DrawContext context, Text text, int x, int y, int color) {
-        context.drawText(this.textRenderer, text, x - this.textRenderer.getWidth(text)/2, y, color, false);
-    }
-
-    public void testDrawX(DrawContext context, int x) {
-        context.fill(x, 0, x+1, this.height, 0xFFff00f2);
-    }
-
-    public void testDrawY(DrawContext context, int y) {
-        context.fill(0, y, this.width, y+1, 0xFFff00f2);
-    }
 
     private void drawEntity(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
         if (client == null) return;

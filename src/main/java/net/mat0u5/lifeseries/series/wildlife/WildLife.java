@@ -35,6 +35,8 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class WildLife extends Series {
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
 
     @Override
     public SeriesList getSeries() {
@@ -60,10 +62,10 @@ public class WildLife extends Series {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Wild Life commands: §r/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snailname"));
+            player.sendMessage(Text.of("§7Wild Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
-            player.sendMessage(Text.of("§7Wild Life non-admin commands: §r/claimkill, /lives"));
+            player.sendMessage(Text.of("§7Wild Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
     }

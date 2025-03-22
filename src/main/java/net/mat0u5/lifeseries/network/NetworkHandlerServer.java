@@ -144,10 +144,12 @@ public class NetworkHandlerServer {
             if (name.equalsIgnoreCase("request_config")) {
                 seriesConfig.sendConfigTo(player);
             }
-            if (name.equalsIgnoreCase("set_series")) {
+        }
+        if (name.equalsIgnoreCase("set_series")) {
+            if (PermissionManager.isAdmin(player) || currentSeries.getSeries() == SeriesList.UNASSIGNED) {
                 SeriesList newSeries = SeriesList.getSeriesFromStringName(value);
                 if (newSeries == SeriesList.UNASSIGNED) return;
-                OtherUtils.broadcastMessageToAdmins(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
+                OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
                 Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries));
             }
         }

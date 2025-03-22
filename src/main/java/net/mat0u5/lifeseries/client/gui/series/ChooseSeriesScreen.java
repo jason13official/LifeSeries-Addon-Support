@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.series;
 
 import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -161,13 +162,9 @@ public class ChooseSeriesScreen extends Screen {
         *///?}
 
         String prompt = "Select the series you want to play.";
-        drawTextCenter(context, Text.of(prompt), centerX, startY + 20);
+        RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);
 
         super.render(context, mouseX, mouseY, delta);
-    }
-
-    public void drawTextCenter(DrawContext context, Text text, int x, int y) {
-        context.drawText(this.textRenderer, text, x - this.textRenderer.getWidth(text)/2, y, TEXT_COLOR, false);
     }
 }
 

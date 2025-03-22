@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.client.ClientTaskScheduler;
 import net.mat0u5.lifeseries.client.config.ClientsideConfig;
 import net.mat0u5.lifeseries.client.gui.ConfigScreen;
 import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
+import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
@@ -121,6 +122,10 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("select_series") && Main.isClient()) {
             MinecraftClient.getInstance().setScreen(new ChooseSeriesScreen(!value.isEmpty()));
+        }
+        if (name.equalsIgnoreCase("series_info") && Main.isClient()) {
+            SeriesList series = SeriesList.getSeriesFromStringName(value);
+            if (series != SeriesList.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeriesInfoScreen(series));
         }
     }
 

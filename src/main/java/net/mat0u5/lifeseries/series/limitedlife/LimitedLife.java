@@ -18,6 +18,8 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class LimitedLife extends Series {
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives";
     
     private int DEFAULT_TIME = 86400;
     private int YELLOW_TIME = 57600;
@@ -274,10 +276,10 @@ public class LimitedLife extends Series {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Limited Life commands: §r/lifeseries, /session, /claimkill, /lives, /boogeyman"));
+            player.sendMessage(Text.of("§7Limited Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
-            player.sendMessage(Text.of("§7Limited Life non-admin commands: §r/claimkill, /lives"));
+            player.sendMessage(Text.of("§7Limited Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
     }

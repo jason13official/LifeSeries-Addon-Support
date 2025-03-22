@@ -14,6 +14,8 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class LastLife extends Series {
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /givelife, /boogeyman, /lastlife";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives, /givelife";
     public static int ROLL_MAX_LIVES = 6;
     public static int ROLL_MIN_LIVES = 2;
     public static int GIVELIFE_MAX_LIVES = 99;
@@ -97,10 +99,10 @@ public class LastLife extends Series {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Last Life commands: §r/lifeseries, /session, /claimkill, /lives, /givelife, /boogeyman, /lastlife"));
+            player.sendMessage(Text.of("§7Last Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
-            player.sendMessage(Text.of("§7Last Life non-admin commands: §r/claimkill, /lives, /givelife"));
+            player.sendMessage(Text.of("§7Last Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
     }

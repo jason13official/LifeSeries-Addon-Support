@@ -28,6 +28,8 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 
 public class DoubleLife extends Series {
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /soulmate";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives";
     public static final RegistryKey<DamageType> SOULMATE_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "soulmate"));
     StringListConfig soulmateConfig;
 
@@ -85,10 +87,10 @@ public class DoubleLife extends Series {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Double Life commands: §r/lifeseries, /session, /claimkill, /lives, /soulmate"));
+            player.sendMessage(Text.of("§7Double Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
-            player.sendMessage(Text.of("§7Double Life non-admin commands: §r/claimkill, /lives"));
+            player.sendMessage(Text.of("§7Double Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
     }
