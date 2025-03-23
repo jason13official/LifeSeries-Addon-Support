@@ -3,8 +3,14 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
@@ -73,7 +79,7 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-        if (VersionControl.isDevVersion() && false) {
+        if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lifeseries")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
@@ -191,10 +197,10 @@ public class LifeSeriesCommand {
     }
 
     public static int getCredits(ServerCommandSource source) {
-        source.sendMessage(Text.of("§7The Life Series was originally created by §fGrian" +
-                ", and this mod, created by §fMat0u5, aims to recreate every single season one-to-one."));
-        source.sendMessage(Text.of("§7This mod uses sounds created by Oli (TheOrionSound), and uses recreated snail model (first created by Danny), and a recreated trivia bot model (first created by Hoffen)."));
-        source.sendMessage(Text.of("§7This mod bundles other mods to improve the experience, such as Polymer, Blockbench Import Library, Cardinal Components API, and supports client-side configuration with Cloth Config."));
+        source.sendMessage(Text.of("§7The Life Series was originally created by §fGrian§7" +
+                ", and this mod, created by §fMat0u5§7, aims to recreate every single season one-to-one."));
+        source.sendMessage(Text.of("§7This mod uses sounds created by §fOli (TheOrionSound)§7, and uses recreated snail model (first created by §fDanny§7), and a recreated trivia bot model (first created by §fHoffen§7)."));
+        source.sendMessage(Text.of("§7This mod bundles other mods to improve the experience, such as §fPolymer§7, §fBlockbench Import Library§7, §fCardinal Components API§7, and supports client-side configuration with §fCloth Config§7."));
         return 1;
     }
 
@@ -202,6 +208,10 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
+        if (Snails.snails.containsKey(player.getUuid())) {
+            Snail snail = Snails.snails.get(player.getUuid());
+            if (snail.attachment != null) snail.attachment.destroy();
+        }
         source.sendMessage(Text.of("Test Command"));
 
         return 1;
@@ -211,6 +221,10 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
+        if (TriviaWildcard.snails.containsKey(player.getUuid())) {
+            Snail snail = TriviaWildcard.snails.get(player.getUuid());
+            if (snail.attachment != null) snail.attachment.destroy();
+        }
         source.sendMessage(Text.of("Test Command 1"));
 
         return 1;
@@ -220,7 +234,10 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command 1"));
+        if (WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+            ((Hunger) WildcardManager.activeWildcards.get(Wildcards.HUNGER)).newFoodRules();
+        }
+        source.sendMessage(Text.of("Test Command 2"));
 
         return 1;
     }
@@ -228,7 +245,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command 2"));
+        source.sendMessage(Text.of("Test Command 3"));
 
         return 1;
     }

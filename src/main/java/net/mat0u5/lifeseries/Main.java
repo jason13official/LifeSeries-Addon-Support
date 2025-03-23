@@ -22,7 +22,6 @@ import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.series.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.registries.ModRegistries;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
@@ -39,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.2.2.101";
+	public static final String MOD_VERSION = "dev-1.2.2.102";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -127,9 +126,6 @@ public class Main implements ModInitializer {
 	public static void reload() {
 		if (Events.skipNextTickReload) return;
 		if (!isLogicalSide()) return;
-		if (currentSeries.getSeries() == SeriesList.WILD_LIFE) {
-			WildcardManager.onSessionEnd();
-		}
 		if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) {
 			TaskManager.initialize();
 		}

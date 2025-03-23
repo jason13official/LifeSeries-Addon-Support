@@ -44,8 +44,6 @@ public class Teleportation extends Superpower {
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
 
-                    playTeleportSound(player.getServerWorld(), player.getPos());
-                    playTeleportSound(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getPos());
                     spawnTeleportParticles(player.getServerWorld(), player.getPos());
                     spawnTeleportParticles(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getPos());
 
@@ -62,6 +60,9 @@ public class Teleportation extends Superpower {
                     /*player.teleport(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
                     lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch, true);
                     *///?}
+
+                    playTeleportSound(player.getServerWorld(), player.getPos());
+                    playTeleportSound(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getPos());
 
                     StatusEffectInstance resistance = new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 3);
                     lookingAtPlayer.addStatusEffect(resistance);

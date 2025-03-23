@@ -67,6 +67,7 @@ public class WildLifeConfig extends ConfigManager {
         getOrCreateDouble("wildcard_sizeshifting_min_size", 0.25);
         getOrCreateDouble("wildcard_sizeshifting_max_size", 3);
         getOrCreateDouble("wildcard_sizeshifting_size_change_multiplier", 1);
+        //getOrCreateBoolean("wildcard_sizeshifting_prevent_shift_falling", true);
 
         getOrCreateDouble("wildcard_timedilation_max_player_tps", 40);
 
@@ -125,6 +126,7 @@ public class WildLifeConfig extends ConfigManager {
         NetworkHandlerServer.sendConfig(player, "double", "wildcard_sizeshifting_min_size", 100, "Size Shifting: Min Size", "Smallest size you can achieve during Size Shifting.", List.of(String.valueOf(getOrCreateDouble("wildcard_sizeshifting_min_size", 0.25)), "0.25"));
         NetworkHandlerServer.sendConfig(player, "double", "wildcard_sizeshifting_max_size", 101, "Size Shifting: Max Size", "Biggest size you can achieve during Size Shifting.", List.of(String.valueOf(getOrCreateDouble("wildcard_sizeshifting_max_size", 3)), "3"));
         NetworkHandlerServer.sendConfig(player, "double", "wildcard_sizeshifting_size_change_multiplier", 102, "Size Shifting: Change Multiplier", "The speed with which you change your size during Size Shifting.", List.of(String.valueOf(getOrCreateDouble("wildcard_sizeshifting_size_change_multiplier", 1)), "1"));
+        //NetworkHandlerServer.sendConfig(player, "boolean", "wildcard_sizeshifting_prevent_shift_falling", 103,"Size Shifting: Prevent Shift Falling", "Prevent players from falling from blocks when shifting.", List.of(String.valueOf(getOrCreateBoolean("wildcard_sizeshifting_prevent_shift_falling", true)), "true"));
 
         NetworkHandlerServer.sendConfig(player, "integer", "wildcard_hunger_randomize_interval", 103, "Hunger: Randomize Interval", "The duration between food changes, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_hunger_randomize_interval", 36000)), "36000"));
 

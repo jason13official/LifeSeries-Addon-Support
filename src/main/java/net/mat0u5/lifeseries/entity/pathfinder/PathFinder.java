@@ -59,7 +59,7 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
     public void tick() {
         setOnGround(true);
         despawnTimer++;
-        if (despawnTimer > 200) {
+        if (despawnTimer > 100) {
             discard();
         }
     }

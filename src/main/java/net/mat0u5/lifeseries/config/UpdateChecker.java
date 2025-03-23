@@ -51,11 +51,6 @@ public class UpdateChecker {
                         Main.LOGGER.info("New version found: "+versionName);
                         updateAvailable = true;
                     }
-                    else {
-                        //TODO remove
-                        Main.LOGGER.info("New version found but lower version");
-                        updateAvailable = true;
-                    }
 
                     versionDescription = json.get("body").getAsString();
 
@@ -76,7 +71,7 @@ public class UpdateChecker {
         if (!updateAvailable || versionName == null) {
             return;
         }
-        if (!VersionControl.isDevVersion() || true) {//TODO
+        if (!VersionControl.isDevVersion()) {
             Text discordText = Text.literal("§7Click ").append(
                     Text.literal("here")
                         .styled(style -> style

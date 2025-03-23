@@ -213,4 +213,11 @@ public class PlayerUtils {
         Session.skipTimer.put(player.getUuid(), timeFor/5);
         player.sendMessage(text, true);
     }
+
+    public static void updatePlayerInventory(ServerPlayerEntity player) {
+        player.currentScreenHandler.syncState();
+        player.playerScreenHandler.syncState();
+        player.getInventory().updateItems();
+        player.currentScreenHandler.sendContentUpdates();
+    }
 }

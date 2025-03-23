@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.InventoryS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -151,9 +153,6 @@ public class Hunger extends Wildcard {
             shuffleVersion = rnd.nextInt(0,100);
             shuffledBefore = false;
             lastVersion = -1;
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                addHunger(player);
-            }
             super.activate();
         });
     }
@@ -165,6 +164,9 @@ public class Hunger extends Wildcard {
             PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), Text.of(""), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
             TaskScheduler.scheduleTask(40, WildcardManager::showDots);
             TaskScheduler.scheduleTask(140, () -> {
+                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                    addHunger(player);
+                }
                 updateInventories();
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
             });
@@ -203,14 +205,14 @@ public class Hunger extends Wildcard {
             ItemStack newStack = inventory.getStack(i);
             newStack.applyChanges(changes);
         }
-        player.getInventory().updateItems();
-        player.currentScreenHandler.sendContentUpdates();
-        player.playerScreenHandler.onContentChanged(player.getInventory());
+
+        PlayerUtils.updatePlayerInventory(player);
+        player.playerScreenHandler.onContentChanged(inventory);
     }
 
     public static void addHunger(ServerPlayerEntity player) {
         if (player.isSpectator()) return;
-        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, 2);
+        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, 2, false, false, false);
         player.addStatusEffect(statusEffectInstance);
     }
 
@@ -222,8 +224,10 @@ public class Hunger extends Wildcard {
 
     //? if <=1.21 {
     public static void applyFoodComponents(Item item, ComponentMapImpl components) {
+        if (item == null) return;
+        if (item.equals(Items.AIR)) return;
         if (components.contains(DataComponentTypes.FOOD)) {
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7);
+            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
             FoodComponent.StatusEffectEntry statusEffect = new FoodComponent.StatusEffectEntry(statusEffectInstance, 1);
             components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false, 1.6f, Optional.empty(), List.of(statusEffect)));
             return;
@@ -259,7 +263,7 @@ public class Hunger extends Wildcard {
     //?} else {
     /*public static void applyFoodComponents(Item item, MergedComponentMap components) {
         if (components.contains(DataComponentTypes.CONSUMABLE)) {
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7);
+            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
             ApplyEffectsConsumeEffect statusEffect = new ApplyEffectsConsumeEffect(statusEffectInstance, 1);
             components.set(DataComponentTypes.CONSUMABLE,
                     new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, List.of(statusEffect))

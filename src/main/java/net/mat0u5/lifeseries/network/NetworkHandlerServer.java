@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.client.config.BooleanObject;
 import net.mat0u5.lifeseries.client.config.DoubleObject;
 import net.mat0u5.lifeseries.client.config.IntegerObject;
 import net.mat0u5.lifeseries.client.config.StringObject;
+import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
@@ -15,6 +16,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -152,6 +154,16 @@ public class NetworkHandlerServer {
                 if (Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries))) {
                     OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
                 }
+            }
+        }
+        if (name.equalsIgnoreCase("reset_snail_model")) {
+            if (Snails.snails.containsKey(player.getUuid())) {
+                Snail snail = Snails.snails.get(player.getUuid());
+                snail.updateModel();
+            }
+            if (TriviaWildcard.snails.containsKey(player.getUuid())) {
+                Snail snail = TriviaWildcard.snails.get(player.getUuid());
+                snail.updateModel();
             }
         }
     }

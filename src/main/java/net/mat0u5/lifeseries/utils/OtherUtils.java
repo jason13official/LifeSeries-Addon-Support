@@ -50,12 +50,12 @@ public class OtherUtils {
     }
 
     public static void debugString(String str) {
-        System.out.println("String length: " + str.length());
+        Main.LOGGER.info("String length: " + str.length());
 
         // Print each character as its code point
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            System.out.printf("Character at %d: '%c' (Unicode: U+%04X)%n", i, c, (int)c);
+            Main.LOGGER.info("Character at %d: '%c' (Unicode: U+%04X)%n", i, c, (int)c);
         }
     }
 

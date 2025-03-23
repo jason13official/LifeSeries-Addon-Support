@@ -25,6 +25,8 @@ public class SizeShifting extends Wildcard {
 
     public static double SIZE_CHANGE_MULTIPLIER = 1;
     public static double SIZE_CHANGE_STEP = 0.0015;
+
+    //public static boolean SAVE_FROM_FALLING = true;
     
     @Override
     public Wildcards getType() {
@@ -47,8 +49,8 @@ public class SizeShifting extends Wildcard {
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
     }
 
-    public static float getPlayerSize(ServerPlayerEntity player) {
-        return player.getScale();
+    public static double getPlayerSize(ServerPlayerEntity player) {
+        return AttributeUtils.getPlayerSize(player);
     }
 
     public static void addPlayerSize(ServerPlayerEntity player, double amount) {
@@ -70,6 +72,11 @@ public class SizeShifting extends Wildcard {
         if (DependencyManager.cardinalComponentsLoaded()) {
            if (!CardinalComponentsDependency.allowPlayerSizeChange(player)) return;
         }
+        /*
+        if (saveFromFalling) {
+            Has to be done client-side :/
+        }
+        */
 
         AttributeUtils.setScale(player, size);
     }
@@ -80,7 +87,7 @@ public class SizeShifting extends Wildcard {
     public static void resetSizesTick(boolean isActive) {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (!isActive || (player.isSpectator() && !currentSeries.isAlive(player))) {
-                float size = getPlayerSize(player);
+                double size = getPlayerSize(player);
                 if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) return;
                 if (size == 1) return;
                 if (size < 0.98) {

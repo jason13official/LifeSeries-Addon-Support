@@ -147,6 +147,7 @@ public class WildLife extends Series {
         SizeShifting.MIN_SIZE = seriesConfig.getOrCreateDouble("wildcard_sizeshifting_min_size", 0.25);
         SizeShifting.MAX_SIZE = seriesConfig.getOrCreateDouble("wildcard_sizeshifting_max_size", 3);
         SizeShifting.SIZE_CHANGE_MULTIPLIER = seriesConfig.getOrCreateDouble("wildcard_sizeshifting_size_change_multiplier", 1);
+        //SizeShifting.SAVE_FROM_FALLING = seriesConfig.getOrCreateBoolean("wildcard_sizeshifting_prevent_shift_falling", true);
 
 
         Snail.GLOBAL_SPEED_MULTIPLIER = seriesConfig.getOrCreateDouble("wildcard_snails_speed_multiplier", 1);

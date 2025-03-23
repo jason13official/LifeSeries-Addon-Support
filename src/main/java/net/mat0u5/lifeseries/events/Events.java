@@ -38,9 +38,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeries;
@@ -244,19 +242,21 @@ public class Events {
     /*
         Non-events
      */
-    private static final Map<UUID, Vec3d> joiningPlayers = new HashMap<>();
+    public static final List<UUID> joiningPlayers = new ArrayList<>();
+    private static final Map<UUID, Vec3d> joiningPlayersPos = new HashMap<>();
     private static final Map<UUID, Float> joiningPlayersYaw = new HashMap<>();
     private static final Map<UUID, Float> joiningPlayersPitch = new HashMap<>();
     public static void playerStartJoining(ServerPlayerEntity player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
         SnailSkinsServer.sendStoredImages(player);
-        joiningPlayers.put(player.getUuid(), player.getPos());
+        joiningPlayers.add(player.getUuid());
+        joiningPlayersPos.put(player.getUuid(), player.getPos());
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());
         joiningPlayersPitch.put(player.getUuid(), player.getPitch());
     }
     public static void checkPlayerFinishJoiningTick() {
-        for (Map.Entry<UUID, Vec3d> entry : joiningPlayers.entrySet()) {
+        for (Map.Entry<UUID, Vec3d> entry : joiningPlayersPos.entrySet()) {
             UUID uuid = entry.getKey();
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
             if (player == null) continue;
@@ -289,6 +289,7 @@ public class Events {
     }
     public static void finishedJoining(UUID uuid) {
         joiningPlayers.remove(uuid);
+        joiningPlayersPos.remove(uuid);
         joiningPlayersYaw.remove(uuid);
         joiningPlayersPitch.remove(uuid);
     }

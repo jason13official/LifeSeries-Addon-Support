@@ -49,7 +49,7 @@ public class Snails extends Wildcard {
     @Override
     public void tick() {
         ticks++;
-        if (ticks % 200 == 0) {
+        if (ticks % 100 == 0) {
             for (ServerPlayerEntity player : currentSeries.getAlivePlayers()) {
                 UUID playerUUID = player.getUuid();
                 if (snails.containsKey(playerUUID)) {

@@ -21,7 +21,6 @@ public class SoundSystemMixin {
             "block.beacon.deactivate",
             "wildlife_time_slow_down",
             "wildlife_time_speed_up",
-            "wildlife_trivia_intro",
             "wildlife_trivia_suspense",
             "wildlife_trivia_suspense_end"
     );

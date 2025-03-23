@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -23,7 +24,10 @@ import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.Box;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ClientEvents {
@@ -55,6 +59,8 @@ public class ClientEvents {
         if (player != null) {
             sendPackets(player);
             tryTripleJump(player);
+            checkSnailInvisible(client, player);
+            checkTriviaSnailInvisible(client, player);
         }
         ClientKeybinds.tick();
         ClientTaskScheduler.onClientTick();
@@ -145,5 +151,61 @@ public class ClientEvents {
             return true;
         }
         return false;
+    }
+
+    private static int invisibleSnailFor = 0;
+    public static void checkSnailInvisible(MinecraftClient client, ClientPlayerEntity player) {
+        if (client.world == null) return;
+        if (MainClient.snailPos == null) return;
+        if (MainClient.snailPosTime == 0) return;
+        if (player.squaredDistanceTo(MainClient.snailPos.toCenterPos()) > 2500) return;
+        if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return;
+        if (invisibleSnailFor > 60) {
+            invisibleSnailFor = 0;
+            NetworkHandlerClient.sendStringPacket("reset_snail_model", "");
+        }
+
+        List<Entity> snailEntities = new ArrayList<>();
+        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class,
+                new Box(MainClient.snailPos).expand(10), entity->true)) {
+            if (MainClient.snailPartUUIDs.contains(entity.getUuid())) {
+                snailEntities.add(entity);
+            }
+        }
+
+        if (snailEntities.isEmpty()) {
+            invisibleSnailFor++;
+        }
+        else {
+            invisibleSnailFor = 0;
+        }
+    }
+
+    private static int invisibleTriviaSnailFor = 0;
+    public static void checkTriviaSnailInvisible(MinecraftClient client, ClientPlayerEntity player) {
+        if (client.world == null) return;
+        if (MainClient.triviaSnailPos == null) return;
+        if (MainClient.triviaSnailPosTime == 0) return;
+        if (player.squaredDistanceTo(MainClient.triviaSnailPos.toCenterPos()) > 2500) return;
+        if (System.currentTimeMillis() - MainClient.triviaSnailPosTime > 2000) return;
+        if (invisibleTriviaSnailFor > 60) {
+            invisibleTriviaSnailFor = 0;
+            NetworkHandlerClient.sendStringPacket("reset_snail_model", "");
+        }
+
+        List<Entity> snailEntities = new ArrayList<>();
+        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class,
+                new Box(MainClient.triviaSnailPos).expand(10), entity->true)) {
+            if (MainClient.triviaSnailPartUUIDs.contains(entity.getUuid())) {
+                snailEntities.add(entity);
+            }
+        }
+
+        if (snailEntities.isEmpty()) {
+            invisibleTriviaSnailFor++;
+        }
+        else {
+            invisibleTriviaSnailFor = 0;
+        }
     }
 }

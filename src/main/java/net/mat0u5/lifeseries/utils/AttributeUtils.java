@@ -122,4 +122,11 @@ public class AttributeUtils {
         //?} else
         /*return player.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED);*/
     }
+
+    public static double getPlayerSize(ServerPlayerEntity player) {
+        //? if <=1.21 {
+        return player.getAttributeBaseValue(EntityAttributes.GENERIC_SCALE);
+        //?} else
+        /*return player.getAttributeBaseValue(EntityAttributes.SCALE);*/
+    }
 }

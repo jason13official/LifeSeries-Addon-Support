@@ -218,7 +218,7 @@ public class WildcardManager {
     }
 
     public static void onSessionStart() {
-        if (chosenWildcard == null) {
+        if (chosenWildcard == null && activeWildcards.isEmpty()) {
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
                 if (PermissionManager.isAdmin(player)) {
                     NetworkHandlerServer.sendStringPacket(player, "select_wildcards", "true");

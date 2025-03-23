@@ -13,6 +13,8 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.*;
 
@@ -27,9 +29,14 @@ public class MainClient implements ClientModInitializer {
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
-
     public static Map<UUID, Long> invisiblePlayers = new HashMap<>();
-
+    public static List<UUID> triviaBotPartUUIDs = new ArrayList<>();
+    public static List<UUID> snailPartUUIDs = new ArrayList<>();
+    public static BlockPos snailPos = null;
+    public static long snailPosTime = 0;
+    public static List<UUID> triviaSnailPartUUIDs = new ArrayList<>();
+    public static BlockPos triviaSnailPos = null;
+    public static long triviaSnailPosTime = 0;
     public static int snailAir = 300;
 
     @Override

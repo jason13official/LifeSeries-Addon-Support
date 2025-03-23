@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
@@ -188,13 +189,20 @@ public class QuizScreen extends DefaultScreen {
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
     }
 
-
-
     private void drawEntity(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
         if (client == null) return;
         if (client.world == null) return;
         if (client.player == null) return;
-        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class, client.player.getBoundingBox().expand(5), entity->true)) {
+        List<Entity> allEntities = new ArrayList<>();
+        List<Entity> matchingBotEntities = new ArrayList<>();
+        for (DisplayEntity.ItemDisplayEntity entity : client.world.getEntitiesByClass(DisplayEntity.ItemDisplayEntity.class, client.player.getBoundingBox().expand(10), entity->true)) {
+            if (MainClient.triviaBotPartUUIDs.contains(entity.getUuid())) {
+                matchingBotEntities.add(entity);
+            }
+            allEntities.add(entity);
+        }
+        if (matchingBotEntities.isEmpty()) matchingBotEntities = allEntities;
+        for (Entity entity : matchingBotEntities) {
             drawEntity(context, x-30, y-55, x+30, y+85, size, 0.0625F, mouseX, mouseY, entity);
         }
     }

@@ -29,6 +29,7 @@ import static net.mat0u5.lifeseries.Main.*;
 public class TriviaWildcard extends Wildcard {
     private static final Map<UUID, Queue<Integer>> playerSpawnQueue = new HashMap<>();
     private static final Map<UUID, Integer> spawnedBotsFor = new HashMap<>();
+    public static final Map<UUID, Snail> snails = new HashMap<>();
     private static boolean globalScheduleInitialized = false;
     public static Map<UUID, TriviaBot> bots = new HashMap<>();
     public static int activatedAt = -1;
@@ -38,6 +39,7 @@ public class TriviaWildcard extends Wildcard {
     public static TriviaQuestionManager normalTrivia;
     public static TriviaQuestionManager hardTrivia;
     private static final Random rnd = new Random();
+    public static long ticks = 0;
 
     @Override
     public Wildcards getType() {
@@ -50,6 +52,23 @@ public class TriviaWildcard extends Wildcard {
         if (passedTime % 20 == 0) trySpawnBots();
         if (passedTime % 200 == 0) updateDeadBots();
     }
+
+    @Override
+    public void tick() {
+        ticks++;
+        if (ticks % 200 == 0) {
+            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                UUID playerUUID = player.getUuid();
+                if (snails.containsKey(playerUUID)) {
+                    Snail snail = snails.get(playerUUID);
+                    if (snail == null || snail.isDead() || snail.isRemoved()) {
+                        snails.remove(playerUUID);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void activate() {
         usedEasyQuestions.clear();

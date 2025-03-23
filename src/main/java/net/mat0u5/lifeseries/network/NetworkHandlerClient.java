@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +125,40 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("series_info") && Main.isClient()) {
             SeriesList series = SeriesList.getSeriesFromStringName(value);
             if (series != SeriesList.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeriesInfoScreen(series));
+        }
+        if (name.equalsIgnoreCase("trivia_bot_part") && Main.isClient()) {
+            try {
+                UUID uuid = UUID.fromString(value);
+                MainClient.triviaBotPartUUIDs.add(uuid);
+            }catch(Exception e) {}
+        }
+        if (name.equalsIgnoreCase("snail_part") && Main.isClient()) {
+            try {
+                UUID uuid = UUID.fromString(value);
+                MainClient.snailPartUUIDs.add(uuid);
+            }catch(Exception e) {}
+        }
+        if (name.equalsIgnoreCase("snail_pos")) {
+            try {
+                String[] split = value.split("_");
+                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                MainClient.snailPos = pos;
+                MainClient.snailPosTime = System.currentTimeMillis();
+            }catch(Exception e) {}
+        }
+        if (name.equalsIgnoreCase("trivia_snail_part") && Main.isClient()) {
+            try {
+                UUID uuid = UUID.fromString(value);
+                MainClient.triviaSnailPartUUIDs.add(uuid);
+            }catch(Exception e) {}
+        }
+        if (name.equalsIgnoreCase("trivia_snail_pos")) {
+            try {
+                String[] split = value.split("_");
+                BlockPos pos = new BlockPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                MainClient.triviaSnailPos = pos;
+                MainClient.triviaSnailPosTime = System.currentTimeMillis();
+            }catch(Exception e) {}
         }
     }
 

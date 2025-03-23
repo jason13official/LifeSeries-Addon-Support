@@ -7,7 +7,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Mixin(value = ItemStack.class, priority = 1)
 public class ItemStackMixin {
@@ -16,6 +18,10 @@ public class ItemStackMixin {
         if (!stack.isOf(otherStack.getItem())) {
         } else {
             if (stack.isEmpty() && otherStack.isEmpty()) {
+                cir.setReturnValue(true);
+                return;
+            }
+            if (stack.equals(otherStack)) {
                 cir.setReturnValue(true);
                 return;
             }
@@ -33,8 +39,33 @@ public class ItemStackMixin {
             /*comp1.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
             comp2.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
              *///?}
+            if (Objects.equals(comp1, comp2)) {
+                cir.setReturnValue(true);
+                return;
+            }
 
-            cir.setReturnValue(Objects.equals(comp1, comp2));
+
+            boolean componentsEqual = true;
+
+            Set<ComponentType<?>> allTypes = new HashSet<>();
+            allTypes.addAll(comp1.getTypes());
+            allTypes.addAll(comp2.getTypes());
+
+            for (ComponentType<?> type : allTypes) {
+                if (type.equals(DataComponentTypes.FOOD)) continue;
+                //? if >= 1.21.2
+                /*if (type.equals(DataComponentTypes.CONSUMABLE)) continue;*/
+
+                Object value1 = comp1.get(type);
+                Object value2 = comp2.get(type);
+
+                if (!Objects.equals(value1, value2)) {
+                    componentsEqual = false;
+                    break;
+                }
+            }
+
+            cir.setReturnValue(componentsEqual);
         }
     }
 }

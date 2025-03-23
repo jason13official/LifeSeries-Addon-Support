@@ -25,7 +25,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
             return false;
         }
 
-        if (mob.gliding) {
+        if (mob.gliding || mob.mining) {
             return false;
         }
 

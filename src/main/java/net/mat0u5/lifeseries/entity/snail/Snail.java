@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
@@ -215,6 +216,11 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void updateModel() {
         if (attachment != null) this.attachment.destroy();
         if (this.holder != null) TaskScheduler.scheduleTask(5, () -> this.attachment = EntityAttachment.ofTicking(this.holder, this));
+        TaskScheduler.scheduleTask(7, () -> {
+            if (getActualBoundPlayer() != null) {
+                sendDisplayEntityPackets(getActualBoundPlayer());
+            }
+        });
     }
 
     public int getJumpRangeSquared() {
@@ -227,6 +233,18 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         boundPlayerUUID = player.getUuid();
         writeCustomDataToNbt(new NbtCompound());
         updateSnailName();
+        sendDisplayEntityPackets(player);
+    }
+
+    public void sendDisplayEntityPackets(ServerPlayerEntity player) {
+        if (holder == null) return;
+        List<VirtualElement> elements = holder.getElements();
+        for (VirtualElement element : elements) {
+            if (element instanceof ItemDisplayElement itemDisplayElement) {
+                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(player, "snail_part", itemDisplayElement.getUuid().toString());
+                else NetworkHandlerServer.sendStringPacket(player, "trivia_snail_part", itemDisplayElement.getUuid().toString());
+            }
+        }
     }
 
     public void updateSnailName() {
@@ -240,38 +258,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (snailName == null) return this.getType().getName();
         if (snailName.getString().isEmpty()) return this.getType().getName();
         return snailName;
-    }
-
-    @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        if (boundPlayerUUID == null) return;
-        nbt.putUuid("boundPlayer", boundPlayerUUID);
-        if (pathFinder != null) nbt.putUuid("pathFinder", pathFinder.getUuid());
-        if (groundPathFinder != null) nbt.putUuid("groundPathFinder", groundPathFinder.getUuid());
-    }
-
-    @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        UUID newUUID = nbt.getUuid("boundPlayer");
-        if (newUUID != null) {
-            boundPlayerUUID = newUUID;
-        }
-        if (getWorld() instanceof ServerWorld world) {
-            UUID pfUUID = nbt.getUuid("pathFinder");
-            if (pfUUID != null) {
-                if (world.getEntity(pfUUID) instanceof PathFinder pf) {
-                    pathFinder = pf;
-                }
-            }
-            UUID gpfUUID = nbt.getUuid("groundPathFinder");
-            if (gpfUUID != null) {
-                if (world.getEntity(gpfUUID) instanceof PathFinder gpf) {
-                    groundPathFinder = gpf;
-                }
-            }
-        }
     }
 
     @Override
@@ -323,6 +309,20 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void tick() {
         super.tick();
 
+        if (age % 10 == 0 && getActualBoundPlayer() != null) {
+            BlockPos pos = getBlockPos();
+            boolean sameDimensions = getWorld().getRegistryKey().equals(getActualBoundPlayer().getWorld().getRegistryKey());
+            if (sameDimensions) {
+                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "snail_pos", pos.getX()+"_"+pos.getY()+"_"+pos.getZ());
+                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "trivia_snail_pos", pos.getX()+"_"+pos.getY()+"_"+pos.getZ());
+            }
+        }
+        if (age % 400 == 0 && getActualBoundPlayer() != null) {
+            if (getActualBoundPlayer() != null) {
+                sendDisplayEntityPackets(getActualBoundPlayer());
+            }
+        }
+
         if (this.holder == null && age > 2) {
             createHolder();
         }
@@ -331,7 +331,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             dontAttackFor--;
         }
 
-        if (nullPlayerChecks > 1000 && !fromTrivia) {
+        if (nullPlayerChecks > 200 && !fromTrivia) {
             despawn();
         }
 
@@ -343,7 +343,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             updateAnimations();
         }
 
-        if (age % 100 == 0) {
+        if (age % 50 == 0) {
             if (!fromTrivia) {
                 if (!Snails.snails.containsValue(this) || !WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
                     despawn();
@@ -778,8 +778,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         nullPlayerChecks = 0;
         if (player.isSpectator()) return null;
         if (player.isDead()) return null;
+        if (Events.joiningPlayers.contains(player.getUuid())) return null;
         return player;
     }
+
     @Nullable
     public ServerPlayerEntity getActualBoundPlayer() {
         if (server == null) return null;
@@ -955,7 +957,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void playWalkSound() {
         int cooldownBefore = soundCooldown;
         soundCooldown = 0;
-        playRandomSound("walk", 0.2f, 0, 0);
+        playRandomSound("walk", 0.1f, 0, 0);
         soundCooldown = cooldownBefore;
     }
 

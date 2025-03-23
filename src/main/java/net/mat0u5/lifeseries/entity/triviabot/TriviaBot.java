@@ -8,6 +8,8 @@ import de.tomalbrc.bil.core.holder.entity.living.LivingEntityHolder;
 import de.tomalbrc.bil.core.model.Model;
 import de.tomalbrc.bil.file.loader.BbModelLoader;
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
+import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
+import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
@@ -121,17 +123,21 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        if (boundPlayerUUID == null) return;
-        nbt.putUuid("boundPlayer", boundPlayerUUID);
+        try {
+            if (boundPlayerUUID == null) return;
+            nbt.putUuid("boundPlayer", boundPlayerUUID);
+        }catch(Exception e) {}
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        UUID newUUID = nbt.getUuid("boundPlayer");
-        if (newUUID != null) {
-            boundPlayerUUID = newUUID;
-        }
+        try {
+            UUID newUUID = nbt.getUuid("boundPlayer");
+            if (newUUID != null) {
+                boundPlayerUUID = newUUID;
+            }
+        }catch(Exception e) {}
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -172,10 +178,26 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return player;
     }
 
+    @Nullable
+    public ServerPlayerEntity getActualBoundPlayer() {
+        if (server == null) return null;
+        return PlayerUtils.getPlayer(boundPlayerUUID);
+    }
+
     public void setBoundPlayer(ServerPlayerEntity player) {
         if (player == null) return;
         boundPlayerUUID = player.getUuid();
         writeCustomDataToNbt(new NbtCompound());
+        sendDisplayEntityPackets(player);
+    }
+
+    public void sendDisplayEntityPackets(ServerPlayerEntity player) {
+        List<VirtualElement> elements = holder.getElements();
+        for (VirtualElement element : elements) {
+            if (element instanceof ItemDisplayElement itemDisplayElement) {
+                NetworkHandlerServer.sendStringPacket(player, "trivia_bot_part", itemDisplayElement.getUuid().toString());
+            }
+        }
     }
 
     @Override
@@ -193,10 +215,16 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 despawn();
             }
         }
+        if (age % 400 == 0 && getActualBoundPlayer() != null) {
+            if (getActualBoundPlayer() != null) {
+                sendDisplayEntityPackets(getActualBoundPlayer());
+            }
+        }
 
         if (submittedAnswer && answeredRight != null) {
             if (answeredRight) {
                 if (analyzing < -80) {
+                    if (hasVehicle()) dismountVehicle();
                     noClip = true;
                     float velocity = Math.min(0.5f, 0.25f * Math.abs((analyzing+80) / (20.0f)));
                     setVelocity(0,velocity,0);
@@ -205,6 +233,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             }
             else {
                 if (analyzing < -100) {
+                    if (hasVehicle()) dismountVehicle();
                     noClip = true;
                     float velocity = Math.min(0.5f, 0.25f * Math.abs((analyzing+100) / (20.0f)));
                     setVelocity(0,velocity,0);
@@ -299,6 +328,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                         this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
                         10, 0.5, 0.5, 0.5, 0.5
                 );
+                TriviaWildcard.snails.put(getBoundPlayer().getUuid(), triviaSnail);
             }
         }
         despawn();

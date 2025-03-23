@@ -90,6 +90,12 @@ public class Mimicry extends Superpower {
         mimic.tick();
     }
 
+    @Override
+    public void turnOff() {
+        super.turnOff();
+        NetworkHandlerServer.sendLongPacket(getPlayer(), "mimicry_cooldown", System.currentTimeMillis()-1000);
+    }
+
     public Superpower getMimickedPower() {
         if (mimic == null) return this;
         return mimic;
