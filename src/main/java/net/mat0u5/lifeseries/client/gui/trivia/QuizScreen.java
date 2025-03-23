@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.client.gui.trivia;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -15,7 +15,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -24,14 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizScreen extends Screen {
-    private static final Identifier BACKGROUND_TEXTURE_LEFT = Identifier.of("lifeseries","textures/gui/trivia_question1.png");
-    private static final Identifier BACKGROUND_TEXTURE_RIGHT = Identifier.of("lifeseries","textures/gui/trivia_question2.png");
-
-    private static final int BG_WIDTH = 320;
-    private static final int BG_HEIGHT = 180;
-
-    public static final int TEXT_COLOR = 0x3c3c3c;
+public class QuizScreen extends DefaultScreen {
     public static final int TEXT_COLOR_HIGHLIGHTED = 0xffffff;
     private static final int[] ANSWER_COLORS = {
             0xFF5c57f3, 0xFFf8aa13, 0xFF5ef961, 0xFFf5fd6e, 0xFFed5b64
@@ -47,16 +39,10 @@ public class QuizScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
-
-    @Override
     protected void init() {
         super.init();
         timerSeconds = Trivia.getRemainingTime();
 
-        int startX = (this.width - BG_WIDTH) / 2;
-        int endX = startX + BG_WIDTH;
-        int startY = (this.height - BG_HEIGHT) / 2;
         int fifth3 = startX + (BG_WIDTH / 5) * 3;
         int answersStartX = fifth3 + 15;
         int answersStopX = endX - 15;
@@ -125,14 +111,8 @@ public class QuizScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-
+    public void render(DrawContext context, int mouseX, int mouseY) {
         // X
-        int startX = (this.width - BG_WIDTH) / 2;
-        int endX = startX + BG_WIDTH;
-
-        int centerX = (startX + endX) / 2;
         int fifth1 = startX + (BG_WIDTH / 5);
         int fifth2 = startX + (BG_WIDTH / 5) * 2;
         int fifth4 = startX + (BG_WIDTH / 5) * 4;
@@ -140,24 +120,9 @@ public class QuizScreen extends Screen {
         int questionWidth = (fifth2-10) - questionX;
 
         // Y
-        int startY = (this.height - BG_HEIGHT) / 2;
-        int endY = startY + BG_HEIGHT;
-
         int minY = startY + 9;
-        int centerY = (startY + endY) / 2;
         int maxY = endY - 23;
         int questionY = startY + 30;
-
-
-
-        // Background
-        //? if <= 1.21 {
-        context.drawTexture(BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
-        context.drawTexture(BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
-         //?} else {
-        /*context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-        *///?}
 
         /*
         testDrawX(context, 0);
@@ -193,7 +158,7 @@ public class QuizScreen extends Screen {
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
         List<OrderedText> wrappedQuestion = this.textRenderer.wrapLines(Text.literal(Trivia.question), questionWidth);
         for (int i = 0; i < wrappedQuestion.size(); i++) {
-            context.drawText(this.textRenderer, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight, TEXT_COLOR, false);
+            context.drawText(this.textRenderer, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight, DEFAULT_TEXT_COLOR, false);
         }
 
         // Answers
@@ -208,7 +173,7 @@ public class QuizScreen extends Screen {
 
             // Check if the mouse is hovering over this answer
             boolean hovered = rect.contains(mouseX, mouseY);
-            int textColor = hovered ? TEXT_COLOR_HIGHLIGHTED : TEXT_COLOR;
+            int textColor = hovered ? TEXT_COLOR_HIGHLIGHTED : DEFAULT_TEXT_COLOR;
 
             // Draw each line
             int lineY = rect.y + 2;
@@ -221,8 +186,6 @@ public class QuizScreen extends Screen {
         // Entity in the middle
         context.fill(centerX-33, centerY-55, centerX+33, centerY+55, 0xFF000000);
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
-
-        super.render(context, mouseX, mouseY, delta);
     }
 
 

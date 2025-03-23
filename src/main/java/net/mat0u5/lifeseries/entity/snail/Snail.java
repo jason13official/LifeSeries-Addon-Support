@@ -415,6 +415,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void despawn() {
+        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", 300);
         if (boundPlayerUUID != null) {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }

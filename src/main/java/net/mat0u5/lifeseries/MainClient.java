@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.client.ClientKeybinds;
 import net.mat0u5.lifeseries.client.render.ClientRenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -41,6 +42,7 @@ public class MainClient implements ClientModInitializer {
         NetworkHandlerClient.registerClientReceiver();
         ClientRenderUtils.onInitialize();
         ClientKeybinds.registerKeybinds();
+        ClientEvents.registerEvents();
     }
 
     public static boolean isRunningIntegratedServer() {

@@ -1,17 +1,14 @@
 package net.mat0u5.lifeseries.client.gui.series;
 
-import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
+import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class ChooseSeriesScreen extends Screen {
-    private static final Identifier BACKGROUND_TEXTURE_LEFT = Identifier.of("lifeseries","textures/gui/trivia_question1.png");
-    private static final Identifier BACKGROUND_TEXTURE_RIGHT = Identifier.of("lifeseries","textures/gui/trivia_question2.png");
+public class ChooseSeriesScreen extends DefaultScreen {
 
     private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
 
@@ -22,11 +19,6 @@ public class ChooseSeriesScreen extends Screen {
     private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
     private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
 
-
-    private static final int BG_WIDTH = 320;
-    private static final int BG_HEIGHT = 180;
-
-    public static final int TEXT_COLOR = 0x3c3c3c;
     public static boolean hasSelectedBefore = false;
 
     public ChooseSeriesScreen(boolean hasSelectedBefore) {
@@ -61,11 +53,10 @@ public class ChooseSeriesScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-
         if (button == 0) { // Left-click
             int region = getRegion((int) mouseX, (int) mouseY);
             if (region != 0) {
-                if (hasSelectedBefore) {
+                if (hasSelectedBefore && this.client != null) {
                     if (region == 1) this.client.setScreen(new ConfirmSeriesAnswerScreen(this, "Third Life"));
                     if (region == 2) this.client.setScreen(new ConfirmSeriesAnswerScreen(this, "Last Life"));
                     if (region == 3) this.client.setScreen(new ConfirmSeriesAnswerScreen(this, "Double Life"));
@@ -87,29 +78,16 @@ public class ChooseSeriesScreen extends Screen {
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
-    @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        // X
-        int startX = (this.width - BG_WIDTH) / 2;
-        int endX = startX + BG_WIDTH;
-        int centerX = (startX + endX) / 2;
-
+    public void render(DrawContext context, int mouseX, int mouseY) {
         int oneFourthX = startX + BG_WIDTH / 4;
         int threeFourthX = startX + (BG_WIDTH / 4)*3;
-
-        // Y
-        int startY = (this.height - BG_HEIGHT) / 2;
 
         int region = getRegion(mouseX, mouseY);
 
         // Background + images
         //? if <= 1.21 {
-        context.drawTexture(BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
-        context.drawTexture(BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
 
         if (region != 0) {
             if (region == 1) context.drawTexture(TEXTURE_SELECTED,oneFourthX-32, startY + 32, 0, 0, 64, 64);
@@ -134,10 +112,7 @@ public class ChooseSeriesScreen extends Screen {
 
         context.getMatrices().pop();
         //?} else {
-        /*context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-
-        if (region != 0) {
+        /*if (region != 0) {
             if (region == 1) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, oneFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 2) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 3) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, threeFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
@@ -163,8 +138,6 @@ public class ChooseSeriesScreen extends Screen {
 
         String prompt = "Select the series you want to play.";
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);
-
-        super.render(context, mouseX, mouseY, delta);
     }
 }
 

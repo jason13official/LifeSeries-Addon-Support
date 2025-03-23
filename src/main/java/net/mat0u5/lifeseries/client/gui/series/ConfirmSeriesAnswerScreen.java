@@ -1,50 +1,43 @@
 package net.mat0u5.lifeseries.client.gui.series;
 
-import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
+import net.mat0u5.lifeseries.client.gui.DefaultScreen;
+import net.mat0u5.lifeseries.client.gui.DefaultSmallScreen;
+import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
-public class ConfirmSeriesAnswerScreen extends Screen {
-    private static final Identifier BACKGROUND_TEXTURE_LEFT = Identifier.of("lifeseries","textures/gui/trivia_question1.png");
-    private static final Identifier BACKGROUND_TEXTURE_RIGHT = Identifier.of("lifeseries","textures/gui/trivia_question2.png");
-
-    public static final int TEXT_COLOR = 0x3c3c3c;
-
-    private static final int BG_WIDTH = 320;
-    private static final int BG_HEIGHT = 180;
-
+public class ConfirmSeriesAnswerScreen extends DefaultSmallScreen {
     private final ChooseSeriesScreen parent;
     private final String seriesName;
 
     public ConfirmSeriesAnswerScreen(ChooseSeriesScreen parent, String seriesName) {
-        super(Text.literal("Confirm Answer"));
+        super(Text.literal("Confirm Answer"), 2.2f, 1.6f);
         this.parent = parent;
         this.seriesName = seriesName;
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
+    public boolean allowCloseButton() {
+        return false;
+    }
 
     @Override
     protected void init() {
         super.init();
         int startX = (this.width - BG_WIDTH) / 2;
         int startY = (this.height - BG_HEIGHT) / 2;
-        int oneFourthX = startX + BG_WIDTH / 4;
-        int threeFourthX = startX + (BG_WIDTH / 4)*3;
+        int fifth2 = startX + (BG_WIDTH / 5)*2;
+        int fifth3 = startX + (BG_WIDTH / 5)*3;
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
                             NetworkHandlerClient.sendStringPacket("set_series", seriesName);
                         })
-                        .position(oneFourthX - 30, startY + BG_HEIGHT - 40)
+                        .position(fifth2 - 40, startY + BG_HEIGHT - 35)
                         .size(60, 20)
                         .build()
         );
@@ -53,45 +46,19 @@ public class ConfirmSeriesAnswerScreen extends Screen {
                 ButtonWidget.builder(Text.literal("Cancel"), btn -> {
                             if (this.client != null) this.client.setScreen(parent);
                         })
-                        .position(threeFourthX - 30, startY + BG_HEIGHT - 40)
+                        .position(fifth3 - 20, startY + BG_HEIGHT - 35)
                         .size(60, 20)
                         .build()
         );
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        int startX = (this.width - BG_WIDTH) / 2;
-        int startY = (this.height - BG_HEIGHT) / 2;
-        //? if <= 1.21 {
-        context.drawTexture(BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
-        context.drawTexture(BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
-        //?} else {
-        /*context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
-        *///?}
-
-
-        String prompt = "WARNING: you have already selected a series.";
-        int textWidth = textRenderer.getWidth(prompt);
-        int textX = startX + (BG_WIDTH - textWidth) / 2;
-        int textY = startY + 30;
-        context.drawText(textRenderer, prompt, textX, textY, TEXT_COLOR, false);
-
-
-        String prompt3 = "Changing it might cause some saved data to be lost (lives, ...).";
-        int textWidth3 = textRenderer.getWidth(prompt3);
-        int textX3 = startX + (BG_WIDTH - textWidth3) / 2;
-        int textY3 = startY + 30 + textRenderer.fontHeight + 5;
-        context.drawText(textRenderer, prompt3, textX3, textY3, TEXT_COLOR, false);
-
-        String prompt2 = "Change the series to " + seriesName + "?";
-        int textWidth2 = textRenderer.getWidth(prompt2);
-        int textX2 = startX + (BG_WIDTH - textWidth2) / 2;
-        int textY2 = startY + 40 + (textRenderer.fontHeight + 5)*2;
-        context.drawText(textRenderer, prompt2, textX2, textY2, TEXT_COLOR, false);
-
-        super.render(context, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY) {
+        Text prompt1 = Text.of("WARNING: you have already selected a series.");
+        Text prompt2 = Text.of("Changing it might cause some saved data to be lost (lives, ...).");
+        Text prompt3 = Text.of("Change the series to " + seriesName + "?");
+        RenderUtils.drawTextCenter(context, textRenderer, prompt1, centerX, startY + 15);
+        RenderUtils.drawTextCenter(context, textRenderer, prompt2, centerX, startY + 20 + textRenderer.fontHeight);
+        RenderUtils.drawTextCenter(context, textRenderer, prompt3, centerX, startY + 35 + textRenderer.fontHeight*2);
     }
 }

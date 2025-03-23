@@ -2,9 +2,12 @@ package net.mat0u5.lifeseries.client.render;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.font.TextRenderer;
+
+import java.util.List;
 
 public class RenderUtils {
     public static final int DEFAULT_TEXT_COLOR = 0x3c3c3c;
@@ -25,6 +28,9 @@ public class RenderUtils {
         context.drawTexture(texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height);
         context.getMatrices().pop();
     }
+    public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height) {
+        context.drawTexture(texture, x, y, u, v, width, height);
+    }
     //?} else {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.getMatrices().push();
@@ -32,17 +38,24 @@ public class RenderUtils {
         context.drawTexture(RenderLayer::getGuiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
         context.getMatrices().pop();
     }
+    public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
+        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
     *///?}
 
+    //Center Fixed Text
     public static void drawTextCenter(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
         drawTextCenter(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
     }
+
     public static void drawTextCenterScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
         drawTextCenterScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
     }
+
     public static void drawTextCenter(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
         context.drawText(textRenderer, text, x - textRenderer.getWidth(text)/2, y, textColor, false);
     }
+
     public static void drawTextCenterScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
@@ -50,16 +63,20 @@ public class RenderUtils {
         context.getMatrices().pop();
     }
 
-    
+
+    //Left Fixed Text
     public static void drawTextLeft(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
         drawTextLeft(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
     }
+
     public static void drawTextLeftScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
         drawTextLeftScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
     }
+
     public static void drawTextLeft(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
         context.drawText(textRenderer, text, x, y, textColor, false);
     }
+
     public static void drawTextLeftScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
@@ -67,15 +84,28 @@ public class RenderUtils {
         context.getMatrices().pop();
     }
 
+    public static void drawTextLeftWrapLines(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y, int maxWidth, int gapY) {
+        List<OrderedText> wrappedText = textRenderer.wrapLines(text, maxWidth);
+        int offsetY = 0;
+        for (OrderedText line : wrappedText) {
+            context.drawText(textRenderer, line, x, y + offsetY, textColor, false);
+            offsetY += textRenderer.fontHeight + gapY;
+        }
+    }
+
+    //Right Fixed Text
     public static void drawTextRight(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
         drawTextRight(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
     }
+
     public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
         drawTextRightScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
     }
+
     public static void drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
         context.drawText(textRenderer, text, x - textRenderer.getWidth(text), y, textColor, false);
     }
+
     public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);

@@ -1,10 +1,17 @@
 package net.mat0u5.lifeseries.client;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
+import net.mat0u5.lifeseries.config.UpdateChecker;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
@@ -20,6 +27,26 @@ import net.minecraft.registry.entry.RegistryEntry;
 import java.util.Map;
 
 public class ClientEvents {
+    public static void registerEvents() {
+        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
+        ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
+    }
+
+    private static boolean hasShownUpdateScreen = false;
+    public static void onScreenOpen(MinecraftClient client, Screen screen, int scaledWidth, int scaledHeight) {
+        if (UpdateChecker.updateAvailable) {
+            if (screen instanceof TitleScreen && !hasShownUpdateScreen) {
+                client.execute(() -> {
+                    client.setScreen(new UpdateInfoScreen(UpdateChecker.versionName, UpdateChecker.versionDescription));
+                    hasShownUpdateScreen = true;
+                });
+            }
+        }
+    }
+
+    public static void onClientStart(MinecraftClient client) {
+    }
+
     public static void onClientTickEnd() {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;

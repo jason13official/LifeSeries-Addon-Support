@@ -1,6 +1,5 @@
-package net.mat0u5.lifeseries.client.gui;
+package net.mat0u5.lifeseries.client.gui.other;
 
-import com.sun.jdi.DoubleValue;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;

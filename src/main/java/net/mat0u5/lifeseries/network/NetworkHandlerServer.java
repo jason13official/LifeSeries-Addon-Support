@@ -224,6 +224,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendNumberPacket(ServerPlayerEntity player, String name, double number) {
+        if (player == null) return;
         NumberPayload payload = new NumberPayload(name, number);
         ServerPlayNetworking.send(player, payload);
     }

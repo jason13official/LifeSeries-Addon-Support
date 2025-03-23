@@ -1,20 +1,18 @@
 package net.mat0u5.lifeseries.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientTaskScheduler;
 import net.mat0u5.lifeseries.client.config.ClientsideConfig;
-import net.mat0u5.lifeseries.client.gui.ConfigScreen;
+import net.mat0u5.lifeseries.client.gui.other.ConfigScreen;
 import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
 import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
-import net.mat0u5.lifeseries.client.gui.ChooseWildcardScreen;
+import net.mat0u5.lifeseries.client.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.client.render.VignetteRenderer;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
@@ -23,7 +21,6 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;

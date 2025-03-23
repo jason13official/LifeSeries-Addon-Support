@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.client.gui.series;
 
+import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.lastlife.LastLife;
@@ -10,17 +10,12 @@ import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.mat0u5.lifeseries.series.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class SeriesInfoScreen extends Screen {
-    private static final Identifier BACKGROUND_TEXTURE_LEFT = Identifier.of("lifeseries","textures/gui/trivia_question1.png");
-    private static final Identifier BACKGROUND_TEXTURE_RIGHT = Identifier.of("lifeseries","textures/gui/trivia_question2.png");
-
-    private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
+public class SeriesInfoScreen extends DefaultScreen {
 
     private static final Identifier TEXTURE_THIRDLIFE = Identifier.of("lifeseries","textures/gui/thirdlife.png");
     private static final Identifier TEXTURE_LASTLIFE = Identifier.of("lifeseries","textures/gui/lastlife.png");
@@ -29,15 +24,10 @@ public class SeriesInfoScreen extends Screen {
     private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
     private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
 
-
-
-    private static final int BG_WIDTH = (int)(320 * 1.3f);
-    private static final int BG_HEIGHT = (int)(180 * 1.3f);
-
     public static SeriesList series;
 
     public SeriesInfoScreen(SeriesList series) {
-        super(Text.literal("Series Info Screen"));
+        super(Text.literal("Series Info Screen"), 1.3f, 1.3f);
         this.series = series;
     }
 
@@ -52,40 +42,16 @@ public class SeriesInfoScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {}
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        // X
-        int startX = (this.width - BG_WIDTH) / 2;
-        int endX = startX + BG_WIDTH;
-        int centerX = (startX + endX) / 2;
-
-        int oneFourthX = startX + BG_WIDTH / 4;
-        int threeFourthX = startX + (BG_WIDTH / 4)*3;
-
-        // Y
-        int startY = (this.height - BG_HEIGHT) / 2;
-        int endY = startY + BG_HEIGHT;
-
-
+    public void render(DrawContext context, int mouseX, int mouseY) {
         // Background + images
         //? if <= 1.21 {
-        RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 1.3f, 1.3f);
-        RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 1.3f, 1.3f);
-
         Identifier logo = getSeriesLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 10, 0, 0, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 10, 0, 0, 256, 256, 0.25f, 0.25f);
         }
         //?} else {
-        /*RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256, 1.3f, 1.3f);
-        RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256, 1.3f, 1.3f);
-
-
-        Identifier logo = getSeriesLogo();
+        /*Identifier logo = getSeriesLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
@@ -158,7 +124,5 @@ public class SeriesInfoScreen extends Screen {
         Text sessionStart = Text.of("§8After that, run §3'/session start'§8 to start the session.");
         RenderUtils.drawTextLeft(context, this.textRenderer, sessionStart, startX + 20, currentY);
         currentY += textRenderer.fontHeight + 5;
-
-        super.render(context, mouseX, mouseY, delta);
     }
 }

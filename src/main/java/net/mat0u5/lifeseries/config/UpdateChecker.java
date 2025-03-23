@@ -51,6 +51,11 @@ public class UpdateChecker {
                         Main.LOGGER.info("New version found: "+versionName);
                         updateAvailable = true;
                     }
+                    else {
+                        //TODO remove
+                        Main.LOGGER.info("New version found but lower version");
+                        updateAvailable = true;
+                    }
 
                     versionDescription = json.get("body").getAsString();
 
@@ -71,7 +76,7 @@ public class UpdateChecker {
         if (!updateAvailable || versionName == null) {
             return;
         }
-        if (!VersionControl.isDevVersion()) {
+        if (!VersionControl.isDevVersion() || true) {//TODO
             Text discordText = Text.literal("§7Click ").append(
                     Text.literal("here")
                         .styled(style -> style
@@ -80,7 +85,7 @@ public class UpdateChecker {
                             .withUnderline(true)
                         )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\n"));
             Text updateText =
-                    Text.literal("A new version of the Life Series Mod is available ("+versionName+"). \n")
+                    Text.literal("A new version of the Life Series Mod is available ("+versionName+") §nserver-side§f. \n")
                         .styled(style -> style
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of(
                                 "§7§nUpdate Description:§r\n\n"+versionDescription
