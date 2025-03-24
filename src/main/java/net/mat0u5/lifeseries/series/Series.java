@@ -301,14 +301,14 @@ public abstract class Series extends Session {
         return alivePlayers;
     }
 
-    public boolean getGreenPlayers() {
+    public boolean anyGreenPlayers() {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (isOnSpecificLives(player, 3, false)) return true;
         }
         return false;
     }
 
-    public boolean getYellowPlayers() {
+    public boolean anyYellowPlayers() {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (isOnSpecificLives(player, 2, false)) return true;
         }

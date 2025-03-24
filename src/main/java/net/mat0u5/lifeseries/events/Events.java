@@ -22,6 +22,7 @@ import net.mat0u5.lifeseries.series.secretlife.TaskManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -93,7 +94,7 @@ public class Events {
         try {
             UpdateChecker.onPlayerJoin(player);
             currentSeries.onPlayerFinishJoining(player);
-            NetworkHandlerServer.tryKickFailedHandshake(player);
+            TaskScheduler.scheduleTask(20, () -> NetworkHandlerServer.tryKickFailedHandshake(player));
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
@@ -249,7 +250,7 @@ public class Events {
     public static void playerStartJoining(ServerPlayerEntity player) {
         NetworkHandlerServer.sendHandshake(player);
         NetworkHandlerServer.sendUpdatePacketTo(player);
-        SnailSkinsServer.sendStoredImages(player);
+        SnailSkinsServer.sendStoredImages(List.of(player));
         joiningPlayers.add(player.getUuid());
         joiningPlayersPos.put(player.getUuid(), player.getPos());
         joiningPlayersYaw.put(player.getUuid(), player.getYaw());

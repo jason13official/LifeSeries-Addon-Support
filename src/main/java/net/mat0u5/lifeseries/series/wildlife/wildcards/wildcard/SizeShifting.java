@@ -36,7 +36,7 @@ public class SizeShifting extends Wildcard {
     @Override
     public void tick() {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) return;
+            if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) continue;
             if (player.isSpectator()) continue;
             if (player.isSneaking()) {
                 addPlayerSize(player, -SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
@@ -88,8 +88,8 @@ public class SizeShifting extends Wildcard {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (!isActive || (player.isSpectator() && !currentSeries.isAlive(player))) {
                 double size = getPlayerSize(player);
-                if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) return;
-                if (size == 1) return;
+                if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) continue;
+                if (size == 1) continue;
                 if (size < 0.98) {
                     addPlayerSize(player, 0.01);
                 }

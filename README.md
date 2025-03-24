@@ -15,17 +15,18 @@ This includes automated lives tracking, automated team colors, automated session
 Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want to submit any bugs / give suggestions.
 ## Features
 
-This mod contains every single season of the Life Series, so Third Life, Last Life, Double Life, Limited Life, Secret Life, and even Wild Life!
+This mod contains every single season of the Life Series, so that's Third Life, Last Life, Double Life, Limited Life, Secret Life, and now even Wild Life!
 
-| Third Life | Last Life | Double Life | Limited Life | Secret Life | | Wild Life   |
-|------------|-----------|-------------|--------------|-------------|-|-------------|
-| Completed  | Completed | Completed   | Completed    | Completed | | Completed |
+| Third Life | Last Life | Double Life | Limited Life | Secret Life | | **Wild Life** |
+|------------|-----------|-------------|--------------|-------------|-|---------------|
+| Completed  | Completed | Completed   | Completed    | Completed | | Completed     |
 
 ## Wild Life
+As far as I know, this is the *only* full re-creation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
 To play Wild Life, the mod must be installed on the server **and on the client** - every player needs to have the mod installed in order to play.<br>
 This is because Wild Life contains features which would be impossible to do without client-side modifications.<br>
-As far as I know, this is the *only* full re-creation of Wild Life that exists, and it took a lot of work to make, so enjoy!<br>
-*NOTE: Wild Life modifies core mechanics of the minecraft game, and using other complex mods or modded clients (Lunar Client, etc.), might cause some of the features not to work properly!!*
+**NOTE: Wild Life modifies core mechanics of the minecraft game, and using other complex mods or modded clients (Lunar Client, etc.), might cause some of the features not to work properly!!**<br>
+*It is also worth mentioning that some features in Wild Life will most probably trigger any anti-cheats, so consider disabling those.*
 
 -----
 ## Usage
@@ -34,18 +35,18 @@ After first starting a server with this mod installed, you will need to choose t
 You can do this with the `/lifeseries chooseSeries` command (or with the `/lifeseries setSeries <series>` command, if you don't have the mod installed client-side)<br>
 Don't worry, you don't have to remember all of this, you will be given instructions in chat ;) <br>
 
-
 ### Starting a session
-To start a session, you must first set its length using `/session timer set <time>`. The `<time>` field is a string, which includes the hours, minutes and seconds you want the session to last - example valid values: `30m`,`1h`, `1h45m`, `2h35m20s` <br>
+To start a session, you must first set its length using `/session timer set <time>`. The `<time>` field is a string, which includes the hours, minutes and seconds you want the session to last - example valid values: `30m`,`1h`, `1h45m`, `2h35m20s`,...<br>
 After you set your session time, you can simply run `/session start` to start the session.<br>
 
 ### The Blacklists
-Every session has certain blacklisted items to prevent players from getting to overpowered, just like Grian's series, where some for example banned enchantment tables and similar OP items.<br>
+Every season has certain blacklisted items to prevent players from getting to overpowered, just like Grian's series, where some for example banned enchantment tables and similar OP items.<br>
 Since I am creating this mod mainly for the group of players I am playing with, the Blacklists are catered to how we feel a balanced series should look like.<br>
-For Example most of the series have maces, end crystals, strength pots,... banned.<br>
+For Example most of the seasons have maces, end crystals, strength pots,... banned.<br>
 Blacklisted items are automatically deleted from inventories, and cannot even be crafted.<br>
 A similar feature to the item blacklist is enchantment clamping, which limits specific (mainly combat) enchantments to level 1.<br>
-On series where bookshelves are banned, the enchantment table has been modified a little bit to give all enchantments (because in vanilla its impossible to get some without bookshelves), and its also possible to get higher levels on some enchants directly from the table (like efficiency, unbreaking, fortune,...)
+On series where bookshelves are banned, the enchantment table algorithm has been modified to be able to give all the enchantments (because in vanilla its impossible to get some without bookshelves), and its also possible to get higher levels on some enchants directly from the table without bookshelves (like efficiency, unbreaking, fortune,...)
+All of this is configurable, which brings me to the next point, the **Config**.
 
 ### Config
 - Using `/lifeseries config` while having the Life Series mod installed client-side, along with the Cloth Config mod will open a GUI for you to edit the config from in-game.<br>
@@ -54,8 +55,8 @@ On series where bookshelves are banned, the enchantment table has been modified 
 - Currently, you can modify these (check the config files themselves for more info):
   - Default number of lives, the blacklists, Clamped enchants, spawn egg drop rates, if players drop items when they lose their last life ** and much, much more**.
   - Tasks in Secret Life (`config/lifeseries/secretlife/` folder) - there are three files, where you can modify / add / remove the easy, hard and red tasks.
-  - Snail names and skins in Wild Life.
-  - I can't mention it all, or we'd be here all day long :)
+  - Snail names and skins, trivia timers, size shifting and much more in Wild Life.
+  - I can't mention it all, or we'd be here all day long. You can check the config files yourself to find what is configurable :)
 
 ## Commands & Subcommands
 Unless specified otherwise (using "*No permissions required.*"), all commands can only be used by opped players (permissionLevel >= 2)

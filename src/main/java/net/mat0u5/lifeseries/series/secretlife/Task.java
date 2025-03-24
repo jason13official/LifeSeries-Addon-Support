@@ -22,8 +22,8 @@ public class Task {
     }
 
     public static void checkPlayerColors() {
-        anyGreenPlayers = currentSeries.getGreenPlayers();
-        anyYellowPlayers = currentSeries.getYellowPlayers();
+        anyGreenPlayers = currentSeries.anyGreenPlayers();
+        anyYellowPlayers = currentSeries.anyYellowPlayers();
     }
 
     public boolean isValid() {

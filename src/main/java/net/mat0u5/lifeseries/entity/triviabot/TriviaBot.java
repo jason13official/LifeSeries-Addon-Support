@@ -771,7 +771,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public static final List<UUID> cursedGigantificationPlayers = new ArrayList<>();
     public void curseGigantification(ServerPlayerEntity player) {
         cursedGigantificationPlayers.add(player.getUuid());
-        SizeShifting.setPlayerSizeUnchecked(player, 5);
+        SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
 
     public void curseSlipperyGround(ServerPlayerEntity player) {

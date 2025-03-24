@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -258,7 +259,7 @@ public class Blacklist {
         for (int i = 0; i < inventory.size(); i++) {
             processItemStack(player, inventory.getStack(i));
         }
-        PlayerUtils.updatePlayerInventory(player);
+        TaskScheduler.scheduleTask(1, () -> PlayerUtils.updatePlayerInventory(player));
     }
 
     public boolean isBlacklistedItemSimple(ItemStack itemStack) {

@@ -207,7 +207,6 @@ public class Hunger extends Wildcard {
         }
 
         PlayerUtils.updatePlayerInventory(player);
-        player.playerScreenHandler.onContentChanged(inventory);
     }
 
     public static void addHunger(ServerPlayerEntity player) {
@@ -222,10 +221,13 @@ public class Hunger extends Wildcard {
         }
     }
 
+    public static final List<Item> bannedFoodItems = List.of(
+            Items.AIR, Items.ENDER_PEARL, Items.WIND_CHARGE
+    );
     //? if <=1.21 {
     public static void applyFoodComponents(Item item, ComponentMapImpl components) {
         if (item == null) return;
-        if (item.equals(Items.AIR)) return;
+        if (bannedFoodItems.contains(item)) return;
         if (components.contains(DataComponentTypes.FOOD)) {
             StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
             FoodComponent.StatusEffectEntry statusEffect = new FoodComponent.StatusEffectEntry(statusEffectInstance, 1);
@@ -262,6 +264,8 @@ public class Hunger extends Wildcard {
     }
     //?} else {
     /*public static void applyFoodComponents(Item item, MergedComponentMap components) {
+        if (item == null) return;
+        if (bannedFoodItems.contains(item)) return;
         if (components.contains(DataComponentTypes.CONSUMABLE)) {
             StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
             ApplyEffectsConsumeEffect statusEffect = new ApplyEffectsConsumeEffect(statusEffectInstance, 1);

@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.config.UpdateChecker;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -52,18 +53,21 @@ public class ClientEvents {
     }
 
     public static void onClientTickEnd() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
+        try {
+            MinecraftClient client = MinecraftClient.getInstance();
+            ClientPlayerEntity player = client.player;
 
-        spawnInvisibilityParticles(client);
-        if (player != null) {
-            sendPackets(player);
-            tryTripleJump(player);
-            checkSnailInvisible(client, player);
-            checkTriviaSnailInvisible(client, player);
-        }
-        ClientKeybinds.tick();
-        ClientTaskScheduler.onClientTick();
+            checkResourcepackReload();
+            spawnInvisibilityParticles(client);
+            if (player != null) {
+                sendPackets(player);
+                tryTripleJump(player);
+                checkSnailInvisible(client, player);
+                checkTriviaSnailInvisible(client, player);
+            }
+            ClientKeybinds.tick();
+            ClientTaskScheduler.onClientTick();
+        }catch(Exception ignored) {}
     }
 
     public static void spawnInvisibilityParticles(MinecraftClient client) {
@@ -206,6 +210,14 @@ public class ClientEvents {
         }
         else {
             invisibleTriviaSnailFor = 0;
+        }
+    }
+
+    public static void checkResourcepackReload() {
+        if (SnailSkinsClient.skinReloadTicks <= 0) return;
+        SnailSkinsClient.skinReloadTicks--;
+        if (SnailSkinsClient.skinReloadTicks == 0) {
+            ClientResourcePacks.enableClientResourcePack(ClientResourcePacks.SNAILS_RESOURCEPACK, true);
         }
     }
 }

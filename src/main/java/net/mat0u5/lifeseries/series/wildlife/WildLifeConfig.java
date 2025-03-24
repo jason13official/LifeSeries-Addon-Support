@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.series.wildlife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
@@ -93,6 +94,11 @@ public class WildLifeConfig extends ConfigManager {
         getOrCreateProperty("blacklist_items","["+String.join(", ", BLACKLISTED_ITEMS)+"]");
         getOrCreateProperty("blacklist_blocks","["+String.join(", ", BLACKLISTED_BLOCKS)+"]");
         getOrCreateProperty("blacklist_clamped_enchants","["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]");
+
+
+        new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
+        new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");
+        new TriviaQuestionManager("./config/lifeseries/wildlife","hard-trivia.json");
     }
 
     @Override

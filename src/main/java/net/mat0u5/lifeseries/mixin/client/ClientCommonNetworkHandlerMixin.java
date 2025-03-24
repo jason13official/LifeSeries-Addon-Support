@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ClientCommonNetworkHandlerMixin {
     @Unique
     private static final List<String> bannedURLs = List.of(
-            ""
+            "github.com/Mat0u5/LifeSeries-Resources"
     );
 
     @Shadow

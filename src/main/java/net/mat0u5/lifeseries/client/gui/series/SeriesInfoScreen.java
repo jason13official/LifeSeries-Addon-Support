@@ -47,8 +47,8 @@ public class SeriesInfoScreen extends DefaultScreen {
         //? if <= 1.21 {
         Identifier logo = getSeriesLogo();
         if (logo != null) {
-            RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 10, 0, 0, 256, 256, 0.25f, 0.25f);
-            RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 10, 0, 0, 256, 256, 0.25f, 0.25f);
+            RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
+            RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
         }
         //?} else {
         /*Identifier logo = getSeriesLogo();
@@ -64,7 +64,7 @@ public class SeriesInfoScreen extends DefaultScreen {
         RenderUtils.drawTextCenterScaled(context, this.textRenderer, Text.of("§0"+seriesName), centerX, startY + 10, 1.5f, 1.5f);
         context.getMatrices().pop();
 
-        int currentY = startY + 50;
+        int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
         MutableText adminCommandsTextActual = null;
         if (series == SeriesList.THIRD_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
@@ -83,7 +83,7 @@ public class SeriesInfoScreen extends DefaultScreen {
                 RenderUtils.drawTextLeft(context, this.textRenderer, adminCommandsText, startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 5;
                 RenderUtils.drawTextLeft(context, this.textRenderer, Text.literal("  ").append(adminCommandsTextActual), startX + 20, currentY);
-                currentY += textRenderer.fontHeight + 10;
+                currentY += textRenderer.fontHeight + 8;
             }
         }
 
@@ -99,13 +99,13 @@ public class SeriesInfoScreen extends DefaultScreen {
             MutableText combined = commandsText.copy().append(commandsTextActual);
             if (textRenderer.getWidth(combined) < (endX - startX)) {
                 RenderUtils.drawTextLeft(context, this.textRenderer, combined, startX + 20, currentY);
-                currentY += textRenderer.fontHeight + 15;
+                currentY += textRenderer.fontHeight + 10;
             }
             else {
                 RenderUtils.drawTextLeft(context, this.textRenderer, commandsText, startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 5;
                 RenderUtils.drawTextLeft(context, this.textRenderer, Text.literal("  ").append(commandsTextActual), startX + 20, currentY);
-                currentY += textRenderer.fontHeight + 5;
+                currentY += textRenderer.fontHeight + 10;
             }
         }
 
@@ -123,6 +123,10 @@ public class SeriesInfoScreen extends DefaultScreen {
 
         Text sessionStart = Text.of("§8After that, run §3'/session start'§8 to start the session.");
         RenderUtils.drawTextLeft(context, this.textRenderer, sessionStart, startX + 20, currentY);
+        currentY += textRenderer.fontHeight + 15;
+
+        Text configText = Text.of("§0§nRun §8§n'/lifeseries config'§0§n to open the Life Series configuration!");
+        RenderUtils.drawTextLeft(context, this.textRenderer, configText, startX + 20, currentY);
         currentY += textRenderer.fontHeight + 5;
     }
 }

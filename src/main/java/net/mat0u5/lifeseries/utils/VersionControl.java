@@ -10,7 +10,7 @@ public class VersionControl {
 
     public static int getModVersionInt(String string) {
         if (string.startsWith("v.")) {
-            string = string.replaceFirst("v\\.","");
+            string = string.substring(2);
         }
         string = string.replaceAll("^\\D+", "");
 
@@ -26,11 +26,11 @@ public class VersionControl {
 
     public static String clientCmpatibilityMin() {
         //This is the version that the SERVER needs to have for the current client.
-        return "dev-1.2.2.100";
+        return "1.3.0";
     }
 
     public static String serverCompatibilityMin() {
         //This is the version that the CLIENT needs to have for the current server.
-        return "dev-1.2.2.100";
+        return "1.3.0";
     }
 }
