@@ -129,7 +129,7 @@ This command **always** available
 </details>
 
 <details open>
-<summary>/wildcard</summary>
+<summary>/superpower</summary>
 
 *This command is only available when playing Wild Life.*
 - `/superpower resetAll` - Resets all superpowers.

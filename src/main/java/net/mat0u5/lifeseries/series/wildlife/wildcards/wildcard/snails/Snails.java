@@ -11,11 +11,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Snails extends Wildcard {
     public static StringListConfig snailNameConfig;
@@ -36,6 +36,9 @@ public class Snails extends Wildcard {
             spawnSnailFor(player);
         }
         loadSnailNames();
+        if (!currentSession.statusStarted()) {
+            OtherUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/snail ...'§7 command to modify snail names and to get info on how to change snail textures."));
+        }
         super.activate();
     }
 

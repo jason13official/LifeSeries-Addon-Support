@@ -23,6 +23,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.*;
@@ -673,6 +674,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public boolean canPathToPlayerFromGround(boolean flying) {
         if (groundPathFinder == null) return false;
         return groundPathFinder.canPathfind(getBoundPlayer(), flying);
+    }
+
+    public boolean isValidBlockOnGround() {
+        if (groundPathFinder == null) return false;
+        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.LAVA)) return false;
+        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.WATER)) return false;
+        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.POWDER_SNOW)) return false;
+        return true;
     }
 
     public void updateNavigation() {

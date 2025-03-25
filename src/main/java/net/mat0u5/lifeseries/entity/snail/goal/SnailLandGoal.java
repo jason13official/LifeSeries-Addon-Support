@@ -41,6 +41,11 @@ public final class SnailLandGoal extends Goal {
         if (!isMobAboveTarget) {
             return false;
         }
+
+        if (!mob.isValidBlockOnGround()) {
+            return false;
+        }
+
         return mob.canPathToPlayerFromGround(false);
     }
 

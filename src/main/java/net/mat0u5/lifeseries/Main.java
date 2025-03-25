@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "1.3.0";
+	public static final String MOD_VERSION = "1.3.1";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -137,6 +137,7 @@ public class Main implements ModInitializer {
 		currentSeries.reload();
 		NetworkHandlerServer.sendUpdatePackets();
 		SnailSkinsServer.sendStoredImages();
+		PlayerUtils.resendCommandTrees();
 	}
 
 	public static boolean changeSeriesTo(String changeTo) {

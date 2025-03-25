@@ -20,6 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 
 import java.io.IOException;
 import java.util.*;
@@ -81,6 +82,9 @@ public class TriviaWildcard extends Wildcard {
         TriviaBot.cursedGigantificationPlayers.clear();
         TriviaBot.cursedHeartPlayers.clear();
         TriviaBot.cursedMoonJumpPlayers.clear();
+        if (!currentSession.statusStarted()) {
+            OtherUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
+        }
         super.activate();
     }
 

@@ -14,11 +14,9 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.common.ResourcePackRemoveS2CPacket;
 import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlaySoundFromEntityS2CPacket;
-import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -219,5 +217,16 @@ public class PlayerUtils {
         player.playerScreenHandler.syncState();
         player.getInventory().updateItems();
         player.currentScreenHandler.sendContentUpdates();
+    }
+
+    public static void resendCommandTree(ServerPlayerEntity player) {
+        if (player == null) return;
+        if (player.getServer() == null) return;
+        player.getServer().getCommandManager().sendCommandTree(player);
+    }
+    public static void resendCommandTrees() {
+        for (ServerPlayerEntity player : getAllPlayers()) {
+            resendCommandTree(player);
+        }
     }
 }

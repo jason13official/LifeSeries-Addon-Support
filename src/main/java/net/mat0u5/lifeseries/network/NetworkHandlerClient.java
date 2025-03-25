@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientTaskScheduler;
 import net.mat0u5.lifeseries.client.config.ClientsideConfig;
 import net.mat0u5.lifeseries.client.gui.other.ConfigScreen;
+import net.mat0u5.lifeseries.client.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
 import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
@@ -159,6 +160,9 @@ public class NetworkHandlerClient {
                 MainClient.triviaSnailPos = pos;
                 MainClient.triviaSnailPosTime = System.currentTimeMillis();
             }catch(Exception e) {}
+        }
+        if (name.equalsIgnoreCase("snail_textures_info") && Main.isClient()) {
+            MinecraftClient.getInstance().setScreen(new SnailTextureInfoScreen());
         }
     }
 

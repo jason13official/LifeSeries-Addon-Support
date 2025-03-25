@@ -84,13 +84,14 @@ public class RenderUtils {
         context.getMatrices().pop();
     }
 
-    public static void drawTextLeftWrapLines(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y, int maxWidth, int gapY) {
+    public static int drawTextLeftWrapLines(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y, int maxWidth, int gapY) {
         List<OrderedText> wrappedText = textRenderer.wrapLines(text, maxWidth);
         int offsetY = 0;
         for (OrderedText line : wrappedText) {
             context.drawText(textRenderer, line, x, y + offsetY, textColor, false);
             offsetY += textRenderer.fontHeight + gapY;
         }
+        return offsetY;
     }
 
     //Right Fixed Text

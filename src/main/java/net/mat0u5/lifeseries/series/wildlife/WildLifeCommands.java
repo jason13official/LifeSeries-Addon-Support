@@ -164,14 +164,10 @@ public class WildLifeCommands {
 
     public static int getSnailTexturesInfo(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) return -1;
 
-        source.sendMessage(Text.of("To create your custom snail textures, you must first open the snail model (§7./config/lifeseries/wildlife/snailskins/snail.bbmodel§f) in Blockbench."));
-        source.sendMessage(Text.of("After that, you should hide the parachute and propeller layers, as they just get in the way and should not be edited anyways."));
-        source.sendMessage(Text.of("Then, after you edit the skin however you wish, export it, and put it in the folder (§7./config/lifeseries/wildlife/snailskins/§f). Then reload, and it should be finished"));
-        TaskScheduler.scheduleTask(80, () -> {
-            source.sendMessage(Text.of("This is a pretty complicated process and it requires Blockbench knowledge. If you have any questions, join the discord or google it."));
-        });
-
+        NetworkHandlerServer.sendStringPacket(player, "snail_textures_info" ,"");
 
         return 1;
     }

@@ -94,7 +94,10 @@ public class Events {
         try {
             UpdateChecker.onPlayerJoin(player);
             currentSeries.onPlayerFinishJoining(player);
-            TaskScheduler.scheduleTask(20, () -> NetworkHandlerServer.tryKickFailedHandshake(player));
+            TaskScheduler.scheduleTask(20, () -> {
+                NetworkHandlerServer.tryKickFailedHandshake(player);
+                PlayerUtils.resendCommandTree(player);
+            });
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

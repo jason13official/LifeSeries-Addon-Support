@@ -29,6 +29,7 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
         setInvulnerable(true);
         setNoGravity(true);
         setPersistent();
+        setInvisible(true);
         noClip = true;
     }
 
@@ -91,5 +92,10 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
 
     public void resetDespawnTimer() {
         despawnTimer = 0;
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
     }
 }
