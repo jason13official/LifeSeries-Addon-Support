@@ -286,6 +286,7 @@ public class LimitedLife extends Series {
 
     @Override
     public void reload() {
+        super.reload();
         DEFAULT_TIME = seriesConfig.getOrCreateInt("time_default", 86400);
         YELLOW_TIME = seriesConfig.getOrCreateInt("time_yellow", 57600);
         RED_TIME = seriesConfig.getOrCreateInt("time_red", 28800);

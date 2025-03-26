@@ -1,11 +1,14 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.client.ClientUtils;
 import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
 import net.minecraft.enchantment.effect.entity.ReplaceDiskEnchantmentEffect;
@@ -98,4 +101,14 @@ public abstract class PlayerEntityMixin {
             frostWalker.apply(player.getServerWorld(), 5, null, player, player.getPos());
         }
     }
+
+    //? if >= 1.21.2 {
+    /*@Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)
+    protected void canGlide(CallbackInfoReturnable<Boolean> cir) {
+        if (!Main.isClient()) return;
+        if (ClientUtils.shouldPreventGliding()) {
+            cir.setReturnValue(false);
+        }
+    }
+    *///?}
 }

@@ -14,7 +14,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.*;
 
@@ -38,6 +37,8 @@ public class MainClient implements ClientModInitializer {
     public static BlockPos triviaSnailPos = null;
     public static long triviaSnailPosTime = 0;
     public static int snailAir = 300;
+    public static boolean preventGliding = false;
+    public static int mutedForTicks = 0;
 
     @Override
     public void onInitializeClient() {

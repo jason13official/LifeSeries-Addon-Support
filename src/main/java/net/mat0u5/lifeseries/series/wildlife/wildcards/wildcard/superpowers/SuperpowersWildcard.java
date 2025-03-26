@@ -16,6 +16,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class SuperpowersWildcard extends Wildcard {
     private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
+    public static final Map<UUID, Superpowers> assignedSuperpowers = new HashMap<>();
 
     @Override
     public Wildcards getType() {
@@ -56,6 +57,10 @@ public class SuperpowersWildcard extends Wildcard {
         Collections.shuffle(allPlayers);
         for (ServerPlayerEntity player : allPlayers) {
             Superpowers power = implemented.get(pos%implemented.size());
+            if (assignedSuperpowers.containsKey(player.getUuid())) {
+                power = assignedSuperpowers.get(player.getUuid());
+                assignedSuperpowers.remove(player.getUuid());
+            }
             Superpower instance = Superpowers.getInstance(player, power);
             if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
             pos++;

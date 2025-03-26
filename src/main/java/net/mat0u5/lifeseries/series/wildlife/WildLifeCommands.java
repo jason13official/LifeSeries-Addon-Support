@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -142,6 +143,17 @@ public class WildLifeCommands {
                         .executes(context -> getSuperpower(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
                     )
                 )
+                .then(literal("skipCooldown")
+                    .executes(context -> skipSuperpowerCooldown(context.getSource()))
+                )
+                .then(literal("assignForRandomization")
+                    .then(argument("player", EntityArgumentType.player())
+                        .then(argument("superpower", StringArgumentType.string())
+                            .suggests((context, builder) -> CommandSource.suggestMatching(Superpowers.getImplementedStr(), builder))
+                            .executes(context -> assignSuperpower(context.getSource(), EntityArgumentType.getPlayer(context, "player"), StringArgumentType.getString(context, "superpower")))
+                        )
+                    )
+                )
         );
     }
 
@@ -204,6 +216,37 @@ public class WildLifeCommands {
         List<String> allWildcards = Wildcards.getInactiveWildcardsStr();
         allWildcards.add("*");
         return allWildcards;
+    }
+
+    public static int assignSuperpower(ServerCommandSource source, ServerPlayerEntity player, String name) {
+        if (checkBanned(source)) return -1;
+        if (!Superpowers.getImplementedStr().contains(name)) {
+            source.sendError(Text.of("That superpower doesn't exist."));
+            return -1;
+        }
+        Superpowers superpower = Superpowers.fromString(name);
+        if (superpower == Superpowers.NONE) {
+            source.sendError(Text.of("That superpower doesn't exist."));
+            return -1;
+        }
+        SuperpowersWildcard.assignedSuperpowers.put(player.getUuid(), superpower);
+        source.sendMessage(Text.of("§7Forced " + player.getNameForScoreboard()+"'s superpower to be §f" + name + "§7 when the next superpower randomization happens."));
+        return 1;
+    }
+
+    public static int skipSuperpowerCooldown(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        ServerPlayerEntity player = source.getPlayer();
+        if (player == null) return -1;
+        Superpower superpower = SuperpowersWildcard.getSuperpowerInstance(player);
+        if (superpower == null) {
+            source.sendError(Text.of("You do not have an active superpower."));
+            return -1;
+        }
+        superpower.cooldown = 0;
+        NetworkHandlerServer.sendLongPacket(player, "superpower_cooldown", 0);
+        source.sendMessage(Text.of("§7Your superpower cooldown has been skipped."));
+        return 1;
     }
 
     public static int setRandomSuperpowers(ServerCommandSource source) {

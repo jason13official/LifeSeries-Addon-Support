@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -18,24 +19,33 @@ import java.util.List;
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessage(String message, CallbackInfo ci) {
-        if (!Trivia.isDoingTrivia()) return;
-
-        if (MinecraftClient.getInstance().player != null) {
+        if (MinecraftClient.getInstance().player == null) return;
+        if (Trivia.isDoingTrivia()) {
             //? if <= 1.21 {
             MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
             //?} else {
             /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
              *///?}
+            ci.cancel();
+            return;
         }
-        ci.cancel();
+        if (MainClient.mutedForTicks > 0) {
+            //? if <= 1.21 {
+            MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."));
+             //?} else {
+            /*MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."), false);
+            *///?}
+            ci.cancel();
+            return;
+        }
     }
 
     @Unique
     private static final List<String> notAllowedCommand = List.of("msg", "tell", "whisper", "w", "me");
     @Inject(method = "sendChatCommand", at = @At("HEAD"), cancellable = true)
     private void onSendChatCommand(String command, CallbackInfo ci) {
-        if (!Trivia.isDoingTrivia()) return;
         if (MinecraftClient.getInstance().player == null) return;
+        if (!Trivia.isDoingTrivia()) return;
         for (String s : notAllowedCommand) {
             if (command.startsWith(s+" ")) {
                 //? if <= 1.21 {

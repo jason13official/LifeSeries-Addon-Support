@@ -41,6 +41,7 @@ public abstract class ConfigManager {
         getOrCreateBoolean("players_drop_items_on_last_death", false);
         getOrCreateBoolean("show_death_title_on_last_death", true);
         getOrCreateProperty("blacklist_banned_enchants","[]");
+        getOrCreateBoolean("mute_dead_players", false);
     }
 
     public static void moveOldMainFileIfExists() {

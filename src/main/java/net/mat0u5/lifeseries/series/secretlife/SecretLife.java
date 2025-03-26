@@ -66,6 +66,7 @@ public class SecretLife extends Series {
 
     @Override
     public void reload() {
+        super.reload();
         MAX_HEALTH = seriesConfig.getOrCreateDouble("max_player_health", 60.0d);
         TaskManager.EASY_SUCCESS = seriesConfig.getOrCreateInt("task_health_easy_pass", 20);
         TaskManager.EASY_FAIL = seriesConfig.getOrCreateInt("task_health_easy_fail", 0);

@@ -142,6 +142,7 @@ public class WildLife extends Series {
 
     @Override
     public void reload() {
+        super.reload();
         Hunger.SWITCH_DELAY = seriesConfig.getOrCreateInt("wildcard_hunger_randomize_interval", 36000);
 
         SizeShifting.MIN_SIZE = seriesConfig.getOrCreateDouble("wildcard_sizeshifting_min_size", 0.25);
@@ -228,11 +229,11 @@ public class WildLife extends Series {
 
     @Override
     public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.getType().msgId().equalsIgnoreCase("fall")) {
+        if (source.getType() == player.getDamageSources().fall().getType()) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
-                    if (power.cancelNextFallDamage) {
-                        power.cancelNextFallDamage = false;
+                    if (power.isLaunchedUp) {
+                        power.isLaunchedUp = false;
                         cir.setReturnValue(false);
                         return;
                     }

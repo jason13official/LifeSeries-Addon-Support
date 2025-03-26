@@ -104,6 +104,6 @@ public class ThirdLifeConfig extends ConfigManager {
 
         NetworkHandlerServer.sendConfig(player, "boolean", "auto_keep_inventory", 14, "Auto Keep Inventory", "Decides whether the keepInventory gamerule should be automatically turned on when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_keep_inventory", true)), "true"));
         NetworkHandlerServer.sendConfig(player, "boolean", "auto_set_worldborder", 15, "Auto Set Worldborder", "Decides whether the world border should be shrunk when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_set_worldborder", true)), "true"));
-
+        NetworkHandlerServer.sendConfig(player, "boolean", "mute_dead_players", 16, "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not.", List.of(String.valueOf(getOrCreateBoolean("mute_dead_players", false)), "false"));
     }
 }

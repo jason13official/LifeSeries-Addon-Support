@@ -5,10 +5,7 @@ package net.mat0u5.lifeseries.events;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DatapackManager;
@@ -20,6 +17,7 @@ import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.mat0u5.lifeseries.series.secretlife.TaskManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -27,6 +25,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -62,6 +62,9 @@ public class Events {
             return Events.onBlockAttack((ServerPlayerEntity) player, world, pos);
         });
         UseBlockCallback.EVENT.register(Events::onBlockUse);
+        //? if >= 1.21.2 {
+        /*UseItemCallback.EVENT.register(Events::onItemUse);
+        *///?}
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> onPlayerJoin(handler.getPlayer()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> onPlayerDisconnect(handler.getPlayer()));
         ServerTickEvents.END_SERVER_TICK.register(Events::onServerTickEnd);
@@ -194,6 +197,25 @@ public class Events {
                 }
                 if (blacklist == null) return ActionResult.PASS;
                 return blacklist.onBlockUse(serverPlayer,serverWorld,hand,hitResult);
+            } catch(Exception e) {
+                Main.LOGGER.error(e.getMessage());
+                return ActionResult.PASS;
+            }
+        }
+        return ActionResult.PASS;
+    }
+
+    public static ActionResult onItemUse(PlayerEntity player, World world, Hand hand) {
+        if (isFakePlayer(player)) return ActionResult.PASS;
+
+        if (player instanceof ServerPlayerEntity serverPlayer &&
+                world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
+            try {
+                ItemStack itemStack = player.getStackInHand(hand);
+                if (ItemStackUtils.hasCustomComponentEntry(serverPlayer.getInventory().getArmorStack(3), "FlightSuperpower") &&
+                        itemStack.isOf(Items.FIREWORK_ROCKET)) {
+                    return ActionResult.FAIL;
+                }
             } catch(Exception e) {
                 Main.LOGGER.error(e.getMessage());
                 return ActionResult.PASS;

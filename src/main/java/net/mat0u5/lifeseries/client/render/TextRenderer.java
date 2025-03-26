@@ -104,7 +104,9 @@ public class TextRenderer {
         long millisLeft = MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP - currentMillis;
         if (millisLeft > 10000000) return 0;
 
-        boolean keyPressed = (System.currentTimeMillis() - lastPressed) < 500;
+        long pressedAgo = System.currentTimeMillis() - lastPressed;
+        boolean keyPressed = pressedAgo < 500;
+        if (pressedAgo > 6000) return 0;
 
         Text timerText = Text.of((keyPressed?"§c§n":"§7")+"Superpower cooldown:§f "+OtherUtils.formatTimeMillis(millisLeft));
 

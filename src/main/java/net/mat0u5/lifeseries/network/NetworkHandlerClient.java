@@ -164,6 +164,9 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("snail_textures_info") && Main.isClient()) {
             MinecraftClient.getInstance().setScreen(new SnailTextureInfoScreen());
         }
+        if (name.equalsIgnoreCase("prevent_gliding") && Main.isClient()) {
+            MainClient.preventGliding = value.equalsIgnoreCase("true");
+        }
     }
 
     public static void handleNumberPacket(String name, double number) {
@@ -181,6 +184,9 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("fake_thunder") && MinecraftClient.getInstance().world != null) {
             MinecraftClient.getInstance().world.setLightningTicksLeft(intNumber);
+        }
+        if (name.equalsIgnoreCase("mute")) {
+            MainClient.mutedForTicks = intNumber;
         }
     }
 

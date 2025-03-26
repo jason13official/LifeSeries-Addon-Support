@@ -109,6 +109,7 @@ public class LastLife extends Series {
 
     @Override
     public void reload() {
+        super.reload();
         ROLL_MIN_LIVES = seriesConfig.getOrCreateInt("random_lives_min", 2);
         ROLL_MAX_LIVES = seriesConfig.getOrCreateInt("random_lives_max", 6);
         GIVELIFE_MAX_LIVES = seriesConfig.getOrCreateInt("givelife_lives_max", 99);

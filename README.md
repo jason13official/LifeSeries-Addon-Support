@@ -132,10 +132,12 @@ This command **always** available
 <summary>/superpower</summary>
 
 *This command is only available when playing Wild Life.*
+- `/superpower set <player> <power>` - Sets `<player>`'s superpower to `<power>`.
+- `/superpower get <player>` - Shows you `<player>`'s superpower.
 - `/superpower resetAll` - Resets all superpowers.
 - `/superpower setRandom` - Assigns a random superpower to all online players.
-- `/superpower get <player>` - Shows you `<player>`'s superpower.
-- `/superpower set <player> <power>` - Sets `<player>`'s superpower to `<power>`.
+- `/superpower resetCooldown` - Resets your superpower cooldown.
+- `/superpower assignForRandomization <player> <power>` - Forces `<player>`'s superpower to be `<power>` when the next superpower randomization happens.
 </details>
 
 <details open>

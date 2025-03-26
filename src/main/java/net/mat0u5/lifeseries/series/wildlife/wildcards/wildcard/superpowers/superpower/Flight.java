@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
 import net.minecraft.component.type.UnbreakableComponent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -18,18 +19,19 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 
 import java.util.Optional;
 
 public class Flight extends Superpower {
-    public boolean cancelNextFallDamage = false;
+    public boolean isLaunchedUp = false;
     private int onGroundTicks = 0;
+    private long ticks = 0;
 
     public Flight(ServerPlayerEntity player) {
         super(player);
-        giveHelmet();
     }
 
     @Override
@@ -44,18 +46,30 @@ public class Flight extends Superpower {
 
     @Override
     public void tick() {
-        if (!cancelNextFallDamage) return;
+        ticks++;
         ServerPlayerEntity player = getPlayer();
-        if (player == null) return;
+        if (player == null) {
+            onGroundTicks = 0;
+            return;
+        }
+        if (!isLaunchedUp) {
+            onGroundTicks = 0;
+            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "true");
+            return;
+        }
+
         if (player.isOnGround()) {
             onGroundTicks++;
+            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "true");
         }
+
         else {
             onGroundTicks = 0;
         }
 
-        if (onGroundTicks >= 5) {
-            cancelNextFallDamage = false;
+        if (onGroundTicks >= 10) {
+            isLaunchedUp = false;
+            onGroundTicks = 0;
         }
     }
 
@@ -73,8 +87,8 @@ public class Flight extends Superpower {
         player.addStatusEffect(effect);
         NetworkHandlerServer.sendStringPacket(player, "jump", "");
 
-
-        cancelNextFallDamage = true;
+        isLaunchedUp = true;
+        NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "false");
     }
 
     @Override
@@ -83,6 +97,7 @@ public class Flight extends Superpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         TaskScheduler.scheduleTask(1, () -> player.getInventory().markDirty());
+        NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "false");
     }
 
     private void giveHelmet() {
@@ -93,8 +108,14 @@ public class Flight extends Superpower {
             ItemStack helmet = new ItemStack(Items.IRON_NUGGET);
             helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
             helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
-            helmet.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
+            ItemEnchantmentsComponent enchantmentsComponent = helmet.get(DataComponentTypes.ENCHANTMENTS);
+            if (enchantmentsComponent != null) {
+                helmet.set(DataComponentTypes.ENCHANTMENTS, enchantmentsComponent.withShowInTooltip(false));
+            }
+            helmet.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(false));
             helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
+            helmet.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+            helmet.set(DataComponentTypes.ITEM_NAME, Text.of("Winged Helmet"));
             //? if >= 1.21.2 {
             /*helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
             helmet.set(DataComponentTypes.GLIDER, Unit.INSTANCE);

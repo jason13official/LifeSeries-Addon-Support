@@ -70,7 +70,9 @@ public abstract class Series extends Session {
         }
     }
 
-    public void reload() {}
+    public void reload() {
+        Session.MUTE_DEAD_PLAYERS = seriesConfig.getOrCreateBoolean("mute_dead_players", false);
+    }
 
     public void createTeams() {
         Collection<Team> allTeams = TeamUtils.getAllTeams();

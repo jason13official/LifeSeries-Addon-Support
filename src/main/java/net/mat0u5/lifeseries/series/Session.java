@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.series;
 
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.WorldUitls;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -14,12 +16,15 @@ import net.minecraft.world.border.WorldBorder;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.Main.currentSeries;
+
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
     public List<SessionAction> activeActions = new ArrayList<>();
     public List<UUID> displayTimer = new ArrayList<>();
     public static final int NATURAL_DEATH_LOG_MAX = 2400;
     public static final int DISPLAY_TIMER_INTERVAL = 5;
+    public static boolean MUTE_DEAD_PLAYERS = false;
     public int currentTimer = 5;
 
     public Integer sessionLength = null;
@@ -143,6 +148,13 @@ public class Session {
         if (currentTimer <=0) {
             currentTimer = DISPLAY_TIMER_INTERVAL;
             displayTimers(server);
+            if (MUTE_DEAD_PLAYERS) {
+                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                    if (currentSeries.isAlive(player)) continue;
+                    if (PermissionManager.isAdmin(player)) continue;
+                    NetworkHandlerServer.sendNumberPacket(player, "mute", 50);
+                }
+            }
         }
 
         if (playerNaturalDeathLog != null && !playerNaturalDeathLog.isEmpty()) {
