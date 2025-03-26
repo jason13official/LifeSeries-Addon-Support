@@ -23,12 +23,11 @@ public class EnchantmentHelperMixin {
         if (!(victimEntity instanceof ServerPlayerEntity victim)) return;
         if (damageSource == null) return;
         if (damageSource.getAttacker() == null) return;
-        if (!(damageSource.getAttacker() instanceof ServerPlayerEntity attacker)) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        attacker.damage(victim.getDamageSources().thorns(victim), 1F);
+        damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
         //?} else {
-        /*attacker.damage(victim.getServerWorld(), victim.getDamageSources().thorns(victim), 1F);
+        /*damageSource.getAttacker().damage(victim.getServerWorld(), victim.getDamageSources().thorns(victim), 1F);
         *///?}
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -44,6 +45,12 @@ public class Necromancy extends Superpower {
     public void activate() {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
+
+        if (getDeadPlayers().isEmpty()) {
+            PlayerUtils.displayMessageToPlayer(player, Text.of("There are no dead players."), 80);
+            return;
+        }
+
         player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_EMERGE, SoundCategory.MASTER, 1, 1);
 
         List<ServerPlayerEntity> affectedPlayers = player.getServerWorld().getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
@@ -121,6 +128,7 @@ public class Necromancy extends Superpower {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (currentSeries.isAlive(player)) continue;
+            if (!player.isSpectator()) continue;
             deadPlayers.add(player);
         }
         return deadPlayers;

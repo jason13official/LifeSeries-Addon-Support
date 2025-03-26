@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.DummyInterface;
@@ -56,17 +57,24 @@ public abstract class LivingEntityMixin implements DummyInterface {
      //?} else
     /*public void damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {*/
         if (!Main.isLogicalSide()) return;
+
+        LivingEntity entity = (LivingEntity) (Object) this;
+        //? if >= 1.21.2 {
+        /*if (entity instanceof CreakingEntity creaking) {
+            creaking.hurtTime = 20;
+        }
+        *///?}
+
         ItemStack weapon = source.getWeaponStack();
-        if (amount <= 2) return;
+        if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
         if (weapon == null) return;
         if (weapon.isEmpty()) return;
         if (!weapon.isOf(Items.MACE)) return;
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
-        LivingEntity entity = (LivingEntity) (Object) this;
         //? if <= 1.21 {
-        cir.setReturnValue(entity.damage(source, 2));
+        cir.setReturnValue(entity.damage(source, WindCharge.MAX_MACE_DAMAGE));
          //?} else
-        /*cir.setReturnValue(entity.damage(world, source, 2));*/
+        /*cir.setReturnValue(entity.damage(world, source, WindCharge.MAX_MACE_DAMAGE));*/
     }
 
     //? if = 1.21.2 {
@@ -137,7 +145,7 @@ public abstract class LivingEntityMixin implements DummyInterface {
         if (!Main.isLogicalSide()) return strength;
         if (lastDamageSource != null) {
             DamageSource source = lastDamageSource;
-            if (source.getAttacker() instanceof ServerPlayerEntity attacker && source.getType().msgId().equalsIgnoreCase("player")) {
+            if (source.getAttacker() instanceof ServerPlayerEntity attacker && source.getType() == attacker.getDamageSources().playerAttack(attacker).getType()) {
                 if (SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
                     return 3;
                 }

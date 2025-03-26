@@ -6,6 +6,9 @@ import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,6 +22,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class Teleportation extends Superpower {
+    private long ticks = 0;
 
     public Teleportation(ServerPlayerEntity player) {
         super(player);
@@ -32,6 +36,23 @@ public class Teleportation extends Superpower {
     @Override
     public int getCooldownMillis() {
         return 5000;
+    }
+
+    @Override
+    public void tick() {
+        ticks++;
+        if (ticks % 2400 == 0) {
+            ServerPlayerEntity player = getPlayer();
+            if (player != null) {
+                int pearls = player.getInventory().count(Items.ENDER_PEARL);
+                int givePearls = 2;
+                if (pearls == 15) givePearls = 1;
+                if (pearls >= 16) givePearls = 0;
+                if (givePearls > 0) {
+                    player.getInventory().insertStack(new ItemStack(Items.ENDER_PEARL, givePearls));
+                }
+            }
+        }
     }
 
     @Override

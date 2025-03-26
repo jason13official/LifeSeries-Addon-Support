@@ -34,8 +34,7 @@ public class AttributeUtils {
                 resetPlayerJumpHeight(player);
             }
         }
-        if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP) &&
-            !SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
+        if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
             resetSafeFallHeight(player);
         }
         resetMovementSpeed(player);

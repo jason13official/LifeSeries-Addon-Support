@@ -17,7 +17,10 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
@@ -164,6 +167,14 @@ public class NetworkHandlerServer {
             if (TriviaWildcard.snails.containsKey(player.getUuid())) {
                 Snail snail = TriviaWildcard.snails.get(player.getUuid());
                 snail.updateModel();
+            }
+        }
+        if (name.equalsIgnoreCase("triple_jump")) {
+            if (currentSeries.getSeries() == SeriesList.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+                Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
+                if (power instanceof TripleJump tripleJump) {
+                    tripleJump.isInAir = true;
+                }
             }
         }
     }

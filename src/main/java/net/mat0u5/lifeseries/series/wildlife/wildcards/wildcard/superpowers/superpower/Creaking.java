@@ -11,12 +11,18 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+//? if >= 1.21.2 {
+/*import net.minecraft.entity.mob.CreakingEntity;
+import net.minecraft.particle.TrailParticleEffect;
+*///?}
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.server;
@@ -24,7 +30,9 @@ import static net.mat0u5.lifeseries.Main.server;
 public class Creaking extends ToggleableSuperpower {
 
     private final List<String> createdTeams = new ArrayList<>();
-    private final List<UUID> createdEntities = new ArrayList<>();
+    //? if >= 1.21.2 {
+    /*private final List<CreakingEntity> createdEntities = new ArrayList<>();
+    *///?}
 
     public Creaking(ServerPlayerEntity player) {
         super(player);
@@ -33,6 +41,14 @@ public class Creaking extends ToggleableSuperpower {
     @Override
     public Superpowers getSuperpower() {
         return Superpowers.CREAKING;
+    }
+
+    @Override
+    public void tick() {
+        if (!active) return;
+        //? if >= 1.21.2 {
+        /*spawnTrailParticles();
+        *///?}
     }
 
     @Override
@@ -51,11 +67,11 @@ public class Creaking extends ToggleableSuperpower {
         //? if >= 1.21.2 {
         /*for (int i = 0; i < 3; i++) {
             BlockPos spawnPos =  getCloseBlockPos(player.getServerWorld(), player.getBlockPos(), 6);
-            Entity entity = EntityType.CREAKING.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
-            if (entity != null) {
-                entity.setInvulnerable(true);
-                createdEntities.add(entity.getUuid());
-                makeFriendly(newTeamName, entity, player);
+            CreakingEntity creaking = EntityType.CREAKING.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
+            if (creaking != null) {
+                creaking.setInvulnerable(true);
+                createdEntities.add(creaking);
+                makeFriendly(newTeamName, creaking, player);
             }
         }
         *///?}
@@ -65,16 +81,9 @@ public class Creaking extends ToggleableSuperpower {
     public void deactivate() {
         // Also gets triggered when the players team is changed.
         super.deactivate();
-        if (server != null) {
-            List<Entity> toKill = new ArrayList<>();
-            for (ServerWorld world : server.getWorlds()) {
-                for (Entity entity : world.iterateEntities()) {
-                    if (createdEntities.contains(entity.getUuid())) {
-                        toKill.add(entity);
-                    }
-                }
-            }
-            toKill.forEach(Entity::discard);
+        //? if >= 1.21.2 {
+        /*if (server != null) {
+            createdEntities.forEach(Entity::discard);
             createdEntities.clear();
         }
         for (String teamAdded : createdTeams) {
@@ -86,6 +95,7 @@ public class Creaking extends ToggleableSuperpower {
                 currentSeries.reloadPlayerTeam(getPlayer());
             }
         }
+        *///?}
     }
 
     @Override
@@ -131,4 +141,50 @@ public class Creaking extends ToggleableSuperpower {
                 1, 0, 0, 0, 0
         );
     }
+    //? if >= 1.21.2 {
+    /*public void spawnTrailParticles() {
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        ServerWorld world = player.getServerWorld();
+        if (world == null) return;
+        for (CreakingEntity creakingEntity : createdEntities) {
+            if (creakingEntity.getRandom().nextInt(50)==0) {
+                spawnTrailParticles(creakingEntity, 1, false);
+            }
+            if (creakingEntity.hurtTime > 0) {
+                spawnTrailParticles(creakingEntity, 4, true);
+            }
+        }
+    }
+
+    public void spawnTrailParticles(CreakingEntity creaking, int count, boolean towardsPlayer) {
+        ServerPlayerEntity player = getPlayer();
+        if (player == null) return;
+        ServerWorld world = player.getServerWorld();
+        if (world == null) return;
+
+        int i = towardsPlayer ? 16545810 : 6250335;
+        Random random = world.random;
+
+        for(double d = 0.0; d < count; d++) {
+            Box box = creaking.getBoundingBox();
+            Vec3d vec3d = box.getMinPos().add(random.nextDouble() * box.getLengthX(), random.nextDouble() * box.getLengthY(), random.nextDouble() * box.getLengthZ());
+            Vec3d vec3d2 = player.getPos().add(random.nextDouble() - 0.5, random.nextDouble(), random.nextDouble() - 0.5);
+
+            if (!towardsPlayer) {
+                Vec3d vec3d3 = vec3d;
+                vec3d = vec3d2;
+                vec3d2 = vec3d3;
+            }
+
+            //? if = 1.21.2 {
+            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i);
+            world.spawnParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            ^///?} else if >= 1.21.4 {
+            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
+            world.spawnParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
+            ^///?}
+        }
+    }
+    *///?}
 }

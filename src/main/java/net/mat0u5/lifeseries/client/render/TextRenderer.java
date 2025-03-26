@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public class TextRenderer {
@@ -16,6 +17,7 @@ public class TextRenderer {
         MinecraftClient client = MinecraftClient.getInstance();
         int yPos = client.getWindow().getScaledHeight() - 5;
         yPos += renderGameNotBroken(client, context, yPos);
+        yPos += renderSessionTimer(client, context, yPos);
         yPos += renderMimicryTimer(client, context, yPos);
         yPos += renderSuperpowerCooldown(client, context, yPos);
         yPos += renderTriviaTimer(client, context, yPos);
@@ -71,6 +73,28 @@ public class TextRenderer {
 
             return -client.textRenderer.fontHeight*2-15;
         }
+    }
+
+    public static int renderSessionTimer(MinecraftClient client, DrawContext context, int y) {
+        if (System.currentTimeMillis()-MainClient.sessionTimeLastUpdated > 15000) return 0;
+        if (MainClient.sessionTime == 0) return 0;
+
+        MutableText timerText = Text.literal("");
+        if (MainClient.sessionTime == -3) timerText = timerText.append(Text.of("§7Session has ended"));
+        else if (MainClient.sessionTime == -2) timerText = timerText.append(Text.of("§7Session has been paused"));
+        else if (MainClient.sessionTime == -1) timerText = timerText.append(Text.of("§7Session has not started"));
+        else {
+            long remainingTime = MainClient.sessionTime - System.currentTimeMillis();
+            if (remainingTime < 0) timerText = timerText.append(Text.of("§7Session has ended"));
+            else timerText = timerText.append(Text.of("§7Session: " + OtherUtils.formatTimeMillis(remainingTime)));
+        }
+
+        int screenWidth = client.getWindow().getScaledWidth();
+        int x = screenWidth - 5;
+
+        renderTextLeft(context, timerText, x, y);
+
+        return -client.textRenderer.fontHeight-7;
     }
 
     public static int renderTriviaTimer(MinecraftClient client, DrawContext context, int y) {

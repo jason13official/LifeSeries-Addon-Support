@@ -166,6 +166,7 @@ public class WildLife extends Series {
         TriviaBot.EASY_TIME = seriesConfig.getOrCreateInt("wildcard_trivia_seconds_easy", 180);
         TriviaBot.NORMAL_TIME = seriesConfig.getOrCreateInt("wildcard_trivia_seconds_normal", 240);
         TriviaBot.HARD_TIME = seriesConfig.getOrCreateInt("wildcard_trivia_seconds_hard", 300);
+        WindCharge.MAX_MACE_DAMAGE = seriesConfig.getOrCreateInt("wildcard_superpowers_windcharge_max_mace_damage", 2);
 
         Snails.loadConfig();
         Snails.loadSnailNames();
@@ -234,6 +235,15 @@ public class WildLife extends Series {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
                         power.isLaunchedUp = false;
+                        cir.setReturnValue(false);
+                        return;
+                    }
+                }
+            }
+            if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+                if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof TripleJump power) {
+                    if (power.isInAir) {
+                        power.isInAir = false;
                         cir.setReturnValue(false);
                         return;
                     }

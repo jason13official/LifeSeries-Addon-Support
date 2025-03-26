@@ -86,6 +86,8 @@ public class WildLifeConfig extends ConfigManager {
         getOrCreateInt("wildcard_trivia_seconds_normal", 240);
         getOrCreateInt("wildcard_trivia_seconds_hard", 300);
 
+        getOrCreateInt("wildcard_superpowers_windcharge_max_mace_damage", 2);
+
         getOrCreateBoolean("spawner_recipe", true);
         getOrCreateBoolean("spawn_egg_allow_on_spawner", true);
         getOrCreateInt("max_player_health", 20);
@@ -152,5 +154,7 @@ public class WildLifeConfig extends ConfigManager {
         NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_end_spawn_delay", 113, "Mob Swap: Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_end_spawn_delay", 2400)), "2400"));
         NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_spawn_mobs", 114, "Mob Swap: Number of Mobs", "The number of mobs that spawn each cycle.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_spawn_mobs", 250)), "250"));
         NetworkHandlerServer.sendConfig(player, "double", "wildcard_mobswap_boss_chance_multiplier", 115, "Mob Swap: Boss Chance Multiplier", "Multiplier for boss chance (wither / warden).", List.of(String.valueOf(getOrCreateDouble("wildcard_mobswap_boss_chance_multiplier", 1)), "1"));
+
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_superpowers_windcharge_max_mace_damage", 116, "Superpower - Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower.", List.of(String.valueOf(getOrCreateInt("wildcard_superpowers_windcharge_max_mace_damage", 2)), "2"));
     }
 }

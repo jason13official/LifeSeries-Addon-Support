@@ -215,6 +215,10 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("time_dilation")) {
             MainClient.TIME_DILATION_TIMESTAMP = number;
         }
+        if (name.equalsIgnoreCase("session_timer")) {
+            MainClient.sessionTime = number;
+            MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
+        }
     }
 
     public static void handlePlayerDisguise(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) {

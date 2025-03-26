@@ -39,6 +39,8 @@ public class MainClient implements ClientModInitializer {
     public static int snailAir = 300;
     public static boolean preventGliding = false;
     public static int mutedForTicks = 0;
+    public static long sessionTime = 0;
+    public static long sessionTimeLastUpdated = 0;
 
     @Override
     public void onInitializeClient() {

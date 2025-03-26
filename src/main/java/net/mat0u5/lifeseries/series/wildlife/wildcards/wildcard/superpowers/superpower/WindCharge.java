@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundEvents;
 import java.util.Set;
 
 public class WindCharge extends ToggleableSuperpower {
+    public static int MAX_MACE_DAMAGE = 2;
 
     public WindCharge(ServerPlayerEntity player) {
         super(player);

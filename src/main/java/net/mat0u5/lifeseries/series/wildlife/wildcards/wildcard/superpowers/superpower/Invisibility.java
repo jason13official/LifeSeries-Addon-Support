@@ -21,6 +21,11 @@ public class Invisibility extends ToggleableSuperpower {
     }
 
     @Override
+    public int deactivateCooldownMillis() {
+        return 5000;
+    }
+
+    @Override
     public void tick() {
         if (!active) return;
         ServerPlayerEntity player = getPlayer();

@@ -25,6 +25,8 @@ import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
 
 import java.util.ArrayList;
@@ -110,7 +112,7 @@ public class ClientEvents {
             MinecraftClient client = MinecraftClient.getInstance();
             ClientPlayerEntity player = client.player;
             if (player == null) return;
-            jumpCooldown = 5;
+            jumpCooldown = 3;
         }
     }
 
@@ -145,6 +147,8 @@ public class ClientEvents {
         if (!hasTripleJumpEffect(player)) return;
         jumpedInAir++;
         player.jump();
+        player.playSoundToPlayer(SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST.value(), SoundCategory.MASTER, 0.25f, 1f);
+        NetworkHandlerClient.sendStringPacket("triple_jump","");
     }
 
     private static boolean hasTripleJumpEffect(ClientPlayerEntity player) {
