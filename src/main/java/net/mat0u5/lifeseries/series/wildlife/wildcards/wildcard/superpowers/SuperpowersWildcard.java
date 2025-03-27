@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
@@ -47,7 +48,20 @@ public class SuperpowersWildcard extends Wildcard {
     public static void rollRandomSuperpowers() {
         resetAllSuperpowers();
         List<Superpowers> implemented = new java.util.ArrayList<>(Superpowers.getImplemented());
-        if (implemented.contains(Superpowers.NECROMANCY) && !Necromancy.shouldBeIncluded()) {
+        boolean shouldIncludeNecromancy = implemented.contains(Superpowers.NECROMANCY) && Necromancy.shouldBeIncluded();
+        boolean shouldRandomizeNecromancy = false;
+        double necromancyRandomizeChance = 0;
+        if (shouldIncludeNecromancy) {
+            int alivePlayersNum = currentSeries.getAlivePlayers().size();
+            int deadPlayersNum = Necromancy.getDeadPlayers().size();
+            int totalPlayersNum = alivePlayersNum + deadPlayersNum;
+            if (totalPlayersNum >= 6) {
+                implemented.remove(Superpowers.NECROMANCY);
+                shouldRandomizeNecromancy = true;
+                necromancyRandomizeChance = (double)deadPlayersNum / (double)alivePlayersNum;
+            }
+        }
+        else {
             implemented.remove(Superpowers.NECROMANCY);
         }
 
@@ -60,6 +74,15 @@ public class SuperpowersWildcard extends Wildcard {
             if (assignedSuperpowers.containsKey(player.getUuid())) {
                 power = assignedSuperpowers.get(player.getUuid());
                 assignedSuperpowers.remove(player.getUuid());
+            }
+            else if (shouldIncludeNecromancy && shouldRandomizeNecromancy) {
+                if (player.getRandom().nextDouble() <= necromancyRandomizeChance) {
+                    power = Superpowers.NECROMANCY;
+                }
+            }
+            if (power == Superpowers.NECROMANCY) {
+                implemented.remove(Superpowers.NECROMANCY);
+                shouldIncludeNecromancy = false;
             }
             Superpower instance = Superpowers.getInstance(player, power);
             if (instance != null) playerSuperpowers.put(player.getUuid(), instance);

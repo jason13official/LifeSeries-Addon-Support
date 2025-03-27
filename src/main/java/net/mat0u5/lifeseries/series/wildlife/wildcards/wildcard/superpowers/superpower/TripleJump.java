@@ -47,7 +47,6 @@ public class TripleJump extends ToggleableSuperpower {
         }
 
         if (onGroundTicks >= 10) {
-            OtherUtils.log("ground");
             isInAir = false;
             onGroundTicks = 0;
         }

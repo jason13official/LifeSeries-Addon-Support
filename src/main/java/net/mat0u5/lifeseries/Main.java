@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.1.2";
+	public static final String MOD_VERSION = "dev-1.3.1.3";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -194,6 +194,7 @@ public class Main implements ModInitializer {
 			currentSeries.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
 			NetworkHandlerServer.sendStringPacket(player, "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+			NetworkHandlerServer.sendLongPacket(player, "session_timer", -1);
 		}
 		Stats.resetStats();
 		return true;

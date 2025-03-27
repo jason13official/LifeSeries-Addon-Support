@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.TimeControl;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -198,8 +199,13 @@ public class WildcardManager {
             wildcard.tick();
         }
         SizeShifting.resetSizesTick(isActiveWildcard(Wildcards.SIZE_SHIFTING));
-        if (!isActiveWildcard(Wildcards.MOB_SWAP) && server != null && server.getTicks() % 200 == 0) {
-            MobSwap.killMobSwapMobs();
+        if (server != null && server.getTicks() % 200 == 0) {
+            if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
+                MobSwap.killMobSwapMobs();
+            }
+            //? if >= 1.21.2 {
+            /*Creaking.killUnassignedMobs();
+            *///?}
         }
 
         if (TimeControl.changedSpeedFor > 0) TimeControl.changedSpeedFor--;

@@ -18,6 +18,7 @@ public class TextRenderer {
         int yPos = client.getWindow().getScaledHeight() - 5;
         yPos += renderGameNotBroken(client, context, yPos);
         yPos += renderSessionTimer(client, context, yPos);
+        yPos += renderLimitedLifeTimer(client, context, yPos);
         yPos += renderMimicryTimer(client, context, yPos);
         yPos += renderSuperpowerCooldown(client, context, yPos);
         yPos += renderTriviaTimer(client, context, yPos);
@@ -86,7 +87,7 @@ public class TextRenderer {
         else {
             long remainingTime = MainClient.sessionTime - System.currentTimeMillis();
             if (remainingTime < 0) timerText = timerText.append(Text.of("§7Session has ended"));
-            else timerText = timerText.append(Text.of("§7Session: " + OtherUtils.formatTimeMillis(remainingTime)));
+            else timerText = timerText.append(Text.of("§7Session " + OtherUtils.formatTimeMillis(remainingTime)));
         }
 
         int screenWidth = client.getWindow().getScaledWidth();
@@ -94,7 +95,27 @@ public class TextRenderer {
 
         renderTextLeft(context, timerText, x, y);
 
-        return -client.textRenderer.fontHeight-7;
+        return -client.textRenderer.fontHeight-5;
+    }
+
+    public static int renderLimitedLifeTimer(MinecraftClient client, DrawContext context, int y) {
+        if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
+        if (MainClient.limitedLifeTime == 0) return 0;
+
+        MutableText timerText = Text.literal("");
+        if (MainClient.limitedLifeTime == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
+        else {
+            long remainingTime = MainClient.limitedLifeTime - System.currentTimeMillis();
+            if (remainingTime < 0) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
+            else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
+        }
+
+        int screenWidth = client.getWindow().getScaledWidth();
+        int x = screenWidth - 5;
+
+        renderTextLeft(context, timerText, x, y);
+
+        return -client.textRenderer.fontHeight-5;
     }
 
     public static int renderTriviaTimer(MinecraftClient client, DrawContext context, int y) {
@@ -115,7 +136,7 @@ public class TextRenderer {
 
         renderTextLeft(context, timerText, x - client.textRenderer.getWidth(actualTimer), y);
 
-        return -client.textRenderer.fontHeight-7;
+        return -client.textRenderer.fontHeight-5;
     }
 
     private static long lastPressed = 0;
@@ -138,7 +159,7 @@ public class TextRenderer {
         int x = screenWidth - 5;
         renderTextLeft(context, timerText, x, y);
 
-        return -client.textRenderer.fontHeight-7;
+        return -client.textRenderer.fontHeight-5;
     }
 
     public static int renderMimicryTimer(MinecraftClient client, DrawContext context, int y) {
@@ -154,7 +175,7 @@ public class TextRenderer {
         int x = screenWidth - 5;
         renderTextLeft(context, timerText, x, y);
 
-        return -client.textRenderer.fontHeight-7;
+        return -client.textRenderer.fontHeight-5;
     }
 
     public static void renderTextLeft(DrawContext context, Text text, int x, int y) {

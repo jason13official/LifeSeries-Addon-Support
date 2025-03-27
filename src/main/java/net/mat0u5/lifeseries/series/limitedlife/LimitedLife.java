@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.series.limitedlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -13,6 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
 import java.util.List;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
@@ -59,15 +61,45 @@ public class LimitedLife extends Series {
         }
 
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            MutableText fullMessage = Text.literal("");
-            if (displayTimer.contains(player.getUuid())) {
-                fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
+
+            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+                if (displayTimer.contains(player.getUuid())) {
+                    long timestamp = 0;
+                    if (statusNotStarted()) timestamp = -1;
+                    else if (statusPaused()) timestamp = -2;
+                    else if (statusFinished()) timestamp = -3;
+                    else if (sessionLength != null) {
+                        long remainingMillis = (sessionLength - (int) passedTime) * 50;
+                        timestamp = System.currentTimeMillis() + remainingMillis;
+                    }
+                    if (timestamp != 0) {
+                        NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
+                    }
+                }
+
+                if (hasAssignedLives(player) && getPlayerLives(player) != null) {
+                    long livesRunOutAt;
+                    if (isAlive(player)) {
+                        livesRunOutAt = System.currentTimeMillis() + getPlayerLives(player) * 1000;
+                    }
+                    else {
+                        livesRunOutAt = -1;
+                    }
+                    String livesColor = getColorForLives(getPlayerLives(player)).toString();
+                    NetworkHandlerServer.sendLongPacket(player, "limited_life_timer__"+livesColor, livesRunOutAt);
+                }
             }
-            if (hasAssignedLives(player)) {
-                if (!fullMessage.getString().isEmpty()) fullMessage.append(Text.of("  |  "));
-                fullMessage.append(getFormattedLives(getPlayerLives(player)));
+            else {
+                MutableText fullMessage = Text.literal("");
+                if (displayTimer.contains(player.getUuid())) {
+                    fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
+                }
+                if (hasAssignedLives(player)) {
+                    if (!fullMessage.getString().isEmpty()) fullMessage.append(Text.of("  |  "));
+                    fullMessage.append(getFormattedLives(getPlayerLives(player)));
+                }
+                player.sendMessage(fullMessage, true);
             }
-            player.sendMessage(fullMessage, true);
         }
     }
 

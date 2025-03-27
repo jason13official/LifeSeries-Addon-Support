@@ -46,7 +46,7 @@ public class Necromancy extends Superpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
 
-        if (getDeadPlayers().isEmpty()) {
+        if (getDeadSpectatorPlayers().isEmpty()) {
             PlayerUtils.displayMessageToPlayer(player, Text.of("There are no dead players."), 80);
             return;
         }
@@ -62,7 +62,7 @@ public class Necromancy extends Superpower {
         TaskScheduler.scheduleTask(100, () -> {
             ServerPlayerEntity updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
-                List<ServerPlayerEntity> deadPlayers = getDeadPlayers();
+                List<ServerPlayerEntity> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayerEntity deadPlayer : deadPlayers) {
                     BlockPos tpTo = getCloseBlockPos(updatedPlayer.getServerWorld(), updatedPlayer.getBlockPos(), 3);
                     //? if <= 1.21 {
@@ -124,11 +124,20 @@ public class Necromancy extends Superpower {
         return null;
     }
 
-    public static List<ServerPlayerEntity> getDeadPlayers() {
+    public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             if (currentSeries.isAlive(player)) continue;
             if (!player.isSpectator()) continue;
+            deadPlayers.add(player);
+        }
+        return deadPlayers;
+    }
+
+    public static List<ServerPlayerEntity> getDeadPlayers() {
+        List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            if (currentSeries.isAlive(player)) continue;
             deadPlayers.add(player);
         }
         return deadPlayers;

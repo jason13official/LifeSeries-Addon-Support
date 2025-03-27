@@ -141,6 +141,7 @@ public class Session {
     public void removeFromDisplayTimer(ServerPlayerEntity player) {
         if (!displayTimer.contains(player.getUuid())) return;
         displayTimer.remove(player.getUuid());
+        NetworkHandlerServer.sendLongPacket(player, "session_timer", 0);
     }
 
     public void tick(MinecraftServer server) {

@@ -219,6 +219,11 @@ public class NetworkHandlerClient {
             MainClient.sessionTime = number;
             MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
         }
+        if (name.startsWith("limited_life_timer__")) {
+            MainClient.limitedLifeTimerColor = name.replaceFirst("limited_life_timer__","");
+            MainClient.limitedLifeTime = number;
+            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
+        }
     }
 
     public static void handlePlayerDisguise(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) {

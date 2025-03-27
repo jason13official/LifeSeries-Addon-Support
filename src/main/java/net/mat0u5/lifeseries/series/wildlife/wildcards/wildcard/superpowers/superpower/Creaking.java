@@ -1,11 +1,16 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
+import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.TeamUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Creaking extends ToggleableSuperpower {
+    public static final List<UUID> allCreatedEntities = new ArrayList<>();
 
     private final List<String> createdTeams = new ArrayList<>();
     //? if >= 1.21.2 {
@@ -70,7 +77,9 @@ public class Creaking extends ToggleableSuperpower {
             CreakingEntity creaking = EntityType.CREAKING.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
             if (creaking != null) {
                 creaking.setInvulnerable(true);
+                creaking.addCommandTag("creakingFromSuperpower");
                 createdEntities.add(creaking);
+                allCreatedEntities.add(creaking.getUuid());
                 makeFriendly(newTeamName, creaking, player);
             }
         }
@@ -184,6 +193,20 @@ public class Creaking extends ToggleableSuperpower {
             /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
             world.spawnParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
             ^///?}
+        }
+    }
+
+    public static void killUnassignedMobs() {
+        if (server == null) return;
+        for (ServerWorld world : server.getWorlds()) {
+            List<Entity> toKill = new ArrayList<>();
+            world.iterateEntities().forEach(entity -> {
+                if (!(entity instanceof CreakingEntity)) return;
+                if (allCreatedEntities.contains(entity.getUuid())) return;
+                if (!entity.getCommandTags().contains("creakingFromSuperpower")) return;
+                toKill.add(entity);
+            });
+            toKill.forEach(Entity::discard);
         }
     }
     *///?}

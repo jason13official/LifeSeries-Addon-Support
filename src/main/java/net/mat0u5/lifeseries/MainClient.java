@@ -41,6 +41,9 @@ public class MainClient implements ClientModInitializer {
     public static int mutedForTicks = 0;
     public static long sessionTime = 0;
     public static long sessionTimeLastUpdated = 0;
+    public static String limitedLifeTimerColor = "";
+    public static long limitedLifeTime = 0;
+    public static long limitedLifeTimeLastUpdated = 0;
 
     @Override
     public void onInitializeClient() {

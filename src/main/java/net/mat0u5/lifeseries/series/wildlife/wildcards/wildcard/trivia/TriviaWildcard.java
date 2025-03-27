@@ -85,6 +85,7 @@ public class TriviaWildcard extends Wildcard {
         if (!currentSession.statusStarted()) {
             OtherUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
         }
+        OtherUtils.broadcastMessageToAdmins(Text.of("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
         super.activate();
     }
 
