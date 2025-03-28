@@ -232,7 +232,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void setBoundPlayer(ServerPlayerEntity player) {
         if (player == null) return;
         boundPlayerUUID = player.getUuid();
-        writeCustomDataToNbt(new NbtCompound());
         updateSnailName();
         sendDisplayEntityPackets(player);
     }
@@ -410,9 +409,12 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
     }
 
-    public long addTicket(ServerWorld world) {
-        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 1, getBlockPos());
-        return ChunkTicketType.PORTAL.getExpiryTicks();
+    public void addTicket(ServerWorld world) {
+        //? if <= 1.21.4 {
+        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
+        //?} else {
+        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
+        *///?}
     }
 
     public void despawn() {
@@ -547,11 +549,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
         else if (pathFinder == null || pathFinder.isRemoved()) {
             pathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorld(), this.getBlockPos(), SpawnReason.COMMAND);
-            if (pathFinder != null) {
-                NbtCompound pathFinderNbt = new NbtCompound();
-                pathFinderNbt.putUuid("pathFinder", pathFinder.getUuid());
-                writeCustomDataToNbt(pathFinderNbt);
-            }
         }
         else {
             pathFinder.resetDespawnTimer();
@@ -563,11 +560,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
         else if (groundPathFinder == null || groundPathFinder.isRemoved()) {
             groundPathFinder = MobRegistry.PATH_FINDER.spawn((ServerWorld) this.getWorld(), this.getBlockPos(), SpawnReason.COMMAND);
-            if (groundPathFinder != null) {
-                NbtCompound pathFinderNbt = new NbtCompound();
-                pathFinderNbt.putUuid("groundPathFinder", groundPathFinder.getUuid());
-                writeCustomDataToNbt(pathFinderNbt);
-            }
         }
         else {
             groundPathFinder.resetDespawnTimer();
@@ -807,9 +799,15 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     @Override
+    //? if <= 1.21.4 {
     protected boolean shouldSwimInFluids() {
         return false;
     }
+    //?} else {
+    /*public boolean shouldSwimInFluids() {
+        return false;
+    }
+    *///?}
 
     @Override
     public boolean isTouchingWater() {

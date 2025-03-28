@@ -22,7 +22,7 @@ import java.util.Optional;
 public class PlayerManagerMixin {
     @Inject(method = "broadcast(Lnet/minecraft/text/Text;Z)V", at = @At("HEAD"), cancellable = true)
     public void broadcast(Text message, boolean overlay, CallbackInfo ci) {
-        if (message.getString().contains("`")) ci.cancel();
+        if (message.getString().contains("`")) ci.cancel();//TODO
     }
 
     @Inject(method = "loadPlayerData", at = @At(value = "RETURN", shift = At.Shift.BEFORE))

@@ -232,7 +232,11 @@ public class QuizScreen extends DefaultScreen {
         context.getMatrices().scale(size, size, -size);
         context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
         context.getMatrices().multiply(quaternionf);
+        //? if <= 1.21.4 {
         DiffuseLighting.method_34742();
+        //?} else {
+        /*DiffuseLighting.enableGuiShaderLighting();
+        *///?}
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         if (quaternionf2 != null) {
             entityRenderDispatcher.setRotation(quaternionf2.conjugate(new Quaternionf()).rotateY(3.1415927F));

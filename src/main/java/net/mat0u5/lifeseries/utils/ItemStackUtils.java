@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.mat0u5.lifeseries.Main.server;
 
@@ -93,7 +94,14 @@ public class ItemStackUtils {
         if (nbtComponent == null) return null;
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
+        //? if <= 1.21.4 {
         return nbtComp.getString(componentKey);
+        //?} else {
+        /*Optional<String> optional = nbtComp.getString(componentKey);
+        if (optional.isEmpty()) return null;
+        return optional.get();
+        *///?}
+
     }
 
     public static Integer getCustomComponentInt(ItemStack itemStack, String componentKey) {
@@ -102,7 +110,13 @@ public class ItemStackUtils {
         if (nbtComponent == null) return null;
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
+        //? if <= 1.21.4 {
         return nbtComp.getInt(componentKey);
+        //?} else {
+        /*Optional<Integer> optional = nbtComp.getInt(componentKey);
+        if (optional.isEmpty()) return null;
+        return optional.get();
+        *///?}
     }
 
     public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
@@ -111,7 +125,13 @@ public class ItemStackUtils {
         if (nbtComponent == null) return null;
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
+        //? if <= 1.21.4 {
         return nbtComp.getByte(componentKey);
+        //?} else {
+        /*Optional<Byte> optional = nbtComp.getByte(componentKey);
+        if (optional.isEmpty()) return null;
+        return optional.get();
+        *///?}
     }
 
     public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
@@ -120,7 +140,13 @@ public class ItemStackUtils {
         if (nbtComponent == null) return null;
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
+        //? if <= 1.21.4 {
         return nbtComp.getBoolean(componentKey);
+        //?} else {
+        /*Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
+        if (optional.isEmpty()) return null;
+        return optional.get();
+        *///?}
     }
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {

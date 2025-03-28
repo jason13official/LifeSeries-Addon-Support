@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
@@ -121,7 +122,9 @@ public class SessionCommand {
             source.sendMessage(Text.of("The session ends in " + currentSession.getRemainingTime()));
         }
         else {
-            source.sendMessage(Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, Stats.getStats())))));
+            source.sendMessage(Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style ->
+                    style.withClickEvent(TextUtils.copyClipboardClickEvent(Stats.getStats()))
+            )));
         }
         return 1;
     }

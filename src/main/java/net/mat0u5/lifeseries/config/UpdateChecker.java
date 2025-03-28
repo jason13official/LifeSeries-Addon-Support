@@ -4,11 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.PermissionManager;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.TextUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -76,21 +74,23 @@ public class UpdateChecker {
                     Text.literal("here")
                         .styled(style -> style
                             .withColor(Formatting.BLUE)
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/QWJxfb4zQZ"))
+                            .withClickEvent(TextUtils.openURLClickEvent("https://discord.gg/QWJxfb4zQZ"))
                             .withUnderline(true)
                         )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\n"));
             Text updateText =
                     Text.literal("A new version of the Life Series Mod is available ("+versionName+") §nserver-side§f. \n")
                         .styled(style -> style
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of(
-                                "§7§nUpdate Description:§r\n\n"+versionDescription
-                            )))
+                            .withHoverEvent(
+                                TextUtils.showTextHoverEvent(Text.of(
+                                    "§7§nUpdate Description:§r\n\n"+versionDescription
+                                ))
+                            )
                         )
                         .append(
                             Text.literal("Click to download on Modrinth")
                                 .styled(style -> style
                                     .withColor(Formatting.BLUE)
-                                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/life-series"))
+                                        .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                                     .withUnderline(true)
                                 )
                         );
@@ -106,7 +106,7 @@ public class UpdateChecker {
                         Text.literal("Download full releases on Modrinth")
                             .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/life-series"))
+                                .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/life-series"))
                                 .withUnderline(true)
                             )
                     );

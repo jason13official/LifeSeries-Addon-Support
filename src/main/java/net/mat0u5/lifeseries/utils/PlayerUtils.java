@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.series.Session;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -224,9 +225,33 @@ public class PlayerUtils {
         if (player.getServer() == null) return;
         player.getServer().getCommandManager().sendCommandTree(player);
     }
+
     public static void resendCommandTrees() {
         for (ServerPlayerEntity player : getAllPlayers()) {
             resendCommandTree(player);
         }
     }
+
+    public static ItemStack getEquipmentSlot(PlayerEntity player, int slot) {
+        //? if <= 1.21.4 {
+        return player.getInventory().getArmorStack(slot);
+        //?} else {
+        /*return player.getInventory().getStack(PlayerInventory.EQUIPMENT_SLOTS.get(slot).getIndex());//TODO
+        *///?}
+    }
+
+    //? if <= 1.21.4 {
+    public static Iterable<ItemStack> getArmorItems(ServerPlayerEntity player) {
+        return player.getArmorItems();
+    }
+    //?} else {
+    /*public static List<ItemStack> getArmorItems(ServerPlayerEntity player) {
+        List<ItemStack> result = new ArrayList<>();
+        result.add(getEquipmentSlot(player, 0));
+        result.add(getEquipmentSlot(player, 1));
+        result.add(getEquipmentSlot(player, 2));
+        result.add(getEquipmentSlot(player, 3));
+        return result;
+    }
+    *///?}
 }

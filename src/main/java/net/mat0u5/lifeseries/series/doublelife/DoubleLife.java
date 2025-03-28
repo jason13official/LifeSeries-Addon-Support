@@ -335,7 +335,11 @@ public class DoubleLife extends Series {
         /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
                 .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setAttacker(player);
+        //? if <= 1.21.4 {
         soulmate.setAttacking(player);
+        //?} else {
+        /^soulmate.setAttacking(player, 100);
+        ^///?}
         soulmate.damage(soulmate.getServerWorld(), damageSource, 1000);
         *///?}
 

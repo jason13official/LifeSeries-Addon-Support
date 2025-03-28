@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -167,7 +168,7 @@ public class WildLifeCommands {
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/snail names set " + player.getNameForScoreboard() + " "+name))
+                                .withClickEvent(TextUtils.runCommandClickEvent("/snail names set " + player.getNameForScoreboard() + " "+name))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept."));
         OtherUtils.broadcastMessageToAdmins(adminText);

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class SnailPushProjectilesGoal extends Goal {
 
@@ -46,9 +47,16 @@ public final class SnailPushProjectilesGoal extends Goal {
         for (ProjectileEntity projectile : projectiles) {
             NbtCompound empty = new NbtCompound();
             NbtCompound nbt = projectile.writeNbt(empty);
+            //? if <= 1.21.4 {
             if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
                 continue;
             }
+            //?} else {
+            /*Optional<Boolean> bool = nbt.getBoolean("inGround");
+            if (nbt.contains("inGround") && bool.isPresent()) {
+                if (bool.get()) continue;
+            }
+            *///?}
 
             Entity sender = projectile.getOwner();
             if (sender instanceof LivingEntity target) {

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -99,7 +100,7 @@ public class ClaimKillCommand {
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claimkill validate " + player.getNameForScoreboard() + " "+victim.getNameForScoreboard()))
+                                .withClickEvent(TextUtils.runCommandClickEvent("/claimkill validate " + player.getNameForScoreboard() + " "+victim.getNameForScoreboard()))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept the claim if you think it's valid."));
         OtherUtils.broadcastMessageToAdmins(adminText, 120);

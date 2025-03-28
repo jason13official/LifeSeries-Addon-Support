@@ -24,9 +24,9 @@ import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -149,7 +149,7 @@ public class Main implements ModInitializer {
 								Text.literal("Polymer mod")
 										.styled(style -> style
 												.withColor(Formatting.BLUE)
-												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/polymer"))
+												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/polymer"))
 												.withUnderline(true)
 										)
 						).append(Text.of(" §cto play Wild Life."))
@@ -162,7 +162,7 @@ public class Main implements ModInitializer {
 								Text.literal("Blockbench Import Library mod")
 										.styled(style -> style
 												.withColor(Formatting.BLUE)
-												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/blockbench-import-library"))
+												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/blockbench-import-library"))
 												.withUnderline(true)
 										)
 						).append(Text.of(" §cto play Wild Life."))
@@ -175,7 +175,7 @@ public class Main implements ModInitializer {
 								Text.literal("Cardinal Components API mod")
 										.styled(style -> style
 												.withColor(Formatting.BLUE)
-												.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/cardinal-components-api"))
+												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/cardinal-components-api"))
 												.withUnderline(true)
 										)
 						).append(Text.of(" §cto play Wild Life."))

@@ -212,7 +212,7 @@ public class Events {
                 world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
             try {
                 ItemStack itemStack = player.getStackInHand(hand);
-                if (ItemStackUtils.hasCustomComponentEntry(serverPlayer.getInventory().getArmorStack(3), "FlightSuperpower") &&
+                if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(serverPlayer, 3), "FlightSuperpower") &&
                         itemStack.isOf(Items.FIREWORK_ROCKET)) {
                     return ActionResult.FAIL;
                 }

@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
+import java.util.Optional;
+
 import static net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency.MORPH_COMPONENT;
 
 /*
@@ -87,20 +89,35 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
                 */
 
             }
+            //? if <= 1.21.4 {
             dummy.prevX = player.prevX;
             dummy.prevY = player.prevY;
             dummy.prevZ = player.prevZ;
             dummy.prevBodyYaw = player.prevBodyYaw;
             dummy.prevHeadYaw = player.prevHeadYaw;
             dummy.prevPitch = player.prevPitch;
+            //?} else {
+            /*dummy.lastX = player.lastX;
+            dummy.lastY = player.lastY;
+            dummy.lastZ = player.lastZ;
+            dummy.lastBodyYaw = player.lastBodyYaw;
+            dummy.lastHeadYaw = player.lastHeadYaw;
+            dummy.lastPitch = player.lastPitch;
+            *///?}
 
-            //Some math to sync the dummy LimbAnimator to the player LimbAnimator
+            //Some math to synchronize the morph limbs with the player limbs
+            //? if <= 1.21.4 {
             float prevPlayerSpeed = (player.limbAnimator.getSpeed(-1)+player.limbAnimator.getSpeed())/2;
+            //?} else {
+            /*float prevPlayerSpeed = (player.limbAnimator.getAmplitude(-1)+player.limbAnimator.getSpeed())/2;
+            *///?}
             dummy.limbAnimator.setSpeed(prevPlayerSpeed);
             //? if <= 1.21 {
             dummy.limbAnimator.updateLimbs(player.limbAnimator.getPos() - dummy.limbAnimator.getPos(), 1);
-             //?} else {
+            //?} else if <= 1.21.4 {
             /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getPos() - dummy.limbAnimator.getPos(), 1, 1);
+            *///?} else {
+            /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getAnimationProgress() - dummy.limbAnimator.getAnimationProgress(), 1, 1);
             *///?}
             dummy.limbAnimator.setSpeed(player.limbAnimator.getSpeed());
 
@@ -123,10 +140,19 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
 
     @Override
     public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
+        //? if <= 1.21.4 {
         if(nbt.contains("type")){
             morph = Registries.ENTITY_TYPE.get(Identifier.of(nbt.getString("type")));
         }
         shouldMorph = nbt.getBoolean("morph");
+        //?} else {
+        /*if(nbt.contains("type")){
+            Optional<String> type = nbt.getString("type");
+            if (type.isPresent()) morph = Registries.ENTITY_TYPE.get(Identifier.of(type.get()));
+        }
+        Optional<Boolean> shouldMorphNbt = nbt.getBoolean("morph");
+        if (shouldMorphNbt.isPresent()) shouldMorph = shouldMorphNbt.get();
+        *///?}
     }
 
     @Override

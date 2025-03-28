@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,5 +85,37 @@ public class TextUtils {
     }
     public static String removeFormattingCodes(String input) {
         return input.replaceAll("§[0-9a-fk-or]", "");
+    }
+
+    public static ClickEvent openURLClickEvent(String url) {
+        //? if <= 1.21.4 {
+        return new ClickEvent(ClickEvent.Action.OPEN_URL, url);
+        //?} else {
+        /*return new ClickEvent.OpenUrl(URI.create(url));
+        *///?}
+    }
+
+    public static ClickEvent runCommandClickEvent(String command) {
+        //? if <= 1.21.4 {
+        return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+         //?} else {
+        /*return new ClickEvent.RunCommand(command);
+        *///?}
+    }
+
+    public static ClickEvent copyClipboardClickEvent(String copy) {
+        //? if <= 1.21.4 {
+        return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
+         //?} else {
+        /*return new ClickEvent.CopyToClipboard(copy);
+        *///?}
+    }
+
+    public static HoverEvent showTextHoverEvent(Text text) {
+        //? if <= 1.21.4 {
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+         //?} else {
+        /*return new HoverEvent.ShowText(text);
+        *///?}
     }
 }

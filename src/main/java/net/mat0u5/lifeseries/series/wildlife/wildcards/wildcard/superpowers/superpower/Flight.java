@@ -5,15 +5,17 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
-import net.minecraft.component.type.UnbreakableComponent;
+import net.minecraft.component.type.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,6 +25,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 
+import javax.tools.Tool;
 import java.util.Optional;
 
 public class Flight extends Superpower {
@@ -103,30 +106,39 @@ public class Flight extends Superpower {
     private void giveHelmet() {
         ServerPlayerEntity player = getPlayer();
         if (player != null) {
-            if (ItemStackUtils.hasCustomComponentEntry(player.getInventory().getArmorStack(3), "FlightSuperpower")) return;
+            if (ItemStackUtils.hasCustomComponentEntry(PlayerUtils.getEquipmentSlot(player, 3), "FlightSuperpower")) return;
 
             ItemStack helmet = new ItemStack(Items.IRON_NUGGET);
             helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.BINDING_CURSE), 1);
             helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
             ItemEnchantmentsComponent enchantmentsComponent = helmet.get(DataComponentTypes.ENCHANTMENTS);
+            //? if <= 1.21.4 {
             if (enchantmentsComponent != null) {
                 helmet.set(DataComponentTypes.ENCHANTMENTS, enchantmentsComponent.withShowInTooltip(false));
             }
             helmet.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(false));
-            helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+             //?} else {
+            /*helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
+            helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT.with(DataComponentTypes.ENCHANTMENTS, true));//TODO
+            *///?}
+
+            helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponentTypes.ITEM_NAME, Text.of("Winged Helmet"));
             //? if >= 1.21.2 {
             /*helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
             helmet.set(DataComponentTypes.GLIDER, Unit.INSTANCE);
-            helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
+                //? if <= 1.21.4 {
+                helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
+                //?} else {
+                /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
+                ^///?}
             *///?}
             ItemStackUtils.setCustomComponentBoolean(helmet, "IgnoreBlacklist", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);
 
-
-            ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), player.getInventory().getArmorStack(3).copy(), player);
+            ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), PlayerUtils.getEquipmentSlot(player, 3).copy(), player);
             player.equipStack(EquipmentSlot.HEAD, helmet);
         }
     }

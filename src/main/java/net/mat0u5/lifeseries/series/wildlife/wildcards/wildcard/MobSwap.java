@@ -379,6 +379,11 @@ public class MobSwap extends Wildcard {
         if (squaredDistance < 4) {
             cir.setReturnValue(false);
         }
+        //? if <= 1.21.4 {
         cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.shouldTick(pos));
+        //?} else {
+        /*ChunkPos chunkPos = new ChunkPos(pos);
+        cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesAt(chunkPos));
+        *///?}
     }
 }
