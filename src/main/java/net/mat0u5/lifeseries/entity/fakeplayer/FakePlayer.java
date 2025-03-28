@@ -46,9 +46,14 @@ public class FakePlayer extends ServerPlayerEntity {
             UUID shadow) {
         ServerWorld worldIn = server.getWorld(dimensionId);
         UserCache.setUseRemote(false);
-        GameProfile gameprofile;
+        GameProfile gameprofile = null;
         try {
-            gameprofile = Objects.requireNonNull(server.getUserCache()).findByName(username).orElse(null);
+            if (server.getUserCache() != null) {
+                Optional<GameProfile> opt = server.getUserCache().findByName(username);
+                if (opt.isPresent()) {
+                    gameprofile = opt.get();
+                }
+            }
         }
         finally {
             UserCache.setUseRemote(server.isDedicated() && server.isRemote());

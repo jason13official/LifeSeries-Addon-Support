@@ -120,7 +120,10 @@ public class Flight extends Superpower {
             helmet.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
              //?} else {
             /*helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
-            helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT.with(DataComponentTypes.ENCHANTMENTS, true));//TODO
+            helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT
+                    .with(DataComponentTypes.ENCHANTMENTS, true)
+                    .with(DataComponentTypes.UNBREAKABLE, true)
+            );
             *///?}
 
             helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);

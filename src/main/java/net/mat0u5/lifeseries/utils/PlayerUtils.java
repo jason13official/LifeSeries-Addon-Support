@@ -236,7 +236,7 @@ public class PlayerUtils {
         //? if <= 1.21.4 {
         return player.getInventory().getArmorStack(slot);
         //?} else {
-        /*return player.getInventory().getStack(PlayerInventory.EQUIPMENT_SLOTS.get(slot).getIndex());//TODO
+        /*return player.getInventory().getStack(slot + 36);
         *///?}
     }
 
