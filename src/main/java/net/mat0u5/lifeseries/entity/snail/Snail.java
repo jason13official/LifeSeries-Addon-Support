@@ -744,8 +744,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 double movementSpeed = MOVEMENT_SPEED * speedMultiplier * GLOBAL_SPEED_MULTIPLIER;
                 double flyingSpeed = FLYING_SPEED * speedMultiplier * GLOBAL_SPEED_MULTIPLIER;
                 if (isNerfed()) {
-                    movementSpeed *= 0.7;
-                    flyingSpeed *= 0.7;
+                    movementSpeed *= 0.6;
+                    flyingSpeed *= 0.6;
                 }
                 //? if <= 1.21 {
                 Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(movementSpeed);

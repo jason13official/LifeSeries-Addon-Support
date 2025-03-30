@@ -154,7 +154,9 @@ public class WildLife extends Series {
         Snail.GLOBAL_SPEED_MULTIPLIER = seriesConfig.getOrCreateDouble("wildcard_snails_speed_multiplier", 1);
         Snail.SHOULD_DROWN_PLAYER = seriesConfig.getOrCreateBoolean("wildcard_snails_drown_players", true);
 
-        TimeDilation.MIN_PLAYER_MSPT = (float) (1000.0 / seriesConfig.getOrCreateDouble("wildcard_timedilation_max_player_tps", 40));
+        TimeDilation.MIN_TICK_RATE = (float) (20.0 * seriesConfig.getOrCreateDouble("wildcard_timedilation_min_speed", 0.05));
+        TimeDilation.MAX_TICK_RATE = (float) (20.0 * seriesConfig.getOrCreateDouble("wildcard_timedilation_max_speed", 5));
+        TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / seriesConfig.getOrCreateDouble("wildcard_timedilation_player_max_speed", 2));
 
         MobSwap.MAX_DELAY = seriesConfig.getOrCreateInt("wildcard_mobswap_start_spawn_delay", 7200);
         MobSwap.MIN_DELAY = seriesConfig.getOrCreateInt("wildcard_mobswap_end_spawn_delay", 2400);

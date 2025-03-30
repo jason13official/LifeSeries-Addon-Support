@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,7 +103,12 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void pressedSuperpowerKey(ServerPlayerEntity player) {
         if (playerSuperpowers.containsKey(player.getUuid())) {
-            playerSuperpowers.get(player.getUuid()).onKeyPressed();
+            if (currentSeries.isAlive(player)) {
+                playerSuperpowers.get(player.getUuid()).onKeyPressed();
+            }
+            else {
+                PlayerUtils.displayMessageToPlayer(player, Text.literal("Dead players can't use superpowers!"), 60);
+            }
         }
     }
 

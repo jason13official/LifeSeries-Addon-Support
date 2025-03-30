@@ -136,6 +136,7 @@ public class Session {
 
     public void addToDisplayTimer(ServerPlayerEntity player) {
         displayTimer.add(player.getUuid());
+        NetworkHandlerServer.sendLongPacket(player, "session_timer", 0);
     }
 
     public void removeFromDisplayTimer(ServerPlayerEntity player) {
@@ -251,18 +252,23 @@ public class Session {
         else if (statusFinished()) {
             message = "Session has ended";
         }
-        for (UUID uuid : displayTimer) {
-            if (skipTimer.containsKey(uuid)) {
-                int value = skipTimer.get(uuid);
-                value--;
-                if (value > 0) skipTimer.put(uuid, value);
-                else skipTimer.remove(uuid);
-                continue;
-            }
-            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
-            if (player == null) continue;
 
-            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            UUID uuid = player.getUuid();
+            if (displayTimer.contains(player.getUuid())) {
+                if (skipTimer.containsKey(uuid)) {
+                    int value = skipTimer.get(uuid);
+                    value--;
+                    if (value > 0) skipTimer.put(uuid, value);
+                    else skipTimer.remove(uuid);
+                    continue;
+                }
+
+                if (!NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+                    player.sendMessage(Text.literal(message).formatted(Formatting.GRAY), true);
+                }
+            }
+            else if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 long timestamp = 0;
                 if (statusNotStarted()) timestamp = -1;
                 else if (statusPaused()) timestamp = -2;
@@ -274,9 +280,6 @@ public class Session {
                 if (timestamp != 0) {
                     NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
                 }
-            }
-            else {
-                player.sendMessage(Text.literal(message).formatted(Formatting.GRAY), true);
             }
         }
     }

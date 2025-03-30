@@ -118,7 +118,7 @@ public class TimeDilation extends Wildcard {
             lastDiv = -1;
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvent.of(Identifier.ofVanilla("wildlife_time_slow_down")));
             slowlySetWorldSpeed(getMinTickRate(), 18);
-            if (!isNerfed()) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets("time_dilation", System.currentTimeMillis()));
+            if (!isNerfed() && getMinTickRate() <= 4) TaskScheduler.scheduleTask(18, () -> NetworkHandlerServer.sendLongPackets("time_dilation", System.currentTimeMillis()));
             TaskScheduler.scheduleTask(19, super::activate);
         });
     }
@@ -162,7 +162,7 @@ public class TimeDilation extends Wildcard {
 
     public static float getMinTickRate() {
         if (isNerfed()) return MIN_TICK_RATE_NERFED;
-        return MIN_TICK_RATE;
+        return Math.max(MIN_TICK_RATE, 1);
     }
 
     public static boolean isNerfed() {

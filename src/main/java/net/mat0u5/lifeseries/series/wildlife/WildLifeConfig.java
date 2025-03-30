@@ -3,10 +3,13 @@ package net.mat0u5.lifeseries.series.wildlife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
+
+import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
@@ -70,7 +73,9 @@ public class WildLifeConfig extends ConfigManager {
         getOrCreateDouble("wildcard_sizeshifting_size_change_multiplier", 1);
         //getOrCreateBoolean("wildcard_sizeshifting_prevent_shift_falling", true);
 
-        getOrCreateDouble("wildcard_timedilation_max_player_tps", 40);
+        getOrCreateDouble("wildcard_timedilation_min_speed", 0.05);
+        getOrCreateDouble("wildcard_timedilation_max_speed", 5);
+        getOrCreateDouble("wildcard_timedilation_player_max_speed", 2);
 
         getOrCreateDouble("wildcard_snails_speed_multiplier", 1);
         getOrCreateBoolean("wildcard_snails_drown_players", true);
@@ -142,19 +147,21 @@ public class WildLifeConfig extends ConfigManager {
         NetworkHandlerServer.sendConfig(player, "double", "wildcard_snails_speed_multiplier", 104, "Snails: Speed Multiplier", "Snail movement speed multiplier.", List.of(String.valueOf(getOrCreateDouble("wildcard_snails_speed_multiplier", 1)), "1"));
         NetworkHandlerServer.sendConfig(player, "boolean", "wildcard_snails_drown_players", 105, "Snails: Drown Players", "Controls whether snails can drown players when the snails are underwater.", List.of(String.valueOf(getOrCreateBoolean("wildcard_snails_drown_players", true)), "true"));
 
-        NetworkHandlerServer.sendConfig(player, "double", "wildcard_timedilation_max_player_tps", 106, "Time Dilation: Max Player TPS", "Controls the maximum speed the PLAYERS themselves can move (not the world).", List.of(String.valueOf(getOrCreateDouble("wildcard_timedilation_max_player_tps", 40)), "40"));
+        NetworkHandlerServer.sendConfig(player, "double", "wildcard_timedilation_min_speed", 106, "Time Dilation: Min World Speed Multiplier", "Controls the minimum speed the WORLD can move.", List.of(String.valueOf(getOrCreateDouble("wildcard_timedilation_min_speed", 0.05)), "0.05"));
+        NetworkHandlerServer.sendConfig(player, "double", "wildcard_timedilation_max_speed", 107, "Time Dilation: Max World Speed Multiplier", "Controls the maximum speed the WORLD can move.", List.of(String.valueOf(getOrCreateDouble("wildcard_timedilation_max_speed", 5)), "5"));
+        NetworkHandlerServer.sendConfig(player, "double", "wildcard_timedilation_player_max_speed", 108, "Time Dilation: Max Player Speed Multiplier", "Controls the maximum speed the PLAYERS themselves can move (not the world).", List.of(String.valueOf(getOrCreateDouble("wildcard_timedilation_player_max_speed", 2)), "2"));
 
-        NetworkHandlerServer.sendConfig(player, "boolean", "wildcard_trivia_bots_can_enter_boats", 107, "Trivia: Bots Can Enter Boats", "Controls whether trivia bots can enter boats.", List.of(String.valueOf(getOrCreateBoolean("wildcard_trivia_bots_can_enter_boats", true)), "true"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_bots_per_player", 108, "Trivia: Bots per Player", "The amount of trivia bots that will spawn for each player over the session.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_bots_per_player", 5)), "5"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_easy", 109, "Trivia: Easy Timer", "Easy question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_easy", 180)), "180"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_normal", 110, "Trivia: Normal Timer", "Normal question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_normal", 240)), "240"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_hard", 111, "Trivia: Hard Timer", "Hard question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_hard", 300)), "300"));
+        NetworkHandlerServer.sendConfig(player, "boolean", "wildcard_trivia_bots_can_enter_boats", 109, "Trivia: Bots Can Enter Boats", "Controls whether trivia bots can enter boats.", List.of(String.valueOf(getOrCreateBoolean("wildcard_trivia_bots_can_enter_boats", true)), "true"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_bots_per_player", 110, "Trivia: Bots per Player", "The amount of trivia bots that will spawn for each player over the session.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_bots_per_player", 5)), "5"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_easy", 111, "Trivia: Easy Timer", "Easy question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_easy", 180)), "180"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_normal", 112, "Trivia: Normal Timer", "Normal question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_normal", 240)), "240"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_trivia_seconds_hard", 113, "Trivia: Hard Timer", "Hard question timer length, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_trivia_seconds_hard", 300)), "300"));
 
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_start_spawn_delay", 112, "Mob Swap: Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_start_spawn_delay", 7200)), "7200"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_end_spawn_delay", 113, "Mob Swap: Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_end_spawn_delay", 2400)), "2400"));
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_spawn_mobs", 114, "Mob Swap: Number of Mobs", "The number of mobs that spawn each cycle.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_spawn_mobs", 250)), "250"));
-        NetworkHandlerServer.sendConfig(player, "double", "wildcard_mobswap_boss_chance_multiplier", 115, "Mob Swap: Boss Chance Multiplier", "Multiplier for boss chance (wither / warden).", List.of(String.valueOf(getOrCreateDouble("wildcard_mobswap_boss_chance_multiplier", 1)), "1"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_start_spawn_delay", 114, "Mob Swap: Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_start_spawn_delay", 7200)), "7200"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_end_spawn_delay", 115, "Mob Swap: Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_end_spawn_delay", 2400)), "2400"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_mobswap_spawn_mobs", 116, "Mob Swap: Number of Mobs", "The number of mobs that spawn each cycle.", List.of(String.valueOf(getOrCreateInt("wildcard_mobswap_spawn_mobs", 250)), "250"));
+        NetworkHandlerServer.sendConfig(player, "double", "wildcard_mobswap_boss_chance_multiplier", 117, "Mob Swap: Boss Chance Multiplier", "Multiplier for boss chance (wither / warden).", List.of(String.valueOf(getOrCreateDouble("wildcard_mobswap_boss_chance_multiplier", 1)), "1"));
 
-        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_superpowers_windcharge_max_mace_damage", 116, "Superpower - Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower.", List.of(String.valueOf(getOrCreateInt("wildcard_superpowers_windcharge_max_mace_damage", 2)), "2"));
+        NetworkHandlerServer.sendConfig(player, "integer", "wildcard_superpowers_windcharge_max_mace_damage", 118, "Superpower - Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower.", List.of(String.valueOf(getOrCreateInt("wildcard_superpowers_windcharge_max_mace_damage", 2)), "2"));
     }
 }
