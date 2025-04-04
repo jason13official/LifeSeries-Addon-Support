@@ -49,7 +49,7 @@ public class LimitedLifeCommands {
                 .then(literal("add")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("player", EntityArgumentType.player())
-                                .then(argument("time", StringArgumentType.string())
+                                .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                                         .executes(context -> lifeManager(
                                                 context.getSource(), EntityArgumentType.getPlayer(context, "player"),
@@ -61,7 +61,7 @@ public class LimitedLifeCommands {
                 .then(literal("remove")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("player", EntityArgumentType.player())
-                                .then(argument("time", StringArgumentType.string())
+                                .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                                         .executes(context -> lifeManager(
                                                 context.getSource(), EntityArgumentType.getPlayer(context, "player"),
@@ -73,7 +73,7 @@ public class LimitedLifeCommands {
                 .then(literal("set")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .then(argument("player", EntityArgumentType.player())
-                                .then(argument("time", StringArgumentType.string())
+                                .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("8h", "16h", "24h"), builder))
                                         .executes(context -> lifeManager(
                                                 context.getSource(), EntityArgumentType.getPlayer(context, "player"),

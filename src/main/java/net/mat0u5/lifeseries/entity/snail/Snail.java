@@ -699,18 +699,33 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void setNavigationFlying() {
         setPathfindingPenalty(PathNodeType.BLOCKED, -1);
+        setPathfindingPenalty(PathNodeType.TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.DANGER_TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.WALKABLE_DOOR, -1);
+        setPathfindingPenalty(PathNodeType.DOOR_OPEN, -1);
+        setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
         navigation = new BirdNavigation(this, getWorld());
         updateNavigationTarget();
     }
 
     public void setNavigationWalking() {
         setPathfindingPenalty(PathNodeType.BLOCKED, -1);
+        setPathfindingPenalty(PathNodeType.TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.DANGER_TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.WALKABLE_DOOR, -1);
+        setPathfindingPenalty(PathNodeType.DOOR_OPEN, -1);
+        setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
         navigation = new MobNavigation(this, getWorld());
         updateNavigationTarget();
     }
 
     public void setNavigationMining() {
         setPathfindingPenalty(PathNodeType.BLOCKED, 0);
+        setPathfindingPenalty(PathNodeType.TRAPDOOR, 0);
+        setPathfindingPenalty(PathNodeType.DANGER_TRAPDOOR, 0);
+        setPathfindingPenalty(PathNodeType.WALKABLE_DOOR, 0);
+        setPathfindingPenalty(PathNodeType.DOOR_OPEN, 0);
+        setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
         navigation = new MiningNavigation(this, getWorld());
         updateNavigationTarget();
     }

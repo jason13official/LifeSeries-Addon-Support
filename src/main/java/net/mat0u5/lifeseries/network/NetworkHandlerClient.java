@@ -91,14 +91,6 @@ public class NetworkHandlerClient {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
             MainClient.clientActiveWildcards = newList;
         }
-        if (name.equalsIgnoreCase("curse_sliding")) {
-            if (value.equalsIgnoreCase("true")) {
-                MainClient.CURSE_SLIDING = true;
-            }
-            else {
-                MainClient.CURSE_SLIDING = false;
-            }
-        }
         if (name.equalsIgnoreCase("jump") && MinecraftClient.getInstance().player != null) {
             MinecraftClient.getInstance().player.jump();
         }
@@ -212,17 +204,24 @@ public class NetworkHandlerClient {
                 }
             }catch(Exception ignored) {}
         }
+
         if (name.equalsIgnoreCase("time_dilation")) {
             MainClient.TIME_DILATION_TIMESTAMP = number;
         }
+
         if (name.equalsIgnoreCase("session_timer")) {
             MainClient.sessionTime = number;
             MainClient.sessionTimeLastUpdated = System.currentTimeMillis();
         }
+
         if (name.startsWith("limited_life_timer__")) {
             MainClient.limitedLifeTimerColor = name.replaceFirst("limited_life_timer__","");
             MainClient.limitedLifeTime = number;
             MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
+        }
+
+        if (name.equalsIgnoreCase("curse_sliding")) {
+            MainClient.CURSE_SLIDING = number;
         }
     }
 

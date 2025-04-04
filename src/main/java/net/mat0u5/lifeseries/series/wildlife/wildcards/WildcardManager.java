@@ -22,10 +22,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -212,6 +209,13 @@ public class WildcardManager {
         if (!isActiveWildcard(Wildcards.TIME_DILATION) && TimeControl.changedSpeedFor <= 0) {
             if (TimeDilation.getWorldSpeed() != 20) {
                 TimeDilation.setWorldSpeed(20);
+            }
+        }
+
+        if (isActiveWildcard(Wildcards.TRIVIA)) {
+            for (UUID uuid : TriviaBot.cursedSliding) {
+                ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+                NetworkHandlerServer.sendLongPacket(player, "curse_sliding", System.currentTimeMillis());
             }
         }
     }

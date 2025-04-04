@@ -62,7 +62,7 @@ public class SessionCommand {
                 .then(literal("timer")
                     .then(literal("set")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("time", StringArgumentType.string())
+                        .then(argument("time", StringArgumentType.greedyString())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("1h","1h30m","2h"), builder))
                             .executes(context -> SessionCommand.setTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
@@ -71,7 +71,7 @@ public class SessionCommand {
                     )
                     .then(literal("add")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("time", StringArgumentType.string())
+                        .then(argument("time", StringArgumentType.greedyString())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                             .executes(context -> SessionCommand.addTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
@@ -80,7 +80,7 @@ public class SessionCommand {
                     )
                     .then(literal("fastforward")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("time", StringArgumentType.string())
+                        .then(argument("time", StringArgumentType.greedyString())
                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
                             .executes(context -> SessionCommand.skipTime(
                                 context.getSource(), StringArgumentType.getString(context, "time")
@@ -89,7 +89,7 @@ public class SessionCommand {
                     )
                     .then(literal("remove")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                            .then(argument("time", StringArgumentType.string())
+                            .then(argument("time", StringArgumentType.greedyString())
                                     .suggests((context, builder) -> CommandSource.suggestMatching(List.of("5m"), builder))
                                     .executes(context -> SessionCommand.removeTime(
                                             context.getSource(), StringArgumentType.getString(context, "time")

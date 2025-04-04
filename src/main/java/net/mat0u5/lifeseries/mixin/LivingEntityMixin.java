@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.DummyInterface;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -16,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -160,5 +162,41 @@ public abstract class LivingEntityMixin implements DummyInterface {
         if (!Main.isClient()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         ClientEvents.onClientJump(entity);
+    }
+
+    @ModifyArg(
+            //? if <= 1.21 {
+            method = "travel",
+            //?} else {
+            /*method = "travelMidAir",
+            *///?}
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyMovementInput(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"),
+            index = 1
+    )
+    private float applyMovementInput(float slipperiness) {
+        if (!Main.isClient()) return slipperiness;
+        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000) return slipperiness;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
+            return 1.198f;
+        }
+        return slipperiness;
+    }
+
+    @ModifyArg(
+            method = "applyMovementInput",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"),
+            index = 0
+    )
+    private Vec3d applyMovementInput(Vec3d velocity) {
+        if (!Main.isClient()) return velocity;
+        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000) return velocity;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
+            BlockPos blockPos = playerr.getVelocityAffectingPos();
+            float originalSlipperiness = playerr.getWorld().getBlockState(blockPos).getBlock().getSlipperiness();
+            return new Vec3d((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
+        }
+        return velocity;
     }
 }

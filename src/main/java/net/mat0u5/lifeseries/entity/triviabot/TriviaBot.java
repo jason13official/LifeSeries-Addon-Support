@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotTeleportGoal;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.LongPayload;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
@@ -780,8 +781,9 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         SizeShifting.setPlayerSizeUnchecked(player, 4);
     }
 
+    public static final List<UUID> cursedSliding = new ArrayList<>();
     public void curseSlipperyGround(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, new StringPayload("curse_sliding", "true"));
+        cursedSliding.add(player.getUuid());
     }
 
     public void curseBindingArmor(ServerPlayerEntity player) {

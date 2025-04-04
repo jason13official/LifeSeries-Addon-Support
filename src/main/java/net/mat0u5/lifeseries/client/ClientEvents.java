@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientEvents {
+    public static long onGroundFor = 0;
     public static void registerEvents() {
         ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
         ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
@@ -67,10 +68,19 @@ public class ClientEvents {
                 checkSnailInvisible(client, player);
                 checkTriviaSnailInvisible(client, player);
                 if (MainClient.mutedForTicks > 0) MainClient.mutedForTicks--;
+                checkOnGroundFor(player);
             }
             ClientKeybinds.tick();
             ClientTaskScheduler.onClientTick();
         }catch(Exception ignored) {}
+    }
+    public static void checkOnGroundFor(ClientPlayerEntity player) {
+        if (!player.isOnGround()) {
+            onGroundFor = 0;
+        }
+        else {
+            onGroundFor++;
+        }
     }
 
     public static void spawnInvisibilityParticles(MinecraftClient client) {

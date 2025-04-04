@@ -79,6 +79,7 @@ public class LifeSeriesCommand {
                     )
                 )
         );
+        /*
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lifeseries")
@@ -97,6 +98,7 @@ public class LifeSeriesCommand {
                     )
             );
         }
+        */
     }
 
     public static int chooseSeries(ServerCommandSource source) {

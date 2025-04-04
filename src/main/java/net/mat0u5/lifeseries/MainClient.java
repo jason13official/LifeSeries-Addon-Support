@@ -24,7 +24,7 @@ public class MainClient implements ClientModInitializer {
     public static long TIME_DILATION_TIMESTAMP = 0;
     public static long SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
     public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
-    public static boolean CURSE_SLIDING = false;
+    public static long CURSE_SLIDING = 0;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();

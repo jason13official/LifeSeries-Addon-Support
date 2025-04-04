@@ -7,10 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.ai.pathing.PathNode;
+import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.AmbientEntity;
@@ -67,6 +64,12 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
 
     public void setNavigation(boolean flying) {
         despawnTimer = 0;
+        setPathfindingPenalty(PathNodeType.BLOCKED, -1);
+        setPathfindingPenalty(PathNodeType.TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.DANGER_TRAPDOOR, -1);
+        setPathfindingPenalty(PathNodeType.WALKABLE_DOOR, -1);
+        setPathfindingPenalty(PathNodeType.DOOR_OPEN, -1);
+        setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0);
         if (flying) {
             moveControl = new FlightMoveControl(this, 20, true);
             navigation = new BirdNavigation(this, getWorld());

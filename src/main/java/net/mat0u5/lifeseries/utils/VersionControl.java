@@ -26,11 +26,11 @@ public class VersionControl {
 
     public static String clientCmpatibilityMin() {
         //This is the version that the SERVER needs to have for the current client.
-        return "1.3.2";
+        return "dev-1.3.2.1";
     }
 
     public static String serverCompatibilityMin() {
         //This is the version that the CLIENT needs to have for the current server.
-        return "1.3.2";
+        return "dev-1.3.2.1";
     }
 }

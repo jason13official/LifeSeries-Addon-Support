@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.LongPayload;
+import net.mat0u5.lifeseries.network.packets.NumberPayload;
 import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.Stats;
@@ -239,7 +241,9 @@ public class TriviaWildcard extends Wildcard {
             AttributeUtils.resetPlayerJumpHeight(player);
         }
 
-        ServerPlayNetworking.send(player, new StringPayload("curse_sliding", "false"));
+        TriviaBot.cursedSliding.remove(player.getUuid());
+        NetworkHandlerServer.sendLongPacket(player, "curse_sliding", 0);
+
         NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");
     }
 

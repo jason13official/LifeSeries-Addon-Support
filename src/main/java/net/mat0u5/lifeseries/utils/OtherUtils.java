@@ -155,6 +155,7 @@ public class OtherUtils {
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
     public static int parseTimeFromArgument(String time) {
+        time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
             return -1; // Invalid time format
@@ -168,6 +169,7 @@ public class OtherUtils {
     }
 
     public static int parseTimeSecondsFromArgument(String time) {
+        time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
             return -1; // Invalid time format
