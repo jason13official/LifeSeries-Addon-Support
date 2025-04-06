@@ -38,8 +38,8 @@ public abstract class ConfigManager {
         getOrCreateBoolean("creative_ignore_blacklist", true);
         getOrCreateBoolean("auto_set_worldborder", true);
         getOrCreateBoolean("auto_keep_inventory", true);
-        getOrCreateBoolean("players_drop_items_on_last_death", false);
-        getOrCreateBoolean("show_death_title_on_last_death", true);
+        getOrCreateBoolean("players_drop_items_on_final_death", false);
+        getOrCreateBoolean("final_death_title_show", true);
         getOrCreateProperty("blacklist_banned_enchants","[]");
         getOrCreateBoolean("mute_dead_players", false);
     }

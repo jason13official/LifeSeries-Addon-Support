@@ -39,6 +39,7 @@ public abstract class Series extends Session {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-af45fc947c22c9ee91ec021d998318a5f2d5bdaf/RP.zip";
     public static final String RESOURCEPACK_MAIN_SHA ="38a74dc7c112e1e9c009e71f544b1b050a01560e";
     public boolean NO_HEALING = false;
+    public boolean SHOW_DEATH_TITLE = false;
 
     public abstract SeriesList getSeries();
     public abstract ConfigManager getConfig();
@@ -48,9 +49,6 @@ public abstract class Series extends Session {
     }
 
     public void initialize() {
-        createTeams();
-        createScoreboards();
-        updateStuff();
         reload();
     }
 
@@ -72,6 +70,11 @@ public abstract class Series extends Session {
 
     public void reload() {
         Session.MUTE_DEAD_PLAYERS = seriesConfig.getOrCreateBoolean("mute_dead_players", false);
+        SHOW_DEATH_TITLE = seriesConfig.getOrCreateBoolean("final_death_title_show",true);
+        createTeams();
+        createScoreboards();
+        updateStuff();
+        reloadAllPlayerTeams();
     }
 
     public void createTeams() {
@@ -256,7 +259,7 @@ public abstract class Series extends Session {
     }
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
-        boolean doDrop = seriesConfig.getOrCreateBoolean("players_drop_items_on_last_death", false);
+        boolean doDrop = seriesConfig.getOrCreateBoolean("players_drop_items_on_final_death", false);
         boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
@@ -269,9 +272,19 @@ public abstract class Series extends Session {
     }
 
     public void showDeathTitle(ServerPlayerEntity player) {
-        if (!seriesConfig.getOrCreateBoolean("show_death_title_on_last_death",true)) return;
-        PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal("ran out of lives!"), 20, 80, 20);
-        OtherUtils.broadcastMessage(Text.literal("").append(player.getStyledDisplayName()).append(Text.of(" ran out of lives.")));
+        if (SHOW_DEATH_TITLE) {
+            String subtitle = seriesConfig.getOrCreateProperty("final_death_title_subtitle", "ran out of lives!");
+            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
+        }
+        String message = seriesConfig.getOrCreateProperty("final_death_message", "${player} ran out of lives.");
+        if (message.contains("${player}")) {
+            String before = message.split("\\$\\{player}")[0];
+            String after = message.split("\\$\\{player}")[1];
+            OtherUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
+        }
+        else {
+            OtherUtils.broadcastMessage(Text.literal(message));
+        }
     }
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {

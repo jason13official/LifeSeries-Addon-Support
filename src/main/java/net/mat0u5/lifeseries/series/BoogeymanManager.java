@@ -12,8 +12,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class BoogeymanManager {
 
@@ -113,7 +112,8 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
             resetBoogeymen();
-            chooseBoogeymen(currentSeries.getAlivePlayers(), 100);
+            double chanceMultiplier = seriesConfig.getOrCreateDouble("boogeyman_chance_multiplier", 1);
+            chooseBoogeymen(currentSeries.getAlivePlayers(), 100 * chanceMultiplier);
         });
     }
 
@@ -137,17 +137,21 @@ public class BoogeymanManager {
     }
 
     public void boogeymenChooseRandom(List<ServerPlayerEntity> allowedPlayers, double currentChance) {
+        int maxAmount = seriesConfig.getOrCreateInt("boogeyman_max_amount", 999);
         List<ServerPlayerEntity> nonRedPlayers = currentSeries.getNonRedPlayers();
         Collections.shuffle(nonRedPlayers);
 
         List<ServerPlayerEntity> normalPlayers = new ArrayList<>();
         List<ServerPlayerEntity> boogeyPlayers = new ArrayList<>();
+        int chosen = 0;
         for (ServerPlayerEntity player : nonRedPlayers) {
             if (!allowedPlayers.contains(player)) continue;
             if (rolledPlayers.contains(player.getUuid())) continue;
             double currentRoll = Math.random()*100;
             if (currentChance >= currentRoll && currentChance != 0) {
+                if (chosen >= maxAmount) break;
                 boogeyPlayers.add(player);
+                chosen++;
             }
             else {
                 currentChance = 0;
@@ -171,7 +175,7 @@ public class BoogeymanManager {
         for (ServerPlayerEntity boogey : boogeyPlayers) {
             addBoogeyman(boogey);
             boogey.sendMessage(Text.of("§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. " +
-                    "If you fail, next session you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman."));
+                    "If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman."));
         }
         Stats.boogeymenChosen(boogeyPlayers);
     }
@@ -196,8 +200,6 @@ public class BoogeymanManager {
     public void playerFailBoogeyman(ServerPlayerEntity player) {
         if (!currentSeries.isAlive(player)) return;
         if (currentSeries.isOnLastLife(player, true)) return;
-        player.sendMessage(Text.of("§7You failed to kill a green or yellow name last session as the Boogeyman. As punishment, you have dropped to your §cLast Life§7. " +
-                "All alliances are severed and you are now hostile to all players. You may team with others on their Last Life if you wish."));
         OtherUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
         currentSeries.setPlayerLives(player, 1);
     }

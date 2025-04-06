@@ -12,7 +12,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class SessionCommand {
-    private static final String INVALID_TIME_FORMAT_ERROR = "Invalid time format. Use h, m, s for hours, minutes, and seconds.";
+    public static final String INVALID_TIME_FORMAT_ERROR = "Invalid time format. Use h, m, s for hours, minutes, and seconds.";
 
     public static boolean isAllowed() {
         return currentSeries.getSeries() != SeriesList.UNASSIGNED;
@@ -193,8 +192,8 @@ public class SessionCommand {
     public static int skipTime(ServerCommandSource source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == -1) {
+        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (totalTicks == null) {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
@@ -206,8 +205,8 @@ public class SessionCommand {
     public static int setTime(ServerCommandSource source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == -1) {
+        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (totalTicks == null) {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
@@ -220,8 +219,8 @@ public class SessionCommand {
     public static int addTime(ServerCommandSource source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == -1) {
+        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (totalTicks == null) {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
@@ -234,8 +233,8 @@ public class SessionCommand {
     public static int removeTime(ServerCommandSource source, String timeArgument) {
         if (checkBanned(source)) return -1;
 
-        int totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
-        if (totalTicks == -1) {
+        Integer totalTicks = OtherUtils.parseTimeFromArgument(timeArgument);
+        if (totalTicks == null) {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }

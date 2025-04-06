@@ -56,10 +56,8 @@ public class Session {
         passedTime = 0;
         MutableText sessionStartedText = Text.literal("Session started!").formatted(Formatting.GOLD);
         Text firstLine = sessionStartedText.append(Text.literal(" ["+OtherUtils.formatTime(sessionLength)+"]").formatted(Formatting.GRAY));
-        MutableText infoText1 = Text.literal("§f/session timer remaining§7 - sends remaining time in chat.");
-        MutableText infoText2 = Text.literal("§f/session timer showDisplay§7 - shows a permanent session countdown.");
+        MutableText infoText2 = Text.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
         OtherUtils.broadcastMessage(firstLine);
-        OtherUtils.broadcastMessage(infoText1);
         OtherUtils.broadcastMessage(infoText2);
         activeActions.clear();
         activeActions.add(endWarning1);

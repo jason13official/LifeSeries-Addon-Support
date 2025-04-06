@@ -154,11 +154,11 @@ public class OtherUtils {
     }
 
     private static final Pattern TIME_PATTERN = Pattern.compile("(?:(\\d+)h)?(?:(\\d+)m)?(?:(\\d+)s)?");
-    public static int parseTimeFromArgument(String time) {
+    public static Integer parseTimeFromArgument(String time) {
         time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
-            return -1; // Invalid time format
+            return null; // Invalid time format
         }
 
         int hours = parseInt(matcher.group(1));
@@ -168,11 +168,11 @@ public class OtherUtils {
         return (hours * 3600 + minutes * 60 + seconds) * 20;
     }
 
-    public static int parseTimeSecondsFromArgument(String time) {
+    public static Integer parseTimeSecondsFromArgument(String time) {
         time = time.replaceAll(" ", "").replaceAll("\"", "");
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
-            return -1; // Invalid time format
+            return null; // Invalid time format
         }
 
         int hours = parseInt(matcher.group(1));

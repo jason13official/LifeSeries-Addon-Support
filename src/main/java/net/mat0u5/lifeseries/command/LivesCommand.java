@@ -24,7 +24,7 @@ public class LivesCommand {
 
     public static boolean checkBanned(ServerCommandSource source) {
         if (isAllowed()) return false;
-        source.sendError(Text.of("This command is not available during Limited Life."));
+        source.sendError(Text.of("This command is not available during Limited Life. Use '/limitedlife time' instead."));
         return true;
     }
 

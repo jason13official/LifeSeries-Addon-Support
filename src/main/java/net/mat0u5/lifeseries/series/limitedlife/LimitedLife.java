@@ -23,9 +23,9 @@ public class LimitedLife extends Series {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
     public static final String COMMANDS_TEXT = "/claimkill, /lives";
     
-    private int DEFAULT_TIME = 86400;
-    private int YELLOW_TIME = 57600;
-    private int RED_TIME = 28800;
+    public static int DEFAULT_TIME = 86400;
+    public static int YELLOW_TIME = 57600;
+    public static int RED_TIME = 28800;
     private boolean SHOW_DEATH_TITLE = true;
     private int DEATH_NORMAL = -3600;
     private int DEATH_BOOGEYMAN = -7200;
@@ -121,9 +121,9 @@ public class LimitedLife extends Series {
     @Override
     public Formatting getColorForLives(Integer lives) {
         if (lives == null) return Formatting.GRAY;
-        if (lives >= YELLOW_TIME) return Formatting.GREEN;
-        if (lives >= RED_TIME) return Formatting.YELLOW;
-        if (lives >= 1) return Formatting.RED;
+        if (lives > YELLOW_TIME) return Formatting.GREEN;
+        if (lives > RED_TIME) return Formatting.YELLOW;
+        if (lives > 0) return Formatting.RED;
         return Formatting.DARK_GRAY;
     }
 
@@ -139,9 +139,9 @@ public class LimitedLife extends Series {
         Integer lives = getPlayerLives(player);
         if (lives == null) TeamUtils.addEntityToTeam("Unassigned",player);
         else if (lives <= 0) TeamUtils.addEntityToTeam("Dead",player);
-        else if (lives >= YELLOW_TIME) TeamUtils.addEntityToTeam("Green",player);
-        else if (lives >= RED_TIME) TeamUtils.addEntityToTeam("Yellow",player);
-        else if (lives >= 1) TeamUtils.addEntityToTeam("Red",player);
+        else if (lives > YELLOW_TIME) TeamUtils.addEntityToTeam("Green",player);
+        else if (lives > RED_TIME) TeamUtils.addEntityToTeam("Yellow",player);
+        else if (lives > 0) TeamUtils.addEntityToTeam("Red",player);
     }
 
     @Override
@@ -322,7 +322,6 @@ public class LimitedLife extends Series {
         DEFAULT_TIME = seriesConfig.getOrCreateInt("time_default", 86400);
         YELLOW_TIME = seriesConfig.getOrCreateInt("time_yellow", 57600);
         RED_TIME = seriesConfig.getOrCreateInt("time_red", 28800);
-        SHOW_DEATH_TITLE = seriesConfig.getOrCreateBoolean("show_death_title_on_last_death",true);
         DEATH_NORMAL = seriesConfig.getOrCreateInt("time_death",-3600);
         DEATH_BOOGEYMAN = seriesConfig.getOrCreateInt("time_death_boogeyman",-7200);
         KILL_NORMAL = seriesConfig.getOrCreateInt("time_kill",1800);
@@ -357,8 +356,18 @@ public class LimitedLife extends Series {
 
     @Override
     public void showDeathTitle(ServerPlayerEntity player) {
-        if (!SHOW_DEATH_TITLE) return;
-        PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal("ran out of time!"), 20, 80, 20);
-        OtherUtils.broadcastMessage(Text.literal("").append(player.getStyledDisplayName()).append(Text.of(" ran out of time.")));
+        if (SHOW_DEATH_TITLE) {
+            String subtitle = seriesConfig.getOrCreateProperty("final_death_title_subtitle", "ran out of time!");
+            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
+        }
+        String message = seriesConfig.getOrCreateProperty("final_death_message", "ran out of time.");
+        if (message.contains("${player}")) {
+            String before = message.split("\\$\\{player}")[0];
+            String after = message.split("\\$\\{player}")[1];
+            OtherUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
+        }
+        else {
+            OtherUtils.broadcastMessage(Text.literal(message));
+        }
     }
 }

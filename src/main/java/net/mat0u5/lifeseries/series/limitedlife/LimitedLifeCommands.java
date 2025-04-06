@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.limitedlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.command.SessionCommand;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -154,7 +155,11 @@ public class LimitedLifeCommands {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        int amount = OtherUtils.parseTimeSecondsFromArgument(timeArgument);
+        Integer amount = OtherUtils.parseTimeSecondsFromArgument(timeArgument);
+        if (amount == null) {
+            source.sendError(Text.literal(SessionCommand.INVALID_TIME_FORMAT_ERROR));
+            return -1;
+        }
         if (reverse) amount *= -1;
 
         if (setNotGive) {

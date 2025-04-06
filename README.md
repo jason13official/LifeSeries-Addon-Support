@@ -10,9 +10,10 @@
 
 
 # Life Series Mod
-This server-side mod is a one-to-one recreation of [Grian](https://www.youtube.com/c/Grian)'s Life Series in minecraft fabric, with as many QOL features as possible. 
-This includes automated lives tracking, automated team colors, automated session timer, automatic Boogeyman selection and kill tracking, and much more.<br>
-Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want to submit any bugs / give suggestions.
+This mod is a one-to-one recreation of [Grian](https://www.youtube.com/c/Grian)'s Life Series in minecraft fabric, with as many QOL features as possible. 
+That includes automated lives tracking, automated team colors, automated session timer, automatic Boogeyman selection and kill tracking, and much more.<br>
+The mod is *server-side required* and optional (**but very much recommended**) on the client-side, as that adds further QOL features (such as GUIs for most of the features, so you don't have to use the commands as much).<br>
+Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want to submit any bugs or give suggestions.
 ## Features
 
 This mod contains every single season of the Life Series, so that's Third Life, Last Life, Double Life, Limited Life, Secret Life, and now even Wild Life!
@@ -22,11 +23,11 @@ This mod contains every single season of the Life Series, so that's Third Life, 
 | Completed  | Completed | Completed   | Completed    | Completed | | Completed     |
 
 ## Wild Life
-As far as I know, this is the *only* full re-creation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
+This is the *only* full re-creation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
 To play Wild Life, the mod must be installed on the server **and on the client** - every player needs to have the mod installed in order to play.<br>
 This is because Wild Life contains features which would be impossible to do without client-side modifications.<br>
 **NOTE: Wild Life modifies core mechanics of the minecraft game, and using other complex mods or modded clients (Lunar Client, etc.), might cause some of the features not to work properly!!**<br>
-*It is also worth mentioning that some features in Wild Life will most probably trigger any anti-cheats, so consider disabling those.*
+*It is also worth mentioning that some features in Wild Life will most probably trigger any anti-cheats, so consider disabling any anti-cheats that you have installed on the server.*
 
 -----
 ## Usage
