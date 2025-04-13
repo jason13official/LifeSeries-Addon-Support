@@ -7,6 +7,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
@@ -17,11 +18,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
@@ -79,6 +79,13 @@ public class SecretLife extends Series {
     @Override
     public void onPlayerRespawn(ServerPlayerEntity player) {
         super.onPlayerRespawn(player);
+        if (giveBookOnRespawn.containsKey(player.getUuid())) {
+            ItemStack book = giveBookOnRespawn.get(player.getUuid());
+            giveBookOnRespawn.remove(player.getUuid());
+            if (book != null) {
+                player.getInventory().insertStack(book);
+            }
+        }
         TaskType type = TaskManager.getPlayersTaskType(player);
         if (isOnLastLife(player, false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
             TaskManager.chooseTasks(List.of(player), TaskType.RED);
@@ -283,6 +290,20 @@ public class SecretLife extends Series {
     public void tick(MinecraftServer server) {
         super.tick(server);
         TaskManager.tick();
+    }
+
+    private Map<UUID, ItemStack> giveBookOnRespawn = new HashMap<>();
+    @Override
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        super.modifyEntityDrops(entity, damageSource);
+        if (entity instanceof ServerPlayerEntity player) {
+            boolean dropBook = seriesConfig.getOrCreateBoolean("players_drop_task_on_death", false);
+            if (dropBook) return;
+            boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+            if (keepInventory) return;
+            giveBookOnRespawn.put(player.getUuid(), TaskManager.getPlayersTaskBook(player));
+            TaskManager.removePlayersTaskBook(player);
+        }
     }
 
     public void removePlayerHealth(ServerPlayerEntity player, double health) {

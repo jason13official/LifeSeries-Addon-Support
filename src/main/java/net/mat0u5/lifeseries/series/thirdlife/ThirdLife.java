@@ -35,13 +35,17 @@ public class ThirdLife extends Series {
 
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
+        sendPlayerJoinMessage(player);
+        super.onPlayerFinishJoining(player);
+    }
+
+    public void sendPlayerJoinMessage(ServerPlayerEntity player) {
         if (PermissionManager.isAdmin(player)) {
             player.sendMessage(Text.of("§7Third Life commands: §r"+COMMANDS_ADMIN_TEXT));
         }
         else {
             player.sendMessage(Text.of("§7Third Life non-admin commands: §r"+COMMANDS_TEXT));
         }
-        super.onPlayerFinishJoining(player);
     }
 
     @Override

@@ -21,6 +21,7 @@
     "SpawnEggItemMixin",
     "SpawnGroupMixin",
     "SpawnHelperMixin",
+    "WanderingTraderManagerMixin",
     "superpowers.AdvancedExplosionBehaviorMixin",
     "superpowers.EnchantmentHelperMixin",
     "superpowers.EnderPearlEntityMixin",

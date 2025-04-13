@@ -72,6 +72,7 @@ public class SecretLifeConfig extends ConfigManager {
         getOrCreateProperty("blacklist_clamped_enchants","["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]");
         getOrCreateProperty("final_death_title_subtitle", "ran out of lives!");
         getOrCreateProperty("final_death_message", "${player} ran out of lives.");
+        getOrCreateBoolean("players_drop_task_on_death", false);
     }
 
     @Override
@@ -100,7 +101,9 @@ public class SecretLifeConfig extends ConfigManager {
         index += NetworkHandlerServer.sendConfig(player, "string", "final_death_title_subtitle", index, "Death Subtitle", "The subtitle that shows when a player dies (requires Show Death Title on Final Death to be set to true).", List.of(getOrCreateProperty("final_death_title_subtitle", "ran out of lives!"), "ran out of lives!"));
         index += NetworkHandlerServer.sendConfig(player, "string", "final_death_message", index, "Final Death Message", "The message that gets shown in chat when a player fully dies.", List.of(getOrCreateProperty("final_death_message", "${player} ran out of lives."), "${player} ran out of lives."));
 
-        index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_keep_inventory", index, "Auto Keep Inventory", "Decides whether the keepInventory gamerule should be automatically turned on when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_keep_inventory", true)), "true"));
+        index += NetworkHandlerServer.sendConfig(player, "boolean", "players_drop_task_on_death", index, "Drop Task On Death", "Decides whether players drop their secret task book on death or if they keep it.", List.of(String.valueOf(getOrCreateBoolean("players_drop_task_on_death", false)), "false"));
+
+        index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_keep_inventory", index, "Keep Inventory", "Decides whether players drop their items when they die.", List.of(String.valueOf(getOrCreateBoolean("auto_keep_inventory", true)), "true"));
         index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_set_worldborder", index, "Auto Set Worldborder", "Decides whether the world border should be shrunk when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_set_worldborder", true)), "true"));
         index += NetworkHandlerServer.sendConfig(player, "boolean", "mute_dead_players", index, "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not.", List.of(String.valueOf(getOrCreateBoolean("mute_dead_players", false)), "false"));
 

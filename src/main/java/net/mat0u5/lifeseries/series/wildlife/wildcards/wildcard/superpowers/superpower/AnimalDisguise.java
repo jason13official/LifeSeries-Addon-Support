@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 
 import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.registries.MobRegistry;
+import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
@@ -28,6 +30,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
     }
     List<EntityType<?>> defaultRandom = List.of(EntityType.COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.PIG);
     List<EntityType<?>> bannedEntities = List.of(
+            MobRegistry.PATH_FINDER, MobRegistry.TRIVIA_BOT, MobRegistry.SNAIL,
             EntityType.PLAYER, EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.ARMOR_STAND, EntityType.GOAT,EntityType.VEX,
             EntityType.ALLAY, EntityType.PHANTOM, EntityType.DOLPHIN, EntityType.COD, EntityType.TROPICAL_FISH, EntityType.SALMON,
             EntityType.TADPOLE, EntityType.BEE, EntityType.HORSE, EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE,

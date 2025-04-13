@@ -178,8 +178,8 @@ public class WildLife extends Series {
     }
 
     @Override
-    public void modifyMobDrops(LivingEntity entity, DamageSource damageSource) {
-        super.modifyMobDrops(entity, damageSource);
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        super.modifyEntityDrops(entity, damageSource);
         if (damageSource.getSource() instanceof PlayerEntity) {
             if (entity instanceof WardenEntity || entity instanceof WitherEntity) {
                 //? if <= 1.21 {

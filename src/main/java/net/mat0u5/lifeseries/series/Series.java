@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.series;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
@@ -57,9 +59,9 @@ public abstract class Series extends Session {
         if (server.getOverworld().getWorldBorder().getSize() > 1000000 && seriesConfig.getOrCreateBoolean("auto_set_worldborder", true)) {
             OtherUtils.executeCommand("worldborder set 500");
         }
-        if (seriesConfig.getOrCreateBoolean("auto_keep_inventory", true)) {
-            OtherUtils.executeCommand("gamerule keepInventory true");
-        }
+
+        OtherUtils.executeCommand("gamerule keepInventory " + seriesConfig.getOrCreateBoolean("auto_keep_inventory", true));
+
         if (NO_HEALING) {
             OtherUtils.executeCommand("gamerule naturalRegeneration false");
         }
@@ -393,14 +395,16 @@ public abstract class Series extends Session {
     }
 
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
-        if (entity.getEntityWorld().isClient() || !(damageSource.getAttacker() instanceof ServerPlayerEntity)) {
-            return;
-        }
-        modifyMobDrops(entity, damageSource);
     }
 
-    public void modifyMobDrops(LivingEntity entity, DamageSource damageSource) {
-        spawnEggChance(entity);
+    public void onEntityDropItems(LivingEntity entity, DamageSource damageSource) {
+        modifyEntityDrops(entity, damageSource);
+    }
+
+    public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
+        if (!entity.getEntityWorld().isClient() && (damageSource.getAttacker() instanceof ServerPlayerEntity)) {
+            spawnEggChance(entity);
+        }
     }
 
     private void spawnEggChance(LivingEntity entity) {
@@ -411,6 +415,8 @@ public abstract class Series extends Session {
         if (entity instanceof WitherEntity) return;
         if (entity instanceof WardenEntity) return;
         if (entity instanceof ElderGuardianEntity) return;
+        if (entity instanceof Snail) return;
+        if (entity instanceof TriviaBot) return;
         if (entity.getCommandTags().contains("notNatural") && onlyNatural) return;
 
         EntityType<?> entityType = entity.getType();

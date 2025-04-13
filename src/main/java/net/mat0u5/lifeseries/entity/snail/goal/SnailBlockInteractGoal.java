@@ -21,6 +21,7 @@ public final class SnailBlockInteractGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.isPaused()) return false;
         if (mob.getWorld() == null) {
             return false;
         }

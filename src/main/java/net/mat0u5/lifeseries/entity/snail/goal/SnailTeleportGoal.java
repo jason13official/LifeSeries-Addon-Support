@@ -2,11 +2,8 @@ package net.mat0u5.lifeseries.entity.snail.goal;
 
 
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +26,7 @@ public final class SnailTeleportGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.isPaused()) return false;
         if (teleportCooldown > 0) {
             teleportCooldown--;
             return false;
@@ -53,7 +51,7 @@ public final class SnailTeleportGoal extends Goal {
     @Override
     public void start() {
         teleportCooldown = 20;
-        mob.teleportNearPlayer(Snail.TP_MIN_RANGE);
+        mob.fakeTeleportNearPlayer(Snail.TP_MIN_RANGE);
     }
 
     @Override

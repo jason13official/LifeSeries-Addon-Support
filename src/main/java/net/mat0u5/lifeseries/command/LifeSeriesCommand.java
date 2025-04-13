@@ -10,7 +10,6 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
@@ -79,7 +78,7 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-        /*
+
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lifeseries")
@@ -98,7 +97,7 @@ public class LifeSeriesCommand {
                     )
             );
         }
-        */
+
     }
 
     public static int chooseSeries(ServerCommandSource source) {
@@ -223,9 +222,10 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (TriviaWildcard.snails.containsKey(player.getUuid())) {
-            Snail snail = TriviaWildcard.snails.get(player.getUuid());
-            if (snail.attachment != null) snail.attachment.destroy();
+        if (Snails.snails.containsKey(player.getUuid())) {
+            Snail snail = Snails.snails.get(player.getUuid());
+            source.sendMessage(Text.of("teleportNearPlayer"));
+            snail.fakeTeleportNearPlayer(20);
         }
         source.sendMessage(Text.of("Test Command 1"));
 

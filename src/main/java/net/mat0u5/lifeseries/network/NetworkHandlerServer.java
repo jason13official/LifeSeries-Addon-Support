@@ -162,11 +162,11 @@ public class NetworkHandlerServer {
         if (name.equalsIgnoreCase("reset_snail_model")) {
             if (Snails.snails.containsKey(player.getUuid())) {
                 Snail snail = Snails.snails.get(player.getUuid());
-                snail.updateModel();
+                snail.updateModel(true);
             }
             if (TriviaWildcard.snails.containsKey(player.getUuid())) {
                 Snail snail = TriviaWildcard.snails.get(player.getUuid());
-                snail.updateModel();
+                snail.updateModel(true);
             }
         }
         if (name.equalsIgnoreCase("triple_jump")) {

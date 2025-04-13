@@ -53,6 +53,9 @@ public class ThirdLifeConfig extends ConfigManager {
     public ThirdLifeConfig() {
         super("./config/"+ Main.MOD_ID,"thirdlife.properties");
     }
+    public ThirdLifeConfig(String folderPath, String filePath) {
+        super(folderPath, filePath);
+    }
 
     @Override
     public void defaultProperties() {
@@ -61,7 +64,7 @@ public class ThirdLifeConfig extends ConfigManager {
         getOrCreateBoolean("spawn_egg_allow_on_spawner", false);
         getOrCreateInt("max_player_health", 20);
         getOrCreateInt("default_lives", 3);
-        getOrCreateBoolean("custom_enchanter_algorithm", true);
+        getOrCreateBoolean("custom_enchanter_algorithm", false);
         getOrCreateProperty("blacklist_items","["+String.join(", ", BLACKLISTED_ITEMS)+"]");
         getOrCreateProperty("blacklist_blocks","["+String.join(", ", BLACKLISTED_BLOCKS)+"]");
         getOrCreateProperty("blacklist_clamped_enchants","["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]");
@@ -95,7 +98,7 @@ public class ThirdLifeConfig extends ConfigManager {
 
 
         index += NetworkHandlerServer.sendConfig(player, "boolean", "creative_ignore_blacklist", index, "Creative Ignore Blacklist", "Controls whether players in creative mode are able to bypass the blacklists.", List.of(String.valueOf(getOrCreateBoolean("creative_ignore_blacklist", true)), "true"));
-        index += NetworkHandlerServer.sendConfig(player, "boolean", "custom_enchanter_algorithm", index, "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves.", List.of(String.valueOf(getOrCreateBoolean("custom_enchanter_algorithm", true)), "true"));
+        index += NetworkHandlerServer.sendConfig(player, "boolean", "custom_enchanter_algorithm", index, "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves.", List.of(String.valueOf(getOrCreateBoolean("custom_enchanter_algorithm", false)), "false"));
 
         index += NetworkHandlerServer.sendConfig(player, "double", "spawn_egg_drop_chance", index, "Spawn Egg Drop Chance", "Modifies the chance of mobs dropping their spawn egg. (0.05 = 5%)", List.of(String.valueOf(getOrCreateDouble("spawn_egg_drop_chance", 0.05)), "0.05"));
 
@@ -107,7 +110,7 @@ public class ThirdLifeConfig extends ConfigManager {
         index += NetworkHandlerServer.sendConfig(player, "string", "final_death_title_subtitle", index, "Death Subtitle", "The subtitle that shows when a player dies (requires Show Death Title on Final Death to be set to true).", List.of(getOrCreateProperty("final_death_title_subtitle", "ran out of lives!"), "ran out of lives!"));
         index += NetworkHandlerServer.sendConfig(player, "string", "final_death_message", index, "Final Death Message", "The message that gets shown in chat when a player fully dies.", List.of(getOrCreateProperty("final_death_message", "${player} ran out of lives."), "${player} ran out of lives."));
 
-        index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_keep_inventory", index, "Auto Keep Inventory", "Decides whether the keepInventory gamerule should be automatically turned on when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_keep_inventory", true)), "true"));
+        index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_keep_inventory", index, "Keep Inventory", "Decides whether players drop their items when they die.", List.of(String.valueOf(getOrCreateBoolean("auto_keep_inventory", true)), "true"));
         index += NetworkHandlerServer.sendConfig(player, "boolean", "auto_set_worldborder", index, "Auto Set Worldborder", "Decides whether the world border should be shrunk when the server starts.", List.of(String.valueOf(getOrCreateBoolean("auto_set_worldborder", true)), "true"));
         index += NetworkHandlerServer.sendConfig(player, "boolean", "mute_dead_players", index, "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not.", List.of(String.valueOf(getOrCreateBoolean("mute_dead_players", false)), "false"));
     }

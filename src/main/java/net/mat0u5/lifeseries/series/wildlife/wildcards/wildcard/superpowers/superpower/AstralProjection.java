@@ -32,6 +32,7 @@ public class AstralProjection extends ToggleableSuperpower {
     @Nullable
     private ServerWorld startedWorld;
     private float[] startedLooking = new float[2];
+    private GameMode startedGameMode = GameMode.SURVIVAL;
 
     public AstralProjection(ServerPlayerEntity player) {
         super(player);
@@ -80,11 +81,12 @@ public class AstralProjection extends ToggleableSuperpower {
         startedLooking[0] = player.getYaw();
         startedLooking[1] = player.getPitch();
         startedWorld = player.getServerWorld();
+        startedGameMode = player.interactionManager.getGameMode();
         player.changeGameMode(GameMode.SPECTATOR);
         PlayerInventory inv = player.getInventory();
 
         FakePlayer.createFake(fakePlayerName, player.server, startedPos, startedLooking[0], startedLooking[1], player.server.getOverworld().getRegistryKey(),
-                GameMode.SURVIVAL, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
+                startedGameMode, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
             NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
@@ -112,7 +114,7 @@ public class AstralProjection extends ToggleableSuperpower {
                     EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1], false);
             *///?}
         }
-        player.changeGameMode(GameMode.SURVIVAL);
+        player.changeGameMode(startedGameMode);
         player.playSoundToPlayer(SoundEvents.ENTITY_EVOKER_DEATH, SoundCategory.MASTER, 0.3f, 1);
     }
 

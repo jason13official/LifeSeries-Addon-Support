@@ -21,6 +21,7 @@ public final class SnailJumpAttackPlayerGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.isPaused()) return false;
         if (mob.dontAttackFor > 0) {
             return false;
         }

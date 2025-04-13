@@ -12,6 +12,7 @@ public final class SnailMineTowardsPlayerGoal extends SnailFlyGoal {
 
     @Override
     public boolean canStart() {
+        if (getMob().isPaused()) return false;
 
         if (getMob().getBoundPlayer() == null) {
             return false;

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -57,7 +58,7 @@ public class SuperPunch extends ToggleableSuperpower {
         ServerPlayerEntity rider = getPlayer();
         if (rider == null) return;
 
-        if (entity.hasVehicle()) return;
+        if (entity.hasPassengers()) return;
 
         if (rider.hasVehicle()) {
             Entity vehicle = rider.getVehicle();

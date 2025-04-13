@@ -19,6 +19,7 @@ public final class SnailStartFlyingGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.isPaused()) return false;
         if (mob.getBoundPlayer() == null) {
             return false;
         }

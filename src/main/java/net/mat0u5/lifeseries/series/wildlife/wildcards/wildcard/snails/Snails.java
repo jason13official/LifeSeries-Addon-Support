@@ -12,6 +12,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -69,13 +70,19 @@ public class Snails extends Wildcard {
         }
     }
 
-    public void spawnSnailFor(ServerPlayerEntity player) {
-        Snail snail = MobRegistry.SNAIL.spawn(player.getServerWorld(), player.getBlockPos().add(0,20,0), SpawnReason.COMMAND);
+    public static void spawnSnailFor(ServerPlayerEntity player) {
+        BlockPos pos = Snail.getBlockPosNearTarget(player, player.getServerWorld(), 20);
+        if (pos == null) pos = player.getBlockPos().add(0,20,0);
+        spawnSnailFor(player, pos);
+    }
+
+    public static void spawnSnailFor(ServerPlayerEntity player, BlockPos pos) {
+        if (player == null || pos == null) return;
+        Snail snail = MobRegistry.SNAIL.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND);
         if (snail != null) {
             snail.setBoundPlayer(player);
             snail.updateSkin(player);
             snails.put(player.getUuid(), snail);
-            snail.teleportNearPlayer(20);
         }
     }
 

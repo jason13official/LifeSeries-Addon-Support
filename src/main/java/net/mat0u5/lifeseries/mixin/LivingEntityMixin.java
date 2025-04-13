@@ -3,10 +3,12 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientEvents;
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.morph.DummyInterface;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -198,5 +200,11 @@ public abstract class LivingEntityMixin implements DummyInterface {
             return new Vec3d((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
         }
         return velocity;
+    }
+
+    @Inject(method = "drop", at = @At("HEAD"))
+    private void onDrop(ServerWorld world, DamageSource damageSource, CallbackInfo ci) {
+        if (!Main.isLogicalSide()) return;
+        Events.onEntityDropItems((LivingEntity) (Object) this, damageSource);
     }
 }

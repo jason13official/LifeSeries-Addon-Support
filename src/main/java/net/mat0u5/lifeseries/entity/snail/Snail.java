@@ -10,7 +10,6 @@ import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
 import net.mat0u5.lifeseries.events.Events;
@@ -37,11 +36,11 @@ import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -65,6 +64,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Snail extends HostileEntity implements AnimatedEntity {
@@ -94,11 +94,13 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public int nullPlayerChecks = 0;
     public Text snailName;
     private int lastAir = 0;
+    private int snailSkin = -1;
+    private int updateModelCooldown = -1;
 
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the snail
-    public static final int TP_MIN_RANGE = 15;
+    public static final int TP_MIN_RANGE = 40;
     public static final int MAX_DISTANCE = 150; // Distance over this teleports the snail to the player
     public static final int JUMP_COOLDOWN_SHORT = 10;
     public static final int JUMP_COOLDOWN_LONG = 30;
@@ -109,30 +111,13 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         setInvulnerable(true);
         setPersistent();
     }
-    
-    public void createHolder() {
-        if (!fromTrivia) {
-            this.holder = new LivingEntityHolder<>(this, MODEL);
-            this.attachment = EntityAttachment.ofTicking(holder, this);
-        }
-        else {
-            this.holder = new LivingEntityHolder<>(this, TRIVIA_MODEL);
-            this.attachment = EntityAttachment.ofTicking(holder, this);
-        }
+
+    public void setSnailSkin(int skinIndex) {
+        snailSkin = skinIndex;
     }
 
-    public void setSnailSkin(int index) {
-        setSnailSkin(0,index);
-    }
-
-    public void setSnailSkin(int tryNumber, int index) {
-        if (holder == null) {
-            if (tryNumber < 5) {
-                TaskScheduler.scheduleTask(5, () -> setSnailSkin(tryNumber+1, index));
-            }
-            return;
-        }
-        if (index >= 0) {
+    public void updateHolderSkin() {
+        if (snailSkin >= 0) {
             // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
             List<VirtualElement> elements = holder.getElements();
             for (VirtualElement element : elements) {
@@ -145,7 +130,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     if (oldValue > 10000) {
                         oldValue = (oldValue - 9999) % 10;
                     }
-                    int newValue = 9999 + oldValue + index * 10;
+                    int newValue = 9999 + oldValue + snailSkin * 10;
                     CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
                     currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
                     //?} else {
@@ -183,7 +168,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     if (oldCMD > 10000) {
                         oldCMD = (oldCMD - 9999) % 10;
                     }
-                    int newCMD = 9999 + oldCMD + index * 10;
+                    int newCMD = 9999 + oldCMD + snailSkin * 10;
                     *///?}
 
                     //? if = 1.21.2 {
@@ -200,10 +185,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 }
             }
         }
-        else {
-            this.holder = new LivingEntityHolder<>(this, MODEL);
-        }
-        updateModel();
     }
 
     public void updateSkin(ServerPlayerEntity player) {
@@ -211,17 +192,31 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         String playerNameLower = player.getNameForScoreboard().toLowerCase();
         if (SnailSkinsServer.indexedSkins.containsKey(playerNameLower)) {
             setSnailSkin(SnailSkinsServer.indexedSkins.get(playerNameLower));
+            updateModel(true);
         }
     }
 
-    public void updateModel() {
+    public void updateModel(boolean force) {
+        if (updateModelCooldown > 0 && !force) {
+            return;
+        }
+        updateModelCooldown = 5;
         if (attachment != null) this.attachment.destroy();
-        if (this.holder != null) TaskScheduler.scheduleTask(5, () -> this.attachment = EntityAttachment.ofTicking(this.holder, this));
-        TaskScheduler.scheduleTask(7, () -> {
-            if (getActualBoundPlayer() != null) {
-                sendDisplayEntityPackets(getActualBoundPlayer());
-            }
-        });
+        if (holder != null) this.holder.destroy();
+
+        if (!fromTrivia) {
+            this.holder = new LivingEntityHolder<>(this, MODEL);
+        }
+        else {
+            this.holder = new LivingEntityHolder<>(this, TRIVIA_MODEL);
+        }
+        this.holder.tick();
+        this.attachment = EntityAttachment.ofTicking(this.holder, this);
+        this.attachment.tick();
+        if (snailSkin >= 0) updateHolderSkin();
+        if (getActualBoundPlayer() != null) {
+            sendDisplayEntityPackets(getActualBoundPlayer());
+        }
     }
 
     public int getJumpRangeSquared() {
@@ -307,6 +302,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     @Override
     public void tick() {
+        if (isPaused()) {
+            navigation.stop();
+            return;
+        }
         super.tick();
 
         if (age % 10 == 0 && getActualBoundPlayer() != null) {
@@ -323,8 +322,9 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             }
         }
 
-        if (this.holder == null && age > 2) {
-            createHolder();
+        if (updateModelCooldown > 0) updateModelCooldown--;
+        if ((this.holder == null || this.attachment == null) && age > 2) {
+            updateModel(false);
         }
 
         if (dontAttackFor > 0) {
@@ -390,6 +390,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         chunkLoading();
         playSounds();
         clearStatusEffects();
+    }
+
+    public boolean isPaused() {
+        return currentSession.statusPaused();
     }
 
     public boolean isNerfed() {
@@ -603,38 +607,30 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         return getY() - belowBlock.getY() - 1;
     }
 
-    public void teleportNearPlayer(double minDistanceFromPlayer) {
+    public void fakeTeleportNearPlayer(double minDistanceFromPlayer) {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
         if (getWorld() instanceof ServerWorld world) {
-            this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
+            BlockPos tpTo = getBlockPosNearTarget(getBoundPlayer(), world, minDistanceFromPlayer);
+            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            this.getWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             AnimationUtils.spawnTeleportParticles(world, getPos());
-
-            BlockPos tpTo = getBlockPosNearTarget(world, minDistanceFromPlayer);
-            Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-            //? if <= 1.21 {
-            teleport(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), flags, getYaw(), getPitch());
-            //?} else {
-            /*teleport(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), flags, getYaw(), getPitch(), false);
-             *///?}
-
-            this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
-            AnimationUtils.spawnTeleportParticles(world, getPos());
-
-            TaskScheduler.scheduleTask(5, this::updateModel);
+            AnimationUtils.spawnTeleportParticles(world, tpTo.toCenterPos());
+            despawn();
+            Snails.spawnSnailFor(player, tpTo);
         }
     }
 
-    public BlockPos getBlockPosNearTarget(ServerWorld world, double minDistanceFromTarget) {
-        if (getBoundPlayer() == null) return getBlockPos();
+    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, ServerWorld world, double minDistanceFromTarget) {
+        if (target == null) return null;
 
-        BlockPos targetPos = getBoundPlayer().getBlockPos();
+        BlockPos targetPos = target.getBlockPos();
 
         for (int attempts = 0; attempts < 10; attempts++) {
             Vec3d offset = new Vec3d(
-                    random.nextDouble() * 2 - 1,
+                    target.getRandom().nextDouble() * 2 - 1,
                     0,
-                    random.nextDouble() * 2 - 1
+                    target.getRandom().nextDouble() * 2 - 1
             ).normalize().multiply(minDistanceFromTarget);
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
@@ -648,7 +644,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         return targetPos;
     }
 
-    private BlockPos findNearestAirBlock(BlockPos pos, World world) {
+    private static BlockPos findNearestAirBlock(BlockPos pos, World world) {
         for (int yOffset = -5; yOffset <= 5; yOffset++) {
             BlockPos newPos = pos.up(yOffset);
             if (world.getBlockState(newPos).isAir()) {

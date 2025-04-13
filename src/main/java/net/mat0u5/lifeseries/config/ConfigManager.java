@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.series.aprilfools.simplelife.SimpleLifeConfig;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
@@ -78,6 +79,7 @@ public abstract class ConfigManager {
         new LimitedLifeConfig();
         new SecretLifeConfig();
         new WildLifeConfig();
+        new SimpleLifeConfig();
     }
 
     private void createFileIfNotExists() {

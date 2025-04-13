@@ -10,7 +10,9 @@ public enum SeriesList {
     DOUBLE_LIFE,
     LIMITED_LIFE,
     SECRET_LIFE,
-    WILD_LIFE;
+    WILD_LIFE,
+
+    SIMPLE_LIFE;
 
     public static String getFormattedStringNameFromSeries(SeriesList series) {
         if (series == THIRD_LIFE) return "Third Life";
@@ -19,6 +21,7 @@ public enum SeriesList {
         if (series == LIMITED_LIFE) return "Limited Life";
         if (series == SECRET_LIFE) return "Secret Life";
         if (series == WILD_LIFE) return "Wild Life";
+        if (series == SIMPLE_LIFE) return "Simple Life";
         return "unassigned";
     }
 
@@ -29,6 +32,7 @@ public enum SeriesList {
         if (series == LIMITED_LIFE) return "limitedlife";
         if (series == SECRET_LIFE) return "secretlife";
         if (series == WILD_LIFE) return "wildlife";
+        if (series == SIMPLE_LIFE) return "simplelife";
         return "unassigned";
     }
 
@@ -39,6 +43,7 @@ public enum SeriesList {
         if (name.equalsIgnoreCase("limitedlife")) return LIMITED_LIFE;
         if (name.equalsIgnoreCase("secretlife")) return SECRET_LIFE;
         if (name.equalsIgnoreCase("wildlife")) return WILD_LIFE;
+        if (name.equalsIgnoreCase("simplelife")) return SIMPLE_LIFE;
 
         if (name.equalsIgnoreCase("Third Life")) return THIRD_LIFE;
         if (name.equalsIgnoreCase("Last Life")) return LAST_LIFE;
@@ -46,15 +51,16 @@ public enum SeriesList {
         if (name.equalsIgnoreCase("Limited Life")) return LIMITED_LIFE;
         if (name.equalsIgnoreCase("Secret Life")) return SECRET_LIFE;
         if (name.equalsIgnoreCase("Wild Life")) return WILD_LIFE;
+        if (name.equalsIgnoreCase("Simple Life")) return SIMPLE_LIFE;
         return UNASSIGNED;
     }
 
     public static List<SeriesList> getAllImplemented() {
-        return List.of(THIRD_LIFE,LAST_LIFE,DOUBLE_LIFE,LIMITED_LIFE,SECRET_LIFE,WILD_LIFE);
+        return List.of(THIRD_LIFE,LAST_LIFE,DOUBLE_LIFE,LIMITED_LIFE,SECRET_LIFE,WILD_LIFE,SIMPLE_LIFE);
     }
 
     public static List<String> getImplementedSeriesNames() {
-        return List.of("thirdlife", "lastlife", "doublelife", "limitedlife", "secretlife", "wildlife");
+        return List.of("thirdlife", "lastlife", "doublelife", "limitedlife", "secretlife", "wildlife", "simplelife");
     }
 
     public static String getDatapackName(SeriesList series) {
@@ -64,6 +70,6 @@ public enum SeriesList {
         if (series == LIMITED_LIFE) return "Limited Life Recipe Datapack.zip";
         if (series == SECRET_LIFE) return "Secret Life Recipe Datapack.zip";
         if (series == WILD_LIFE) return "Wild Life Recipe Datapack.zip";
-        return "";
+        return null;
     }
 }

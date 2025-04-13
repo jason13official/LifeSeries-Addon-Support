@@ -154,23 +154,20 @@ public class Events {
 
     public static void onEntityDeath(LivingEntity entity, DamageSource source) {
         if (isFakePlayer(entity)) return;
-
         try {
             if (!Main.isLogicalSide()) return;
             if (entity instanceof ServerPlayerEntity player) {
                 Events.onPlayerDeath(player, source);
                 return;
             }
-            onMobDeath(entity, source);
+            currentSeries.onMobDeath(entity, source);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
-
-    public static void onMobDeath(LivingEntity entity, DamageSource source) {
+    public static void onEntityDropItems(LivingEntity entity, DamageSource source) {
         if (isFakePlayer(entity)) return;
-
         try {
             if (!Main.isLogicalSide()) return;
-            currentSeries.onMobDeath(entity, source);
+            currentSeries.onEntityDropItems(entity, source);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

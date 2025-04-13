@@ -22,6 +22,7 @@ public class SnailFlyGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (mob.isPaused()) return false;
         if (!mob.flying || mob.gliding) {
             return false;
         }

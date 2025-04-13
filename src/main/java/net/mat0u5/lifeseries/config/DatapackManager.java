@@ -15,6 +15,7 @@ public class DatapackManager {
         try {
             for (SeriesList series : SeriesList.getAllImplemented()) {
                 String datapackName = SeriesList.getDatapackName(series);
+                if (datapackName == null) continue;
                 Path datapackPath = datapackFolder.resolve(datapackName);
                 if (Files.exists(datapackPath) && Files.isRegularFile(datapackPath)) {
                     Files.delete(datapackPath);

@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.dependencies.PolymerDependency;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
+import net.mat0u5.lifeseries.series.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
 import net.mat0u5.lifeseries.series.secretlife.TaskManager;
 import net.mat0u5.lifeseries.series.unassigned.UnassignedSeries;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.2.2";
+	public static final String MOD_VERSION = "dev-1.3.2.3";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -116,6 +117,9 @@ public class Main implements ModInitializer {
 				currentSeries = new UnassignedSeries();
 				changeSeriesTo("unassigned");
 			}
+		}
+		if (series.equalsIgnoreCase("simplelife")) {
+			currentSeries = new SimpleLife();
 		}
 		currentSession = currentSeries;
 		seriesConfig = currentSeries.getConfig();

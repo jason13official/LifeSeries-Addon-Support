@@ -23,6 +23,7 @@ public class SeriesInfoScreen extends DefaultScreen {
     private static final Identifier TEXTURE_LIMITEDLIFE = Identifier.of("lifeseries","textures/gui/limitedlife.png");
     private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
     private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
+    private static final Identifier TEXTURE_SIMPLELIFE = Identifier.of("lifeseries","textures/gui/simplelife.png");
 
     public static SeriesList series;
 
@@ -38,6 +39,7 @@ public class SeriesInfoScreen extends DefaultScreen {
         if (series == SeriesList.LIMITED_LIFE) return TEXTURE_LIMITEDLIFE;
         if (series == SeriesList.SECRET_LIFE) return TEXTURE_SECRETLIFE;
         if (series == SeriesList.WILD_LIFE) return TEXTURE_WILDLIFE;
+        if (series == SeriesList.SIMPLE_LIFE) return TEXTURE_SIMPLELIFE;
         return null;
     }
 
@@ -67,7 +69,7 @@ public class SeriesInfoScreen extends DefaultScreen {
         int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
         MutableText adminCommandsTextActual = null;
-        if (series == SeriesList.THIRD_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
+        if (series == SeriesList.THIRD_LIFE || series == SeriesList.SIMPLE_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
         if (series == SeriesList.LAST_LIFE) adminCommandsTextActual = Text.literal(LastLife.COMMANDS_ADMIN_TEXT);
         if (series == SeriesList.DOUBLE_LIFE) adminCommandsTextActual = Text.literal(DoubleLife.COMMANDS_ADMIN_TEXT);
         if (series == SeriesList.LIMITED_LIFE) adminCommandsTextActual = Text.literal(LimitedLife.COMMANDS_ADMIN_TEXT);
@@ -89,7 +91,7 @@ public class SeriesInfoScreen extends DefaultScreen {
 
         MutableText commandsText = Text.literal("§8Available §nnon-admin§8 commands: ");
         MutableText commandsTextActual = null;
-        if (series == SeriesList.THIRD_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
+        if (series == SeriesList.THIRD_LIFE || series == SeriesList.SIMPLE_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
         if (series == SeriesList.LAST_LIFE) commandsTextActual = Text.literal(LastLife.COMMANDS_TEXT);
         if (series == SeriesList.DOUBLE_LIFE) commandsTextActual = Text.literal(DoubleLife.COMMANDS_TEXT);
         if (series == SeriesList.LIMITED_LIFE) commandsTextActual = Text.literal(LimitedLife.COMMANDS_TEXT);
