@@ -1,13 +1,11 @@
 package net.mat0u5.lifeseries.series.limitedlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
-
-import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class LimitedLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(

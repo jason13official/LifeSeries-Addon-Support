@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series.limitedlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
 import net.mat0u5.lifeseries.utils.*;
@@ -14,7 +14,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
 import java.util.List;
-import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.seriesConfig;

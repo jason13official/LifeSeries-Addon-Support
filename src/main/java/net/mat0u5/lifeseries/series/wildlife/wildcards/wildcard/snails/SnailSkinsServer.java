@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ResourceHandler;
+import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ImagePayload;
 import net.mat0u5.lifeseries.series.SeriesList;

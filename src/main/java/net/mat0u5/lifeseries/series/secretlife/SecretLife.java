@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.series.*;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.component.DataComponentTypes;

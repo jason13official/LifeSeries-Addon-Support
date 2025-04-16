@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.StringListConfig;
-import net.mat0u5.lifeseries.config.StringListManager;
+import net.mat0u5.lifeseries.resources.config.StringListConfig;
+import net.mat0u5.lifeseries.resources.config.StringListManager;
 import net.mat0u5.lifeseries.series.SessionAction;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.*;

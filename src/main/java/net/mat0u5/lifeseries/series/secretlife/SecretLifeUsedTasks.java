@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
-import net.mat0u5.lifeseries.config.StringListConfig;
+import net.mat0u5.lifeseries.resources.config.StringListConfig;
 
 import java.util.ArrayList;
 import java.util.List;

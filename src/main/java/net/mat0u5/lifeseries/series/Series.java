@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
-import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
@@ -19,7 +19,6 @@ import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;

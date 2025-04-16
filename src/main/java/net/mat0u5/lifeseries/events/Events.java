@@ -1,15 +1,13 @@
 package net.mat0u5.lifeseries.events;
 
-
-
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.DatapackManager;
-import net.mat0u5.lifeseries.config.UpdateChecker;
+import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
+import net.mat0u5.lifeseries.utils.UpdateChecker;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
@@ -130,7 +128,7 @@ public class Events {
             if (currentSeries.getSeries() == SeriesList.DOUBLE_LIFE) {
                 ((DoubleLife) currentSeries).loadSoulmates();
             }
-            new DatapackManager().onServerStarted(server);
+            DatapackManager.onServerStarted(server);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

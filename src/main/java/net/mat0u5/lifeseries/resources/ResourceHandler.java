@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.config;
+package net.mat0u5.lifeseries.resources;
 
 import net.mat0u5.lifeseries.Main;
 

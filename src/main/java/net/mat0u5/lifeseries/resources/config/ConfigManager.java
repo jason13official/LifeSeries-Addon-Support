@@ -1,7 +1,6 @@
-package net.mat0u5.lifeseries.config;
+package net.mat0u5.lifeseries.resources.config;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.aprilfools.simplelife.SimpleLifeConfig;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
@@ -9,13 +8,11 @@ import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.series.secretlife.SecretLifeConfig;
 import net.mat0u5.lifeseries.series.thirdlife.ThirdLifeConfig;
 import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 public abstract class ConfigManager {
@@ -29,6 +26,7 @@ public abstract class ConfigManager {
         this.filePath = folderPath + "/" + filePath;
         createFileIfNotExists();
         loadProperties();
+        renamedProperties();
         defaultProperties();
     }
     protected abstract void defaultProperties();
@@ -44,6 +42,24 @@ public abstract class ConfigManager {
         getOrCreateProperty("blacklist_banned_enchants","[]");
         getOrCreateBoolean("mute_dead_players", false);
     }
+
+    protected void renamedProperties() {
+        renamedProperty("show_death_title_on_last_death", "final_death_title_show");
+        renamedProperty("players_drop_items_on_last_death", "players_drop_items_on_final_death");
+    }
+
+    private void renamedProperty(String from, String to) {
+        if (properties.containsKey(from)) {
+            if (!properties.containsKey(to)) {
+                String value = getProperty(from);
+                if (value != null) {
+                    setProperty(to, value);
+                }
+            }
+            removeProperty(from);
+        }
+    }
+
 
     public static void moveOldMainFileIfExists() {
         File newFolder = new File("./config/lifeseries/main/");
@@ -123,6 +139,17 @@ public abstract class ConfigManager {
     public void setProperty(String key, String value) {
         if (folderPath == null || filePath == null) return;
         properties.setProperty(key, value);
+        try (OutputStream output = new FileOutputStream(filePath)) {
+            properties.store(output, null);
+        } catch (IOException ex) {
+            Main.LOGGER.error(ex.getMessage());
+        }
+    }
+
+    public void removeProperty(String key) {
+        if (folderPath == null || filePath == null) return;
+        if (!properties.containsKey(key)) return;
+        properties.remove(key);
         try (OutputStream output = new FileOutputStream(filePath)) {
             properties.store(output, null);
         } catch (IOException ex) {
