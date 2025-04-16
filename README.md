@@ -54,9 +54,11 @@ All of this is configurable, which brings me to the next point, the **Config**.
 - The config files are all located in the `config/lifeseries/*` folder. There are files for every series, where you can modify the gameplay for each one of them.<br>
 - Reload the config using `/lifeseries reload` or simply the vanilla `/reload`
 - Currently, you can modify these (check the config files themselves for more info):
-  - Default number of lives, the blacklists, Clamped enchants, spawn egg drop rates, if players drop items when they lose their last life ** and much, much more**.
-  - Tasks in Secret Life (`config/lifeseries/secretlife/` folder) - there are three files, where you can modify / add / remove the easy, hard and red tasks.
-  - Snail names and skins, trivia timers, size shifting and much more in Wild Life.
+  - Modify default number of lives, the blacklists, Clamped enchants, spawn egg drop rates, if players drop items when they lose their last life ** and much, much more**.
+  - Change tasks in Secret Life (`config/lifeseries/secretlife/` folder) - there are three files, where you can modify / add / remove the easy, hard and red tasks.
+  - Modify rewards for completing tasks in Secret Life (`config/lifeseries/secretlife/task_reward_loottable_<version>.json`)
+  - Modify rewards for answering trivia correctly in Wild Life (`config/lifeseries/wildlife/trivia_reward_loottable_<version>.json`)
+  - Choose snail names and skins, trivia timers, size shifting and much more in Wild Life.
   - I can't mention it all, or we'd be here all day long. You can check the config files yourself to find what is configurable :)
 
 ## Commands & Subcommands

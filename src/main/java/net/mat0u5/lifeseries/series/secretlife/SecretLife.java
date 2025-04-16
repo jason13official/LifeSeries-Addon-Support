@@ -144,26 +144,38 @@ public class SecretLife extends Series {
         ItemStack camel = new ItemStack(Items.CAMEL_SPAWN_EGG);
         ItemStack zombieHorse = new ItemStack(Items.ZOMBIE_HORSE_SPAWN_EGG);
         ItemStack skeletonHorse = new ItemStack(Items.SKELETON_HORSE_SPAWN_EGG);
-        NbtCompound saddleItemComp = new NbtCompound();
-        saddleItemComp.putInt("Count", 1);
-        saddleItemComp.putString("id", "saddle");
-
         NbtCompound nbtCompSkeleton = new NbtCompound();
         nbtCompSkeleton.putInt("Tame", 1);
         nbtCompSkeleton.putString("id", "skeleton_horse");
-        nbtCompSkeleton.put("SaddleItem", saddleItemComp);
-        NbtComponent nbtSkeleton = NbtComponent.of(nbtCompSkeleton);
 
         NbtCompound nbtCompZombie= new NbtCompound();
         nbtCompZombie.putInt("Tame", 1);
         nbtCompZombie.putString("id", "zombie_horse");
-        nbtCompZombie.put("SaddleItem", saddleItemComp);
-        NbtComponent nbtZombie = NbtComponent.of(nbtCompZombie);
 
         NbtCompound nbtCompCamel = new NbtCompound();
         nbtCompCamel.putInt("Tame", 1);
         nbtCompCamel.putString("id", "camel");
+
+        //? if <= 1.21.4 {
+        NbtCompound saddleItemComp = new NbtCompound();
+        saddleItemComp.putInt("Count", 1);
+        saddleItemComp.putString("id", "saddle");
+        nbtCompSkeleton.put("SaddleItem", saddleItemComp);
+        nbtCompZombie.put("SaddleItem", saddleItemComp);
         nbtCompCamel.put("SaddleItem", saddleItemComp);
+        //?} else {
+        /*NbtCompound equipmentItemComp = new NbtCompound();
+        NbtCompound saddleItemComp = new NbtCompound();
+        saddleItemComp.putString("id", "saddle");
+        equipmentItemComp.put("saddle", saddleItemComp);
+        nbtCompSkeleton.put("equipment", equipmentItemComp);
+        nbtCompZombie.put("equipment", equipmentItemComp);
+        nbtCompCamel.put("equipment", equipmentItemComp);
+        *///?}
+
+
+        NbtComponent nbtSkeleton = NbtComponent.of(nbtCompSkeleton);
+        NbtComponent nbtZombie = NbtComponent.of(nbtCompZombie);
         NbtComponent nbtCamel= NbtComponent.of(nbtCompCamel);
 
         zombieHorse.set(DataComponentTypes.ENTITY_DATA, nbtZombie);

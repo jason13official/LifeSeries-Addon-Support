@@ -3,14 +3,17 @@ package net.mat0u5.lifeseries.resources.datapack;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 
 import java.nio.file.*;
 
 public class OldDatapackManager {
-    private static void deleteOldDatapacks(MinecraftServer server) {
+    public static boolean deletedOldDatapacks = false;
+    public static void deleteOldDatapacks(MinecraftServer server) {
+        if (server == null) return;
+        if (deletedOldDatapacks) return;
+        deletedOldDatapacks = true;
         Path datapackFolder = server.getSavePath(WorldSavePath.DATAPACKS);
         try {
             for (SeriesList series : SeriesList.getAllImplemented()) {
@@ -27,29 +30,10 @@ public class OldDatapackManager {
         }
     }
 
-    private static void disableOldDatapacks() {
+    public static void disableOldDatapacks() {
         for (SeriesList series : SeriesList.getAllImplemented()) {
             String datapackName = SeriesList.getDatapackName(series);
             OtherUtils.executeCommand("datapack disable \"file/"+datapackName+"\"");
         }
-    }
-
-    private static boolean hasOldDatapacks() {
-        for (SeriesList series : SeriesList.getAllImplemented()) {
-            String datapackName = SeriesList.getDatapackName(series);
-            if (datapackName == null) continue;
-            Path datapackPath = Paths.get("./datapacks").resolve(datapackName);
-            if (Files.exists(datapackPath) && Files.isRegularFile(datapackPath)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void onServerStarted(MinecraftServer server) {
-        if (!hasOldDatapacks()) return;
-        disableOldDatapacks();
-        TaskScheduler.scheduleTask(50, OtherUtils::reloadServerNoUpdate);
-        TaskScheduler.scheduleTask(100, () -> deleteOldDatapacks(server));
     }
 }

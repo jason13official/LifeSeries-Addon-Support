@@ -285,7 +285,18 @@ public class TaskManager {
                 if (i == 0) continue;
                 TaskScheduler.scheduleTask(3*i, () -> {
                     server.getOverworld().playSound(null, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    series.itemSpawner.spawnRandomItemForPlayer(server.getOverworld(), spawnPos, player);
+
+                    List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, server.getOverworld(), player, Identifier.of("lifeseriesdynamic", "task_reward_loottable"));
+                    if (!lootTableItems.isEmpty()) {
+                        for (ItemStack item : lootTableItems) {
+                            ItemStackUtils.spawnItemForPlayer(server.getOverworld(), spawnPos, item, player);
+                        }
+                    }
+                    else {
+                        ItemStack randomItem = series.itemSpawner.getRandomItem();
+                        ItemStackUtils.spawnItemForPlayer(server.getOverworld(), spawnPos, randomItem, player);
+                    }
+
                 });
             }
             TaskScheduler.scheduleTask(3*itemsNum+20, () -> secretKeeperBeingUsed = false);

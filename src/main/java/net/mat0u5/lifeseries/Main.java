@@ -4,8 +4,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.resources.config.MainConfig;
+import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.utils.UpdateChecker;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.dependencies.PolymerDependency;
@@ -35,10 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.2.4";
+	public static final String MOD_VERSION = "dev-1.3.2.5";
 	public static final String MOD_ID = "lifeseries";
 	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -126,7 +129,7 @@ public class Main implements ModInitializer {
 		blacklist = currentSeries.createBlacklist();
 	}
 
-	public static void reload() {
+	public static void reloadStart() {
 		if (Events.skipNextTickReload) return;
 		if (!isLogicalSide()) return;
 		if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) {
@@ -141,6 +144,10 @@ public class Main implements ModInitializer {
 		NetworkHandlerServer.sendUpdatePackets();
 		SnailSkinsServer.sendStoredImages();
 		PlayerUtils.resendCommandTrees();
+		DatapackManager.onReloadStart();
+	}
+	public static void reloadEnd() {
+		DatapackManager.onReloadEnd();
 	}
 
 	public static boolean changeSeriesTo(String changeTo) {
@@ -192,7 +199,7 @@ public class Main implements ModInitializer {
 		currentSeries.resetAllPlayerLives();
 		Main.parseSeries(changeTo);
 		currentSeries.initialize();
-		reload();
+		reloadStart();
 		for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
 			currentSeries.onPlayerJoin(player);
 			currentSeries.onPlayerFinishJoining(player);

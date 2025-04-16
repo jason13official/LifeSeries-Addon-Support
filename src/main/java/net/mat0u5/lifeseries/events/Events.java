@@ -50,7 +50,8 @@ public class Events {
         ServerLifecycleEvents.SERVER_STARTED.register(Events::onServerStart);
         ServerLifecycleEvents.SERVER_STOPPING.register(Events::onServerStopping);
 
-        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register(Events::onReload);
+        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register(Events::onReloadStart);
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(Events::onReloadEnd);
 
         AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
             if (!(player instanceof ServerPlayerEntity)) {
@@ -72,10 +73,17 @@ public class Events {
         AttackEntityCallback.EVENT.register(Events::onAttackEntity);
     }
 
-    private static void onReload(MinecraftServer server, LifecycledResourceManager resourceManager) {
+    private static void onReloadStart(MinecraftServer server, LifecycledResourceManager resourceManager) {
         try {
             if (!Main.isLogicalSide()) return;
-            Main.reload();
+            Main.reloadStart();
+        } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
+    }
+
+    private static void onReloadEnd(MinecraftServer server, LifecycledResourceManager resourceManager, boolean success) {
+        try {
+            if (!Main.isLogicalSide()) return;
+            Main.reloadEnd();
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

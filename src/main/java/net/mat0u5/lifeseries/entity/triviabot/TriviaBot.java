@@ -715,7 +715,17 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (relativeTargetPos.lengthSquared() > 0.0001) {
             vector = relativeTargetPos.normalize().multiply(0.3).add(0,0.1,0);
         }
-        itemSpawner.spawnRandomItemForPlayerWithVelocity((ServerWorld) getWorld(), pos, vector, getBoundPlayer());
+
+        List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerWorld) getWorld(), getBoundPlayer(), Identifier.of("lifeseriesdynamic", "trivia_reward_loottable"));
+        if (!lootTableItems.isEmpty()) {
+            for (ItemStack item : lootTableItems) {
+                ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) getWorld(), pos, item, getBoundPlayer(), vector);
+            }
+        }
+        else {
+            ItemStack randomItem = itemSpawner.getRandomItem();
+            ItemStackUtils.spawnItemForPlayerWithVelocity((ServerWorld) getWorld(), pos, randomItem, getBoundPlayer(), vector);
+        }
     }
 
     public static void initializeItemSpawner() {
@@ -737,12 +747,14 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         itemSpawner.addItem(new ItemStack(Items.NETHERITE_CHESTPLATE), 10);
         itemSpawner.addItem(new ItemStack(Items.NETHERITE_LEGGINGS), 10);
         itemSpawner.addItem(new ItemStack(Items.NETHERITE_BOOTS), 10);
+        itemSpawner.addItem(new ItemStack(Items.ARROW, 64), 10);
+        itemSpawner.addItem(new ItemStack(Items.IRON_BLOCK, 2), 10);
 
         ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
         ItemStackUtils.setCustomComponentBoolean(mace, "NoMending", true);
         mace.setDamage(mace.getMaxDamage()-1);
-        itemSpawner.addItem(mace, 10);
+        itemSpawner.addItem(mace, 5);
 
         ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
         ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);

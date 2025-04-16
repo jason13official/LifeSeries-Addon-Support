@@ -113,7 +113,6 @@ public class SimpleLife extends ThirdLife {
                     if (rand == 1) offers.add(new TradeOffer(new TradedItem(Items.DIRT, 32), Optional.empty(), Items.SPRUCE_SAPLING.getDefaultStack(), 0, 999999, 0, 0, 0));
 
                     wanderingTraderEntity.setOffersFromServer(offers);
-                    OtherUtils.log("Spawned Wandering Trader at " + blockPos3);
                     return true;
                 }
             }

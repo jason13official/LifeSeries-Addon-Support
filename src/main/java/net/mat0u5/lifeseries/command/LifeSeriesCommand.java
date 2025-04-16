@@ -6,13 +6,9 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
-import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
@@ -78,7 +74,7 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-
+        /*
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
                 literal("lifeseries")
@@ -97,7 +93,7 @@ public class LifeSeriesCommand {
                     )
             );
         }
-
+        */
     }
 
     public static int chooseSeries(ServerCommandSource source) {
@@ -236,9 +232,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-            ((Hunger) WildcardManager.activeWildcards.get(Wildcards.HUNGER)).newFoodRules();
-        }
         source.sendMessage(Text.of("Test Command 2"));
 
         return 1;
