@@ -8,6 +8,8 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.awt.*;
+
 public class ChooseSeriesScreen extends DefaultScreen {
 
     private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
@@ -22,7 +24,7 @@ public class ChooseSeriesScreen extends DefaultScreen {
     public static boolean hasSelectedBefore = false;
 
     public ChooseSeriesScreen(boolean hasSelectedBefore) {
-        super(Text.literal("Choose Series Screen"));
+        super(Text.literal("Choose Series Screen"), 1, 1.03f);
         this.hasSelectedBefore = hasSelectedBefore;
     }
 
@@ -48,6 +50,16 @@ public class ChooseSeriesScreen extends DefaultScreen {
             if (Math.abs(x - centerX) < 32) return 5;
             if (Math.abs(x - threeFourthX) < 32) return 6;
         }
+
+        Text aprilFools = Text.of("April Fools Series");
+        int textWidth = textRenderer.getWidth(aprilFools);
+        int textHeight = textRenderer.fontHeight;
+        Rectangle rect = new Rectangle(endX-9-textWidth, endY-9-textHeight, textWidth+1, textHeight+1);
+
+        if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) {
+            return 7;
+        }
+
         return 0;
     }
 
@@ -55,7 +67,11 @@ public class ChooseSeriesScreen extends DefaultScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
             int region = getRegion((int) mouseX, (int) mouseY);
-            if (region != 0) {
+            if (region == 7 && this.client != null) {
+                this.client.setScreen(new ChooseExtraSeriesScreen(hasSelectedBefore));
+                return true;
+            }
+            else if (region != 0) {
                 if (hasSelectedBefore && this.client != null) {
                     if (region == 1) this.client.setScreen(new ConfirmSeriesAnswerScreen(this, "Third Life"));
                     if (region == 2) this.client.setScreen(new ConfirmSeriesAnswerScreen(this, "Last Life"));
@@ -138,6 +154,25 @@ public class ChooseSeriesScreen extends DefaultScreen {
 
         String prompt = "Select the series you want to play.";
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);
+
+        Text aprilFools = Text.of("April Fools Series");
+        int textWidth = textRenderer.getWidth(aprilFools);
+        int textHeight = textRenderer.fontHeight;
+
+        Rectangle rect = new Rectangle(endX-9-textWidth, endY-9-textHeight, textWidth+1, textHeight+1);
+
+        context.fill(rect.x - 1, rect.y - 1, rect.x + rect.width + 1, rect.y, 0xFF3c3c3c); // top border
+        context.fill(rect.x - 1, rect.y + rect.height, rect.x + rect.width + 2, rect.y + rect.height + 2, 0xFF3c3c3c); // bottom
+        context.fill(rect.x - 1, rect.y, rect.x, rect.y + rect.height, 0xFF3c3c3c); // left
+        context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, 0xFF3c3c3c); // right
+
+        if (region == 7) {
+            RenderUtils.drawTextLeft(context, this.textRenderer, 0xffffff, aprilFools, rect.x+1, rect.y+1);
+        }
+        else {
+            RenderUtils.drawTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, aprilFools, rect.x+1, rect.y+1);
+        }
+
     }
 }
 

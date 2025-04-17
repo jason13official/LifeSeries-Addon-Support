@@ -1,19 +1,19 @@
 package net.mat0u5.lifeseries.client.gui.series;
 
-import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 
 public class ConfirmSeriesAnswerScreen extends DefaultSmallScreen {
-    private final ChooseSeriesScreen parent;
+    private final Screen parent;
     private final String seriesName;
 
-    public ConfirmSeriesAnswerScreen(ChooseSeriesScreen parent, String seriesName) {
+    public ConfirmSeriesAnswerScreen(Screen parent, String seriesName) {
         super(Text.literal("Confirm Answer"), 2.2f, 1.6f);
         this.parent = parent;
         this.seriesName = seriesName;
