@@ -611,17 +611,17 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
         if (getWorld() instanceof ServerWorld world) {
-            BlockPos tpTo = getBlockPosNearTarget(getBoundPlayer(), world, minDistanceFromPlayer);
-            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
-            this.getWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            BlockPos tpTo = getBlockPosNearTarget(player, minDistanceFromPlayer);
+            world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            player.getServerWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             AnimationUtils.spawnTeleportParticles(world, getPos());
-            AnimationUtils.spawnTeleportParticles(world, tpTo.toCenterPos());
+            AnimationUtils.spawnTeleportParticles(player.getServerWorld(), tpTo.toCenterPos());
             despawn();
             Snails.spawnSnailFor(player, tpTo);
         }
     }
 
-    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, ServerWorld world, double minDistanceFromTarget) {
+    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, double minDistanceFromTarget) {
         if (target == null) return null;
 
         BlockPos targetPos = target.getBlockPos();
@@ -635,7 +635,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
 
-            BlockPos validPos = findNearestAirBlock(pos, world);
+            BlockPos validPos = findNearestAirBlock(pos, target.getServerWorld());
             if (validPos != null) {
                 return validPos;
             }

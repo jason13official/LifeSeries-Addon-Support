@@ -71,7 +71,7 @@ public class Snails extends Wildcard {
     }
 
     public static void spawnSnailFor(ServerPlayerEntity player) {
-        BlockPos pos = Snail.getBlockPosNearTarget(player, player.getServerWorld(), 20);
+        BlockPos pos = Snail.getBlockPosNearTarget(player, 20);
         if (pos == null) pos = player.getBlockPos().add(0,20,0);
         spawnSnailFor(player, pos);
     }
