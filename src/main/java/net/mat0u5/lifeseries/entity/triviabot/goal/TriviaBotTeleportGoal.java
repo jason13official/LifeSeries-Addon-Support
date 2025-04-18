@@ -58,7 +58,7 @@ public final class TriviaBotTeleportGoal extends Goal {
     @Override
     public void start() {
         teleportCooldown = 20;
-        mob.teleportToPlayer();
+        mob.fakeTeleportToPlayer();
     }
 
     @Override

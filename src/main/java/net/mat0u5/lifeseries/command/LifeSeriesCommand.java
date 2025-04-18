@@ -4,11 +4,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
+import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
@@ -222,6 +225,11 @@ public class LifeSeriesCommand {
             Snail snail = Snails.snails.get(player.getUuid());
             source.sendMessage(Text.of("teleportNearPlayer"));
             snail.fakeTeleportNearPlayer(20);
+        }
+        if (TriviaWildcard.bots.containsKey(player.getUuid())) {
+            TriviaBot bot = TriviaWildcard.bots.get(player.getUuid());
+            source.sendMessage(Text.of("teleportNearPlayer_Trivia"));
+            bot.fakeTeleportToPlayer();
         }
         source.sendMessage(Text.of("Test Command 1"));
 

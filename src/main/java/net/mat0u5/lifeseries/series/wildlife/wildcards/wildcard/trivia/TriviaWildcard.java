@@ -23,6 +23,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.IOException;
 import java.util.*;
@@ -207,13 +208,15 @@ public class TriviaWildcard extends Wildcard {
     }
 
     public static void spawnBotFor(ServerPlayerEntity player) {
+        spawnBotFor(player, TriviaBot.getBlockPosNearTarget(player, player.getBlockPos().add(0,50,0), 10));
+    }
+    public static void spawnBotFor(ServerPlayerEntity player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(player.getServerWorld(), player.getBlockPos().add(0,50,0), SpawnReason.COMMAND);
+        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND);
         if (bot != null) {
             Stats.newTriviaBot(player);
             bot.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
-            bot.teleportAbovePlayer(10, 50);
             player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);
             NetworkHandlerServer.sendNumberPacket(player, "fake_thunder", 7);
         }

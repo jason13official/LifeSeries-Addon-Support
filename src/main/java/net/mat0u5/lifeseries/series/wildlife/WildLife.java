@@ -16,6 +16,7 @@ import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -181,7 +182,7 @@ public class WildLife extends Series {
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         super.modifyEntityDrops(entity, damageSource);
         if (damageSource.getSource() instanceof PlayerEntity) {
-            if (entity instanceof WardenEntity || entity instanceof WitherEntity) {
+            if (entity instanceof WardenEntity || entity instanceof WitherEntity || entity instanceof EnderDragonEntity) {
                 //? if <= 1.21 {
                 entity.dropStack(Items.TOTEM_OF_UNDYING.getDefaultStack());
                  //?} else {

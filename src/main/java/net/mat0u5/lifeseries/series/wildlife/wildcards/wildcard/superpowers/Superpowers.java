@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers;
 
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ public enum Superpowers {
     SUPER_PUNCH,
     MIMICRY,
     TELEPORTATION,
-    //LISTENING,
+    LISTENING,
     SHADOW_PLAY,
     FLIGHT,
     PLAYER_DISGUISE,
@@ -29,13 +29,16 @@ public enum Superpowers {
     NECROMANCY;
 
     public static List<Superpowers> getImplemented() {
-        return List.of(TIME_CONTROL, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE,
+        List<Superpowers> result = new ArrayList<>(List.of(TIME_CONTROL, WIND_CHARGE, ASTRAL_PROJECTION, PLAYER_DISGUISE,
                 ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY, TELEPORTATION, SHADOW_PLAY, INVISIBILITY,
                 TRIPLE_JUMP, SUPERSPEED, NECROMANCY
                 //? if >= 1.21.2 {
                 /*, CREAKING, FLIGHT
-                *///?}
-        );
+                 *///?}
+
+        ));
+        if (DependencyManager.voicechatLoaded()) result.add(LISTENING);
+        return result;
     }
 
     @Nullable
@@ -57,6 +60,9 @@ public enum Superpowers {
         /*if (superpower == CREAKING) return new Creaking(player);
         if (superpower == FLIGHT) return new Flight(player);
         *///?}
+        if (DependencyManager.voicechatLoaded()) {
+            if (superpower == LISTENING) return new Listening(player);
+        }
         return null;
     }
 

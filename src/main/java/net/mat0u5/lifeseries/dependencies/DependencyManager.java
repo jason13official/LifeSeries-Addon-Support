@@ -20,6 +20,10 @@ public class DependencyManager {
         return isModLoaded("cloth-config");
     }
 
+    public static boolean voicechatLoaded() {
+        return isModLoaded("voicechat");
+    }
+
     public static boolean wildLifeModsLoaded() {
         return cardinalComponentsLoaded() && blockbenchImportLibraryLoaded() && polymerLoaded();
     }

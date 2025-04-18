@@ -10,7 +10,6 @@ import de.tomalbrc.bil.file.loader.BbModelLoader;
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -18,8 +17,6 @@ import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotLookAtPlayerGoal;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotTeleportGoal;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.network.packets.LongPayload;
-import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -47,7 +44,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -407,32 +403,18 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (!except.equalsIgnoreCase("snail_transform")) animator.pauseAnimation("snail_transform");
     }
 
-    public void teleportToPlayer() {
-        ServerPlayerEntity player = getBoundPlayer();
-        if (player == null) return;
-        teleportTo(player.getServerWorld(), player.getX(), player.getY(), player.getZ());
-    }
-
-    public void teleportAbovePlayer(double minDistanceFromPlayer, int distanceAbove) {
+    public void fakeTeleportToPlayer() {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
         if (getWorld() instanceof ServerWorld world) {
-            BlockPos tpTo = getBlockPosNearTarget(world, player.getBlockPos().add(0, distanceAbove, 0), minDistanceFromPlayer);
-            teleportTo(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ());
+            BlockPos tpTo = getBlockPosNearTarget(player, player.getBlockPos(),5);
+            world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            player.getServerWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            AnimationUtils.spawnTeleportParticles(world, getPos());
+            AnimationUtils.spawnTeleportParticles(player.getServerWorld(), tpTo.toCenterPos());
+            despawn();
+            TriviaWildcard.spawnBotFor(player, tpTo);
         }
-    }
-
-    public void teleportTo(ServerWorld world, double x, double y, double z) {
-        this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
-        AnimationUtils.spawnTeleportParticles((ServerWorld) getWorld(), getPos());
-        Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-        //? if <= 1.21 {
-        teleport(world, x, y, z, flags, getYaw(), getPitch());
-        //?} else {
-        /*teleport(world, x, y, z, flags, getYaw(), getPitch(), false);
-         *///?}
-        this.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT);
-        AnimationUtils.spawnTeleportParticles(world, getPos());
     }
 
     public int getRemainingTime() {
@@ -445,19 +427,19 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return (timeToComplete * 1000L) - timeSinceStart;
     }
 
-    public BlockPos getBlockPosNearTarget(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {
-        if (getBoundPlayer() == null) return getBlockPos();
+    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, BlockPos targetPos, double minDistanceFromTarget) {
+        if (target == null) return targetPos;
 
         for (int attempts = 0; attempts < 10; attempts++) {
             Vec3d offset = new Vec3d(
-                    random.nextDouble() * 2 - 1,
+                    target.getRandom().nextDouble() * 2 - 1,
                     1,
-                    random.nextDouble() * 2 - 1
+                    target.getRandom().nextDouble() * 2 - 1
             ).normalize().multiply(minDistanceFromTarget);
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
 
-            BlockPos validPos = findNearestAirBlock(pos, world);
+            BlockPos validPos = findNearestAirBlock(pos, target.getServerWorld());
             if (validPos != null) {
                 return validPos;
             }
@@ -466,7 +448,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return targetPos;
     }
 
-    private BlockPos findNearestAirBlock(BlockPos pos, World world) {
+    private static BlockPos findNearestAirBlock(BlockPos pos, World world) {
         for (int yOffset = -5; yOffset <= 5; yOffset++) {
             BlockPos newPos = pos.up(yOffset);
             if (world.getBlockState(newPos).isAir() && world.getBlockState(pos.up(yOffset+1)).isAir()) {
@@ -778,7 +760,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     public void curseRavager(ServerPlayerEntity player) {
-        BlockPos spawnPos = getBlockPosNearTarget(player.getServerWorld(), getBlockPos(), 5);
+        BlockPos spawnPos = getBlockPosNearTarget(player, getBlockPos(), 5);
         EntityType.RAVAGER.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
     }
 
@@ -835,7 +817,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     public void curseBeeswarm(ServerPlayerEntity player) {
-        BlockPos spawnPos = getBlockPosNearTarget(player.getServerWorld(), getBlockPos(), 1);
+        BlockPos spawnPos = getBlockPosNearTarget(player, getBlockPos(), 1);
         BeeEntity bee1 = EntityType.BEE.spawn((ServerWorld) getWorld(), spawnPos, SpawnReason.COMMAND);
         BeeEntity bee2 = EntityType.BEE.spawn((ServerWorld) getWorld(), spawnPos, SpawnReason.COMMAND);
         BeeEntity bee3 = EntityType.BEE.spawn((ServerWorld) getWorld(), spawnPos, SpawnReason.COMMAND);

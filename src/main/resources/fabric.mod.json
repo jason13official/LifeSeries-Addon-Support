@@ -24,7 +24,10 @@
 		"fabric-datagen": [
 			"net.mat0u5.lifeseries.MainDataGenerator"
 		],
-		"cardinal-components-entity": ["net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency"]
+		"cardinal-components-entity": ["net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency"],
+		"voicechat": [
+			"net.mat0u5.lifeseries.voicechat.VoicechatMain"
+		]
 	},
 	"mixins": [
 		"lifeseries.mixins.json"
