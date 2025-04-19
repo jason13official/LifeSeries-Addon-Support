@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.client.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.client.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
+import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Trivia {
         difficulty = payload.difficulty();
         timestamp = payload.timestamp();
         secondsToComplete = payload.timeToComplete();
-        Main.LOGGER.info("[PACKET_CLIENT] Received trivia question: {" + question + ", " + difficulty + ", " + answers + "}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received trivia question: {" + question + ", " + difficulty + ", " + answers + "}");
         openGui();
     }
 

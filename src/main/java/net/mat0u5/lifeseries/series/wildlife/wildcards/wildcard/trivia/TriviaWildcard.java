@@ -245,6 +245,7 @@ public class TriviaWildcard extends Wildcard {
         }
 
         TriviaBot.cursedSliding.remove(player.getUuid());
+        TriviaBot.cursedRoboticVoicePlayers.remove(player.getUuid());
         NetworkHandlerServer.sendLongPacket(player, "curse_sliding", 0);
 
         NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");

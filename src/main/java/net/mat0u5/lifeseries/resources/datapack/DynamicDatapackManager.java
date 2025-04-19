@@ -70,7 +70,11 @@ public class DynamicDatapackManager {
     }
 
     public static String getTriviaPackVersion() {
+        //? if <= 1.21.4 {
         return "";
+        //?} else {
+        /*return "_1.21.5";
+         *///?}
     }
 
     public static String getTaskPackVersion() {

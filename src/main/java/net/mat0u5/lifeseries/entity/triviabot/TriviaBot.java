@@ -11,6 +11,7 @@ import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.AnimationHandler;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.goal.TriviaBotGlideGoal;
@@ -607,7 +608,9 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 pos.getX(), pos.getY()+1, pos.getZ(),
                 40, 0.1, 0.25, 0.1, 0.035
         );
-        int curse = world.random.nextInt(9);
+        int numOfCurses = 9;
+        if (DependencyManager.voicechatLoaded()) numOfCurses = 10;
+        int curse = world.random.nextInt(numOfCurses);
         switch (curse) {
             default:
             case 0:
@@ -637,11 +640,9 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             case 8:
                 curseBeeswarm(player);
                 break;
-            /* TODO
             case 9:
-                curse_robotic_voice(player);
+                curseRoboticVoice(player);
                 break;
-             */
         }
     }
 
@@ -833,6 +834,11 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (bee3 != null) bee3.setAngerTime(1000000);
         if (bee4 != null) bee4.setAngerTime(1000000);
         if (bee5 != null) bee5.setAngerTime(1000000);
+    }
+
+    public static final List<UUID> cursedRoboticVoicePlayers = new ArrayList<>();
+    public void curseRoboticVoice(ServerPlayerEntity player) {
+        cursedRoboticVoicePlayers.add(player.getUuid());
     }
 
     /*

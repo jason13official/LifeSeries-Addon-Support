@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.Session;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -215,7 +216,9 @@ public class PlayerUtils {
 
     public static void updatePlayerInventory(ServerPlayerEntity player) {
         player.currentScreenHandler.syncState();
-        player.playerScreenHandler.syncState();
+        if (!player.isCreative()) {
+            player.playerScreenHandler.syncState();
+        }
         player.getInventory().updateItems();
         player.currentScreenHandler.sendContentUpdates();
     }

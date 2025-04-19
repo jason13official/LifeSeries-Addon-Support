@@ -218,9 +218,9 @@
             {
               "function": "minecraft:set_components",
               "components": {
-                "minecraft:custom_name": "\"§6§l§nThe Sacred Patat\"",
+                "minecraft:custom_name": "§6§l§nThe Sacred Patat",
                 "minecraft:lore": [
-                  "\"§5§oEating this might help you. Or maybe not...\""
+                  "§5§oEating this might help you. Or maybe not..."
                 ]
               }
             }

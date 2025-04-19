@@ -8,7 +8,10 @@ import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
@@ -52,18 +55,24 @@ public class VoicechatMain implements VoicechatPlugin {
         if (currentSeries.getSeries() != SeriesList.WILD_LIFE) {
             return;
         }
-        /*
+        if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA)) {
+            return;
+        }
         try {
-            System.out.println("Audio packet received_taa");
-            byte[] opusData = event.getPacket().getOpusEncodedData();
+            VoicechatConnection connection = event.getSenderConnection();
+            if (connection == null) return;
+            UUID senderUUID = connection.getPlayer().getUuid();
+            if (!TriviaBot.cursedRoboticVoicePlayers.contains(senderUUID)) {
+                return;
+            }
 
-            byte[] processedOpusData = processOpusAudio(opusData, 2);
+            byte[] opusData = event.getPacket().getOpusEncodedData();
+            byte[] processedOpusData = processOpusAudioForRobot(senderUUID, opusData);
 
             event.getPacket().setOpusEncodedData(processedOpusData);
         } catch (Exception e) {
             Main.LOGGER.error("Error processing audio", e);
         }
-        */
     }
 
     private void listeningPower(MicrophonePacketEvent event) {
@@ -135,6 +144,23 @@ public class VoicechatMain implements VoicechatPlugin {
             }
 
             short[] processedPcm = RadioEffect.applyEffect(pcmData);
+
+            return encoder.encode(processedPcm);
+        } catch (Exception e) {
+            Main.LOGGER.error("Error processing Opus audio", e);
+            return opusData;
+        }
+    }
+
+    private byte[] processOpusAudioForRobot(UUID uuid, byte[] opusData) {
+        try {
+            short[] pcmData = decoder.decode(opusData);
+            if (pcmData == null) {
+                Main.LOGGER.warn("Failed to decode Opus data");
+                return opusData;
+            }
+
+            short[] processedPcm = RoboticVoice.applyEffect(uuid, pcmData);
 
             return encoder.encode(processedPcm);
         } catch (Exception e) {

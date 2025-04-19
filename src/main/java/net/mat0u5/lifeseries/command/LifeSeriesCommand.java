@@ -77,10 +77,10 @@ public class LifeSeriesCommand {
                     )
                 )
         );
-        /*
+
         if (VersionControl.isDevVersion()) {
             dispatcher.register(
-                literal("lifeseries")
+                literal("ls")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(literal("test")
                         .executes(context -> test(context.getSource()))
@@ -96,7 +96,7 @@ public class LifeSeriesCommand {
                     )
             );
         }
-        */
+
     }
 
     public static int chooseSeries(ServerCommandSource source) {
@@ -240,6 +240,8 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
+        TriviaBot.cursedRoboticVoicePlayers.add(player.getUuid());
+
         source.sendMessage(Text.of("Test Command 2"));
 
         return 1;
@@ -247,6 +249,8 @@ public class LifeSeriesCommand {
     public static int test3(ServerCommandSource source) {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
+
+        TriviaBot.cursedRoboticVoicePlayers.remove(player.getUuid());
 
         source.sendMessage(Text.of("Test Command 3"));
 
