@@ -57,7 +57,7 @@ public class WildLife extends Series {
             int lives = seriesConfig.getOrCreateInt("default_lives", 6);
             setPlayerLives(player, lives);
         }
-        WildcardManager.resetWildcardsOnPlayerJoin(player);
+        WildcardManager.onPlayerJoin(player);
     }
 
     @Override
@@ -69,6 +69,7 @@ public class WildLife extends Series {
             player.sendMessage(Text.of("§7Wild Life non-admin commands: §r"+COMMANDS_TEXT));
         }
         super.onPlayerFinishJoining(player);
+        WildcardManager.onPlayerFinishJoining(player);
     }
 
     @Override

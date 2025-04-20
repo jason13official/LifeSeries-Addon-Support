@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientKeybinds;
-import net.mat0u5.lifeseries.mixin.client.MinecraftClientMixin;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
@@ -85,7 +84,7 @@ public class TextRenderer {
         else if (MainClient.sessionTime == -2) timerText = timerText.append(Text.of("§7Session has been paused"));
         else if (MainClient.sessionTime == -1) timerText = timerText.append(Text.of("§7Session has not started"));
         else {
-            long remainingTime = MainClient.sessionTime - System.currentTimeMillis();
+            long remainingTime = roundTime(MainClient.sessionTime) - System.currentTimeMillis();
             if (remainingTime < 0) timerText = timerText.append(Text.of("§7Session has ended"));
             else timerText = timerText.append(Text.of("§7Session " + OtherUtils.formatTimeMillis(remainingTime)));
         }
@@ -105,7 +104,7 @@ public class TextRenderer {
         MutableText timerText = Text.literal("");
         if (MainClient.limitedLifeTime == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
         else {
-            long remainingTime = MainClient.limitedLifeTime - System.currentTimeMillis();
+            long remainingTime = roundTime(MainClient.limitedLifeTime) - System.currentTimeMillis();
             if (remainingTime < 0) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
             else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
         }
@@ -122,16 +121,16 @@ public class TextRenderer {
         if (!Trivia.isDoingTrivia()) return 0;
         if (client.currentScreen != null) return 0;
 
-        int secondsLeft = (int) Trivia.getRemainingTime();
+        long millisLeft = roundTime(Trivia.getEndTimestamp()) - System.currentTimeMillis();
 
-        Text actualTimer = Text.of(OtherUtils.formatTimeMillis(secondsLeft*1000L));
+        Text actualTimer = Text.of(OtherUtils.formatTimeMillis(millisLeft));
         Text timerText = Text.of("§7Trivia timer: ");
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        if (secondsLeft <= 5) renderTextLeft(context, actualTimer, x, y, 0xFFbf2222);
-        else if (secondsLeft <= 30) renderTextLeft(context, actualTimer, x, y, 0xFFd6961a);
+        if (millisLeft <= 5_000) renderTextLeft(context, actualTimer, x, y, 0xFFbf2222);
+        else if (millisLeft <= 30_000) renderTextLeft(context, actualTimer, x, y, 0xFFd6961a);
         else renderTextLeft(context, actualTimer, x, y, 0xFFffffff);
 
         renderTextLeft(context, timerText, x - client.textRenderer.getWidth(actualTimer), y);
@@ -146,7 +145,7 @@ public class TextRenderer {
         if (MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
         if (currentMillis >= MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) return 0;
-        long millisLeft = MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP - currentMillis;
+        long millisLeft = roundTime(MainClient.SUPERPOWER_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
         long pressedAgo = System.currentTimeMillis() - lastPressed;
@@ -166,7 +165,7 @@ public class TextRenderer {
         if (MainClient.MIMICRY_COOLDOWN_TIMESTAMP == 0) return 0;
         long currentMillis = System.currentTimeMillis();
         if (currentMillis >= MainClient.MIMICRY_COOLDOWN_TIMESTAMP) return 0;
-        long millisLeft = MainClient.MIMICRY_COOLDOWN_TIMESTAMP - currentMillis;
+        long millisLeft = roundTime(MainClient.MIMICRY_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
         Text timerText = Text.of("§7Mimic power cooldown: §f"+OtherUtils.formatTimeMillis(millisLeft));
@@ -185,5 +184,9 @@ public class TextRenderer {
     public static void renderTextLeft(DrawContext context, Text text, int x, int y, int color) {
         MinecraftClient client = MinecraftClient.getInstance();
         context.drawText(client.textRenderer, text, x - client.textRenderer.getWidth(text), y - client.textRenderer.fontHeight, color, false);
+    }
+
+    public static long roundTime(long time) {
+        return time - (time % 1000);
     }
 }

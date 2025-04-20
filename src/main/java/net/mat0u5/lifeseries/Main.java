@@ -39,9 +39,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "1.3.4";
+	public static final String MOD_VERSION = "1.3.4.1";
 	public static final String MOD_ID = "lifeseries";
-	public static final String GITHUB_API_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
+	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
+	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static ConfigManager config;
 
@@ -70,7 +71,7 @@ public class Main implements ModInitializer {
 		ConfigManager.createConfigs();
 
 		ModRegistries.registerModStuff();
-		UpdateChecker.checkForUpdates();
+		UpdateChecker.checkForMajorUpdates();
 
 		NetworkHandlerServer.registerPackets();
 		NetworkHandlerServer.registerServerReceiver();

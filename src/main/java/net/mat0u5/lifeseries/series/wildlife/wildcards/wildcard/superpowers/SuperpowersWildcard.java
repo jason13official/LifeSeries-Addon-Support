@@ -92,6 +92,23 @@ public class SuperpowersWildcard extends Wildcard {
         PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
     }
 
+    public static void rollRandomSuperpowerForPlayer(ServerPlayerEntity player) {
+        List<Superpowers> implemented = new java.util.ArrayList<>(Superpowers.getImplemented());
+        implemented.remove(Superpowers.NECROMANCY);
+        Collections.shuffle(implemented);
+
+        Superpowers power = implemented.getFirst();
+        if (assignedSuperpowers.containsKey(player.getUuid())) {
+            power = assignedSuperpowers.get(player.getUuid());
+            assignedSuperpowers.remove(player.getUuid());
+        }
+
+        Superpower instance = Superpowers.getInstance(player, power);
+        if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
+
+        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+    }
+
     public static void setSuperpower(ServerPlayerEntity player, Superpowers superpower) {
         if (playerSuperpowers.containsKey(player.getUuid())) {
             playerSuperpowers.get(player.getUuid()).turnOff();
@@ -110,6 +127,10 @@ public class SuperpowersWildcard extends Wildcard {
                 PlayerUtils.displayMessageToPlayer(player, Text.literal("Dead players can't use superpowers!"), 60);
             }
         }
+    }
+
+    public static boolean hasPower(ServerPlayerEntity player) {
+        return playerSuperpowers.containsKey(player.getUuid());
     }
 
     public static boolean hasActivePower(ServerPlayerEntity player, Superpowers superpower) {

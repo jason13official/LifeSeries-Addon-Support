@@ -74,7 +74,7 @@ public class WildcardManager {
         if (index == 6) activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
     }
 
-    public static void resetWildcardsOnPlayerJoin(ServerPlayerEntity player) {
+    public static void onPlayerJoin(ServerPlayerEntity player) {
         if (!isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
             if (SizeShifting.getPlayerSize(player) != 1 && !TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) {
                 SizeShifting.setPlayerSize(player, 1);
@@ -90,6 +90,12 @@ public class WildcardManager {
 
         if (DependencyManager.cardinalComponentsLoaded()) {
             CardinalComponentsDependency.resetWildcardsOnPlayerJoin(player);
+        }
+    }
+
+    public static void onPlayerFinishJoining(ServerPlayerEntity player) {
+        if (isActiveWildcard(Wildcards.SUPERPOWERS) && !SuperpowersWildcard.hasPower(player) && currentSeries.isAlive(player)) {
+            SuperpowersWildcard.rollRandomSuperpowerForPlayer(player);
         }
     }
 

@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.utils;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
@@ -16,16 +18,18 @@ import java.util.concurrent.TimeUnit;
 
 public class UpdateChecker {
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    public static boolean majorUpdateAvailable = false;
     public static boolean updateAvailable = false;
     public static String versionName;
     public static String versionDescription;
+    public static int version;
 
-    public static void checkForUpdates() {
+    public static void checkForMajorUpdates() {
         executor.submit(() -> {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URL(Main.GITHUB_API_URL).openConnection();
+                connection = (HttpURLConnection) new URL(Main.MAJOR_UPDATE_URL).openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);
@@ -36,18 +40,68 @@ public class UpdateChecker {
                     InputStreamReader reader = new InputStreamReader(connection.getInputStream());
                     JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
-                    versionName = json.get("tag_name").getAsString();
+                    String name = json.get("tag_name").getAsString();
 
                     int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
-                    int updateVersionNumber = VersionControl.getModVersionInt(versionName);
+                    int updateVersionNumber = VersionControl.getModVersionInt(name);
 
                     // Compare the current version with the latest version
                     if (currentVersionNumber < updateVersionNumber) {
-                        Main.LOGGER.info("New version found: "+versionName);
+                        Main.LOGGER.info("New major version found: "+name);
                         updateAvailable = true;
+                        majorUpdateAvailable = true;
+                        versionName = name;
+                        versionDescription = json.get("body").getAsString();
+                        version = updateVersionNumber;
                     }
 
-                    versionDescription = json.get("body").getAsString();
+
+                } else {
+                    Main.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());
+                }
+            } catch (Exception e) {
+                Main.LOGGER.error("Error while checking for updates: " + e.getMessage());
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                checkForMinorUpdates();
+            }
+        });
+    }
+
+    public static void checkForMinorUpdates() {
+        executor.submit(() -> {
+            HttpURLConnection connection = null;
+            try {
+                // Connect to the GitHub API
+                connection = (HttpURLConnection) new URL(Main.ALL_UPDATES_URL).openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+
+                if (connection.getResponseCode() == 200) {
+                    // Parse the JSON response
+                    InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                    JsonArray jsonList = JsonParser.parseReader(reader).getAsJsonArray();
+
+                    for (JsonElement jsonElement : jsonList.asList()) {
+                        JsonObject json = jsonElement.getAsJsonObject();
+
+                        String name = json.get("tag_name").getAsString();
+
+                        int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
+                        int updateVersionNumber = VersionControl.getModVersionInt(name);
+
+                        if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
+                            Main.LOGGER.info("New minor version found: "+name);
+                            updateAvailable = true;
+                            versionName = name;
+                            if (!majorUpdateAvailable) versionDescription = json.get("body").getAsString();
+                            version = updateVersionNumber;
+                        }
+                    }
 
                 } else {
                     Main.LOGGER.error("Failed to fetch update info: " + connection.getResponseCode());

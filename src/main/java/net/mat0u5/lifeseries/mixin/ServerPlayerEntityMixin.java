@@ -1,15 +1,18 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.world.TeleportTarget;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
@@ -40,4 +43,29 @@ public class ServerPlayerEntityMixin {
             });
         }
     }
+
+    @Inject(method = "sendMessageToClient", at = @At("HEAD"), cancellable = true)
+    private void sendMessageToClient(Text message, boolean overlay, CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (player instanceof FakePlayer) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "acceptsMessage", at = @At("HEAD"), cancellable = true)
+    private void acceptsMessage(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (player instanceof FakePlayer) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "acceptsChatMessage", at = @At("HEAD"), cancellable = true)
+    private void acceptsChatMessage(CallbackInfoReturnable<Boolean> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (player instanceof FakePlayer) {
+            cir.setReturnValue(false);
+        }
+    }
+
 }

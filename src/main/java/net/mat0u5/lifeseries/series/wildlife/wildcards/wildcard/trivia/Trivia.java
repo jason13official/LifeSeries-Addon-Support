@@ -32,6 +32,10 @@ public class Trivia {
         return secondsToComplete - timeSinceStart;
     }
 
+    public static long getEndTimestamp() {
+        return (timestamp + secondsToComplete * 1000L);
+    }
+
     public static boolean isDoingTrivia() {
         if (Trivia.secondsToComplete == 0) return false;
         long remaining = Trivia.getRemainingTime();

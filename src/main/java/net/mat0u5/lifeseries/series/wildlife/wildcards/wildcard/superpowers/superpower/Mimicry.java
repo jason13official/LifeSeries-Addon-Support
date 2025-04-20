@@ -41,11 +41,16 @@ public class Mimicry extends Superpower {
                 isLookingAtPlayer = true;
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer) && mimicPower != null) {
-                    if (mimicPower != Superpowers.NONE) {
+                    if (mimicPower != Superpowers.NONE && mimicPower != Superpowers.MIMICRY) {
                         mimic = Superpowers.getInstance(player, mimicPower);
                         successfullyMimicked = true;
-                        PlayerUtils.displayMessageToPlayer(player, Text.literal("Mimicked superpower of ").append(lookingAtPlayer.getStyledDisplayName()), 65);}
+                        PlayerUtils.displayMessageToPlayer(player, Text.literal("Mimicked superpower of ").append(lookingAtPlayer.getStyledDisplayName()), 65);
                         player.playSoundToPlayer(SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 0.3f, 1);
+                    }
+                    if (mimicPower == Superpowers.MIMICRY) {
+                        PlayerUtils.displayMessageToPlayer(player, Text.literal("You cannot mimic that power."), 65);
+                        return;
+                    }
                 }
             }
         }
@@ -58,8 +63,8 @@ public class Mimicry extends Superpower {
             PlayerUtils.displayMessageToPlayer(player, Text.of("That player does not have a superpower."), 65);
             return;
         }
-
         super.activate();
+        sendCooldownPacket();
     }
 
     @Override
