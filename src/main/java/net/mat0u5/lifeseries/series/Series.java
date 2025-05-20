@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -186,7 +187,7 @@ public abstract class Series extends Session {
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + amount;
-        if (lives < 0) lives = 0;
+        if (lives < 0 && !Necromancy.isRessurectedPlayer(player)) lives = 0;
         setPlayerLives(player, lives);
     }
 
@@ -268,6 +269,7 @@ public abstract class Series extends Session {
                 //?} else
                 /*player.dropStack(player.getServerWorld(), item);*/
             }
+            player.getInventory().clear();
         }
     }
 

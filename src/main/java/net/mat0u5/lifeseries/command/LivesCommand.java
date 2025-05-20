@@ -4,12 +4,17 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.utils.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
+
+import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.utils.PermissionManager.isAdmin;
@@ -84,6 +89,11 @@ public class LivesCommand {
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"))
                     )
                 )
+                .then(literal("*")
+                    .executes(context -> getAllLives(
+                            context.getSource())
+                    )
+                )
             )
             .then(literal("reset")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
@@ -118,6 +128,36 @@ public class LivesCommand {
         if (playerLives <= 0) {
             self.sendMessage(Text.of("Womp womp."));
         }
+
+        return 1;
+    }
+
+    public static int getAllLives(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+
+        if (!ScoreboardUtils.existsObjective("Lives")) {
+            source.sendError(Text.of("Nobody has been assigned lives yet."));
+            return -1;
+        }
+
+        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
+        if (entries.isEmpty()) {
+            source.sendError(Text.of("Nobody has been assigned lives yet."));
+            return -1;
+        }
+        MutableText text = Text.literal("Assigned Lives: \n");
+        for (ScoreboardEntry entry : entries) {
+            String name = entry.owner();
+            if (name.startsWith("`")) continue;
+            int lives = entry.value();
+            Formatting color = currentSeries.getColorForLives(lives);
+
+            MutableText pt1 = Text.literal("").append(Text.literal(name).formatted(color)).append(Text.literal(" has "));
+            Text pt2 = Text.literal(String.valueOf(lives)).formatted(color);
+            Text pt3 = Text.of(" "+(Math.abs(lives)==1?"life":"lives")+".\n");
+            text.append(pt1.append(pt2).append(pt3));
+        }
+        source.sendMessage(text);
 
         return 1;
     }

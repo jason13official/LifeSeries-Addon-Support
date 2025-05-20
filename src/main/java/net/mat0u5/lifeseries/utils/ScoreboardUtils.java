@@ -3,6 +3,9 @@ package net.mat0u5.lifeseries.utils;
 import net.minecraft.scoreboard.*;
 import net.minecraft.text.Text;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static net.mat0u5.lifeseries.Main.server;
 
 public class ScoreboardUtils {
@@ -16,6 +19,12 @@ public class ScoreboardUtils {
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getNullableObjective(name) != null) return;
         scoreboard.addObjective(name, criterion, Text.literal(displayName), criterion.getDefaultRenderType(), false, null);
+    }
+
+    public static boolean existsObjective(String name) {
+        if (server == null) return false;
+        Scoreboard scoreboard = server.getScoreboard();
+        return scoreboard.getNullableObjective(name) != null;
     }
 
     public static void removeObjective(String name) {
@@ -32,6 +41,14 @@ public class ScoreboardUtils {
         ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
         if (objective == null) return;
         scoreboard.getOrCreateScore(holder, objective).setScore(score);
+    }
+
+    public static Collection<ScoreboardEntry> getScores(String objectiveName) {
+        if (server == null) return Collections.emptyList();
+        Scoreboard scoreboard = server.getScoreboard();
+        ScoreboardObjective objective = scoreboard.getNullableObjective(objectiveName);
+        if (objective == null) return Collections.emptyList();
+        return scoreboard.getScoreboardEntries(objective);
     }
 
     public static Integer getScore(ScoreHolder holder, String objectiveName) {

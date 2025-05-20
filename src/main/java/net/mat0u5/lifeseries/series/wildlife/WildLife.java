@@ -74,6 +74,7 @@ public class WildLife extends Series {
 
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
+        if (Necromancy.isRessurectedPlayer(victim)) return true;
         if (isOnLastLife(attacker, false)) return true;
         if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
 

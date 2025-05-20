@@ -146,4 +146,8 @@ public class Necromancy extends Superpower {
     public static boolean shouldBeIncluded() {
         return !getDeadPlayers().isEmpty();
     }
+
+    public static boolean isRessurectedPlayer(ServerPlayerEntity player) {
+        return ressurectedPlayers.contains(player.getUuid());
+    }
 }

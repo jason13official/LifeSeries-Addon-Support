@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -187,10 +188,14 @@ public class OtherUtils {
     }
 
     public static void executeCommand(String command) {
-        if (server == null) return;
-        CommandManager manager = server.getCommandManager();
-        ServerCommandSource commandSource = server.getCommandSource().withSilent();
-        manager.executeWithPrefix(commandSource, command);
+        try {
+            if (server == null) return;
+            CommandManager manager = server.getCommandManager();
+            ServerCommandSource commandSource = server.getCommandSource().withSilent();
+            manager.executeWithPrefix(commandSource, command);
+        } catch (Exception e) {
+            Main.LOGGER.error("Error executing command: " + command, e);
+        }
     }
 
     public static void throwError(String error) {
@@ -216,7 +221,28 @@ public class OtherUtils {
         Events.skipNextTickReload = true;
         reloadServer();
     }
+    private static long[] reloads = {System.currentTimeMillis(),System.currentTimeMillis(),System.currentTimeMillis()};
     public static void reloadServer() {
-        OtherUtils.executeCommand("reload");
+        try {
+            System.out.println("reloads: " + Arrays.toString(reloads));
+            Arrays.sort(reloads);
+            int inInterval = 0;
+            for (int i = 0; i < 3; i++) {
+                if (System.currentTimeMillis() - OtherUtils.reloads[i] < 5000) {
+                    inInterval++;
+                }
+            }
+
+            if (inInterval >= 3) {
+                Main.LOGGER.error("Detected and prevented possible reload loop!");
+                return;
+            }
+            reloads[0] = System.currentTimeMillis();
+            OtherUtils.executeCommand("reload");
+        } catch (Exception e) {
+            Main.LOGGER.error("Error reloading server", e);
+        }
+
+
     }
 }
