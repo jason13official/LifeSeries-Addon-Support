@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.render;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientKeybinds;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
@@ -15,12 +16,38 @@ public class TextRenderer {
         renderTicks++;
         MinecraftClient client = MinecraftClient.getInstance();
         int yPos = client.getWindow().getScaledHeight() - 5;
+
+        if (Main.DEBUG) {
+            yPos += _renderSnailDistance(client, context, yPos);
+        }
+
         yPos += renderGameNotBroken(client, context, yPos);
         yPos += renderSessionTimer(client, context, yPos);
         yPos += renderLimitedLifeTimer(client, context, yPos);
         yPos += renderMimicryTimer(client, context, yPos);
         yPos += renderSuperpowerCooldown(client, context, yPos);
         yPos += renderTriviaTimer(client, context, yPos);
+    }
+
+    public static int _renderSnailDistance(MinecraftClient client, DrawContext context, int y) {
+        try {
+            if (MainClient.snailPos == null) return 0;
+            if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return 0;
+            if (client.player == null) return 0;
+
+            float distance = (float) client.player.getPos().distanceTo(MainClient.snailPos.toCenterPos());
+
+            Text timerText = Text.literal(String.valueOf(Math.round(distance)));
+            if (distance < 20) timerText = Text.literal("§c"+String.valueOf(Math.round(distance)));
+
+            int screenWidth = client.getWindow().getScaledWidth();
+            int x = screenWidth - 5;
+
+            renderTextLeft(context, timerText, x, y);
+
+            return -client.textRenderer.fontHeight-5;
+        }catch(Exception e) {}
+        return 0;
     }
 
     public static int renderGameNotBroken(MinecraftClient client, DrawContext context, int y) {

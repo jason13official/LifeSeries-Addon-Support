@@ -100,7 +100,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public static final float MOVEMENT_SPEED = 0.35f;
     public static final float FLYING_SPEED = 0.3f;
     public static final int STATIONARY_TP_COOLDOWN = 400; // No movement for 20 seconds teleports the snail
-    public static final int TP_MIN_RANGE = 40;
+    public static final int TP_MIN_RANGE = 75;
     public static final int MAX_DISTANCE = 150; // Distance over this teleports the snail to the player
     public static final int JUMP_COOLDOWN_SHORT = 10;
     public static final int JUMP_COOLDOWN_LONG = 30;
@@ -489,6 +489,9 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         player.setAttacker(this);
         player.damage(player.getServerWorld(), damageSource, 2);
         *///?}
+        if (player.isDead()) {
+            despawn();
+        }
     }
 
     @Override
@@ -586,7 +589,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     @Nullable
     public BlockPos getGroundBlock() {
         Vec3d startPos = getPos();
-        Vec3d endPos = startPos.add(0, getWorld().getBottomY(), 0);
+        Vec3d endPos = new Vec3d(startPos.getX(), getWorld().getBottomY(), startPos.getZ());
 
         BlockHitResult result = getWorld().raycast(
                 new RaycastContext(
@@ -626,7 +629,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
         BlockPos targetPos = target.getBlockPos();
 
-        for (int attempts = 0; attempts < 10; attempts++) {
+        for (int attempts = 0; attempts < 25; attempts++) {
             Vec3d offset = new Vec3d(
                     target.getRandom().nextDouble() * 2 - 1,
                     0,
@@ -645,7 +648,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     private static BlockPos findNearestAirBlock(BlockPos pos, World world) {
-        for (int yOffset = -5; yOffset <= 5; yOffset++) {
+        for (int yOffset = 5; yOffset >= -5; yOffset--) {
             BlockPos newPos = pos.up(yOffset);
             if (world.getBlockState(newPos).isAir()) {
                 return newPos;
@@ -666,9 +669,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public boolean isValidBlockOnGround() {
         if (groundPathFinder == null) return false;
-        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.LAVA)) return false;
-        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.WATER)) return false;
-        if (groundPathFinder.getBlockStateAtPos().isOf(Blocks.POWDER_SNOW)) return false;
+        BlockState block = groundPathFinder.getWorld().getBlockState(groundPathFinder.getBlockPos());
+        if (block.isOf(Blocks.LAVA)) return false;
+        if (block.isOf(Blocks.WATER)) return false;
+        if (block.isOf(Blocks.POWDER_SNOW)) return false;
         return true;
     }
 

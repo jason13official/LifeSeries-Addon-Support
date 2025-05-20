@@ -224,7 +224,7 @@ public class LifeSeriesCommand {
         if (Snails.snails.containsKey(player.getUuid())) {
             Snail snail = Snails.snails.get(player.getUuid());
             source.sendMessage(Text.of("teleportNearPlayer"));
-            snail.fakeTeleportNearPlayer(20);
+            snail.fakeTeleportNearPlayer(1);
         }
         if (TriviaWildcard.bots.containsKey(player.getUuid())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUuid());

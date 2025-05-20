@@ -1,13 +1,11 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "###",
-        "#S#",
-        " i "
+        " # ",
+        "#i#"
     ],
     "key": {
         "#": "minecraft:leather",
-        "S": "minecraft:string",
         "i": "minecraft:iron_ingot"
     },
     "result": {

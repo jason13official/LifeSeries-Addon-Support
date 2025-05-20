@@ -34,6 +34,7 @@ public class Snails extends Wildcard {
     public void activate() {
         snails.clear();
         for (ServerPlayerEntity player : currentSeries.getAlivePlayers()) {
+            if (player.isDead()) continue;
             spawnSnailFor(player);
         }
         loadSnailNames();
@@ -55,6 +56,7 @@ public class Snails extends Wildcard {
         ticks++;
         if (ticks % 100 == 0) {
             for (ServerPlayerEntity player : currentSeries.getAlivePlayers()) {
+                if (player.isDead()) continue;
                 UUID playerUUID = player.getUuid();
                 if (snails.containsKey(playerUUID)) {
                     Snail snail = snails.get(playerUUID);
@@ -71,8 +73,8 @@ public class Snails extends Wildcard {
     }
 
     public static void spawnSnailFor(ServerPlayerEntity player) {
-        BlockPos pos = Snail.getBlockPosNearTarget(player, 20);
-        if (pos == null) pos = player.getBlockPos().add(0,20,0);
+        BlockPos pos = Snail.getBlockPosNearTarget(player, 30);
+        if (pos == null) pos = player.getBlockPos().add(0,30,0);
         spawnSnailFor(player, pos);
     }
 

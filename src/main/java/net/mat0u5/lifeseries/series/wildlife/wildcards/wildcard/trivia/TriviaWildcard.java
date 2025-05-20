@@ -309,7 +309,7 @@ public class TriviaWildcard extends Wildcard {
                 return getNormalQuestion();
             }
             return getHardQuestion();
-        }catch(Exception e) {
+        } catch(Exception e) {
             LOGGER.error(e.toString());
             return TriviaQuestion.getDefault();
         }

@@ -96,8 +96,6 @@ public abstract class Series extends Session {
         TeamUtils.createTeam("Yellow", Formatting.YELLOW);
         TeamUtils.createTeam("Green", Formatting.GREEN);
         TeamUtils.createTeam("DarkGreen", Formatting.DARK_GREEN);
-
-
     }
 
     public Formatting getColorForLives(Integer lives) {
@@ -189,7 +187,7 @@ public abstract class Series extends Session {
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + amount;
         if (lives < 0) lives = 0;
-        setPlayerLives(player,lives);
+        setPlayerLives(player, lives);
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
@@ -437,6 +435,14 @@ public abstract class Series extends Session {
         }
     }
 
+    public void learnRecipes() {
+        OtherUtils.executeCommand("recipe give @a lifeseries:name_tag_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:saddle_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:spawner_recipe");
+        OtherUtils.executeCommand("recipe give @a lifeseries:tnt_recipe_variation");
+        OtherUtils.executeCommand("recipe give @a lifeseries:bundle_recipe");
+    }
+
     public void onPlayerJoin(ServerPlayerEntity player) {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
@@ -444,6 +450,7 @@ public abstract class Series extends Session {
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
+        learnRecipes();
         if (statusNotStarted() && PermissionManager.isAdmin(player)) {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
             player.sendMessage(Text.of("After that, use §b'/session start'§f to start the session."));

@@ -666,16 +666,19 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         for (int i = 0; i < 3; i++) {
             RegistryEntry<StatusEffect> effect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
             int amplifier;
-            if (effect == StatusEffects.FIRE_RESISTANCE || effect == StatusEffects.WATER_BREATHING || effect == StatusEffects.NIGHT_VISION) {
+            if (effect == StatusEffects.FIRE_RESISTANCE || effect == StatusEffects.WATER_BREATHING || effect == StatusEffects.NIGHT_VISION ||
+                    effect == StatusEffects.REGENERATION || effect == StatusEffects.STRENGTH || effect == StatusEffects.HEALTH_BOOST || effect == StatusEffects.RESISTANCE) {
                 amplifier = 0;
-            }
-            else if (effect == StatusEffects.REGENERATION || effect == StatusEffects.STRENGTH || effect == StatusEffects.HEALTH_BOOST) {
-                amplifier = player.getRandom().nextInt(1);
             }
             else {
                 amplifier = player.getRandom().nextInt(4);
             }
-            player.addStatusEffect(new StatusEffectInstance(effect, 36000, amplifier));
+            if (WildcardManager.isActiveWildcard(Wildcards.CALLBACK)) {
+                player.addStatusEffect(new StatusEffectInstance(effect, 12000, amplifier));
+            }
+            else {
+                player.addStatusEffect(new StatusEffectInstance(effect, 24000, amplifier));
+            }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
             MutableText effectName = Text.translatable(effect.value().getTranslationKey()).formatted(Formatting.GRAY);
