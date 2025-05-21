@@ -283,6 +283,7 @@ public class Session {
     }
 
     public void showActionInfo() {
+        if (activeActions.isEmpty()) return;
         OtherUtils.broadcastMessageToAdmins(Text.of("§7Queued session actions:"));
         for (SessionAction action : activeActions) {
             String actionMessage = action.sessionMessage;

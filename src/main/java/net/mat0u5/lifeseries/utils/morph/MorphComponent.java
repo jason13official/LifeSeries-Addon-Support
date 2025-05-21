@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.utils.morph;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.minecraft.entity.*;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
@@ -70,6 +71,11 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
     @Override
     public void clientTick() {
         if(isMorphed() && morph != null){
+            boolean isHorse = morph == EntityType.HORSE || morph == EntityType.SKELETON_HORSE || morph == EntityType.ZOMBIE_HORSE;
+            boolean fixedHead = isHorse || morph == EntityType.GOAT;
+            boolean clampedPitch = isHorse || morph == EntityType.GOAT;
+            boolean reversePitch = morph == EntityType.PHANTOM;
+
             if(dummy == null || dummy.getType() != morph){
                 //? if <= 1.21 {
                 Entity entity = morph.create(player.getWorld());
@@ -94,15 +100,39 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
             dummy.prevY = player.prevY;
             dummy.prevZ = player.prevZ;
             dummy.prevBodyYaw = player.prevBodyYaw;
-            dummy.prevHeadYaw = player.prevHeadYaw;
-            dummy.prevPitch = player.prevPitch;
+            if (!fixedHead) {
+                dummy.prevHeadYaw = player.prevHeadYaw;
+            }
+            else {
+                dummy.prevHeadYaw = player.prevBodyYaw;
+            }
+
+            if (!clampedPitch) {
+                dummy.prevPitch = player.prevPitch;
+            }
+            else {
+                dummy.prevPitch = Math.clamp(player.prevPitch, -28, 28);
+            }
+            if (reversePitch) dummy.prevPitch *= -1;
             //?} else {
             /*dummy.lastX = player.lastX;
             dummy.lastY = player.lastY;
             dummy.lastZ = player.lastZ;
             dummy.lastBodyYaw = player.lastBodyYaw;
-            dummy.lastHeadYaw = player.lastHeadYaw;
-            dummy.lastPitch = player.lastPitch;
+            if (!fixedHead) {
+                dummy.lastHeadYaw = player.lastHeadYaw;
+            }
+            else {
+                dummy.lastHeadYaw = player.lastBodyYaw;
+            }
+
+            if (!clampedPitch) {
+                dummy.lastPitch = player.lastPitch;
+            }
+            else {
+                dummy.lastPitch = Math.clamp(player.lastPitch, -28, 28);
+            }
+            if (reversePitch) dummy.lastPitch *= -1;
             *///?}
 
             //Some math to synchronize the morph limbs with the player limbs
@@ -128,9 +158,23 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
 
             dummy.setPosition(player.getPos());
             dummy.setBodyYaw(player.bodyYaw);
-            dummy.setHeadYaw(player.headYaw);
-            dummy.setPitch(player.getPitch());
+            if (!fixedHead) {
+                dummy.setHeadYaw(player.headYaw);
+            }
+            else {
+                dummy.setHeadYaw(player.bodyYaw);
+            }
+
+            if (!clampedPitch) {
+                dummy.setPitch(player.getPitch());
+            }
+            else {
+                dummy.setPitch(Math.clamp(player.getPitch(), -28, 28));
+            }
+            if (reversePitch) dummy.setPitch(dummy.getPitch() * -1);
+
             dummy.setSneaking(player.isSneaking());
+            dummy.age = player.age;
         }
     }
     @Nullable

@@ -313,24 +313,41 @@ public class Blacklist {
         }
         ItemEnchantmentsComponent enchants = itemStack.getComponents().get(DataComponentTypes.ENCHANTMENTS);
         ItemEnchantmentsComponent enchantsStored = itemStack.getComponents().get(DataComponentTypes.STORED_ENCHANTMENTS);
-        if (enchants != null) clampAndBlacklistEnchantments(enchants);
-        if (enchantsStored != null) clampAndBlacklistEnchantments(enchantsStored);
+        if (enchants != null) {
+            itemStack.set(DataComponentTypes.ENCHANTMENTS, clampAndBlacklistEnchantments(enchants));
+        }
+        if (enchantsStored != null) {
+            itemStack.set(DataComponentTypes.STORED_ENCHANTMENTS, clampAndBlacklistEnchantments(enchantsStored));
+        }
     }
 
-    public void clampAndBlacklistEnchantments(ItemEnchantmentsComponent enchants) {
-        blacklistEnchantments(enchants);
-        clampEnchantments(enchants);
+    public ItemEnchantmentsComponent clampAndBlacklistEnchantments(ItemEnchantmentsComponent enchants) {
+        ItemEnchantmentsComponent afterBlacklist = blacklistEnchantments(enchants);
+        clampEnchantments(afterBlacklist);
+        return afterBlacklist;
     }
 
-    public void blacklistEnchantments(ItemEnchantmentsComponent enchants) {
-        List<RegistryKey<Enchantment>> clamp = getBannedEnchants();
+    public ItemEnchantmentsComponent blacklistEnchantments(ItemEnchantmentsComponent enchants) {
+        if (enchants.isEmpty()) return enchants;
+        List<RegistryKey<Enchantment>> banned = getBannedEnchants();
+        if (banned.isEmpty()) return enchants;
+        List<it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<RegistryEntry<Enchantment>>> toRemove = new ArrayList<>();
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<RegistryEntry<Enchantment>> enchant : enchants.getEnchantmentEntries()) {
             Optional<RegistryKey<Enchantment>> enchantRegistry = enchant.getKey().getKey();
             if (enchantRegistry.isEmpty()) continue;
-            if (clamp.contains(enchantRegistry.get())) {
-                enchant.setValue(0);
+            if (banned.contains(enchantRegistry.get())) {
+                toRemove.add(enchant);
             }
         }
+        if (toRemove.isEmpty()) return enchants;
+        ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
+
+        for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<RegistryEntry<Enchantment>> enchant : enchants.getEnchantmentEntries()) {
+            if (toRemove.contains(enchant)) continue;
+            builder.add(enchant.getKey(), enchant.getIntValue());
+        }
+
+        return builder.build();
     }
 
     public void clampEnchantments(ItemEnchantmentsComponent enchants) {

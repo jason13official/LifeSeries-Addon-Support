@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.inventory.Inventory;
@@ -34,7 +35,7 @@ public abstract class AnvilScreenHandlerMixin {
         ItemStack resultStack = outputInventory.getStack(0);
 
         if (resultStack.hasEnchantments()) {
-            blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments());
+            resultStack.set(DataComponentTypes.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
             if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
                 for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<RegistryEntry<Enchantment>> enchant : resultStack.getEnchantments().getEnchantmentEntries()) {
                     Optional<RegistryKey<Enchantment>> enchantRegistry = enchant.getKey().getKey();

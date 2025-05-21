@@ -31,10 +31,8 @@ public class AnimalDisguise extends ToggleableSuperpower {
     List<EntityType<?>> defaultRandom = List.of(EntityType.COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.PIG);
     List<EntityType<?>> bannedEntities = List.of(
             MobRegistry.PATH_FINDER, MobRegistry.TRIVIA_BOT, MobRegistry.SNAIL,
-            EntityType.PLAYER, EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.ARMOR_STAND, EntityType.GOAT,EntityType.VEX,
-            EntityType.ALLAY, EntityType.PHANTOM, EntityType.DOLPHIN, EntityType.COD, EntityType.TROPICAL_FISH, EntityType.SALMON,
-            EntityType.TADPOLE, EntityType.BEE, EntityType.HORSE, EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE,
-            EntityType.AXOLOTL, EntityType.SILVERFISH, EntityType.ENDERMITE, EntityType.BLAZE, EntityType.BREEZE
+            EntityType.PLAYER, EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.ARMOR_STAND,
+            EntityType.AXOLOTL, EntityType.DOLPHIN
     );
 
     @Override
