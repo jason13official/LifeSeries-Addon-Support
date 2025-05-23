@@ -7,7 +7,10 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.minecraft.component.*;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,9 +37,18 @@ public abstract class ItemMixin {
                  //?} else {
                 /*MergedComponentMap components = new MergedComponentMap(normalComponents());
                 *///?}
-                Hunger.applyFoodComponents(item, components);
+                Hunger.defaultFoodComponents(item, components);
                 cir.setReturnValue(components);
             }
+        }
+    }
+
+    @Inject(method = "finishUsing", at = @At("HEAD"))
+    public void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+        if (!Main.isLogicalSide()) return;
+        if (currentSeries instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+            Item item = (Item) (Object) this;
+            Hunger.finishUsing(item, normalComponents(), user);
         }
     }
 }

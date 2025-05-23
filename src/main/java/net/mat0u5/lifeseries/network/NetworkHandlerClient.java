@@ -163,10 +163,6 @@ public class NetworkHandlerClient {
 
     public static void handleNumberPacket(String name, double number) {
         int intNumber = (int) number;
-        if (name.equalsIgnoreCase("hunger_version")) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated hunger shuffle version to {}", intNumber);
-            Hunger.shuffleVersion = intNumber;
-        }
         if (name.equalsIgnoreCase("player_min_mspt")) {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated min. player MSPT to {}", number);
             TimeDilation.MIN_PLAYER_MSPT = (float) number;

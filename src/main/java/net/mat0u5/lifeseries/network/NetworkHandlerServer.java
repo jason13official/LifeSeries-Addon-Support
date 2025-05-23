@@ -278,7 +278,6 @@ public class NetworkHandlerServer {
 
     public static void sendUpdatePacketTo(ServerPlayerEntity player) {
         if (currentSeries instanceof WildLife) {
-            sendNumberPacket(player, "hunger_version", Hunger.shuffleVersion);
             sendNumberPacket(player, "player_min_mspt", TimeDilation.MIN_PLAYER_MSPT);
 
             List<String> activeWildcards = new ArrayList<>();

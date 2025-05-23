@@ -224,7 +224,6 @@ public class OtherUtils {
     private static long[] reloads = {System.currentTimeMillis(),System.currentTimeMillis(),System.currentTimeMillis()};
     public static void reloadServer() {
         try {
-            System.out.println("reloads: " + Arrays.toString(reloads));
             Arrays.sort(reloads);
             int inInterval = 0;
             for (int i = 0; i < 3; i++) {

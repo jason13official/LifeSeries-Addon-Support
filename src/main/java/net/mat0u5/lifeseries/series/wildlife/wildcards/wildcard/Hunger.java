@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.component.*;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -24,6 +25,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -169,13 +171,14 @@ public class Hunger extends Wildcard {
                 }
                 updateInventories();
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
+                shuffleVersion++;
             });
         }
         else {
             TaskScheduler.scheduleTask(10, Hunger::updateInventories);
+            shuffleVersion++;
         }
         shuffledBefore = true;
-        shuffleVersion++;
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             addHunger(player);
         }
@@ -222,92 +225,69 @@ public class Hunger extends Wildcard {
     }
 
     public static final List<Item> bannedFoodItems = List.of(
-            Items.AIR, Items.ENDER_PEARL, Items.WIND_CHARGE
+            Items.AIR, Items.ENDER_PEARL, Items.WIND_CHARGE, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE
     );
-    //? if <=1.21 {
-    public static void applyFoodComponents(Item item, ComponentMapImpl components) {
+
+    //? if <= 1.21 {
+    public static void defaultFoodComponents(Item item, ComponentMapImpl components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
-        if (components.contains(DataComponentTypes.FOOD)) {
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
-            FoodComponent.StatusEffectEntry statusEffect = new FoodComponent.StatusEffectEntry(statusEffectInstance, 1);
-            components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false, 1.6f, Optional.empty(), List.of(statusEffect)));
-            return;
-        }
-        int hash = getHash(item);
-        List<FoodComponent.StatusEffectEntry> foodEffects = new ArrayList<>();
-        if ((hash % 13) % 3 != 0) {
-            int amplifier = hash % 5; // 0 -> 4
-            int duration = ((3 + hash) % 18) * 20; // 1 -> 20 seconds
-            RegistryEntry<StatusEffect> registryEntryEffect = effects.get(hash % effects.size());
-            if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
-                amplifier = 0;
-            }
-            if (durationLimit.contains(registryEntryEffect)) {
-                duration = 1;
-            }
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(registryEntryEffect, duration, amplifier);
-            FoodComponent.StatusEffectEntry statusEffect = new FoodComponent.StatusEffectEntry(statusEffectInstance, 1);
-            foodEffects.add(statusEffect);
-        }
-
-        int nutrition = hash % 19 - 10; // -10 -> 8
-        int saturation = hash % 12 - 7; // -7 -> 4
-        if (nutrition < 0) nutrition = 0;
-        if (saturation < 0) saturation = 0;
-        if (saturation > nutrition) saturation = nutrition;
-        if (commonItems.contains(item)) {
-            nutrition = 0;
-            saturation = 0;
-        }
-        components.set(DataComponentTypes.FOOD, new FoodComponent(nutrition, saturation, false, 1.6f, Optional.empty(), foodEffects));
+        components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false, 1.6f, Optional.empty(), List.of()));
     }
     //?} else {
-    /*public static void applyFoodComponents(Item item, MergedComponentMap components) {
+    /*public static void defaultFoodComponents(Item item, MergedComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
-        if (components.contains(DataComponentTypes.CONSUMABLE)) {
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
-            ApplyEffectsConsumeEffect statusEffect = new ApplyEffectsConsumeEffect(statusEffectInstance, 1);
-            components.set(DataComponentTypes.CONSUMABLE,
-                    new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, List.of(statusEffect))
-            );
-            components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false));
-            return;
-        }
-        int hash = getHash(item);
-        List<ConsumeEffect> foodEffects = new ArrayList<>();
-        if ((hash % 13) % 3 != 0) {
-            int amplifier = hash % 5; // 0 -> 4
-            int duration = ((3 + hash) % 18) * 20; // 1 -> 20 seconds
-            RegistryEntry<StatusEffect> registryEntryEffect = effects.get(hash % effects.size());
-            if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
-                amplifier = 0;
-            }
-            if (durationLimit.contains(registryEntryEffect)) {
-                duration = 1;
-            }
-            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(registryEntryEffect, duration, amplifier);
-            ApplyEffectsConsumeEffect statusEffect = new ApplyEffectsConsumeEffect(statusEffectInstance, 1);
-            foodEffects.add(statusEffect);
-        }
-
-        int nutrition = hash % 19 - 10; // -10 -> 8
-        int saturation = hash % 12 - 7; // -7 -> 4
-        if (nutrition < 0) nutrition = 0;
-        if (saturation < 0) saturation = 0;
-        if (saturation > nutrition) saturation = nutrition;
-        if (commonItems.contains(item)) {
-            nutrition = 0;
-            saturation = 0;
-        }
         components.set(DataComponentTypes.CONSUMABLE,
-                new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, foodEffects)
+                new ConsumableComponent(ConsumableComponent.DEFAULT_CONSUME_SECONDS, UseAction.EAT, SoundEvents.ENTITY_GENERIC_EAT, true, List.of())
         );
-        components.set(DataComponentTypes.FOOD, new FoodComponent(nutrition, saturation, false));
-
+        components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false));
     }
     *///?}
+
+    public static void finishUsing(Item item, ComponentMap normalComponents, LivingEntity entity) {
+        if (!(entity instanceof ServerPlayerEntity player)) return;
+        if (item == null) return;
+        if (bannedFoodItems.contains(item)) return;
+
+        int nutrition = 0;
+        int saturation = 0;
+        StatusEffectInstance effect = null;
+
+        if (normalComponents.contains(DataComponentTypes.FOOD)) {
+            effect = new StatusEffectInstance(StatusEffects.HUNGER, 3600, 7, false, false, false);
+        }
+        else {
+            //Random effect
+            int hash = getHash(item);
+            if ((hash % 13) % 3 != 0) {
+                int amplifier = hash % 5; // 0 -> 4
+                int duration = ((3 + hash) % 18) * 20; // 1 -> 20 seconds
+                RegistryEntry<StatusEffect> registryEntryEffect = effects.get(hash % effects.size());
+                if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
+                    amplifier = 0;
+                }
+                if (durationLimit.contains(registryEntryEffect)) {
+                    duration = 1;
+                }
+                effect = new StatusEffectInstance(registryEntryEffect, duration, amplifier);
+            }
+
+            // Random nutrition and saturation
+            if (!commonItems.contains(item)) {
+                nutrition = hash % 19 - 10; // -10 -> 8
+                saturation = hash % 12 - 7; // -7 -> 4
+                if (nutrition < 0) nutrition = 0;
+                if (saturation < 0) saturation = 0;
+                if (saturation > nutrition) saturation = nutrition;
+            }
+        }
+
+        player.getHungerManager().add(nutrition, saturation);
+        if (effect != null) {
+            player.addStatusEffect(effect);
+        }
+    }
 
     private static int getHash(Item item) {
         String itemId = Registries.ITEM.getId(item).toString();
