@@ -7,6 +7,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
 
+import static net.mat0u5.lifeseries.Main.seriesConfig;
+
 public class LimitedLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
@@ -78,6 +80,7 @@ public class LimitedLifeConfig extends ConfigManager {
         getOrCreateInt("time_kill",1800);
         getOrCreateInt("time_kill_boogeyman",3600);
         getOrCreateInt("boogeyman_amount", 1);
+        getOrCreateBoolean("tick_offline_players", false);
     }
 
 
@@ -121,5 +124,6 @@ public class LimitedLifeConfig extends ConfigManager {
         index += NetworkHandlerServer.sendConfig(player, "integer", "time_death_boogeyman", index, "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds.", List.of(String.valueOf(getOrCreateInt("time_death_boogeyman",-7200)), "-7200"));
         index += NetworkHandlerServer.sendConfig(player, "integer", "time_kill", index, "Time Kill", "The time you gain for killing someone, in seconds.", List.of(String.valueOf(getOrCreateInt("time_kill",1800)), "1800"));
         index += NetworkHandlerServer.sendConfig(player, "integer", "time_kill_boogeyman", index, "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds.", List.of(String.valueOf(getOrCreateInt("time_kill_boogeyman",3600)), "3600"));
+        index += NetworkHandlerServer.sendConfig(player, "boolean", "tick_offline_players", index, "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on.", List.of(String.valueOf(getOrCreateBoolean("tick_offline_players", false)), "false"));
     }
 }

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.series.*;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.scoreboard.ScoreHolder;
+import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -13,6 +14,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
+import java.util.Collection;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
@@ -30,6 +32,7 @@ public class LimitedLife extends Series {
     private int DEATH_BOOGEYMAN = -7200;
     private int KILL_NORMAL = 1800;
     private int KILL_BOOGEYMAN = 3600;
+    public static boolean TICK_OFFLINE_PLAYERS = false;
 
     public LimitedLifeBoogeymanManager boogeymanManager = new LimitedLifeBoogeymanManager();
 
@@ -112,6 +115,17 @@ public class LimitedLife extends Series {
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
                 if (statusStarted() && isAlive(player)) {
                     removePlayerLife(player);
+                }
+            }
+
+            if (TICK_OFFLINE_PLAYERS) {
+                if (statusStarted()) {
+                    Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
+                    for (ScoreboardEntry entry : entries) {
+                        if (entry.value() <= 0) continue;
+                        if (PlayerUtils.getPlayer(entry.owner()) != null) continue;
+                        ScoreboardUtils.setScore(ScoreHolder.fromName(entry.owner()), "Lives", entry.value() - 1);
+                    }
                 }
             }
         }
@@ -325,6 +339,7 @@ public class LimitedLife extends Series {
         DEATH_BOOGEYMAN = seriesConfig.getOrCreateInt("time_death_boogeyman",-7200);
         KILL_NORMAL = seriesConfig.getOrCreateInt("time_kill",1800);
         KILL_BOOGEYMAN = seriesConfig.getOrCreateInt("time_kill_boogeyman",3600);
+        TICK_OFFLINE_PLAYERS = seriesConfig.getOrCreateBoolean("tick_offline_players", false);
     }
 
     @Override

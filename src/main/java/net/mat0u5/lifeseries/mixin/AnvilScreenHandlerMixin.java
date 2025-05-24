@@ -33,6 +33,9 @@ public abstract class AnvilScreenHandlerMixin {
         AnvilScreenHandler self = (AnvilScreenHandler) (Object) this;
         // Get the result item (slot 0 is the output)
         ItemStack resultStack = outputInventory.getStack(0);
+        if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoAnvil") || ItemStackUtils.hasCustomComponentEntry(resultStack, "NoModifications")) {
+            outputInventory.setStack(0, ItemStack.EMPTY);
+        }
 
         if (resultStack.hasEnchantments()) {
             resultStack.set(DataComponentTypes.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));

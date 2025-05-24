@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AnvilScreenHandlerMixin",
+    "CraftingScreenHandlerMixin",
     "EnchantmentHelperMixin",
     "EntityMixin",
     "ForgingScreenHandlerAccessor",

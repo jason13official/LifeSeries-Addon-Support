@@ -192,7 +192,7 @@ public class SecretLife extends Series {
 
         ItemStack mace = new ItemStack(Items.MACE);
         ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
-        ItemStackUtils.setCustomComponentBoolean(mace, "NoMending", true);
+        ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
         mace.setDamage(mace.getMaxDamage()-1);
         itemSpawner.addItem(mace, 3);
 

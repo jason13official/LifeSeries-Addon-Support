@@ -24,6 +24,22 @@ public class VersionControl {
         return (major * 100000) + (minor * 10000) + (patch * 1000) + build;
     }
 
+    /*
+        *     COMPATIBILITY TABLE
+        *   1.3.0
+        *   1.3.1       -   1.3.1.2
+        *   1.3.1.3     -   1.3.1.4
+        *   1.3.2
+        *   1.3.2.1     -   1.3.2.2
+        *   1.3.2.3
+        *   1.3.2.4
+        *   1.3.2.5
+        *   1.3.2.6
+        *   1.3.3       -   1.3.3.2
+        *   1.3.4       -   1.3.4.4
+        *   1.3.4.5     -   *
+     */
+
     public static String clientCmpatibilityMin() {
         //This is the version that the SERVER needs to have for the current client.
         return "dev-1.3.4.5";

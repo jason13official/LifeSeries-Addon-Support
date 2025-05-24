@@ -212,7 +212,9 @@ public class NetworkHandlerClient {
 
         if (name.startsWith("limited_life_timer__")) {
             MainClient.limitedLifeTimerColor = name.replaceFirst("limited_life_timer__","");
-            MainClient.limitedLifeTime = number;
+            if (Math.abs(MainClient.limitedLifeTime-number) > 2000) {
+                MainClient.limitedLifeTime = number;
+            }
             MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
         }
 

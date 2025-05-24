@@ -425,7 +425,7 @@
               "components": {
                 "minecraft:custom_data": {
                   "IgnoreBlacklist": true,
-                  "NoMending": true
+                  "NoModifications": true
                 },
                 "minecraft:damage": 499
               }
