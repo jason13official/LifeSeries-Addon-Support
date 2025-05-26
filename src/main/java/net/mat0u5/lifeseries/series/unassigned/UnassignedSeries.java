@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series.unassigned;
 
+import net.mat0u5.lifeseries.resources.config.ConfigEntry;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
@@ -10,6 +11,9 @@ import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
@@ -22,7 +26,10 @@ public class UnassignedSeries extends Series {
     public ConfigManager getConfig() {
         return new ConfigManager(null, null) {
             @Override
-            public void defaultProperties() {}
+            public void instantiateProperties() {}
+
+            @Override
+            protected List<ConfigEntry<?>> getDefaultConfigEntries() { return new ArrayList<>(List.of()); }
         };
     }
 

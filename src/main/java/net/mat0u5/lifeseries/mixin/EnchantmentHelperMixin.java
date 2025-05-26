@@ -34,7 +34,7 @@ public class EnchantmentHelperMixin {
             return;
         }
 
-        if (seriesConfig.getOrCreateBoolean("custom_enchanter_algorithm", false)) {
+        if (seriesConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seriesConfig)) {
             customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
         }
         else {

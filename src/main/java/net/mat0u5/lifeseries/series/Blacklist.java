@@ -48,7 +48,7 @@ public class Blacklist {
 
     public List<String> loadItemBlacklist() {
         if (seriesConfig == null) return new ArrayList<>();
-        String raw = seriesConfig.getOrCreateProperty("blacklist_items", "[]");
+        String raw = seriesConfig.BLACKLIST_ITEMS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -56,7 +56,7 @@ public class Blacklist {
 
     public List<String> loadBlockBlacklist() {
         if (seriesConfig == null) return new ArrayList<>();
-        String raw = seriesConfig.getOrCreateProperty("blacklist_blocks", "[]");
+        String raw = seriesConfig.BLACKLIST_BLOCKS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -64,7 +64,7 @@ public class Blacklist {
 
     public List<String> loadClampedEnchants() {
         if (seriesConfig == null) return new ArrayList<>();
-        String raw = seriesConfig.getOrCreateProperty("blacklist_clamped_enchants", "[]");
+        String raw = seriesConfig.BLACKLIST_CLAMPED_ENCHANTS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -72,7 +72,7 @@ public class Blacklist {
 
     public List<String> loadBlacklistedEnchants() {
         if (seriesConfig == null) return new ArrayList<>();
-        String raw = seriesConfig.getOrCreateProperty("blacklist_banned_enchants", "[]");
+        String raw = seriesConfig.BLACKLIST_BANNED_ENCHANTS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -84,7 +84,7 @@ public class Blacklist {
         List<Identifier> newListIdentifier = new ArrayList<>();
 
         if (seriesConfig != null) {
-            if (!seriesConfig.getOrCreateBoolean("spawner_recipe", false)) {
+            if (!seriesConfig.SPAWNER_RECIPE.get(seriesConfig)) {
                 newListIdentifier.add(Identifier.of("lifeseries", "spawner_recipe"));
             }
         }
@@ -225,7 +225,7 @@ public class Blacklist {
 
 
     public ActionResult onBlockUse(ServerPlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        if (player.isCreative() && seriesConfig.getOrCreateBoolean("creative_ignore_blacklist", true)) return ActionResult.PASS;
+        if (player.isCreative() && seriesConfig.CREATIVE_IGNORE_BLACKLIST.get(seriesConfig)) return ActionResult.PASS;
         processItemStack(player, player.getStackInHand(hand));
         BlockPos blockPos = hitResult.getBlockPos();
         BlockState block = world.getBlockState(blockPos);
@@ -238,7 +238,7 @@ public class Blacklist {
     }
 
     public ActionResult onBlockAttack(ServerPlayerEntity player, World world, BlockPos pos) {
-        if (player.isCreative() && seriesConfig.getOrCreateBoolean("creative_ignore_blacklist", true)) return ActionResult.PASS;
+        if (player.isCreative() && seriesConfig.CREATIVE_IGNORE_BLACKLIST.get(seriesConfig)) return ActionResult.PASS;
         if (world.isClient()) return ActionResult.PASS;
         BlockState block = world.getBlockState(pos);
         if (block.isAir()) return ActionResult.PASS;
@@ -255,7 +255,7 @@ public class Blacklist {
 
     public void onInventoryUpdated(ServerPlayerEntity player, PlayerInventory inventory) {
         if (Main.server == null) return;
-        if (player.isCreative() && seriesConfig.getOrCreateBoolean("creative_ignore_blacklist", true)) return;
+        if (player.isCreative() && seriesConfig.CREATIVE_IGNORE_BLACKLIST.get(seriesConfig)) return;
         for (int i = 0; i < inventory.size(); i++) {
             processItemStack(player, inventory.getStack(i));
         }

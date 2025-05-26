@@ -57,11 +57,11 @@ public abstract class Series extends Session {
 
     public void updateStuff() {
         if (server == null) return;
-        if (server.getOverworld().getWorldBorder().getSize() > 1000000 && seriesConfig.getOrCreateBoolean("auto_set_worldborder", true)) {
+        if (server.getOverworld().getWorldBorder().getSize() > 1000000 && seriesConfig.AUTO_SET_WORLDBORDER.get(seriesConfig)) {
             OtherUtils.executeCommand("worldborder set 500");
         }
 
-        OtherUtils.executeCommand("gamerule keepInventory " + seriesConfig.getOrCreateBoolean("auto_keep_inventory", true));
+        OtherUtils.executeCommand("gamerule keepInventory " + seriesConfig.AUTO_KEEP_INVENTORY.get(seriesConfig));
 
         if (NO_HEALING) {
             OtherUtils.executeCommand("gamerule naturalRegeneration false");
@@ -72,8 +72,8 @@ public abstract class Series extends Session {
     }
 
     public void reload() {
-        Session.MUTE_DEAD_PLAYERS = seriesConfig.getOrCreateBoolean("mute_dead_players", false);
-        SHOW_DEATH_TITLE = seriesConfig.getOrCreateBoolean("final_death_title_show",true);
+        Session.MUTE_DEAD_PLAYERS = seriesConfig.MUTE_DEAD_PLAYERS.get(seriesConfig);
+        SHOW_DEATH_TITLE = seriesConfig.FINAL_DEATH_TITLE_SHOW.get(seriesConfig);
         createTeams();
         createScoreboards();
         updateStuff();
@@ -260,7 +260,7 @@ public abstract class Series extends Session {
     }
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
-        boolean doDrop = seriesConfig.getOrCreateBoolean("players_drop_items_on_final_death", false);
+        boolean doDrop = seriesConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seriesConfig);
         boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
@@ -275,10 +275,10 @@ public abstract class Series extends Session {
 
     public void showDeathTitle(ServerPlayerEntity player) {
         if (SHOW_DEATH_TITLE) {
-            String subtitle = seriesConfig.getOrCreateProperty("final_death_title_subtitle", "ran out of lives!");
+            String subtitle = seriesConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seriesConfig);
             PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
         }
-        String message = seriesConfig.getOrCreateProperty("final_death_message", "${player} ran out of lives.");
+        String message = seriesConfig.FINAL_DEATH_MESSAGE.get(seriesConfig);
         if (message.contains("${player}")) {
             String before = message.split("\\$\\{player}")[0];
             String after = message.split("\\$\\{player}")[1];
@@ -408,8 +408,8 @@ public abstract class Series extends Session {
     }
 
     private void spawnEggChance(LivingEntity entity) {
-        double chance = seriesConfig.getOrCreateDouble("spawn_egg_drop_chance", 0.05);
-        boolean onlyNatural = seriesConfig.getOrCreateBoolean("spawn_egg_drop_only_natural", true);
+        double chance = seriesConfig.SPAWN_EGG_DROP_CHANCE.get(seriesConfig);
+        boolean onlyNatural = seriesConfig.SPAWN_EGG_DROP_ONLY_NATURAL.get(seriesConfig);
         if (chance <= 0) return;
         if (entity instanceof EnderDragonEntity) return;
         if (entity instanceof WitherEntity) return;

@@ -10,7 +10,11 @@ public class StringListConfig extends ConfigManager {
     }
 
     @Override
-    protected void defaultProperties() {}
+    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+        return List.of();
+    }
+    @Override
+    protected void instantiateProperties() {}
 
     public void save(List<String> list) {
         resetProperties("-- DO NOT MODIFY --");

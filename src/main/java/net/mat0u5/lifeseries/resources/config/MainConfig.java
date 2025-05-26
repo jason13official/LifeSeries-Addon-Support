@@ -2,12 +2,19 @@ package net.mat0u5.lifeseries.resources.config;
 
 import net.mat0u5.lifeseries.Main;
 
+import java.util.List;
+
 public class MainConfig extends ConfigManager {
     public MainConfig() {
         super("./config/lifeseries/main", Main.MOD_ID+".properties");
     }
+
     @Override
-    public void defaultProperties() {
+    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+        return List.of();
+    }
+    @Override
+    public void instantiateProperties() {
         getOrCreateProperty("currentSeries","unassigned");
     }
 }

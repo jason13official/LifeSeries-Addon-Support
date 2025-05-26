@@ -41,7 +41,7 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealth(ServerPlayerEntity player) {
-        double health = seriesConfig.getOrCreateDouble("max_player_health", DEFAULT_PLAYER_MAX_HEALTH);
+        double health = seriesConfig.MAX_PLAYER_HEALTH.get(seriesConfig);
         setMaxPlayerHealth(player, health);
     }
 

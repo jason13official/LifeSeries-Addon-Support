@@ -21,11 +21,11 @@ public abstract class SpawnEggItemMixin {
     private void preventSpawnerModification(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         if (!Main.isLogicalSide()) return;
         if (context.getPlayer() instanceof ServerPlayerEntity) {
-            if (seriesConfig.getOrCreateBoolean("spawn_egg_allow_on_spawner", false)) return;
+            if (seriesConfig.SPAWN_EGG_ALLOW_ON_SPAWNER.get(seriesConfig)) return;
             Block block = context.getWorld().getBlockState(context.getBlockPos()).getBlock();
             if (block != Blocks.SPAWNER) return;
             if (context.getPlayer() == null) return;
-            if (context.getPlayer().isCreative() && seriesConfig.getOrCreateBoolean("creative_ignore_blacklist", true)) return;
+            if (context.getPlayer().isCreative() && seriesConfig.CREATIVE_IGNORE_BLACKLIST.get(seriesConfig)) return;
             cir.setReturnValue(ActionResult.FAIL);
         }
     }

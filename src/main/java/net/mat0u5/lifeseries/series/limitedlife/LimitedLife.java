@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.series.limitedlife;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
+import net.mat0u5.lifeseries.series.secretlife.SecretLifeConfig;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.scoreboard.ScoreHolder;
@@ -332,14 +333,15 @@ public class LimitedLife extends Series {
     @Override
     public void reload() {
         super.reload();
-        DEFAULT_TIME = seriesConfig.getOrCreateInt("time_default", 86400);
-        YELLOW_TIME = seriesConfig.getOrCreateInt("time_yellow", 57600);
-        RED_TIME = seriesConfig.getOrCreateInt("time_red", 28800);
-        DEATH_NORMAL = seriesConfig.getOrCreateInt("time_death",-3600);
-        DEATH_BOOGEYMAN = seriesConfig.getOrCreateInt("time_death_boogeyman",-7200);
-        KILL_NORMAL = seriesConfig.getOrCreateInt("time_kill",1800);
-        KILL_BOOGEYMAN = seriesConfig.getOrCreateInt("time_kill_boogeyman",3600);
-        TICK_OFFLINE_PLAYERS = seriesConfig.getOrCreateBoolean("tick_offline_players", false);
+        if (!(seriesConfig instanceof LimitedLifeConfig config)) return;
+        DEFAULT_TIME = config.TIME_DEFAULT.get(config);
+        YELLOW_TIME = config.TIME_YELLOW.get(config);
+        RED_TIME = config.TIME_RED.get(config);
+        DEATH_NORMAL = config.TIME_DEATH.get(config);
+        DEATH_BOOGEYMAN = config.TIME_DEATH_BOOGEYMAN.get(config);
+        KILL_NORMAL = config.TIME_KILL.get(config);
+        KILL_BOOGEYMAN = config.TIME_KILL_BOOGEYMAN.get(config);
+        TICK_OFFLINE_PLAYERS = config.TICK_OFFLINE_PLAYERS.get(config);
     }
 
     @Override
@@ -366,22 +368,5 @@ public class LimitedLife extends Series {
     public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
         super.playerLostAllLives(player, livesBefore);
         boogeymanManager.playerLostAllLives(player);
-    }
-
-    @Override
-    public void showDeathTitle(ServerPlayerEntity player) {
-        if (SHOW_DEATH_TITLE) {
-            String subtitle = seriesConfig.getOrCreateProperty("final_death_title_subtitle", "ran out of time!");
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
-        }
-        String message = seriesConfig.getOrCreateProperty("final_death_message", "ran out of time.");
-        if (message.contains("${player}")) {
-            String before = message.split("\\$\\{player}")[0];
-            String after = message.split("\\$\\{player}")[1];
-            OtherUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
-        }
-        else {
-            OtherUtils.broadcastMessage(Text.literal(message));
-        }
     }
 }

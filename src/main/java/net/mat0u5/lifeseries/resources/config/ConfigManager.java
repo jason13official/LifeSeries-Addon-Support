@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.resources.config;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.aprilfools.simplelife.SimpleLifeConfig;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
@@ -13,9 +14,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
-public abstract class ConfigManager {
+public abstract class ConfigManager extends DefaultConfigValues {
 
     protected Properties properties = new Properties();
     protected String folderPath;
@@ -27,11 +30,47 @@ public abstract class ConfigManager {
         createFileIfNotExists();
         loadProperties();
         renamedProperties();
-        defaultProperties();
+        instantiateProperties();
     }
-    protected abstract void defaultProperties();
 
-    protected void defaultSessionProperties() {
+    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+        return new ArrayList<>(List.of(
+                SPAWN_EGG_DROP_CHANCE,
+                SPAWN_EGG_DROP_ONLY_NATURAL,
+                CREATIVE_IGNORE_BLACKLIST,
+                AUTO_SET_WORLDBORDER,
+                AUTO_KEEP_INVENTORY,
+                PLAYERS_DROP_ITEMS_ON_FINAL_DEATH,
+                FINAL_DEATH_TITLE_SHOW,
+                BLACKLIST_BANNED_ENCHANTS,
+                MUTE_DEAD_PLAYERS,
+
+                SPAWNER_RECIPE,
+                SPAWN_EGG_ALLOW_ON_SPAWNER,
+                MAX_PLAYER_HEALTH,
+                DEFAULT_LIVES,
+                CUSTOM_ENCHANTER_ALGORITHM,
+                BLACKLIST_ITEMS,
+                BLACKLIST_BLOCKS,
+                BLACKLIST_CLAMPED_ENCHANTS,
+                FINAL_DEATH_TITLE_SUBTITLE,
+                FINAL_DEATH_MESSAGE
+        ));
+    }
+
+    protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
+        return new ArrayList<>(List.of());
+    }
+
+    protected List<ConfigEntry<?>> getAllConfigEntries() {
+        List<ConfigEntry<?>> allEntries = new ArrayList<>();
+        allEntries.addAll(getDefaultConfigEntries());
+        allEntries.addAll(getSeasonSpecificConfigEntries());
+        return allEntries;
+    }
+
+    /*
+    protected void reloadDefaultSessionProperties() {
         getOrCreateDouble("spawn_egg_drop_chance", 0.05);
         getOrCreateBoolean("spawn_egg_drop_only_natural", true);
         getOrCreateBoolean("creative_ignore_blacklist", true);
@@ -42,6 +81,64 @@ public abstract class ConfigManager {
         getOrCreateProperty("blacklist_banned_enchants","[]");
         getOrCreateBoolean("mute_dead_players", false);
     }
+    */
+
+    protected void instantiateProperties() {
+        for (ConfigEntry<?> entry : getAllConfigEntries()) {
+            if (entry.defaultValue instanceof Integer integerValue) {
+                getOrCreateInt(entry.key, integerValue);
+            } else if (entry.defaultValue instanceof Boolean booleanValue) {
+                getOrCreateBoolean(entry.key, booleanValue);
+            } else if (entry.defaultValue instanceof Double doubleValue) {
+                getOrCreateDouble(entry.key, doubleValue);
+            } else if (entry.defaultValue instanceof String stringValue) {
+                getOrCreateProperty(entry.key, stringValue);
+            }
+        }
+    }
+
+    public void sendConfigTo(ServerPlayerEntity player) {
+        int index = 0;
+        for (ConfigEntry<?> entry : getDefaultConfigEntries()) {
+            String value = getPropertyAsString(entry.key, entry.defaultValue);
+            index += NetworkHandlerServer.sendConfig(
+                    player,
+                    entry.type,
+                    entry.key,
+                    index,
+                    entry.displayName,
+                    entry.description,
+                    List.of(value, entry.defaultValue.toString())
+            );
+        }
+        index = 100;
+        for (ConfigEntry<?> entry : getSeasonSpecificConfigEntries()) {
+            String value = getPropertyAsString(entry.key, entry.defaultValue);
+            index += NetworkHandlerServer.sendConfig(
+                    player,
+                    entry.type,
+                    entry.key,
+                    index,
+                    entry.displayName,
+                    entry.description,
+                    List.of(value, entry.defaultValue.toString())
+            );
+        }
+    }
+
+    private String getPropertyAsString(String key, Object defaultValue) {
+        if (defaultValue instanceof Integer intValue) {
+            return String.valueOf(getOrCreateInt(key, intValue));
+        } else if (defaultValue instanceof Boolean booleanValue) {
+            return String.valueOf(getOrCreateBoolean(key, booleanValue));
+        } else if (defaultValue instanceof Double doubleValue) {
+            return String.valueOf(getOrCreateDouble(key, doubleValue));
+        } else if (defaultValue instanceof String stringValue) {
+            return getOrCreateProperty(key, stringValue);
+        }
+        return defaultValue.toString();
+    }
+
 
     protected void renamedProperties() {
         renamedProperty("show_death_title_on_last_death", "final_death_title_show");
@@ -116,7 +213,7 @@ public abstract class ConfigManager {
                     return;
                 }
                 try (OutputStream output = new FileOutputStream(configFile)) {
-                    defaultProperties();
+                    instantiateProperties();
                     properties.store(output, null);
                 }
             } catch (IOException ex) {
@@ -225,11 +322,5 @@ public abstract class ConfigManager {
             return Integer.parseInt(value);
         } catch (Exception ignored) {}
         return defaultValue;
-    }
-
-    /*
-        Other
-     */
-    public void sendConfigTo(ServerPlayerEntity player) {
     }
 }

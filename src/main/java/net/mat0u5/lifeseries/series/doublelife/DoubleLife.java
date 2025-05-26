@@ -71,7 +71,7 @@ public class DoubleLife extends Series {
         super.onPlayerJoin(player);
 
         if (!hasAssignedLives(player)) {
-            int lives = seriesConfig.getOrCreateInt("default_lives", 3);
+            int lives = seriesConfig.DEFAULT_LIVES.get(seriesConfig);
             setPlayerLives(player, lives);
         }
 

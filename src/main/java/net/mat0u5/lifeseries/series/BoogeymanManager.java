@@ -1,5 +1,8 @@
 package net.mat0u5.lifeseries.series;
 
+import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
+import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
+import net.mat0u5.lifeseries.series.thirdlife.ThirdLifeConfig;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -112,7 +115,10 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
             resetBoogeymen();
-            double chanceMultiplier = seriesConfig.getOrCreateDouble("boogeyman_chance_multiplier", 1);
+            double chanceMultiplier = 1;
+            if (seriesConfig instanceof LastLifeConfig config) {
+                chanceMultiplier = config.BOOGEYMAN_CHANCE_MULTIPLIER.get(config);
+            }
             chooseBoogeymen(currentSeries.getAlivePlayers(), 100 * chanceMultiplier);
         });
     }
@@ -137,7 +143,10 @@ public class BoogeymanManager {
     }
 
     public void boogeymenChooseRandom(List<ServerPlayerEntity> allowedPlayers, double currentChance) {
-        int maxAmount = seriesConfig.getOrCreateInt("boogeyman_max_amount", 999);
+        int maxAmount = 2000000000;
+        if (seriesConfig instanceof LastLifeConfig config) {
+            maxAmount = config.BOOGEYMAN_MAX_AMOUNT.get(config);
+        }
         List<ServerPlayerEntity> nonRedPlayers = currentSeries.getNonRedPlayers();
         Collections.shuffle(nonRedPlayers);
 

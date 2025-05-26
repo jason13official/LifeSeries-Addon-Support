@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.secretlife;
 
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.series.*;
+import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -67,13 +68,15 @@ public class SecretLife extends Series {
     @Override
     public void reload() {
         super.reload();
-        MAX_HEALTH = seriesConfig.getOrCreateDouble("max_player_health", 60.0d);
-        TaskManager.EASY_SUCCESS = seriesConfig.getOrCreateInt("task_health_easy_pass", 20);
-        TaskManager.EASY_FAIL = seriesConfig.getOrCreateInt("task_health_easy_fail", 0);
-        TaskManager.HARD_SUCCESS = seriesConfig.getOrCreateInt("task_health_hard_pass", 40);
-        TaskManager.HARD_FAIL = seriesConfig.getOrCreateInt("task_health_hard_fail", -20);
-        TaskManager.RED_SUCCESS = seriesConfig.getOrCreateInt("task_health_red_pass", 10);
-        TaskManager.RED_FAIL = seriesConfig.getOrCreateInt("task_health_red_fail", -5);
+        if (!(seriesConfig instanceof SecretLifeConfig config)) return;
+
+        MAX_HEALTH = config.MAX_PLAYER_HEALTH.get(config);
+        TaskManager.EASY_SUCCESS = config.TASK_HEALTH_EASY_PASS.get(config);
+        TaskManager.EASY_FAIL = config.TASK_HEALTH_EASY_FAIL.get(config);
+        TaskManager.HARD_SUCCESS = config.TASK_HEALTH_HARD_PASS.get(config);
+        TaskManager.HARD_FAIL = config.TASK_HEALTH_HARD_FAIL.get(config);
+        TaskManager.RED_SUCCESS = config.TASK_HEALTH_RED_PASS.get(config);
+        TaskManager.RED_FAIL = config.TASK_HEALTH_RED_FAIL.get(config);
     }
 
     @Override
@@ -222,7 +225,7 @@ public class SecretLife extends Series {
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
         if (!hasAssignedLives(player)) {
-            int lives = seriesConfig.getOrCreateInt("default_lives", 3);
+            int lives = seriesConfig.DEFAULT_LIVES.get(seriesConfig);
             setPlayerLives(player, lives);
             setPlayerHealth(player, MAX_HEALTH);
             player.setHealth((float) MAX_HEALTH);
@@ -308,8 +311,8 @@ public class SecretLife extends Series {
     @Override
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
         super.modifyEntityDrops(entity, damageSource);
-        if (entity instanceof ServerPlayerEntity player) {
-            boolean dropBook = seriesConfig.getOrCreateBoolean("players_drop_task_on_death", false);
+        if (entity instanceof ServerPlayerEntity player && seriesConfig instanceof SecretLifeConfig config) {
+            boolean dropBook = config.PLAYERS_DROP_TASK_ON_DEATH.get(config);
             if (dropBook) return;
             boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
             if (keepInventory) return;

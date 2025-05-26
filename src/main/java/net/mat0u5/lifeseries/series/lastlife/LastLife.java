@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.lastlife;
 
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.series.*;
+import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.ScoreboardUtils;
@@ -110,9 +111,10 @@ public class LastLife extends Series {
     @Override
     public void reload() {
         super.reload();
-        ROLL_MIN_LIVES = seriesConfig.getOrCreateInt("random_lives_min", 2);
-        ROLL_MAX_LIVES = seriesConfig.getOrCreateInt("random_lives_max", 6);
-        GIVELIFE_MAX_LIVES = seriesConfig.getOrCreateInt("givelife_lives_max", 99);
+        if (!(seriesConfig instanceof LastLifeConfig config)) return;
+        ROLL_MIN_LIVES = config.RANDOM_LIVES_MIN.get(config);
+        ROLL_MAX_LIVES = config.RANDOM_LIVES_MAX.get(config);
+        GIVELIFE_MAX_LIVES = config.GIVELIFE_LIVES_MAX.get(config);
     }
 
     public void addToLifeNoUpdate(ServerPlayerEntity player) {

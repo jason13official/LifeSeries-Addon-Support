@@ -1,7 +1,10 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
+import net.mat0u5.lifeseries.resources.config.ConfigEntry;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class SecretLifeLocationConfig extends ConfigManager {
     public SecretLifeLocationConfig() {
@@ -9,7 +12,11 @@ public class SecretLifeLocationConfig extends ConfigManager {
     }
 
     @Override
-    public void defaultProperties() {}
+    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+        return List.of();
+    }
+    @Override
+    public void instantiateProperties() {}
 
     public void loadLocations() {
         TaskManager.successButtonPos = getLocation("successButtonPos");
