@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
+import java.util.Optional;
+
 import static net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency.MORPH_COMPONENT;
 
 /*
