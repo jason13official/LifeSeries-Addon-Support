@@ -90,16 +90,20 @@ public class UpdateChecker {
                         JsonObject json = jsonElement.getAsJsonObject();
 
                         String name = json.get("tag_name").getAsString();
+                        if (name.contains("dev")) continue;
+                        try {
+                            int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
+                            int updateVersionNumber = VersionControl.getModVersionInt(name);
 
-                        int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
-                        int updateVersionNumber = VersionControl.getModVersionInt(name);
-
-                        if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
-                            Main.LOGGER.info("New minor version found: "+name);
-                            updateAvailable = true;
-                            versionName = name;
-                            if (!majorUpdateAvailable) versionDescription = json.get("body").getAsString();
-                            version = updateVersionNumber;
+                            if (version < updateVersionNumber && currentVersionNumber < updateVersionNumber) {
+                                Main.LOGGER.info("New minor version found: "+name);
+                                updateAvailable = true;
+                                versionName = name;
+                                if (!majorUpdateAvailable) versionDescription = json.get("body").getAsString();
+                                version = updateVersionNumber;
+                            }
+                        }catch(Exception e) {
+                            Main.LOGGER.error("Error while parsing version number for update: " + name + " - " + e.getMessage());
                         }
                     }
 
