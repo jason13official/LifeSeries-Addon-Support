@@ -8,8 +8,7 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.morph.DummyInterface;
+import net.mat0u5.lifeseries.series.wildlife.morph.DummyInterface;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.*;

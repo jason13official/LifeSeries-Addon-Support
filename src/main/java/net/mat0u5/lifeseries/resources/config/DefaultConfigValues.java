@@ -41,6 +41,9 @@ public class DefaultConfigValues {
     public final ConfigEntry<Boolean> MUTE_DEAD_PLAYERS = new ConfigEntry<>(
             "mute_dead_players", false, "boolean", "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not."
     );
+    public final ConfigEntry<String> BLACKLIST_BANNED_POTIONS = new ConfigEntry<>(
+            "blacklist_banned_potions", "[strength, instant_health, instant_damage]", "string", "Banned Potions", "List of banned potion effects."
+    );
 
 
     public final ConfigEntry<Boolean> SPAWNER_RECIPE = new ConfigEntry<>(

@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.utils.morph;
+package net.mat0u5.lifeseries.series.wildlife.morph;
 
 import net.minecraft.entity.player.PlayerEntity;
 

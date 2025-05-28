@@ -1,8 +1,7 @@
-package net.mat0u5.lifeseries.utils.morph;
+package net.mat0u5.lifeseries.series.wildlife.morph;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.minecraft.entity.*;
-import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
@@ -12,8 +11,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
-
-import java.util.Optional;
 
 import static net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency.MORPH_COMPONENT;
 

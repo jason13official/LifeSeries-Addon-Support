@@ -215,8 +215,8 @@ public class PlayerUtils {
     }
 
     public static void updatePlayerInventory(ServerPlayerEntity player) {
-        player.currentScreenHandler.syncState();
         if (!player.isCreative()) {
+            player.currentScreenHandler.syncState();
             player.playerScreenHandler.syncState();
         }
         player.getInventory().updateItems();

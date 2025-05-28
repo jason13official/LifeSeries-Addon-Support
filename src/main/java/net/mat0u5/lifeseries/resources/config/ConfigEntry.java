@@ -18,14 +18,7 @@ public class ConfigEntry<T> {
     }
 
     public T get(ConfigManager config) {
-        /*
         try {
-            //TODO
-        }catch(Exception e) {
-
-        }
-        */
-
         if (defaultValue instanceof Integer i) {
             return (T) Integer.valueOf(config.getOrCreateInt(key, i));
         } else if (defaultValue instanceof Boolean b) {
@@ -35,6 +28,7 @@ public class ConfigEntry<T> {
         } else if (defaultValue instanceof String s) {
             return (T) config.getOrCreateProperty(key, s);
         }
+        }catch(Exception e) {}
 
         Main.LOGGER.error("Config value "+ key +" was null, returning default value - "+defaultValue);
         return defaultValue;

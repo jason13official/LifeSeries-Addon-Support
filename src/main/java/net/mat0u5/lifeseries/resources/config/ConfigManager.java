@@ -35,26 +35,26 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
     protected List<ConfigEntry<?>> getDefaultConfigEntries() {
         return new ArrayList<>(List.of(
-                SPAWN_EGG_DROP_CHANCE,
-                SPAWN_EGG_DROP_ONLY_NATURAL,
-                CREATIVE_IGNORE_BLACKLIST,
-                AUTO_SET_WORLDBORDER,
-                AUTO_KEEP_INVENTORY,
-                PLAYERS_DROP_ITEMS_ON_FINAL_DEATH,
-                FINAL_DEATH_TITLE_SHOW,
-                BLACKLIST_BANNED_ENCHANTS,
-                MUTE_DEAD_PLAYERS,
-
-                SPAWNER_RECIPE,
-                SPAWN_EGG_ALLOW_ON_SPAWNER,
-                MAX_PLAYER_HEALTH,
                 DEFAULT_LIVES,
-                CUSTOM_ENCHANTER_ALGORITHM,
+                MAX_PLAYER_HEALTH,
                 BLACKLIST_ITEMS,
                 BLACKLIST_BLOCKS,
                 BLACKLIST_CLAMPED_ENCHANTS,
+                BLACKLIST_BANNED_ENCHANTS,
+                BLACKLIST_BANNED_POTIONS,
+                CREATIVE_IGNORE_BLACKLIST,
+                CUSTOM_ENCHANTER_ALGORITHM,
+                PLAYERS_DROP_ITEMS_ON_FINAL_DEATH,
+                FINAL_DEATH_TITLE_SHOW,
                 FINAL_DEATH_TITLE_SUBTITLE,
-                FINAL_DEATH_MESSAGE
+                FINAL_DEATH_MESSAGE,
+                MUTE_DEAD_PLAYERS,
+                AUTO_SET_WORLDBORDER,
+                AUTO_KEEP_INVENTORY,
+                SPAWN_EGG_DROP_CHANCE,
+                SPAWN_EGG_DROP_ONLY_NATURAL,
+                SPAWN_EGG_ALLOW_ON_SPAWNER,
+                SPAWNER_RECIPE
         ));
     }
 
@@ -68,20 +68,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
         allEntries.addAll(getSeasonSpecificConfigEntries());
         return allEntries;
     }
-
-    /*
-    protected void reloadDefaultSessionProperties() {
-        getOrCreateDouble("spawn_egg_drop_chance", 0.05);
-        getOrCreateBoolean("spawn_egg_drop_only_natural", true);
-        getOrCreateBoolean("creative_ignore_blacklist", true);
-        getOrCreateBoolean("auto_set_worldborder", true);
-        getOrCreateBoolean("auto_keep_inventory", true);
-        getOrCreateBoolean("players_drop_items_on_final_death", false);
-        getOrCreateBoolean("final_death_title_show", true);
-        getOrCreateProperty("blacklist_banned_enchants","[]");
-        getOrCreateBoolean("mute_dead_players", false);
-    }
-    */
 
     protected void instantiateProperties() {
         for (ConfigEntry<?> entry : getAllConfigEntries()) {

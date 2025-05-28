@@ -14,6 +14,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerInventory;
@@ -46,6 +47,8 @@ public class Blacklist {
     private List<RegistryKey<Enchantment>> loadedListEnchants;
     private List<RegistryKey<Enchantment>> loadedBannedEnchants;
 
+    private List<RegistryKey<StatusEffect>> loadedBannedPotionEffects;
+
     public List<String> loadItemBlacklist() {
         if (seriesConfig == null) return new ArrayList<>();
         String raw = seriesConfig.BLACKLIST_ITEMS.get(seriesConfig);
@@ -73,6 +76,14 @@ public class Blacklist {
     public List<String> loadBlacklistedEnchants() {
         if (seriesConfig == null) return new ArrayList<>();
         String raw = seriesConfig.BLACKLIST_BANNED_ENCHANTS.get(seriesConfig);
+        raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
+        if (raw.isEmpty()) return new ArrayList<>();
+        return new ArrayList<>(Arrays.asList(raw.split(",")));
+    }
+
+    public List<String> loadBannedPotions() {
+        if (seriesConfig == null) return new ArrayList<>();
+        String raw = seriesConfig.BLACKLIST_BANNED_POTIONS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -211,18 +222,53 @@ public class Blacklist {
         return newList;
     }
 
+    public List<RegistryKey<StatusEffect>> getBannedPotions() {
+        if (server == null) return new ArrayList<>();
+
+        if (loadedBannedPotionEffects != null) return loadedBannedPotionEffects;
+        List<RegistryKey<StatusEffect>> newList = new ArrayList<>();
+
+        Registry<StatusEffect> effectsRegistry = server.getRegistryManager()
+
+                //? if <=1.21 {
+                .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
+        //?} else
+        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
+
+        for (String potionId : loadBannedPotions()) {
+            if (!potionId.startsWith("minecraft:")) potionId = "minecraft:" + potionId;
+
+            try {
+                Identifier id = Identifier.of(potionId);
+                StatusEffect enchantment = effectsRegistry.get(id);
+
+                if (enchantment != null) {
+                    newList.add(effectsRegistry.getKey(enchantment).orElseThrow());
+                } else {
+                    OtherUtils.throwError("[CONFIG] Invalid potion: " + potionId);
+                }
+            } catch (Exception e) {
+                OtherUtils.throwError("[CONFIG] Error parsing potion ID: " + potionId);
+            }
+        }
+
+        loadedBannedPotionEffects = newList;
+        return newList;
+    }
+
     public void reloadBlacklist() {
         if (Main.server == null) return;
         loadedListItem = null;
         loadedListBlock = null;
         loadedListEnchants = null;
         loadedBannedEnchants = null;
+        loadedBannedPotionEffects = null;
         getItemBlacklist();
         getBlockBlacklist();
         getClampedEnchants();
         getBannedEnchants();
+        getBannedPotions();
     }
-
 
     public ActionResult onBlockUse(ServerPlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         if (player.isCreative() && seriesConfig.CREATIVE_IGNORE_BLACKLIST.get(seriesConfig)) return ActionResult.PASS;
@@ -274,9 +320,9 @@ public class Blacklist {
         PotionContentsComponent potions = itemStack.getComponents().get(DataComponentTypes.POTION_CONTENTS);
         if (potions == null) return false;
         for (StatusEffectInstance effect : potions.getEffects()) {
-            if (effect.equals(StatusEffects.STRENGTH)) return true;
-            if (effect.equals(StatusEffects.INSTANT_HEALTH)) return true;
-            if (effect.equals(StatusEffects.INSTANT_DAMAGE)) return true;
+            Optional<RegistryKey<StatusEffect>> key = effect.getEffectType().getKey();
+            if (key.isEmpty()) continue;
+            if (getBannedPotions().contains(key.get())) return true;
         }
         return false;
     }
