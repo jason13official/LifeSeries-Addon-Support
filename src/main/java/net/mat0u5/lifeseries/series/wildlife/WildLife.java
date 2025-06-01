@@ -21,6 +21,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -74,7 +75,7 @@ public class WildLife extends Series {
 
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (Necromancy.isRessurectedPlayer(victim)) return true;
+        if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) return true;
         if (isOnLastLife(attacker, false)) return true;
         if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
 
@@ -87,8 +88,24 @@ public class WildLife extends Series {
         boolean gaveLife = false;
         boolean isAllowedToAttack = isAllowedToAttack(killer, victim);
         if (isOnAtLeastLives(victim, 4, false)) {
-            addPlayerLife(killer);
-            gaveLife = true;
+            if (Necromancy.isRessurectedPlayer(killer) && seriesConfig instanceof WildLifeConfig config) {
+                if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get(config)) {
+                    Integer currentLives = getPlayerLives(killer);
+                    if (currentLives == null) currentLives = 0;
+                    int lives = currentLives + 1;
+                    if (lives <= 0) {
+                        ScoreboardUtils.setScore(ScoreHolder.fromName(killer.getNameForScoreboard()), "Lives", lives);
+                    }
+                    else {
+                        addPlayerLife(killer);
+                    }
+                    gaveLife = true;
+                }
+            }
+            else {
+                addPlayerLife(killer);
+                gaveLife = true;
+            }
         }
         if (isAllowedToAttack) return;
         OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
@@ -100,7 +117,7 @@ public class WildLife extends Series {
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         super.onClaimKill(killer, victim);
-        if (isOnAtLeastLives(victim, 3, false)) {
+        if (isOnAtLeastLives(victim, 4, false)) {
             addPlayerLife(killer);
         }
     }

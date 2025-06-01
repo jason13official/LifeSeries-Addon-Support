@@ -130,6 +130,12 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigEntry<>(
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "integer", "Superpower - Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
     );
+    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS = new ConfigEntry<>(
+            "wildcard_superpowers_zombies_lose_items", true, "boolean", "Superpower - Necromancy: Zombies Lose Items", "Controls whether zombies keep their items when they get respawned."
+    );
+    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigEntry<>(
+            "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "boolean", "Superpower - Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
+    );
 
     public WildLifeConfig() {
         super("./config/"+ Main.MOD_ID,"wildlife.properties");
@@ -162,7 +168,9 @@ public class WildLifeConfig extends ConfigManager {
                 WILDCARD_MOBSWAP_SPAWN_MOBS,
                 WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER,
 
-                WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
+                WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE,
+                WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS,
+                WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
         ));
     }
 

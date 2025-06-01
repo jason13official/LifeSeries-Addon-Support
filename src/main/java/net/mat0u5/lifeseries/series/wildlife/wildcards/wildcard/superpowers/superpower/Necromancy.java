@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
+import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.utils.*;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class Necromancy extends Superpower {
     public static final List<UUID> ressurectedPlayers = new ArrayList<>();
@@ -71,6 +73,11 @@ public class Necromancy extends Superpower {
                     /*deadPlayer.teleport(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);
                     *///?}
                     deadPlayer.changeGameMode(GameMode.SURVIVAL);
+                    if (seriesConfig instanceof WildLifeConfig config) {
+                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config)) {
+                            deadPlayer.getInventory().clear();
+                        }
+                    }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
                     WorldUitls.summonHarmlessLightning(deadPlayer.getServerWorld(), deadPlayer.getPos());
                     ressurectedPlayers.add(deadPlayer.getUuid());
