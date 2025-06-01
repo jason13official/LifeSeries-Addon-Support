@@ -81,15 +81,15 @@ public class LimitedLife extends Series {
                 }
 
                 if (hasAssignedLives(player) && getPlayerLives(player) != null) {
-                    long livesRunOutAt;
+                    long playerLives;
                     if (isAlive(player)) {
-                        livesRunOutAt = System.currentTimeMillis() + getPlayerLives(player) * 1000;
+                        playerLives = getPlayerLives(player);
                     }
                     else {
-                        livesRunOutAt = -1;
+                        playerLives = -1;
                     }
                     String livesColor = getColorForLives(getPlayerLives(player)).toString();
-                    NetworkHandlerServer.sendLongPacket(player, "limited_life_timer__"+livesColor, livesRunOutAt);
+                    NetworkHandlerServer.sendLongPacket(player, "limited_life_timer__"+livesColor, playerLives);
                 }
             }
             else {
@@ -221,11 +221,12 @@ public class LimitedLife extends Series {
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         super.onClaimKill(killer, victim);
         Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-        if (boogeyman == null || boogeyman.cured) {
+        if (boogeyman == null || boogeyman.cured || isOnLastLife(victim, true)) {
             addToPlayerLives(killer, KILL_NORMAL);
             PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
             return;
         }
+
         boogeymanManager.cure(killer);
 
         //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
@@ -257,7 +258,7 @@ public class LimitedLife extends Series {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-        if (boogeyman == null || boogeyman.cured) {
+        if (boogeyman == null || boogeyman.cured || isOnLastLife(victim, true)) {
             boolean wasAllowedToAttack = isAllowedToAttack(killer, victim);
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
             String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
@@ -276,9 +277,10 @@ public class LimitedLife extends Series {
             if (wasAllowedToAttack) return;
             OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
                     "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §agreen name§7), and is not a §cboogeyman§f!"));
-            OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove or add time to them (using §f/lives add/remove <player> <time>§7) if this was indeed an unjustified kill."));
+            OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove or add time (using §f/lives add/remove <player> <time>§7) if this was indeed an unjustified kill."));
             return;
         }
+
         boogeymanManager.cure(killer);
 
         //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey

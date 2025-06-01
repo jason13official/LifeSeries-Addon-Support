@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.client.ClientKeybinds;
 import net.mat0u5.lifeseries.client.render.ClientRenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -20,6 +21,7 @@ import java.util.*;
 public class MainClient implements ClientModInitializer {
 
     public static SeriesList clientCurrentSeries = SeriesList.UNASSIGNED;
+    public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
     public static List<Wildcards> clientActiveWildcards = new ArrayList<>();
     public static long TIME_DILATION_TIMESTAMP = 0;
     public static long SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
@@ -43,6 +45,7 @@ public class MainClient implements ClientModInitializer {
     public static long sessionTimeLastUpdated = 0;
     public static String limitedLifeTimerColor = "";
     public static long limitedLifeTime = 0;
+    public static long limitedLifeTimeLastActuallyUpdated = 0;
     public static long limitedLifeTimeLastUpdated = 0;
 
     @Override

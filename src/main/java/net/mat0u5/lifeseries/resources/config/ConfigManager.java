@@ -54,7 +54,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 SPAWN_EGG_DROP_CHANCE,
                 SPAWN_EGG_DROP_ONLY_NATURAL,
                 SPAWN_EGG_ALLOW_ON_SPAWNER,
-                SPAWNER_RECIPE
+                SPAWNER_RECIPE,
+                GIVELIFE_COMMAND_ENABLED,
+                GIVELIFE_LIVES_MAX
         ));
     }
 

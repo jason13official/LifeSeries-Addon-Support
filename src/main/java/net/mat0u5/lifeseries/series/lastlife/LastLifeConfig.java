@@ -3,8 +3,6 @@ package net.mat0u5.lifeseries.series.lastlife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.config.ConfigEntry;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +68,6 @@ public class LastLifeConfig extends ConfigManager {
     public static final ConfigEntry<Integer> RANDOM_LIVES_MAX = new ConfigEntry<>(
             "random_lives_max", 6, "integer", "Random Lives Max", "The maximum lives you can get from the random roll."
     );
-    public static final ConfigEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigEntry<>(
-            "givelife_lives_max", 99, "integer", "/givelife Lives Max", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
-    );
 
 
     public LastLifeConfig() {
@@ -92,8 +87,7 @@ public class LastLifeConfig extends ConfigManager {
                 BOOGEYMAN_CHANCE_MULTIPLIER,
                 BOOGEYMAN_MAX_AMOUNT,
                 RANDOM_LIVES_MIN,
-                RANDOM_LIVES_MAX,
-                GIVELIFE_LIVES_MAX
+                RANDOM_LIVES_MAX
         ));
     }
 
@@ -103,6 +97,7 @@ public class LastLifeConfig extends ConfigManager {
         BLACKLIST_ITEMS.defaultValue = "["+String.join(", ", BLACKLISTED_ITEMS)+"]";
         BLACKLIST_BLOCKS.defaultValue = "["+String.join(", ", BLACKLISTED_BLOCKS)+"]";
         BLACKLIST_CLAMPED_ENCHANTS.defaultValue = "["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]";
+        GIVELIFE_COMMAND_ENABLED.defaultValue = true;
         super.instantiateProperties();
     }
 }

@@ -17,6 +17,7 @@ import net.minecraft.world.border.WorldBorder;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
@@ -154,6 +155,9 @@ public class Session {
                     if (PermissionManager.isAdmin(player)) continue;
                     NetworkHandlerServer.sendNumberPacket(player, "mute", 50);
                 }
+            }
+            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                NetworkHandlerServer.sendStringPacket(player, "sessionStatus", SessionStatus.getStringName(status));
             }
         }
 

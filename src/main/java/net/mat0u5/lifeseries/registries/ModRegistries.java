@@ -33,6 +33,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(BoogeymanCommand::register);
         CommandRegistrationCallback.EVENT.register(ClaimKillCommand::register);
         CommandRegistrationCallback.EVENT.register(LifeSeriesCommand::register);
+        CommandRegistrationCallback.EVENT.register(GivelifeCommand::register);
     }
 
     private static void registerEvents() {

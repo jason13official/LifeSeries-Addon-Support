@@ -2,9 +2,7 @@ package net.mat0u5.lifeseries.series.lastlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.utils.AnimationUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -49,56 +47,12 @@ public class LastLifeCommands {
                     )
                 )
         );
-        dispatcher.register(
-            literal("givelife")
-                .then(argument("player", EntityArgumentType.player())
-                    .executes(context -> giftLife(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
-                )
-        );
     }
 
     public static int assignRandomLives(ServerCommandSource source, Collection<ServerPlayerEntity> players) {
         if (checkBanned(source)) return -1;
 
         ((LastLife) currentSeries).livesManager.assignRandomLives(players);
-        return 1;
-    }
-
-    public static int giftLife(ServerCommandSource source, ServerPlayerEntity target) {
-        if (checkBanned(source)) return -1;
-
-        final ServerPlayerEntity self = source.getPlayer();
-        if (self == null) return -1;
-        if (target == null) return -1;
-        if (!currentSeries.isAlive(self)) {
-            source.sendError(Text.of("You do not have any lives to give."));
-            return -1;
-        }
-        if (!currentSeries.isAlive(target)) {
-            source.sendError(Text.of("That player is not alive."));
-            return -1;
-        }
-        if (target == self) {
-            source.sendError(Text.of("You cannot give a life to yourself."));
-            return -1;
-        }
-        Integer currentLives = currentSeries.getPlayerLives(self);
-        if (currentLives <= 1) {
-            source.sendError(Text.of("You cannot give away your last life."));
-            return -1;
-        }
-        Integer targetLives = currentSeries.getPlayerLives(target);
-        if (targetLives >= LastLife.GIVELIFE_MAX_LIVES) {
-            source.sendError(Text.of("That player cannot receive any more lives."));
-            return -1;
-        }
-
-        Text currentPlayerName = self.getStyledDisplayName();
-        currentSeries.removePlayerLife(self);
-        ((LastLife) currentSeries).addToLifeNoUpdate(target);
-        AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(40, () -> ((LastLife)currentSeries).livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target));
-
         return 1;
     }
 }

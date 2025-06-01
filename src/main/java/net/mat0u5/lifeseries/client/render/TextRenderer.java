@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.render;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientKeybinds;
+import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.client.MinecraftClient;
@@ -132,6 +133,9 @@ public class TextRenderer {
         if (MainClient.limitedLifeTime == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
         else {
             long remainingTime = roundTime(MainClient.limitedLifeTime) - System.currentTimeMillis();
+            if (MainClient.clientSessionStatus != SessionStatus.STARTED) {
+                remainingTime = roundTime(MainClient.limitedLifeTime-MainClient.limitedLifeTimeLastActuallyUpdated);
+            }
             if (remainingTime < 0) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
             else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
         }

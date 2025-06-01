@@ -3,8 +3,6 @@ package net.mat0u5.lifeseries.series.limitedlife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.config.ConfigEntry;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +89,8 @@ public class LimitedLifeConfig extends ConfigManager {
     protected List<ConfigEntry<?>> getDefaultConfigEntries() {
         List<ConfigEntry<?>> defaultEntries = super.getDefaultConfigEntries();
         defaultEntries.remove(DEFAULT_LIVES);
+        defaultEntries.remove(GIVELIFE_COMMAND_ENABLED);
+        defaultEntries.remove(GIVELIFE_LIVES_MAX);
         return defaultEntries;
     }
 

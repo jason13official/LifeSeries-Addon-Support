@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.client.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
 import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
@@ -28,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class NetworkHandlerClient {
     public static void registerClientReceiver() {
@@ -82,6 +85,9 @@ public class NetworkHandlerClient {
             if (Main.isClient()) {
                 ClientResourcePacks.checkClientPacks();
             }
+        }
+        if (name.equalsIgnoreCase("sessionStatus")) {
+            MainClient.clientSessionStatus = SessionStatus.getSessionName(SessionStatus.getStringName(currentSession.status));
         }
         if (name.equalsIgnoreCase("activeWildcards")) {
             List<Wildcards> newList = new ArrayList<>();
@@ -212,10 +218,13 @@ public class NetworkHandlerClient {
 
         if (name.startsWith("limited_life_timer__")) {
             MainClient.limitedLifeTimerColor = name.replaceFirst("limited_life_timer__","");
-            if (Math.abs(MainClient.limitedLifeTime-number) > 2000) {
-                MainClient.limitedLifeTime = number;
+            long currentTime = System.currentTimeMillis();
+            long runOutOfLivesAt = currentTime + number * 1000;
+            if (Math.abs(MainClient.limitedLifeTime-runOutOfLivesAt) > 2000) {
+                MainClient.limitedLifeTime = runOutOfLivesAt;
+                MainClient.limitedLifeTimeLastActuallyUpdated = currentTime;
             }
-            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
+            MainClient.limitedLifeTimeLastUpdated = currentTime;
         }
 
         if (name.equalsIgnoreCase("curse_sliding")) {

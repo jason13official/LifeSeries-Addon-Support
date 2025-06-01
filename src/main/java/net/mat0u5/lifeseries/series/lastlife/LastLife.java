@@ -19,7 +19,6 @@ public class LastLife extends Series {
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /givelife";
     public static int ROLL_MAX_LIVES = 6;
     public static int ROLL_MIN_LIVES = 2;
-    public static int GIVELIFE_MAX_LIVES = 99;
 
     public LastLifeLivesManager livesManager = new LastLifeLivesManager();
     public BoogeymanManager boogeymanManager = new BoogeymanManager();
@@ -70,6 +69,9 @@ public class LastLife extends Series {
                     "§7, who is not §cred name§7, nor a §cboogeyman§7!"));
             return;
         }
+        if (isOnLastLife(victim, true)) {
+            return;
+        }
         boogeymanManager.cure(killer);
     }
 
@@ -78,6 +80,9 @@ public class LastLife extends Series {
         super.onClaimKill(killer, victim);
         Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
         if (boogeyman == null || boogeyman.cured) return;
+        if (isOnLastLife(victim, true)) {
+            return;
+        }
         boogeymanManager.cure(killer);
     }
 
@@ -114,14 +119,5 @@ public class LastLife extends Series {
         if (!(seriesConfig instanceof LastLifeConfig config)) return;
         ROLL_MIN_LIVES = config.RANDOM_LIVES_MIN.get(config);
         ROLL_MAX_LIVES = config.RANDOM_LIVES_MAX.get(config);
-        GIVELIFE_MAX_LIVES = config.GIVELIFE_LIVES_MAX.get(config);
-    }
-
-    public void addToLifeNoUpdate(ServerPlayerEntity player) {
-        Integer currentLives = getPlayerLives(player);
-        if (currentLives == null) currentLives = 0;
-        int lives = currentLives + 1;
-        if (lives < 0) lives = 0;
-        ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
     }
 }

@@ -21,6 +21,7 @@ import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -43,6 +44,7 @@ public abstract class Series extends Session {
     public static final String RESOURCEPACK_MAIN_SHA ="38a74dc7c112e1e9c009e71f544b1b050a01560e";
     public boolean NO_HEALING = false;
     public boolean SHOW_DEATH_TITLE = false;
+    public int GIVELIFE_MAX_LIVES = 99;
 
     public abstract SeriesList getSeries();
     public abstract ConfigManager getConfig();
@@ -74,6 +76,7 @@ public abstract class Series extends Session {
     public void reload() {
         Session.MUTE_DEAD_PLAYERS = seriesConfig.MUTE_DEAD_PLAYERS.get(seriesConfig);
         SHOW_DEATH_TITLE = seriesConfig.FINAL_DEATH_TITLE_SHOW.get(seriesConfig);
+        GIVELIFE_MAX_LIVES = seriesConfig.GIVELIFE_LIVES_MAX.get(seriesConfig);
         createTeams();
         createScoreboards();
         updateStuff();
@@ -189,6 +192,23 @@ public abstract class Series extends Session {
         int lives = currentLives + amount;
         if (lives < 0 && !Necromancy.isRessurectedPlayer(player)) lives = 0;
         setPlayerLives(player, lives);
+    }
+
+    public void addToLifeNoUpdate(ServerPlayerEntity player) {
+        Integer currentLives = getPlayerLives(player);
+        if (currentLives == null) currentLives = 0;
+        int lives = currentLives + 1;
+        if (lives < 0) lives = 0;
+        ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
+    }
+
+    public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
+        target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
+        target.sendMessage(Text.literal("You received a life from ").append(playerName));
+        PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), Text.literal("from ").append(playerName), 10, 30, 10);
+        AnimationUtils.createSpiral(target, 175);
+        currentSeries.reloadPlayerTeam(target);
+        Stats.givelife(playerName, target);
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {

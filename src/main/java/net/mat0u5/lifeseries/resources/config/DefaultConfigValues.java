@@ -76,27 +76,10 @@ public class DefaultConfigValues {
     public final ConfigEntry<String> FINAL_DEATH_MESSAGE = new ConfigEntry<>(
             "final_death_message", "${player} ran out of lives.", "string", "Final Death Message", "The message that gets shown in chat when a player fully dies."
     );
-
-/*
-    getOrCreateDouble("spawn_egg_drop_chance", 0.05);
-    getOrCreateBoolean("spawn_egg_drop_only_natural", true);
-    getOrCreateBoolean("creative_ignore_blacklist", true);
-    getOrCreateBoolean("auto_set_worldborder", true);
-    getOrCreateBoolean("auto_keep_inventory", true);
-    getOrCreateBoolean("players_drop_items_on_final_death", false);
-    getOrCreateBoolean("final_death_title_show", true);
-    getOrCreateProperty("blacklist_banned_enchants","[]");
-    getOrCreateBoolean("mute_dead_players", false);
-
-    getOrCreateBoolean("spawner_recipe", false);
-    getOrCreateBoolean("spawn_egg_allow_on_spawner", false);
-    getOrCreateInt("max_player_health", 20);
-    getOrCreateInt("default_lives", 3);
-    getOrCreateBoolean("custom_enchanter_algorithm", false);
-    getOrCreateProperty("blacklist_items","["+String.join(", ", BLACKLISTED_ITEMS)+"]");
-    getOrCreateProperty("blacklist_blocks","["+String.join(", ", BLACKLISTED_BLOCKS)+"]");
-    getOrCreateProperty("blacklist_clamped_enchants","["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]");
-    getOrCreateProperty("final_death_title_subtitle", "ran out of lives!");
-    getOrCreateProperty("final_death_message", "${player} ran out of lives.");
- */
+    public final ConfigEntry<Boolean> GIVELIFE_COMMAND_ENABLED = new ConfigEntry<>(
+            "givelife_command_enabled", false, "boolean", "Enable givelife command", "Controls whether the '/givelife' command is available."
+    );
+    public final ConfigEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigEntry<>(
+            "givelife_lives_max", 99, "integer", "/givelife Lives Max", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
+    );
 }
