@@ -41,7 +41,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 BLACKLIST_BLOCKS,
                 BLACKLIST_CLAMPED_ENCHANTS,
                 BLACKLIST_BANNED_ENCHANTS,
-                BLACKLIST_BANNED_POTIONS,
+                BLACKLIST_BANNED_POTION_EFFECTS,
                 CREATIVE_IGNORE_BLACKLIST,
                 CUSTOM_ENCHANTER_ALGORITHM,
                 PLAYERS_DROP_ITEMS_ON_FINAL_DEATH,
@@ -131,6 +131,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
     protected void renamedProperties() {
         renamedProperty("show_death_title_on_last_death", "final_death_title_show");
         renamedProperty("players_drop_items_on_last_death", "players_drop_items_on_final_death");
+        renamedProperty("blacklist_banned_potions", "blacklist_banned_potion_effects");
     }
 
     private void renamedProperty(String from, String to) {

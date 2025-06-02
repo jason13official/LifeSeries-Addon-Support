@@ -253,11 +253,13 @@ public class WildLife extends Series {
 
     @Override
     public void onPrePlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.getType() == player.getDamageSources().fall().getType()) {
+        if (source.getType() == player.getDamageSources().fall().getType() ||
+            source.getType() == player.getDamageSources().stalagmite().getType() ||
+            source.getType() == player.getDamageSources().flyIntoWall().getType()) {
             if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                 if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof Flight power) {
                     if (power.isLaunchedUp) {
-                        power.isLaunchedUp = false;
+                        if (source.getType() != player.getDamageSources().flyIntoWall().getType()) power.isLaunchedUp = false;
                         cir.setReturnValue(false);
                         return;
                     }

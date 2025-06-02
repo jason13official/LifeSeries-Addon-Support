@@ -5,7 +5,11 @@ import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.WorldUitls;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -16,8 +20,7 @@ import net.minecraft.world.border.WorldBorder;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();
@@ -158,6 +161,17 @@ public class Session {
             }
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
                 NetworkHandlerServer.sendStringPacket(player, "sessionStatus", SessionStatus.getStringName(status));
+            }
+            for (RegistryEntry<StatusEffect> effect : blacklist.getBannedEffects()) {
+                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+                    if (player.hasStatusEffect(effect)) {
+                        StatusEffectInstance actualEffect = player.getStatusEffect(effect);
+                        if (actualEffect != null) {
+                            if (!actualEffect.isAmbient() && !actualEffect.shouldShowIcon() && !actualEffect.shouldShowParticles()) continue;
+                        }
+                        player.removeStatusEffect(effect);
+                    }
+                }
             }
         }
 

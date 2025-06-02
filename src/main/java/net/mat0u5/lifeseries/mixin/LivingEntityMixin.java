@@ -9,8 +9,10 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Supe
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.series.wildlife.morph.DummyInterface;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
 
+import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = LivingEntity.class, priority = 1)
@@ -116,6 +119,17 @@ public abstract class LivingEntityMixin implements DummyInterface {
     public void stopTicking(CallbackInfo ci){
         if(dummy){
             ci.cancel();
+        }
+    }
+    @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
+    public void addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
+        if (!Main.isLogicalSide()) return;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity instanceof ServerPlayerEntity) {
+            if (!effect.isAmbient() && !effect.shouldShowIcon() && !effect.shouldShowParticles()) return;
+            if (blacklist.getBannedEffects().contains(effect.getEffectType())) {
+                cir.setReturnValue(false);
+            }
         }
     }
 

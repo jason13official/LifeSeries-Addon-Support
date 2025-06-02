@@ -22,6 +22,7 @@
     "SpawnEggItemMixin",
     "SpawnGroupMixin",
     "SpawnHelperMixin",
+    "StatusEffectMixin",
     "WanderingTraderManagerMixin",
     "superpowers.AdvancedExplosionBehaviorMixin",
     "superpowers.EnchantmentHelperMixin",

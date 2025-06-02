@@ -16,7 +16,6 @@ import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,7 +46,7 @@ public class Blacklist {
     private List<RegistryKey<Enchantment>> loadedListEnchants;
     private List<RegistryKey<Enchantment>> loadedBannedEnchants;
 
-    private List<RegistryKey<StatusEffect>> loadedBannedPotionEffects;
+    private List<RegistryEntry<StatusEffect>> loadedBannedEffects;
 
     public List<String> loadItemBlacklist() {
         if (seriesConfig == null) return new ArrayList<>();
@@ -83,7 +82,7 @@ public class Blacklist {
 
     public List<String> loadBannedPotions() {
         if (seriesConfig == null) return new ArrayList<>();
-        String raw = seriesConfig.BLACKLIST_BANNED_POTIONS.get(seriesConfig);
+        String raw = seriesConfig.BLACKLIST_BANNED_POTION_EFFECTS.get(seriesConfig);
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
         if (raw.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(Arrays.asList(raw.split(",")));
@@ -222,16 +221,15 @@ public class Blacklist {
         return newList;
     }
 
-    public List<RegistryKey<StatusEffect>> getBannedPotions() {
+    public List<RegistryEntry<StatusEffect>> getBannedEffects() {
         if (server == null) return new ArrayList<>();
 
-        if (loadedBannedPotionEffects != null) return loadedBannedPotionEffects;
-        List<RegistryKey<StatusEffect>> newList = new ArrayList<>();
+        if (loadedBannedEffects != null) return loadedBannedEffects;
+        List<RegistryEntry<StatusEffect>> newList = new ArrayList<>();
 
         Registry<StatusEffect> effectsRegistry = server.getRegistryManager()
-
-                //? if <=1.21 {
-                .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
+        //? if <=1.21 {
+        .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
         //?} else
         /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
 
@@ -243,7 +241,7 @@ public class Blacklist {
                 StatusEffect enchantment = effectsRegistry.get(id);
 
                 if (enchantment != null) {
-                    newList.add(effectsRegistry.getKey(enchantment).orElseThrow());
+                    newList.add(effectsRegistry.getEntry(enchantment));
                 } else {
                     OtherUtils.throwError("[CONFIG] Invalid potion: " + potionId);
                 }
@@ -252,7 +250,7 @@ public class Blacklist {
             }
         }
 
-        loadedBannedPotionEffects = newList;
+        loadedBannedEffects = newList;
         return newList;
     }
 
@@ -262,12 +260,12 @@ public class Blacklist {
         loadedListBlock = null;
         loadedListEnchants = null;
         loadedBannedEnchants = null;
-        loadedBannedPotionEffects = null;
+        loadedBannedEffects = null;
         getItemBlacklist();
         getBlockBlacklist();
         getClampedEnchants();
         getBannedEnchants();
-        getBannedPotions();
+        getBannedEffects();
     }
 
     public ActionResult onBlockUse(ServerPlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
@@ -320,9 +318,7 @@ public class Blacklist {
         PotionContentsComponent potions = itemStack.getComponents().get(DataComponentTypes.POTION_CONTENTS);
         if (potions == null) return false;
         for (StatusEffectInstance effect : potions.getEffects()) {
-            Optional<RegistryKey<StatusEffect>> key = effect.getEffectType().getKey();
-            if (key.isEmpty()) continue;
-            if (getBannedPotions().contains(key.get())) return true;
+            if (getBannedEffects().contains(effect.getEffectType())) return true;
         }
         return false;
     }
