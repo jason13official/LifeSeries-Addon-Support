@@ -18,6 +18,7 @@ import net.minecraft.network.packet.s2c.common.ResourcePackRemoveS2CPacket;
 import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -257,4 +258,35 @@ public class PlayerUtils {
         return result;
     }
     *///?}
+
+    public static void updatePlayerLists() {
+        if (server == null) return;
+        if (currentSeries == null) return;
+
+
+        List<ServerPlayerEntity> allPlayers = server.getPlayerManager().getPlayerList();
+
+        for (ServerPlayerEntity receivingPlayer : allPlayers) {
+            List<ServerPlayerEntity> visiblePlayers = new ArrayList<>();
+            List<UUID> hiddenPlayerUUIDs = new ArrayList<>();
+
+            for (ServerPlayerEntity player : allPlayers) {
+                if (player == receivingPlayer) continue;
+
+                if (!currentSeries.isAlive(receivingPlayer) || currentSeries.TAB_LIST_SHOW_DEAD_PLAYERS || currentSeries.isAlive(player)) {
+                    visiblePlayers.add(player);
+                    continue;
+                }
+
+                hiddenPlayerUUIDs.add(player.getUuid());
+            }
+            if (!visiblePlayers.isEmpty()) {
+                receivingPlayer.networkHandler.sendPacket(PlayerListS2CPacket.entryFromPlayer(visiblePlayers));
+            }
+            if (!hiddenPlayerUUIDs.isEmpty()) {
+                PlayerRemoveS2CPacket hidePacket = new PlayerRemoveS2CPacket(hiddenPlayerUUIDs);
+                receivingPlayer.networkHandler.sendPacket(hidePacket);
+            }
+        }
+    }
 }

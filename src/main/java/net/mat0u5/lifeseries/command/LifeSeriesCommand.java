@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
@@ -208,10 +209,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (Snails.snails.containsKey(player.getUuid())) {
-            Snail snail = Snails.snails.get(player.getUuid());
-            if (snail.attachment != null) snail.attachment.destroy();
-        }
         source.sendMessage(Text.of("Test Command"));
 
         return 1;
@@ -221,16 +218,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        if (Snails.snails.containsKey(player.getUuid())) {
-            Snail snail = Snails.snails.get(player.getUuid());
-            source.sendMessage(Text.of("teleportNearPlayer"));
-            snail.fakeTeleportNearPlayer(1);
-        }
-        if (TriviaWildcard.bots.containsKey(player.getUuid())) {
-            TriviaBot bot = TriviaWildcard.bots.get(player.getUuid());
-            source.sendMessage(Text.of("teleportNearPlayer_Trivia"));
-            bot.fakeTeleportToPlayer();
-        }
         source.sendMessage(Text.of("Test Command 1"));
 
         return 1;
@@ -240,8 +227,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        TriviaBot.cursedRoboticVoicePlayers.add(player.getUuid());
-
         source.sendMessage(Text.of("Test Command 2"));
 
         return 1;
@@ -249,8 +234,6 @@ public class LifeSeriesCommand {
     public static int test3(ServerCommandSource source) {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
-
-        TriviaBot.cursedRoboticVoicePlayers.remove(player.getUuid());
 
         source.sendMessage(Text.of("Test Command 3"));
 

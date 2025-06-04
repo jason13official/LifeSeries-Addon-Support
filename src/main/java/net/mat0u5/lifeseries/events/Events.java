@@ -44,6 +44,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 public class Events {
     public static boolean skipNextTickReload = false;
+    public static boolean updatePlayerListsNextTick = false;
 
     public static void register() {
         ServerLifecycleEvents.SERVER_STARTING.register(Events::onServerStarting);
@@ -144,6 +145,10 @@ public class Events {
         try {
             skipNextTickReload = false;
             if (!Main.isLogicalSide()) return;
+            if (updatePlayerListsNextTick) {
+                updatePlayerListsNextTick = false;
+                PlayerUtils.updatePlayerLists();
+            }
             checkPlayerFinishJoiningTick();
             if (server.getTickManager().isFrozen()) return;
             if (Main.currentSession != null) {

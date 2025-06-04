@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.resources.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -45,6 +46,8 @@ public abstract class Series extends Session {
     public boolean NO_HEALING = false;
     public boolean SHOW_DEATH_TITLE = false;
     public int GIVELIFE_MAX_LIVES = 99;
+    public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
+    public boolean TAB_LIST_SHOW_LIVES = false;
 
     public abstract SeriesList getSeries();
     public abstract ConfigManager getConfig();
@@ -77,10 +80,13 @@ public abstract class Series extends Session {
         Session.MUTE_DEAD_PLAYERS = seriesConfig.MUTE_DEAD_PLAYERS.get(seriesConfig);
         SHOW_DEATH_TITLE = seriesConfig.FINAL_DEATH_TITLE_SHOW.get(seriesConfig);
         GIVELIFE_MAX_LIVES = seriesConfig.GIVELIFE_LIVES_MAX.get(seriesConfig);
+        TAB_LIST_SHOW_LIVES = seriesConfig.TAB_LIST_SHOW_LIVES.get(seriesConfig);
+        TAB_LIST_SHOW_DEAD_PLAYERS = seriesConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seriesConfig);
         createTeams();
         createScoreboards();
         updateStuff();
         reloadAllPlayerTeams();
+        Events.updatePlayerListsNextTick = true;
     }
 
     public void createTeams() {
@@ -150,6 +156,7 @@ public abstract class Series extends Session {
         else if (lives == 3) TeamUtils.addEntityToTeam("Green",player);
         else if (lives >= 4) TeamUtils.addEntityToTeam("DarkGreen",player);
         if (currentSeries.getSeries() == SeriesList.WILD_LIFE) WildLife.changedPlayerTeam(player);
+        Events.updatePlayerListsNextTick = true;
     }
 
     public Integer getPlayerLives(ServerPlayerEntity player) {

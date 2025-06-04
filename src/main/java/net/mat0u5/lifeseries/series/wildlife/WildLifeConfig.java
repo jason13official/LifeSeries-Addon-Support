@@ -183,6 +183,7 @@ public class WildLifeConfig extends ConfigManager {
         DEFAULT_LIVES.defaultValue = 6;
         SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
         SPAWNER_RECIPE.defaultValue = true;
+        TAB_LIST_SHOW_LIVES.defaultValue = true;
 
         new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
         new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");

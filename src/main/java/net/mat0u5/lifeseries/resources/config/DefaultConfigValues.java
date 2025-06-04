@@ -82,4 +82,10 @@ public class DefaultConfigValues {
     public final ConfigEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigEntry<>(
             "givelife_lives_max", 99, "integer", "/givelife Lives Max", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
     );
+    public final ConfigEntry<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = new ConfigEntry<>(
+            "tab_list_show_dead_players", true, "boolean", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."
+    );
+    public final ConfigEntry<Boolean> TAB_LIST_SHOW_LIVES = new ConfigEntry<>(
+            "tab_list_show_lives", false, "boolean", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
+    );
 }

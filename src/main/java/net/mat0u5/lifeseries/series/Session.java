@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
+import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PermissionManager;
@@ -28,8 +29,9 @@ public class Session {
     public List<UUID> displayTimer = new ArrayList<>();
     public static final int NATURAL_DEATH_LOG_MAX = 2400;
     public static final int DISPLAY_TIMER_INTERVAL = 5;
+    public static final int TAB_LIST_INTERVAL = 20;
     public static boolean MUTE_DEAD_PLAYERS = false;
-    public int currentTimer = 5;
+    public long currentTimer = 0;
 
     public Integer sessionLength = null;
     public double passedTime = 0;
@@ -148,9 +150,8 @@ public class Session {
     }
 
     public void tick(MinecraftServer server) {
-        currentTimer--;
-        if (currentTimer <=0) {
-            currentTimer = DISPLAY_TIMER_INTERVAL;
+        currentTimer++;
+        if (currentTimer % DISPLAY_TIMER_INTERVAL == 0) {
             displayTimers(server);
             if (MUTE_DEAD_PLAYERS) {
                 for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
@@ -173,6 +174,9 @@ public class Session {
                     }
                 }
             }
+        }
+        if (currentTimer % TAB_LIST_INTERVAL == 0) {
+            Events.updatePlayerListsNextTick = true;
         }
 
         if (playerNaturalDeathLog != null && !playerNaturalDeathLog.isEmpty()) {
