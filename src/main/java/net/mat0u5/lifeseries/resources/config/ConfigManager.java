@@ -57,8 +57,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 SPAWNER_RECIPE,
                 GIVELIFE_COMMAND_ENABLED,
                 GIVELIFE_LIVES_MAX,
-                TAB_LIST_SHOW_DEAD_PLAYERS
-                //,TAB_LIST_SHOW_LIVES
+                TAB_LIST_SHOW_DEAD_PLAYERS,
+                TAB_LIST_SHOW_LIVES
         ));
     }
 

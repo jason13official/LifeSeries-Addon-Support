@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.4.13";
+	public static final String MOD_VERSION = "dev-1.3.4.14";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -132,6 +132,11 @@ public class Main implements ModInitializer {
 	public static void reloadStart() {
 		if (Events.skipNextTickReload) return;
 		if (!isLogicalSide()) return;
+		softReloadStart();
+		DatapackManager.onReloadStart();
+	}
+
+	public static void softReloadStart() {
 		if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) {
 			TaskManager.initialize();
 		}
@@ -144,7 +149,6 @@ public class Main implements ModInitializer {
 		NetworkHandlerServer.sendUpdatePackets();
 		SnailSkinsServer.sendStoredImages();
 		PlayerUtils.resendCommandTrees();
-		DatapackManager.onReloadStart();
 	}
 	public static void reloadEnd() {
 		DatapackManager.onReloadEnd();

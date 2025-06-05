@@ -27,6 +27,24 @@ public class ScoreboardUtils {
         return scoreboard.getNullableObjective(name) != null;
     }
 
+    public static ScoreboardObjective getObjective(String name) {
+        if (server == null) return null;
+        Scoreboard scoreboard = server.getScoreboard();
+        return scoreboard.getNullableObjective(name);
+    }
+
+    public static ScoreboardObjective getObjectiveInSlot(ScoreboardDisplaySlot slot) {
+        if (server == null) return null;
+        Scoreboard scoreboard = server.getScoreboard();
+        return scoreboard.getObjectiveForSlot(slot);
+    }
+
+    public static void setObjectiveInSlot(ScoreboardDisplaySlot slot, String name) {
+        if (server == null) return;
+        Scoreboard scoreboard = server.getScoreboard();
+        scoreboard.setObjectiveSlot(slot, scoreboard.getNullableObjective(name));
+    }
+
     public static void removeObjective(String name) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();

@@ -123,7 +123,8 @@ public class NetworkHandlerServer {
 
     public static void onUpdatedConfig() {
         updatedConfigThisTick = false;
-        OtherUtils.broadcastMessageToAdmins(Text.of("§7Config Updated. Run §f'/lifeseries reload'§7 to apply the changes."));
+        OtherUtils.broadcastMessageToAdmins(Text.of("§7Config has been successfully updated."));
+        Main.softReloadStart();
     }
 
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {

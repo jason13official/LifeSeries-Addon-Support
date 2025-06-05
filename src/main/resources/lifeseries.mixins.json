@@ -43,6 +43,7 @@
     "client.EntityTrackingSoundInstanceAccessor",
     "client.EntityTrackingSoundInstanceMixin",
     "client.MinecraftClientMixin",
+    "client.PlayerListHudMixin",
     "client.SoundManagerMixin",
     "client.SoundSystemMixin",
     "superpowers.client.AbstractClientPlayerEntityMixin",

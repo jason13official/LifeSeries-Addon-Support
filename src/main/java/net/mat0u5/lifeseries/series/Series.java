@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.scoreboard.ScoreHolder;
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -73,6 +75,16 @@ public abstract class Series extends Session {
         }
         else {
             OtherUtils.executeCommand("gamerule naturalRegeneration true");
+        }
+
+        ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.LIST);
+        if (TAB_LIST_SHOW_LIVES) {
+            ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, "Lives");
+        }
+        else if (currentListObjective != null) {
+            if (currentListObjective.getName().equals("Lives")) {
+                ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, null);
+            }
         }
     }
 
