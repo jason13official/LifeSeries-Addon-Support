@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.AnimationUtils;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -169,6 +170,7 @@ public class SecretLifeCommands {
 
     public static int changeLocations(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
+        OtherUtils.sendCommandFeedback(source, Text.of("Changing Secret Life locations..."));
         TaskManager.deleteLocations();
         TaskManager.checkSecretLifePositions();
         return 1;
@@ -180,12 +182,15 @@ public class SecretLifeCommands {
         for (ServerPlayerEntity player : targets) {
             if (TaskManager.removePlayersTaskBook(player)) removedFrom++;
         }
-        source.sendMessage(Text.of("Removed task book from " + removedFrom + " target"+(targets.size()==1?".":"s.")));
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Removed task book from " + removedFrom + " target"+(targets.size()==1?".":"s.")));
         return 1;
     }
 
     public static int assignTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Assigning random tasks to " + targets.size() + " target"+(Math.abs(targets.size())!=1?"s":"")+"..."));
         TaskManager.chooseTasks(targets.stream().toList(), null);
         return 1;
     }
@@ -193,6 +198,8 @@ public class SecretLifeCommands {
     public static int succeedTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Succeeding task for " + target.getNameForScoreboard() + "..."));
         TaskManager.succeedTask(target);
         return 1;
     }
@@ -200,6 +207,8 @@ public class SecretLifeCommands {
     public static int failTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Failing task for " + target.getNameForScoreboard() + "..."));
         TaskManager.failTask(target);
         return 1;
     }
@@ -207,6 +216,8 @@ public class SecretLifeCommands {
     public static int rerollTask(ServerCommandSource source, ServerPlayerEntity target) {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Rerolling task for " + target.getNameForScoreboard() + "..."));
         TaskManager.rerollTask(target);
         return 1;
     }
@@ -260,12 +271,12 @@ public class SecretLifeCommands {
         SecretLife secretLife = (SecretLife) currentSeries;
 
         if (!secretLife.isAlive(self)) {
-            self.sendMessage(Text.of("You're dead..."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You're dead..."));
             return -1;
         }
 
         double playerHealth = secretLife.getRoundedHealth(self);
-        self.sendMessage(Text.literal("You have ").append(Text.of(String.valueOf(playerHealth))).append(Text.of(" health.")));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(Text.of(String.valueOf(playerHealth))).append(Text.of(" health.")));
 
         return 1;
     }
@@ -276,13 +287,13 @@ public class SecretLifeCommands {
 
         SecretLife secretLife = (SecretLife) currentSeries;
         if (!secretLife.isAlive(target)) {
-            source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" is dead.")));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" is dead.")));
             return -1;
         }
 
         MutableText pt1 = Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" has "));
         Text pt2 = Text.of(secretLife.getRoundedHealth(target)+" health.");
-        source.sendMessage(pt1.append(pt2));
+        OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2));
         return 1;
     }
 
@@ -300,15 +311,16 @@ public class SecretLifeCommands {
         SecretLife secretLife = (SecretLife) currentSeries;
         if (setNotGive) {
             secretLife.setPlayerHealth(target,amount);
-            source.sendMessage(Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s health to " + amount + ".")));
+            OtherUtils.sendCommandFeedback(source, Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s health to " + amount + ".")));
         }
         else {
             secretLife.addPlayerHealth(target,amount);
             String pt1 = amount >= 0 ? "Added" : "Removed";
             String pt2 = " "+Math.abs(amount)+" health";
             String pt3 = amount >= 0 ? " to " : " from ";
-            source.sendMessage(Text.of(pt1+pt2+pt3).copy().append(target.getStyledDisplayName()).append("."));
+            OtherUtils.sendCommandFeedback(source, Text.of(pt1+pt2+pt3).copy().append(target.getStyledDisplayName()).append("."));
         }
+
         return 1;
     }
 
@@ -319,7 +331,7 @@ public class SecretLifeCommands {
         SecretLife secretLife = (SecretLife) currentSeries;
         secretLife.resetPlayerHealth(target);
 
-        source.sendMessage(Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s health to 30.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s health to 30.")));
         return 1;
     }
 
@@ -329,7 +341,7 @@ public class SecretLifeCommands {
         SecretLife secretLife = (SecretLife) currentSeries;
         secretLife.resetAllPlayerHealth();
 
-        source.sendMessage(Text.literal("Reset everyone's health to 30."));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's health to 30."));
         return 1;
     }
 }

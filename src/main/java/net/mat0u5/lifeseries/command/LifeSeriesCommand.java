@@ -107,6 +107,7 @@ public class LifeSeriesCommand {
             source.sendError(Text.of("§7Use the §f'/lifeseries setSeries <series>'§7 command instead."));
             return -1;
         }
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the series selection GUI..."));
         NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_series", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
         return 1;
     }
@@ -125,8 +126,8 @@ public class LifeSeriesCommand {
                 setSeriesFinal(source, setTo);
             }
             else {
-                source.sendMessage(Text.of("WARNING: you have already selected a series, changing it might cause some saved data to be lost (lives, ...)"));
-                source.sendMessage(Text.literal("If you are sure, use '")
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("WARNING: you have already selected a series, changing it might cause some saved data to be lost (lives, ...)"));
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("If you are sure, use '")
                         .append(Text.literal("/lifeseries chooseSeries").formatted(Formatting.GRAY))
                         .append(Text.literal(" confirm").formatted(Formatting.GREEN)).append(Text.of("'")));
             }
@@ -136,14 +137,16 @@ public class LifeSeriesCommand {
 
     public static void setSeriesFinal(ServerCommandSource source, String setTo) {
         if (Main.changeSeriesTo(setTo)) {
+            OtherUtils.sendCommandFeedback(source, Text.literal("Changing the series to " + setTo + "..."));
             OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
         }
     }
 
     public static int config(ServerCommandSource source) {
-        source.sendMessage(Text.of("§7 The life series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The life series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
 
         if (source.getPlayer() != null) {
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
             NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
         }
         return 1;
@@ -157,7 +160,7 @@ public class LifeSeriesCommand {
                                 .withClickEvent(TextUtils.openURLClickEvent("https://www.dropbox.com/scl/fo/jk9fhqx0jjbgeo2qa6v5i/AOZZxMx6S7MlS9HrIRJkkX4?rlkey=2khwcnf2zhgi6s4ik01e3z9d0&st=ghw1d8k6&dl=0"))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to open a dropbox where you can download the pre-made worlds."));
-        source.sendMessage(worldSavesText);
+        OtherUtils.sendCommandFeedbackQuiet(source, worldSavesText);
         return 1;
     }
 
@@ -174,12 +177,12 @@ public class LifeSeriesCommand {
                                 .withClickEvent(TextUtils.openURLClickEvent("https://discord.gg/QWJxfb4zQZ"))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)"));
-        source.sendMessage(text);
+        OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
     public static int getSeries(ServerCommandSource source) {
-        source.sendMessage(Text.of("Current series: "+ SeriesList.getStringNameFromSeries(currentSeries.getSeries())));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current series: "+ SeriesList.getStringNameFromSeries(currentSeries.getSeries())));
         if (source.getPlayer() != null) {
             NetworkHandlerServer.sendStringPacket(source.getPlayer(), "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
         }
@@ -187,21 +190,21 @@ public class LifeSeriesCommand {
     }
 
     public static int getVersion(ServerCommandSource source) {
-        source.sendMessage(Text.of("Mod version: "+ Main.MOD_VERSION));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Mod version: "+ Main.MOD_VERSION));
         return 1;
     }
 
     public static int reload(ServerCommandSource source) {
-        source.sendMessage(Text.of("Reloading!"));
+        OtherUtils.sendCommandFeedback(source, Text.of("Reloading the Life Series!"));
         OtherUtils.reloadServer();
         return 1;
     }
 
     public static int getCredits(ServerCommandSource source) {
-        source.sendMessage(Text.of("§7The Life Series was originally created by §fGrian§7" +
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7The Life Series was originally created by §fGrian§7" +
                 ", and this mod, created by §fMat0u5§7, aims to recreate every single season one-to-one."));
-        source.sendMessage(Text.of("§7This mod uses sounds created by §fOli (TheOrionSound)§7, and uses recreated snail model (first created by §fDanny§7), and a recreated trivia bot model (first created by §fHoffen§7)."));
-        source.sendMessage(Text.of("§7This mod bundles other mods to improve the experience, such as §fPolymer§7, §fBlockbench Import Library§7, §fCardinal Components API§7, and supports client-side configuration with §fCloth Config§7."));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7This mod uses sounds created by §fOli (TheOrionSound)§7, and uses recreated snail model (first created by §fDanny§7), and a recreated trivia bot model (first created by §fHoffen§7)."));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7This mod bundles other mods to improve the experience, such as §fPolymer§7, §fBlockbench Import Library§7, §fCardinal Components API§7, and supports client-side configuration with §fCloth Config§7."));
         return 1;
     }
 
@@ -209,7 +212,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command"));
 
         return 1;
     }
@@ -218,7 +221,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command 1"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 1"));
 
         return 1;
     }
@@ -227,7 +230,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command 2"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 2"));
 
         return 1;
     }
@@ -235,7 +238,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        source.sendMessage(Text.of("Test Command 3"));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 3"));
 
         return 1;
     }

@@ -118,10 +118,10 @@ public class SessionCommand {
             return -1;
         }
         if (!currentSession.statusFinished()) {
-            source.sendMessage(Text.of("The session ends in " + currentSession.getRemainingTime()));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("The session ends in " + currentSession.getRemainingTime()));
         }
         else {
-            source.sendMessage(Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style ->
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style ->
                     style.withClickEvent(TextUtils.copyClipboardClickEvent(Stats.getStats()))
             )));
         }
@@ -152,9 +152,12 @@ public class SessionCommand {
             return -1;
         }
         if (currentSession.statusPaused()) {
+            OtherUtils.sendCommandFeedback(source, Text.of("Unpausing session..."));
             currentSession.sessionPause();
             return 1;
         }
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Starting session..."));
         if (!currentSession.sessionStart()) {
             source.sendError(Text.of("Could not start session."));
             return -1;
@@ -171,8 +174,8 @@ public class SessionCommand {
             return -1;
         }
 
+        OtherUtils.sendCommandFeedback(source, Text.of("Stopping session..."));
         currentSession.sessionEnd();
-
         return 1;
     }
 
@@ -184,6 +187,7 @@ public class SessionCommand {
             return -1;
         }
 
+        OtherUtils.sendCommandFeedback(source, Text.of("Pausing session..."));
         currentSession.sessionPause();
 
         return 1;
@@ -197,6 +201,7 @@ public class SessionCommand {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
+        OtherUtils.sendCommandFeedback(source, Text.of("Skipped "+timeArgument+" in the session length."));
         currentSession.passedTime+=totalTicks;
         Stats.fastForward(totalTicks);
         return 1;
@@ -211,8 +216,8 @@ public class SessionCommand {
             return -1;
         }
         currentSession.setSessionLength(totalTicks);
-        source.sendMessage(Text.of("The session length has been set to "+ OtherUtils.formatTime(totalTicks)));
 
+        OtherUtils.sendCommandFeedback(source, Text.of("The session length has been set to "+ OtherUtils.formatTime(totalTicks)));
         return 1;
     }
 
@@ -225,8 +230,8 @@ public class SessionCommand {
             return -1;
         }
         currentSession.addSessionLength(totalTicks);
-        source.sendMessage(Text.of("Added "+OtherUtils.formatTime(totalTicks) + " to the session length."));
 
+        OtherUtils.sendCommandFeedback(source, Text.of("Added "+OtherUtils.formatTime(totalTicks) + " to the session length."));
         return 1;
     }
 
@@ -239,8 +244,8 @@ public class SessionCommand {
             return -1;
         }
         currentSession.removeSessionLength(totalTicks);
-        source.sendMessage(Text.of("Removed "+OtherUtils.formatTime(totalTicks) + " from the session length."));
 
+        OtherUtils.sendCommandFeedback(source, Text.of("Removed "+OtherUtils.formatTime(totalTicks) + " from the session length."));
         return 1;
     }
 }

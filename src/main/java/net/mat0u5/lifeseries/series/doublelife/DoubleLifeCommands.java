@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.series.doublelife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -87,8 +88,7 @@ public class DoubleLifeCommands {
         series.setSoulmate(player,soulmate);
         series.saveSoulmates();
 
-        source.sendMessage(Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate is now ")).append(soulmate.getStyledDisplayName()));
-
+        OtherUtils.sendCommandFeedback(source, Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate is now ")).append(soulmate.getStyledDisplayName()));
         return 1;
     }
 
@@ -110,8 +110,7 @@ public class DoubleLifeCommands {
         ServerPlayerEntity soulmate = series.getSoulmate(player);
         if (soulmate == null) return -1;
 
-        source.sendMessage(Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate is ")).append(soulmate.getStyledDisplayName()).append("."));
-
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate is ")).append(soulmate.getStyledDisplayName()).append("."));
         return 1;
     }
 
@@ -129,8 +128,7 @@ public class DoubleLifeCommands {
         series.resetSoulmate(player);
         series.saveSoulmates();
 
-        source.sendMessage(Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate was reset.")));
-
+        OtherUtils.sendCommandFeedback(source, Text.literal("").append(player.getStyledDisplayName()).append(Text.of("'s soulmate was reset.")));
         return 1;
     }
 
@@ -141,8 +139,7 @@ public class DoubleLifeCommands {
 
         series.resetAllSoulmates();
 
-        source.sendMessage(Text.of("All soulmate entries were reset."));
-
+        OtherUtils.sendCommandFeedback(source, Text.of("All soulmate entries were reset."));
         return 1;
     }
 
@@ -165,24 +162,20 @@ public class DoubleLifeCommands {
             if (soulmate != null) {
                 pt3 = soulmate.getStyledDisplayName();
             }
-            source.sendMessage(pt1.append(pt2).append(pt3));
+            OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2).append(pt3));
         }
 
         if (noSoulmates) {
-            source.sendMessage(Text.of("There are no soulmates currently assigned."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("There are no soulmates currently assigned."));
         }
-
-
         return 1;
     }
 
     public static int rollSoulmates(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-
         DoubleLife series = ((DoubleLife) currentSeries);
-
+        OtherUtils.sendCommandFeedback(source, Text.of("Rolling soulmates..."));
         series.rollSoulmates();
-
         return 1;
     }
 }

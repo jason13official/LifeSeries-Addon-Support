@@ -189,10 +189,10 @@ public class WildLifeCommands {
         if (checkBanned(source)) return -1;
         List<String> textures = SnailSkinsServer.getAllSkins();
         if (textures.isEmpty()) {
-            source.sendMessage(Text.of("§7No snail skins have been added yet. Run §f'/snail textures info'§7 to learn how to add them."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7No snail skins have been added yet. Run §f'/snail textures info'§7 to learn how to add them."));
             return -1;
         }
-        source.sendMessage(Text.of("§7The following skins have been found: §f" + String.join(", ", textures)));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7The following skins have been found: §f" + String.join(", ", textures)));
         return 1;
     }
 
@@ -203,6 +203,8 @@ public class WildLifeCommands {
             source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the wildcard GUI."));
             return -1;
         }
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the Wildcard selection GUI..."));
         NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_wildcards", "true");
         return 1;
     }
@@ -231,7 +233,8 @@ public class WildLifeCommands {
             return -1;
         }
         SuperpowersWildcard.assignedSuperpowers.put(player.getUuid(), superpower);
-        source.sendMessage(Text.of("§7Forced " + player.getNameForScoreboard()+"'s superpower to be §f" + name + "§7 when the next superpower randomization happens."));
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Forced " + player.getNameForScoreboard()+"'s superpower to be §f" + name + "§7 when the next superpower randomization happens."));
         return 1;
     }
 
@@ -246,28 +249,29 @@ public class WildLifeCommands {
         }
         superpower.cooldown = 0;
         NetworkHandlerServer.sendLongPacket(player, "superpower_cooldown", 0);
-        source.sendMessage(Text.of("§7Your superpower cooldown has been skipped."));
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Your superpower cooldown has been skipped."));
         return 1;
     }
 
     public static int setRandomSuperpowers(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.rollRandomSuperpowers();
-        source.sendMessage(Text.of("§7Randomized everyone's superpowers."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Randomized everyone's superpowers."));
         return 1;
     }
 
     public static int resetSuperpowers(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         SuperpowersWildcard.resetAllSuperpowers();
-        source.sendMessage(Text.of("§7Deactivated everyone's superpowers."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Deactivated everyone's superpowers."));
         return 1;
     }
 
     public static int getSuperpower(ServerCommandSource source, ServerPlayerEntity player) {
         if (checkBanned(source)) return -1;
         Superpowers superpower = SuperpowersWildcard.getSuperpower(player);
-        source.sendMessage(Text.of("§7"+player.getNameForScoreboard()+"'s superpower is: §f" + Superpowers.getString(superpower)));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7"+player.getNameForScoreboard()+"'s superpower is: §f" + Superpowers.getString(superpower)));
         return 1;
     }
 
@@ -283,27 +287,27 @@ public class WildLifeCommands {
             return -1;
         }
         SuperpowersWildcard.setSuperpower(player, superpower);
-        source.sendMessage(Text.of("§7Set " + player.getNameForScoreboard()+"'s superpower to: §f" + name));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Set " + player.getNameForScoreboard()+"'s superpower to: §f" + name));
         return 1;
     }
 
     public static int setSnailName(ServerCommandSource source, ServerPlayerEntity player, String name) {
         if (checkBanned(source)) return -1;
         Snails.setSnailName(player, name);
-        source.sendMessage(Text.of("§7Set " + player.getNameForScoreboard()+"'s snail name to §f§o" + name));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Set " + player.getNameForScoreboard()+"'s snail name to §f§o" + name));
         return 1;
     }
 
     public static int resetSnailName(ServerCommandSource source, ServerPlayerEntity player) {
         if (checkBanned(source)) return -1;
         Snails.resetSnailName(player);
-        source.sendMessage(Text.of("§7Reset " + player.getNameForScoreboard()+"'s snail name to §f§o"+player.getNameForScoreboard()+"'s Snail"));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Reset " + player.getNameForScoreboard()+"'s snail name to §f§o"+player.getNameForScoreboard()+"'s Snail"));
         return 1;
     }
 
     public static int getSnailName(ServerCommandSource source, ServerPlayerEntity player) {
         if (checkBanned(source)) return -1;
-        source.sendMessage(Text.of("§7"+player.getNameForScoreboard()+"'s snail is called §f§o"+Snails.getSnailName(player)));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7"+player.getNameForScoreboard()+"'s snail is called §f§o"+Snails.getSnailName(player)));
         return 1;
     }
 
@@ -311,7 +315,7 @@ public class WildLifeCommands {
         if (checkBanned(source)) return -1;
         if (wildcardName.equalsIgnoreCase("*")) {
             WildcardManager.onSessionEnd();
-            source.sendMessage(Text.of("§7Deactivated all wildcards."));
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Deactivated all wildcards."));
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
@@ -328,7 +332,7 @@ public class WildLifeCommands {
         wildcardInstance.deactivate();
         WildcardManager.activeWildcards.remove(wildcard);
 
-        source.sendMessage(Text.of("§7Deactivated §f" + wildcardName + "."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Deactivated §f" + wildcardName + "."));
         NetworkHandlerServer.sendUpdatePackets();
         return 1;
     }
@@ -354,7 +358,7 @@ public class WildLifeCommands {
             });
             NetworkHandlerServer.sendUpdatePackets();
 
-            source.sendMessage(Text.of("§7Activated all wildcards (Except Callback)."));
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Activated all wildcards (Except Callback)."));
             return 1;
         }
         Wildcards wildcard = Wildcards.getFromString(wildcardName);
@@ -373,23 +377,24 @@ public class WildLifeCommands {
         }
         TaskScheduler.scheduleTask(89, () -> WildcardManager.activeWildcards.put(wildcard, actualWildcard));
         WildcardManager.activateWildcards();
-        source.sendMessage(Text.of("§7Activated §f" + wildcardName + "."));
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Activated §f" + wildcardName + "."));
         return 1;
     }
 
     public static int listWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        source.sendMessage(Text.of("§7Available Wildcards: §f" + String.join(", ", Wildcards.getWildcardsStr())));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7Available Wildcards: §f" + String.join(", ", Wildcards.getWildcardsStr())));
         return 1;
     }
 
     public static int listActiveWildcards(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         if (Wildcards.getActiveWildcardsStr().isEmpty()) {
-            source.sendMessage(Text.of("§7There are no active Wildcards right now. \nA Wildcard will be randomly selected when the session starts, or you can use §r'/wildcard activate <wildcard>'§7 to activate a specific Wildcard."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7There are no active Wildcards right now. \nA Wildcard will be randomly selected when the session starts, or you can use §r'/wildcard activate <wildcard>'§7 to activate a specific Wildcard."));
             return 1;
         }
-        source.sendMessage(Text.of("§7Activated Wildcards: " + String.join(", ", Wildcards.getActiveWildcardsStr())));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7Activated Wildcards: " + String.join(", ", Wildcards.getActiveWildcardsStr())));
         return 1;
     }
 }

@@ -125,14 +125,14 @@ public class LimitedLifeCommands {
 
         if (self == null) return -1;
         if (!currentSeries.hasAssignedLives(self)) {
-            self.sendMessage(Text.of("You have not been assigned any lives yet."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any lives yet."));
             return 1;
         }
 
         Integer playerLives = currentSeries.getPlayerLives(self);
-        self.sendMessage(Text.literal("You have ").append(currentSeries.getFormattedLives(playerLives)).append(Text.of(" left.")));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeries.getFormattedLives(playerLives)).append(Text.of(" left.")));
         if (playerLives <= 0) {
-            self.sendMessage(Text.of("Womp womp."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
 
         return 1;
@@ -163,8 +163,8 @@ public class LimitedLifeCommands {
             Text pt3 = Text.of("\n");
             text.append(pt1.append(pt2).append(pt3));
         }
-        source.sendMessage(text);
 
+        OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
@@ -180,12 +180,14 @@ public class LimitedLifeCommands {
         MutableText pt1 = Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" has "));
         Text pt2 = currentSeries.getFormattedLives(lives);
         Text pt3 = Text.of(" left.");
-        source.sendMessage(pt1.append(pt2).append(pt3));
+
+        OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2).append(pt3));
         return 1;
     }
 
     public static int reloadLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
+        OtherUtils.sendCommandFeedback(source, Text.of("Reloading lives..."));
         currentSeries.reloadAllPlayerTeams();
         return 1;
     }
@@ -204,7 +206,7 @@ public class LimitedLifeCommands {
         if (setNotGive) {
             currentSeries.setPlayerLives(target,amount);
             Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s time to ")).append(currentSeries.getFormattedLives(target));
-            source.sendMessage(finalText);
+            OtherUtils.sendCommandFeedback(source, finalText);
             Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         else {
@@ -213,9 +215,10 @@ public class LimitedLifeCommands {
             String pt2 = " "+OtherUtils.formatTime(Math.abs(amount)*20);
             String pt4 = amount >= 0 ? " to " : " from ";
             Text finalText = Text.of(pt1+pt2+pt4).copy().append(target.getStyledDisplayName()).append(".");
-            source.sendMessage(finalText);
+            OtherUtils.sendCommandFeedback(source, finalText);
             Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
+
         return 1;
     }
 
@@ -224,8 +227,7 @@ public class LimitedLifeCommands {
         if (target == null) return -1;
 
         currentSeries.resetPlayerLife(target);
-
-        source.sendMessage(Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
         Stats.resetLives(target);
         return 1;
     }
@@ -234,8 +236,7 @@ public class LimitedLifeCommands {
         if (checkBanned(source)) return -1;
 
         currentSeries.resetAllPlayerLives();
-
-        source.sendMessage(Text.literal("Reset everyone's lives."));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives."));
         Stats.resetAllLives();
         return 1;
     }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -119,14 +120,14 @@ public class LivesCommand {
 
         if (self == null) return -1;
         if (!currentSeries.hasAssignedLives(self)) {
-            self.sendMessage(Text.of("You have not been assigned any lives yet."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any lives yet."));
             return 1;
         }
 
         Integer playerLives = currentSeries.getPlayerLives(self);
-        self.sendMessage(Text.literal("You have ").append(currentSeries.getFormattedLives(playerLives)).append(Text.of((playerLives==1?" life.":" lives."))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeries.getFormattedLives(playerLives)).append(Text.of((playerLives==1?" life.":" lives."))));
         if (playerLives <= 0) {
-            self.sendMessage(Text.of("Womp womp."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
 
         return 1;
@@ -157,8 +158,8 @@ public class LivesCommand {
             Text pt3 = Text.of(" "+(Math.abs(lives)==1?"life":"lives")+".\n");
             text.append(pt1.append(pt2).append(pt3));
         }
-        source.sendMessage(text);
 
+        OtherUtils.sendCommandFeedbackQuiet(source, text);
         return 1;
     }
 
@@ -174,12 +175,14 @@ public class LivesCommand {
         MutableText pt1 = Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" has "));
         Text pt2 = currentSeries.getFormattedLives(lives);
         Text pt3 = Text.of(" "+(Math.abs(lives)==1?"life":"lives")+".");
-        source.sendMessage(pt1.append(pt2).append(pt3));
+
+        OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2).append(pt3));
         return 1;
     }
 
     public static int reloadLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
+        OtherUtils.sendCommandFeedback(source, Text.of("Reloading lives..."));
         currentSeries.reloadAllPlayerTeams();
         return 1;
     }
@@ -191,7 +194,7 @@ public class LivesCommand {
         if (setNotGive) {
             currentSeries.setPlayerLives(target,amount);
             Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s lives to " + amount + "."));
-            source.sendMessage(finalText);
+            OtherUtils.sendCommandFeedback(source, finalText);
             Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         else {
@@ -201,7 +204,7 @@ public class LivesCommand {
             String pt3 = Math.abs(amount)==1?"life":"lives";
             String pt4 = amount >= 0 ? " to " : " from ";
             Text finalText = Text.of(pt1+pt2+pt3+pt4).copy().append(target.getStyledDisplayName()).append(".");
-            source.sendMessage(finalText);
+            OtherUtils.sendCommandFeedback(source, finalText);
             Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         return 1;
@@ -212,8 +215,7 @@ public class LivesCommand {
         if (target == null) return -1;
 
         currentSeries.resetPlayerLife(target);
-
-        source.sendMessage(Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
         Stats.resetLives(target);
         return 1;
     }
@@ -222,8 +224,7 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
 
         currentSeries.resetAllPlayerLives();
-
-        source.sendMessage(Text.literal("Reset everyone's lives."));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives."));
         Stats.resetAllLives();
         return 1;
     }

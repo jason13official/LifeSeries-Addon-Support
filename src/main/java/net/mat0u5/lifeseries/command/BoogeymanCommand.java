@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.lastlife.LastLife;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -103,6 +104,7 @@ public class BoogeymanCommand {
             source.sendError(Text.of("That player is not a boogeyman!"));
             return -1;
         }
+        OtherUtils.sendCommandFeedback(source, Text.of("Failing boogeyman for " + target.getName().getString() + "..."));
         bm.playerFailBoogeyman(target);
         Stats.failBoogey(target);
 
@@ -122,7 +124,7 @@ public class BoogeymanCommand {
         }
         bm.cure(target);
 
-        source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now cured.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now cured.")));
         Stats.cureBoogey(target);
 
         return 1;
@@ -142,7 +144,7 @@ public class BoogeymanCommand {
         }
         bm.addBoogeymanManually(target);
 
-        source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now a boogeyman.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now a boogeyman.")));
         Stats.addBoogey(target);
 
         return 1;
@@ -162,7 +164,7 @@ public class BoogeymanCommand {
         }
         bm.removeBoogeymanManually(target);
 
-        source.sendMessage(Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is no longer a boogeyman.")));
+        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is no longer a boogeyman.")));
         Stats.removeBoogey(target);
 
         return 1;
@@ -177,8 +179,8 @@ public class BoogeymanCommand {
         for (Boogeyman boogeyman : bm.boogeymen) {
             boogeymen.add(boogeyman.name);
         }
-        source.sendMessage(Text.of("Current boogeymen: ["+String.join(", ",boogeymen)+"]"));
 
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current boogeymen: ["+String.join(", ",boogeymen)+"]"));
         return 1;
     }
 
@@ -188,7 +190,7 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        source.sendMessage(Text.of("All boogeymen have been cleared"));
+        OtherUtils.sendCommandFeedback(source, Text.of("All boogeymen have been cleared"));
         Stats.boogeyClear();
 
         return 1;
@@ -198,6 +200,8 @@ public class BoogeymanCommand {
         if (checkBanned(source)) return -1;
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
+
+        OtherUtils.sendCommandFeedback(source, Text.of("Choosing random boogeymen..."));
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();

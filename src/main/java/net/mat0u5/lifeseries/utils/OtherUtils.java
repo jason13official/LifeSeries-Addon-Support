@@ -221,6 +221,7 @@ public class OtherUtils {
         Events.skipNextTickReload = true;
         reloadServer();
     }
+
     private static long[] reloads = {System.currentTimeMillis(),System.currentTimeMillis(),System.currentTimeMillis()};
     public static void reloadServer() {
         try {
@@ -241,7 +242,15 @@ public class OtherUtils {
         } catch (Exception e) {
             Main.LOGGER.error("Error reloading server", e);
         }
+    }
 
+    public static void sendCommandFeedback(ServerCommandSource source, Text text) {
+        if (source == null || text == null) return;
+        source.sendFeedback(() -> text, true);
+    }
 
+    public static void sendCommandFeedbackQuiet(ServerCommandSource source, Text text) {
+        if (source == null || text == null) return;
+        source.sendFeedback(() -> text, false);
     }
 }
