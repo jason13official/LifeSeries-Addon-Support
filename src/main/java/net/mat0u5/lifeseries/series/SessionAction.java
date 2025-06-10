@@ -25,7 +25,7 @@ public abstract class SessionAction {
             if (hasTriggered) return true;
             if (remaining <= -triggerAtTicks) {
                 hasTriggered = true;
-                Stats.triggerSessionAction(sessionId);
+                SessionTranscript.triggerSessionAction(sessionId);
                 trigger();
                 return true;
             }
@@ -38,7 +38,7 @@ public abstract class SessionAction {
             if (hasTriggered) return true;
             if (triggerAtTicks <= currentTick) {
                 hasTriggered = true;
-                Stats.triggerSessionAction(sessionId);
+                SessionTranscript.triggerSessionAction(sessionId);
                 trigger();
                 return true;
             }

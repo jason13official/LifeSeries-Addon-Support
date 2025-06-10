@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -126,7 +126,7 @@ public class Callback extends Wildcard {
         deactivateAllWildcards();
         TaskScheduler.scheduleTask(50, () -> {
             if (currentSession.statusStarted()) {
-                Stats.endingIsYours();
+                SessionTranscript.endingIsYours();
                 showEndingTitles();
             }
         });

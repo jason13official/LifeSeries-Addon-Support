@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -122,7 +122,7 @@ public class SessionCommand {
         }
         else {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style ->
-                    style.withClickEvent(TextUtils.copyClipboardClickEvent(Stats.getStats()))
+                    style.withClickEvent(TextUtils.copyClipboardClickEvent(SessionTranscript.getStats()))
             )));
         }
         return 1;
@@ -203,7 +203,6 @@ public class SessionCommand {
         }
         OtherUtils.sendCommandFeedback(source, Text.of("Skipped "+timeArgument+" in the session length."));
         currentSession.passedTime+=totalTicks;
-        Stats.fastForward(totalTicks);
         return 1;
     }
 

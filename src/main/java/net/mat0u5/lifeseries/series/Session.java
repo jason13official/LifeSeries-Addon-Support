@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.utils.WorldUitls;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -69,17 +68,16 @@ public class Session {
         activeActions.add(endWarning1);
         activeActions.add(endWarning2);
         activeActions.add(actionInfoAction);
-        Stats.resetStats();
-        Stats.sessionStart();
-        Stats.logPlayers();
+        SessionTranscript.sessionStart();
+        SessionTranscript.logPlayers();
         return true;
     }
 
     public void sessionEnd() {
+        SessionTranscript.sessionEnd();
         status = SessionStatus.FINISHED;
         OtherUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
-        Stats.sessionEnd();
-        Stats.sendTranscriptToAdmins();
+        SessionTranscript.sendTranscriptToAdmins();
         passedTime = 0;
     }
 
@@ -107,13 +105,11 @@ public class Session {
     public void addSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
         sessionLength += lengthTicks;
-        Stats.addSessionLength(lengthTicks);
     }
 
     public void removeSessionLength(int lengthTicks) {
         if (sessionLength == null) sessionLength = 0;
         sessionLength -= lengthTicks;
-        Stats.removeSessionLength(lengthTicks);
     }
 
     public String getSessionLength() {

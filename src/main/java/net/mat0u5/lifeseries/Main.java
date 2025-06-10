@@ -24,13 +24,9 @@ import net.mat0u5.lifeseries.series.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.4.15";
+	public static final String MOD_VERSION = "dev-1.3.4.16";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -156,47 +152,7 @@ public class Main implements ModInitializer {
 
 	public static boolean changeSeriesTo(String changeTo) {
 		if (changeTo.equalsIgnoreCase("wildlife")) {
-			boolean success = true;
-			if (!DependencyManager.polymerLoaded()) {
-				success = false;
-				OtherUtils.broadcastMessage(
-						Text.literal("§cYou must install the ").append(
-								Text.literal("Polymer mod")
-										.styled(style -> style
-												.withColor(Formatting.BLUE)
-												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/polymer"))
-												.withUnderline(true)
-										)
-						).append(Text.of(" §cto play Wild Life."))
-				);
-			}
-			if (!DependencyManager.blockbenchImportLibraryLoaded()) {
-				success = false;
-				OtherUtils.broadcastMessage(
-						Text.literal("§cYou must install the ").append(
-								Text.literal("Blockbench Import Library mod")
-										.styled(style -> style
-												.withColor(Formatting.BLUE)
-												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/blockbench-import-library"))
-												.withUnderline(true)
-										)
-						).append(Text.of(" §cto play Wild Life."))
-				);
-			}
-			if (!DependencyManager.cardinalComponentsLoaded()) {
-				success = false;
-				OtherUtils.broadcastMessage(
-						Text.literal("§cYou must install the ").append(
-								Text.literal("Cardinal Components API mod")
-										.styled(style -> style
-												.withColor(Formatting.BLUE)
-												.withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/cardinal-components-api"))
-												.withUnderline(true)
-										)
-						).append(Text.of(" §cto play Wild Life."))
-				);
-			}
-			if (!success) return false;
+			if (!DependencyManager.checkWildLifeDependencies()) return false;
 		}
 
 		config.setProperty("currentSeries", changeTo);
@@ -211,7 +167,7 @@ public class Main implements ModInitializer {
 			NetworkHandlerServer.sendStringPacket(player, "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
 			NetworkHandlerServer.sendLongPacket(player, "session_timer", -1);
 		}
-		Stats.resetStats();
+		SessionTranscript.resetStats();
 		return true;
 	}
 }

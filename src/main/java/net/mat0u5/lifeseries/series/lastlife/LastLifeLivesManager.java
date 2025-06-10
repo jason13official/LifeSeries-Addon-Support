@@ -1,13 +1,11 @@
 package net.mat0u5.lifeseries.series.lastlife;
 
 import net.mat0u5.lifeseries.series.SessionAction;
-import net.mat0u5.lifeseries.series.Stats;
-import net.mat0u5.lifeseries.utils.AnimationUtils;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -101,7 +99,7 @@ public class LastLifeLivesManager {
                 Text finalText = textLives.append(Text.literal(" lives.").formatted(Formatting.GREEN));
                 PlayerUtils.sendTitle(player, finalText, 0, 60, 20);
                 if (currentSeries.hasAssignedLives(player)) continue;
-                Stats.assignRandomLives(player, livesNum);
+                SessionTranscript.assignRandomLives(player, livesNum);
                 currentSeries.setPlayerLives(player, livesNum);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.BLOCK_END_PORTAL_SPAWN);

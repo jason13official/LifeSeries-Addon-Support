@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.utils.UpdateChecker;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
@@ -95,6 +96,7 @@ public class Events {
             playerStartJoining(player);
             currentSeries.onPlayerJoin(player);
             blacklist.onInventoryUpdated(player, player.getInventory());
+            SessionTranscript.playerJoin(player);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
@@ -116,6 +118,7 @@ public class Events {
 
         try {
             currentSeries.onPlayerDisconnect(player);
+            SessionTranscript.playerLeave(player);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

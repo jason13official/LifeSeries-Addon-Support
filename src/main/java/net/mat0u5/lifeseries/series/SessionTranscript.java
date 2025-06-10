@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.secretlife.Task;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -8,7 +9,6 @@ import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -18,48 +18,8 @@ import java.util.List;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.currentSession;
 
-public class Stats {
+public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
-
-    public static void resetAllLives() {
-        addMessageWithTime("[COMMAND] Reset everyone's lives.");
-    }
-
-    public static void resetLives(ServerPlayerEntity player) {
-        addMessageWithTime("[COMMAND] Reset " + player.getNameForScoreboard() + " lives.");
-    }
-
-    public static void cureBoogey(ServerPlayerEntity player) {
-        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is now cured from being the boogeyman.");
-    }
-
-    public static void failBoogey(ServerPlayerEntity player) {
-        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " has been marked as a failed boogeyman.");
-    }
-
-    public static void removeBoogey(ServerPlayerEntity player) {
-        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is no longer a boogeyman.");
-    }
-
-    public static void addBoogey(ServerPlayerEntity player) {
-        addMessageWithTime("[COMMAND] " + player.getNameForScoreboard() + " is now a boogeyman.");
-    }
-
-    public static void boogeyClear() {
-        addMessageWithTime("[COMMAND] All boogeymen have been cleared.");
-    }
-
-    public static void fastForward(int ticks) {
-        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been fast forwarded.");
-    }
-
-    public static void removeSessionLength(int ticks) {
-        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been added to the session time.");
-    }
-
-    public static void addSessionLength(int ticks) {
-        addMessageWithTime(OtherUtils.formatTime(ticks) + " has been added to the session time.");
-    }
 
     public static void newSuperpower(ServerPlayerEntity player, Superpowers superpower) {
         addMessageWithTime(player.getNameForScoreboard() + " has been assigned the " + Superpowers.getString(superpower) + " superpower.");
@@ -129,6 +89,14 @@ public class Stats {
         addMessageWithTime("<@","> ",playerName.getString()+" gave a life to " + target.getNameForScoreboard());
     }
 
+    public static void playerLeave(ServerPlayerEntity player) {
+        addMessageWithTime("<@","> ",player.getNameForScoreboard()+" left the game.");
+    }
+
+    public static void playerJoin(ServerPlayerEntity player) {
+        addMessageWithTime("<@","> ",player.getNameForScoreboard()+" joined the game.");
+    }
+
     public static void triggerSessionAction(String message) {
         if (message == null || message.isEmpty()) return;
         addMessageWithTime("TRIGGERED_SESSION_ACTION: " + message);
@@ -151,25 +119,39 @@ public class Stats {
     }
 
     public static void sessionStart() {
-        addMessageWithTime("Session started!");
+        addMessageWithTime("-----  Session started!  -----");
     }
 
     public static void sessionEnd() {
-        addMessageWithTime("The session has ended!");
+        addMessageWithTime("-----  The session has ended!  -----");
     }
     public static void addMessageWithTime(String message) {
         addMessageWithTime("[@","] ", message);
     }
 
-    private static void addMessageWithTime(String start, String end,String message) {
+    private static void addMessageWithTime(String start, String end, String message) {
         String time = currentSession.getPassedTime();
         String finalMessage = start+time+end+message;
+
+        if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
+            finalMessage = message;
+        }
+
+        if (messages.isEmpty()) {
+            addDefaultMessages();
+        }
         messages.add(finalMessage);
     }
 
     public static void resetStats() {
         messages.clear();
-        messages.add("----- "+currentSeries.getSeries().name()+" (" + OtherUtils.getTimeAndDate() + ") -----");
+        addDefaultMessages();
+    }
+
+    public static void addDefaultMessages() {
+        messages.add("-----  Life Series Mod by Mat0u5  |  Mod version: "+ Main.MOD_VERSION+"  -----");
+        messages.add("-----  "+currentSeries.getSeries().name()+"  |  Time and date: " + OtherUtils.getTimeAndDate() +  "  -----");
+        messages.add("-----  Session Transcript  -----");
     }
 
     public static String getStats() {
@@ -186,7 +168,7 @@ public class Stats {
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(TextUtils.copyClipboardClickEvent(Stats.getStats()))
+                                .withClickEvent(TextUtils.copyClipboardClickEvent(SessionTranscript.getStats()))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to copy the session transcript."));
     }

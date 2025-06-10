@@ -1,14 +1,10 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.network.packets.LongPayload;
-import net.mat0u5.lifeseries.network.packets.NumberPayload;
-import net.mat0u5.lifeseries.network.packets.StringPayload;
 import net.mat0u5.lifeseries.registries.MobRegistry;
-import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -214,7 +210,7 @@ public class TriviaWildcard extends Wildcard {
         resetPlayerOnBotSpawn(player);
         TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND);
         if (bot != null) {
-            Stats.newTriviaBot(player);
+            SessionTranscript.newTriviaBot(player);
             bot.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
             player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);

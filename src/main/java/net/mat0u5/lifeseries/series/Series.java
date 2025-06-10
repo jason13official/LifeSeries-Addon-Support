@@ -227,7 +227,7 @@ public abstract class Series extends Session {
         PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), Text.literal("from ").append(playerName), 10, 30, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeries.reloadPlayerTeam(target);
-        Stats.givelife(playerName, target);
+        SessionTranscript.givelife(playerName, target);
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
@@ -295,7 +295,7 @@ public abstract class Series extends Session {
             WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
             showDeathTitle(player);
         }
-        Stats.onPlayerLostAllLives(player);
+        SessionTranscript.onPlayerLostAllLives(player);
     }
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
@@ -375,7 +375,7 @@ public abstract class Series extends Session {
      */
 
     public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
-        Stats.onPlayerDeath(player, source);
+        SessionTranscript.onPlayerDeath(player, source);
         boolean killedByPlayer = false;
         if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
             if (player != source.getAttacker()) {
@@ -418,7 +418,7 @@ public abstract class Series extends Session {
     }
 
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        Stats.claimKill(killer, victim);
+        SessionTranscript.claimKill(killer, victim);
     }
 
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {

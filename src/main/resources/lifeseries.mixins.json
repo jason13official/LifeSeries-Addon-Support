@@ -16,6 +16,7 @@
     "PlayerEntityMixin",
     "PlayerInventoryMixin",
     "RecipeManagerMixin",
+    "ServerCommandSourceMixin",
     "ServerCommonNetworkHandlerMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",

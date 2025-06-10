@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.Boogeyman;
 import net.mat0u5.lifeseries.series.BoogeymanManager;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.series.lastlife.LastLife;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -106,7 +105,6 @@ public class BoogeymanCommand {
         }
         OtherUtils.sendCommandFeedback(source, Text.of("Failing boogeyman for " + target.getName().getString() + "..."));
         bm.playerFailBoogeyman(target);
-        Stats.failBoogey(target);
 
         return 1;
     }
@@ -125,7 +123,6 @@ public class BoogeymanCommand {
         bm.cure(target);
 
         OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now cured.")));
-        Stats.cureBoogey(target);
 
         return 1;
     }
@@ -145,8 +142,6 @@ public class BoogeymanCommand {
         bm.addBoogeymanManually(target);
 
         OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now a boogeyman.")));
-        Stats.addBoogey(target);
-
         return 1;
     }
 
@@ -165,8 +160,6 @@ public class BoogeymanCommand {
         bm.removeBoogeymanManually(target);
 
         OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is no longer a boogeyman.")));
-        Stats.removeBoogey(target);
-
         return 1;
     }
 
@@ -191,8 +184,6 @@ public class BoogeymanCommand {
 
         bm.resetBoogeymen();
         OtherUtils.sendCommandFeedback(source, Text.of("All boogeymen have been cleared"));
-        Stats.boogeyClear();
-
         return 1;
     }
 

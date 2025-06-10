@@ -4,7 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.config.StringListConfig;
 import net.mat0u5.lifeseries.resources.config.StringListManager;
 import net.mat0u5.lifeseries.series.SessionAction;
-import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.utils.*;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WrittenBookContentComponent;
@@ -146,7 +146,7 @@ public class TaskManager {
             linesStr.add(line.get(true).getString());
         }
         book.set(DataComponentTypes.WRITTEN_BOOK_CONTENT, bookContent);
-        Stats.assignTask(player, task, linesStr);
+        SessionTranscript.assignTask(player, task, linesStr);
 
         ItemStackUtils.setCustomComponentBoolean(book, "SecretTask", true);
         ItemStackUtils.setCustomComponentInt(book, "TaskDifficulty", task.getDifficulty());
@@ -330,7 +330,7 @@ public class TaskManager {
         SecretLife series = (SecretLife) currentSeries;
         TaskType type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
-        Stats.successTask(player);
+        SessionTranscript.successTask(player);
         removePlayersTaskBook(player);
         submittedOrFailed.add(player.getUuid());
         secretKeeperBeingUsed = true;
@@ -373,7 +373,7 @@ public class TaskManager {
         }
         if (type == TaskType.EASY) {
             removePlayersTaskBook(player);
-            Stats.rerollTask(player);
+            SessionTranscript.rerollTask(player);
             secretKeeperBeingUsed = true;
             TaskType newType = TaskType.HARD;
             if (series.isOnLastLife(player, false)) {
@@ -421,7 +421,7 @@ public class TaskManager {
         SecretLife series = (SecretLife) currentSeries;
         TaskType type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
-        Stats.failTask(player);
+        SessionTranscript.failTask(player);
         removePlayersTaskBook(player);
         submittedOrFailed.add(player.getUuid());
         secretKeeperBeingUsed = true;

@@ -1,8 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
 import net.mat0u5.lifeseries.series.lastlife.LastLifeConfig;
-import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
-import net.mat0u5.lifeseries.series.thirdlife.ThirdLifeConfig;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TaskScheduler;
@@ -186,7 +184,7 @@ public class BoogeymanManager {
             boogey.sendMessage(Text.of("§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. " +
                     "If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman."));
         }
-        Stats.boogeymenChosen(boogeyPlayers);
+        SessionTranscript.boogeymenChosen(boogeyPlayers);
     }
 
     public void sessionEnd() {

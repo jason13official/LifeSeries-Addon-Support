@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.Stats;
+import net.mat0u5.lifeseries.series.SessionTranscript;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 
 import static net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager.getSeries;
@@ -17,7 +17,7 @@ public abstract class Wildcard {
         if (series == null) return;
         active = true;
         Main.LOGGER.info("[WildLife] Activated Wildcard: {}", getType());
-        Stats.activateWildcard(getType());
+        SessionTranscript.activateWildcard(getType());
     }
 
     public void deactivate() {
@@ -25,7 +25,7 @@ public abstract class Wildcard {
         if (series == null) return;
         active = false;
         Main.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getType());
-        Stats.deactivateWildcard(getType());
+        SessionTranscript.deactivateWildcard(getType());
     }
 
     public void tickSessionOn() {}

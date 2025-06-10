@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.Stats;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -195,7 +194,6 @@ public class LivesCommand {
             currentSeries.setPlayerLives(target,amount);
             Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s lives to " + amount + "."));
             OtherUtils.sendCommandFeedback(source, finalText);
-            Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         else {
             currentSeries.addToPlayerLives(target,amount);
@@ -205,7 +203,6 @@ public class LivesCommand {
             String pt4 = amount >= 0 ? " to " : " from ";
             Text finalText = Text.of(pt1+pt2+pt3+pt4).copy().append(target.getStyledDisplayName()).append(".");
             OtherUtils.sendCommandFeedback(source, finalText);
-            Stats.addMessageWithTime("[COMMAND] "+finalText.getString());
         }
         return 1;
     }
@@ -216,7 +213,6 @@ public class LivesCommand {
 
         currentSeries.resetPlayerLife(target);
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
-        Stats.resetLives(target);
         return 1;
     }
 
@@ -225,7 +221,6 @@ public class LivesCommand {
 
         currentSeries.resetAllPlayerLives();
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives."));
-        Stats.resetAllLives();
         return 1;
     }
 }
