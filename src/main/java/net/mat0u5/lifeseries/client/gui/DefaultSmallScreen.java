@@ -28,20 +28,20 @@ public abstract class DefaultSmallScreen extends DefaultScreen {
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY) {
         //? if <= 1.21 {
-        /*if (!isScaled()) {
+        if (!isScaled()) {
             RenderUtils.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT);
         }
         else {
             RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, scaleX, scaleY);
         }
-        *///?} else {
-        if (!isScaled()) {
+        //?} else {
+        /*if (!isScaled()) {
         RenderUtils.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, 256, 256);
         }
         else {
         RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, 256, 256, scaleX, scaleY);
         }
-        //?}
+        *///?}
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);
     }
 

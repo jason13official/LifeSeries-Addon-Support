@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SoundManager.class, priority = 1)
 public class SoundManagerMixin {
     //? if <= 1.21.5 {
-    /*@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"))
+    @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"))
     private void getAdjustedPitch(SoundInstance sound, CallbackInfo ci) {
         ClientSounds.onSoundPlay(sound);
     }
-    *///?} else {
-    @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)Lnet/minecraft/client/sound/SoundSystem$PlayResult;", at = @At("HEAD"))
+    //?} else {
+    /*@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)Lnet/minecraft/client/sound/SoundSystem$PlayResult;", at = @At("HEAD"))
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<SoundSystem.PlayResult> cir) {
         ClientSounds.onSoundPlay(sound);
     }
-    //?}
+    *///?}
 }

@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.client.gui.series;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gl.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
@@ -106,7 +106,7 @@ public class ChooseSeriesScreen extends DefaultScreen {
         // Background + images
         //? if <= 1.21 {
 
-        /*if (region != 0) {
+        if (region != 0) {
             if (region == 1) context.drawTexture(TEXTURE_SELECTED,oneFourthX-32, startY + 32, 0, 0, 64, 64);
             if (region == 2) context.drawTexture(TEXTURE_SELECTED,centerX-32, startY + 32, 0, 0, 64, 64);
             if (region == 3) context.drawTexture(TEXTURE_SELECTED,threeFourthX-32, startY + 32, 0, 0, 64, 64);
@@ -128,7 +128,7 @@ public class ChooseSeriesScreen extends DefaultScreen {
 
 
         context.getMatrices().pop();
-        *///?} else if <= 1.21.5 {
+        //?} else if <= 1.21.5 {
         /*if (region != 0) {
             if (region == 1) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, oneFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 2) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-32, startY + 32, 0, 0, 64, 64, 64, 64);
@@ -152,7 +152,7 @@ public class ChooseSeriesScreen extends DefaultScreen {
 
         context.getMatrices().pop();
         *///?} else {
-        if (region != 0) {
+        /*if (region != 0) {
             if (region == 1) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, oneFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 2) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 3) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, threeFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
@@ -174,7 +174,7 @@ public class ChooseSeriesScreen extends DefaultScreen {
 
 
         context.getMatrices().popMatrix();
-        //?}
+        *///?}
 
         String prompt = "Select the series you want to play.";
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);

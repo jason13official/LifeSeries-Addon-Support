@@ -59,12 +59,12 @@ public class ServerPlayNetworkHandlerMixin {
     }
 
     //? if <= 1.21 {
-    /*@Inject(method = "requestTeleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
+    @Inject(method = "requestTeleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
     public void requestTeleport(double x, double y, double z, float yaw, float pitch, Set<PositionFlag> flags, CallbackInfo ci) {
-    *///?} else {
-    @Inject(method = "requestTeleport(Lnet/minecraft/entity/player/PlayerPosition;Ljava/util/Set;)V", at = @At("TAIL"))
+    //?} else {
+    /*@Inject(method = "requestTeleport(Lnet/minecraft/entity/player/PlayerPosition;Ljava/util/Set;)V", at = @At("TAIL"))
     public void requestTeleport(PlayerPosition pos, Set<PositionFlag> flags, CallbackInfo ci) {
-    //?}
+    *///?}
         ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
         ServerPlayerEntity player = handler.getPlayer();
         if (player instanceof FakePlayer) {

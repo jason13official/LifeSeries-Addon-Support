@@ -36,22 +36,22 @@ public class PathFinder extends AmbientEntity implements AnimatedEntity {
     }
     public static DefaultAttributeContainer.Builder createAttributes() {
         //? if <= 1.21 {
-        /*return MobEntity.createMobAttributes()
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, FLYING_SPEED)
                 .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 150)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20);
-        *///?} else {
-        return MobEntity.createMobAttributes()
+        //?} else {
+        /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
                 .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.FLYING_SPEED, FLYING_SPEED)
                 .add(EntityAttributes.STEP_HEIGHT, 1)
                 .add(EntityAttributes.FOLLOW_RANGE, 150)
                 .add(EntityAttributes.ATTACK_DAMAGE, 20);
-        //?}
+        *///?}
     }
     @Override
     public void tick() {

@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 //? if >= 1.21.2 {
-import net.minecraft.entity.mob.CreakingEntity;
+/*import net.minecraft.entity.mob.CreakingEntity;
 import net.minecraft.particle.TrailParticleEffect;
-//?}
+*///?}
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.server;
@@ -39,8 +39,8 @@ public class Creaking extends ToggleableSuperpower {
 
     private final List<String> createdTeams = new ArrayList<>();
     //? if >= 1.21.2 {
-    private final List<CreakingEntity> createdEntities = new ArrayList<>();
-    //?}
+    /*private final List<CreakingEntity> createdEntities = new ArrayList<>();
+    *///?}
 
     public Creaking(ServerPlayerEntity player) {
         super(player);
@@ -55,8 +55,8 @@ public class Creaking extends ToggleableSuperpower {
     public void tick() {
         if (!active) return;
         //? if >= 1.21.2 {
-        spawnTrailParticles();
-        //?}
+        /*spawnTrailParticles();
+        *///?}
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Creaking extends ToggleableSuperpower {
         createdTeams.add(newTeamName);
 
         //? if >= 1.21.2 {
-        for (int i = 0; i < 3; i++) {
+        /*for (int i = 0; i < 3; i++) {
             BlockPos spawnPos =  getCloseBlockPos(playerWorld, player.getBlockPos(), 6);
             CreakingEntity creaking = EntityType.CREAKING.spawn(playerWorld, spawnPos, SpawnReason.COMMAND);
             if (creaking != null) {
@@ -85,7 +85,7 @@ public class Creaking extends ToggleableSuperpower {
                 makeFriendly(newTeamName, creaking, player);
             }
         }
-        //?}
+        *///?}
     }
 
     @Override
@@ -93,7 +93,7 @@ public class Creaking extends ToggleableSuperpower {
         // Also gets triggered when the players team is changed.
         super.deactivate();
         //? if >= 1.21.2 {
-        if (server != null) {
+        /*if (server != null) {
             createdEntities.forEach(Entity::discard);
             createdEntities.clear();
         }
@@ -106,7 +106,7 @@ public class Creaking extends ToggleableSuperpower {
                 currentSeries.reloadPlayerTeam(getPlayer());
             }
         }
-        //?}
+        *///?}
     }
 
     @Override
@@ -153,7 +153,7 @@ public class Creaking extends ToggleableSuperpower {
         );
     }
     //? if >= 1.21.2 {
-    public void spawnTrailParticles() {
+    /*public void spawnTrailParticles() {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         ServerWorld world = PlayerUtils.getServerWorld(player);
@@ -189,12 +189,12 @@ public class Creaking extends ToggleableSuperpower {
             }
 
             //? if = 1.21.2 {
-            /*TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i);
+            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i);
             world.spawnParticles(trailParticleEffect2, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
-            *///?} else if >= 1.21.4 {
-            TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
+            ^///?} else if >= 1.21.4 {
+            /^TrailParticleEffect trailParticleEffect2 = new TrailParticleEffect(vec3d2, i, random.nextInt(40) + 10);
             world.spawnParticles(trailParticleEffect2, true, true, vec3d.x, vec3d.y, vec3d.z, 1, 0.0, 0.0, 0.0, 0.0);
-            //?}
+            ^///?}
         }
     }
 
@@ -211,5 +211,5 @@ public class Creaking extends ToggleableSuperpower {
             toKill.forEach(Entity::discard);
         }
     }
-    //?}
+    *///?}
 }

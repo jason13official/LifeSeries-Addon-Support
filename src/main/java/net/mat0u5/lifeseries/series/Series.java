@@ -304,9 +304,9 @@ public abstract class Series extends Session {
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
-                /*player.dropStack(item);
-                *///?} else
-                player.dropStack(PlayerUtils.getServerWorld(player), item);
+                player.dropStack(item);
+                //?} else
+                /*player.dropStack(PlayerUtils.getServerWorld(player), item);*/
             }
             player.getInventory().clear();
         }
@@ -409,10 +409,10 @@ public abstract class Series extends Session {
         respawnPositions.remove(player.getUuid());
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             //? if <= 1.21 {
-            /*player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
-            *///?} else {
-            player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
-            //?}
+            player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
+            //?} else {
+            /*player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
+            *///?}
             break;
         }
     }
@@ -470,9 +470,9 @@ public abstract class Series extends Session {
         // Drop the spawn egg with a 5% chance
         if (Math.random() <= chance) {
             //? if <=1.21 {
-            /*entity.dropStack(spawnEggItem);
-            *///?} else
-            entity.dropStack((ServerWorld) entity.getWorld(), spawnEggItem);
+            entity.dropStack(spawnEggItem);
+            //?} else
+            /*entity.dropStack((ServerWorld) entity.getWorld(), spawnEggItem);*/
         }
     }
 

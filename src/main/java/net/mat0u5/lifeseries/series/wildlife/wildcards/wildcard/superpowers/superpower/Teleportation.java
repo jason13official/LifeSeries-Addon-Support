@@ -77,12 +77,12 @@ public class Teleportation extends Superpower {
                     float storedPitch = player.getPitch();
 
                     //? if <= 1.21 {
-                    /*player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
+                    player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
                     lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch);
-                    *///?} else {
-                    player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
+                    //?} else {
+                    /*player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
                     lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch, true);
-                    //?}
+                    *///?}
 
                     playTeleportSound(playerWorld, player.getPos());
                     playTeleportSound(lookingAtPlayerWorld, lookingAtPlayer.getPos());
@@ -104,10 +104,10 @@ public class Teleportation extends Superpower {
                 Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
 
                 //? if <= 1.21 {
-                /*player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch());
-                *///?} else {
-                player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch(), true);
-                //?}
+                player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch());
+                //?} else {
+                /*player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch(), true);
+                *///?}
 
                 playTeleportSound(playerWorld, player.getPos());
                 spawnTeleportParticles(playerWorld, player.getPos());

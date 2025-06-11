@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 
 //? if <= 1.21 {
-/*@Mixin(value = PlayerEntityRenderer.class, priority = 1)
+@Mixin(value = PlayerEntityRenderer.class, priority = 1)
 public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
     public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
         super(ctx, model, shadowRadius);
@@ -47,8 +47,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 
     }
 }
-*///?} else {
-import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
+//?} else {
+/*import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 @Mixin(value = EntityRenderDispatcher.class, priority = 1)
 public class PlayerEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
@@ -68,4 +68,4 @@ public class PlayerEntityRendererMixin {
         }
     }
 }
-//?}
+*///?}

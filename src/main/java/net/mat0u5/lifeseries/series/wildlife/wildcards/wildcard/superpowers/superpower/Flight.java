@@ -114,32 +114,32 @@ public class Flight extends Superpower {
             helmet.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
             ItemEnchantmentsComponent enchantmentsComponent = helmet.get(DataComponentTypes.ENCHANTMENTS);
             //? if <= 1.21.4 {
-            /*if (enchantmentsComponent != null) {
+            if (enchantmentsComponent != null) {
                 helmet.set(DataComponentTypes.ENCHANTMENTS, enchantmentsComponent.withShowInTooltip(false));
             }
             helmet.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(false));
             helmet.set(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
-             *///?} else {
-            helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
+             //?} else {
+            /*helmet.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
             helmet.set(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplayComponent.DEFAULT
                     .with(DataComponentTypes.ENCHANTMENTS, true)
                     .with(DataComponentTypes.UNBREAKABLE, true)
             );
-            //?}
+            *///?}
 
             helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
             helmet.set(DataComponentTypes.ITEM_NAME, Text.of("Winged Helmet"));
             //? if >= 1.21.2 {
-            helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
+            /*helmet.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries","winged_helmet"));
             helmet.set(DataComponentTypes.GLIDER, Unit.INSTANCE);
                 //? if <= 1.21.4 {
-                /*helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
-                *///?} else if <= 1.21.5 {
-                /*helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
-                *///?} else {
-                helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, Registries.SOUND_EVENT.getEntry(SoundEvents.ITEM_SHEARS_SNIP)));
-                //?}
-            //?}
+                helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false));
+                //?} else if <= 1.21.5 {
+                /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false));
+                ^///?} else {
+                /^helmet.set(DataComponentTypes.EQUIPPABLE, new EquippableComponent(EquipmentSlot.HEAD, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, Optional.empty(), Optional.empty(), Optional.empty(), false, false, false, false, false, Registries.SOUND_EVENT.getEntry(SoundEvents.ITEM_SHEARS_SNIP)));
+                ^///?}
+            *///?}
             ItemStackUtils.setCustomComponentBoolean(helmet, "IgnoreBlacklist", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FromSuperpower", true);
             ItemStackUtils.setCustomComponentBoolean(helmet, "FlightSuperpower", true);

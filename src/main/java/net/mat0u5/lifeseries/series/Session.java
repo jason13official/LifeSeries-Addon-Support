@@ -246,11 +246,11 @@ public class Session {
 
             // Teleport player inside the world border
             //? if <=1.21 {
-            /*player.teleport(PlayerUtils.getServerWorld(player),clampedX, safeY, clampedZ, player.getYaw(), player.getPitch());
-            *///?} else {
-                Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
+            player.teleport(PlayerUtils.getServerWorld(player),clampedX, safeY, clampedZ, player.getYaw(), player.getPitch());
+            //?} else {
+                /*Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
                 player.teleport(PlayerUtils.getServerWorld(player),clampedX, safeY, clampedZ, flags, player.getYaw(), player.getPitch(), false);
-            //?}
+            *///?}
         }
     }
     public static final Map<UUID, Integer> skipTimer = new HashMap<>();

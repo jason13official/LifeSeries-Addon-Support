@@ -64,8 +64,8 @@ public class Events {
         });
         UseBlockCallback.EVENT.register(Events::onBlockUse);
         //? if >= 1.21.2 {
-        UseItemCallback.EVENT.register(Events::onItemUse);
-        //?}
+        /*UseItemCallback.EVENT.register(Events::onItemUse);
+        *///?}
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> onPlayerJoin(handler.getPlayer()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> onPlayerDisconnect(handler.getPlayer()));
         ServerTickEvents.END_SERVER_TICK.register(Events::onServerTickEnd);

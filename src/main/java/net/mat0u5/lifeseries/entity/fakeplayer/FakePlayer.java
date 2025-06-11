@@ -84,10 +84,10 @@ public class FakePlayer extends ServerPlayerEntity {
             ConnectedClientData data =  new ConnectedClientData(current, 0, instance.getClientOptions(), true);
             server.getPlayerManager().onPlayerConnect(connection, instance, data);
             //? if <= 1.21 {
-            /*instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch);
-             *///?} else {
-            instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch, false);
-            //?}
+            instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch);
+             //?} else {
+            /*instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch, false);
+            *///?}
             instance.setHealth(20.0F);
             instance.unsetRemoved();
             instance.changeGameMode(gamemode);
@@ -164,29 +164,29 @@ public class FakePlayer extends ServerPlayerEntity {
 
     @Override
     //? if <= 1.21 {
-    /*public boolean damage(DamageSource source, float amount) {
-     *///?} else {
-    public boolean damage(ServerWorld world, DamageSource source, float amount) {
-    //?}
+    public boolean damage(DamageSource source, float amount) {
+     //?} else {
+    /*public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    *///?}
         if (shadow != null && getServer() != null) {
             ServerPlayerEntity player = getServer().getPlayerManager().getPlayer(shadow);
             if (player != null) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.ASTRAL_PROJECTION)) {
                     if (SuperpowersWildcard.getSuperpowerInstance(player) instanceof AstralProjection projection) {
                         //? if <= 1.21 {
-                        /*projection.onDamageClone(source, amount);
-                         *///?} else {
-                        projection.onDamageClone(world, source, amount);
-                        //?}
+                        projection.onDamageClone(source, amount);
+                         //?} else {
+                        /*projection.onDamageClone(world, source, amount);
+                        *///?}
                     }
                 }
             }
         }
         //? if <= 1.21 {
-        /*return super.damage(source, amount);
-         *///?} else {
-        return super.damage(world, source, amount);
-        //?}
+        return super.damage(source, amount);
+         //?} else {
+        /*return super.damage(world, source, amount);
+        *///?}
 
     }
 }

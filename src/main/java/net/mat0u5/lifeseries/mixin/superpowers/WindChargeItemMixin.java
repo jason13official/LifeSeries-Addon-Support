@@ -25,9 +25,9 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 public class WindChargeItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
     //? if <= 1.21 {
-    /*public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-    *///?} else
-    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
+    //?} else
+    /*public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {*/
         if (!Main.isLogicalSide()) return;
         if (user instanceof ServerPlayerEntity player) {
             if (currentSeries.getSeries() == SeriesList.WILD_LIFE) {

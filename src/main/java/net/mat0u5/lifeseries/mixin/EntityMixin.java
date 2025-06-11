@@ -60,14 +60,14 @@ public abstract class EntityMixin {
     }
 
     //? if <= 1.21 {
-    /*@Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
+    @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
             at = @At("HEAD"), cancellable = true)
     public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    *///?} else {
-        @Inject(method = "dropStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
+    //?} else {
+        /*@Inject(method = "dropStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
                 at = @At("HEAD"), cancellable = true)
         public void dropStack(ServerWorld world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    //?}
+    *///?}
         if (!Main.isLogicalSide()) return;
         if (currentSeries instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
@@ -79,7 +79,7 @@ public abstract class EntityMixin {
 
 
     //? if >= 1.21.2 {
-    @WrapOperation(
+    /*@WrapOperation(
             method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
     )
@@ -90,5 +90,5 @@ public abstract class EntityMixin {
             return original.call(instance);
         }
     }
-    //?}
+    *///?}
 }

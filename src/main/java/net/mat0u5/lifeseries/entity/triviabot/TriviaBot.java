@@ -55,9 +55,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.NbtWriteView;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -72,6 +69,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.server;
+
+//? if >= 1.21.6 {
+/*import net.minecraft.storage.NbtWriteView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
+*///?}
 
 public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "triviabot");
@@ -118,56 +121,56 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     }
 
     //? if <= 1.21.5 {
-    /*@Override
+    @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-    *///?} else {
-    @Override
+    //?} else {
+    /*@Override
     public void writeCustomData(WriteView nbt) {
         super.writeCustomData(nbt);
-    //?}
+    *///?}
         try {
             if (boundPlayerUUID == null) return;
             //? if <= 1.21.4 {
-            /*nbt.putUuid("boundPlayer", boundPlayerUUID);
-            *///?} else {
-            nbt.putNullable("boundPlayer", Uuids.INT_STREAM_CODEC, boundPlayerUUID);
-            //?}
+            nbt.putUuid("boundPlayer", boundPlayerUUID);
+            //?} else {
+            /*nbt.putNullable("boundPlayer", Uuids.INT_STREAM_CODEC, boundPlayerUUID);
+            *///?}
         }catch(Exception e) {}
     }
 
     //? if <= 1.21.5 {
-    /*@Override
+    @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-    *///?} else {
-    @Override
+    //?} else {
+    /*@Override
     public void readCustomData(ReadView nbt) {
         super.readCustomData(nbt);
-    //?}
+    *///?}
         try {
             //? if <= 1.21.4 {
-            /*UUID newUUID = nbt.getUuid("boundPlayer");
+            UUID newUUID = nbt.getUuid("boundPlayer");
             if (newUUID != null) {
                 boundPlayerUUID = newUUID;
             }
-            *///?} else if <= 1.21.5 {
+            //?} else if <= 1.21.5 {
             /*UUID newUUID = nbt.get("boundPlayer", Uuids.INT_STREAM_CODEC).orElse(null);
             if (newUUID != null) {
                 boundPlayerUUID = newUUID;
             }
             *///?} else {
-            UUID newUUID = nbt.read("boundPlayer", Uuids.INT_STREAM_CODEC).orElse(null);
+            /*UUID newUUID = nbt.read("boundPlayer", Uuids.INT_STREAM_CODEC).orElse(null);
             if (newUUID != null) {
                 boundPlayerUUID = newUUID;
             }
-            //?}
+            *///?}
         }catch(Exception e) {}
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         //? if <= 1.21 {
-        /*return MobEntity.createMobAttributes()
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, MOVEMENT_SPEED)
@@ -176,8 +179,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0);
-        *///?} else {
-        return MobEntity.createMobAttributes()
+        //?} else {
+        /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
                 .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.FLYING_SPEED, MOVEMENT_SPEED)
@@ -186,7 +189,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.ATTACK_DAMAGE, 0);
-        //?}
+        *///?}
     }
 
     @Nullable
@@ -213,10 +216,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         if (player == null) return;
         boundPlayerUUID = player.getUuid();
         //? if <= 1.21.5 {
-        /*writeCustomDataToNbt(new NbtCompound());
-        *///?} else {
-        writeCustomData(NbtWriteView.create(ErrorReporter.EMPTY));
-        //?}
+        writeCustomDataToNbt(new NbtCompound());
+        //?} else {
+        /*writeCustomData(NbtWriteView.create(ErrorReporter.EMPTY));
+        *///?}
         sendDisplayEntityPackets(player);
     }
 
@@ -326,10 +329,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void addTicket(ServerWorld world) {
         //? if <= 1.21.4 {
-        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
-         *///?} else {
-        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
-        //?}
+        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
+         //?} else {
+        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
+        *///?}
     }
 
     public void despawn() {
@@ -337,10 +340,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
         //? if <= 1.21 {
-        /*this.kill();
-        *///?} else {
-        this.kill((ServerWorld) getWorld());
-         //?}
+        this.kill();
+        //?} else {
+        /*this.kill((ServerWorld) getWorld());
+         *///?}
         this.discard();
     }
 
@@ -885,14 +888,14 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     @Override
     //? if <= 1.21.4 {
-    /*protected boolean shouldSwimInFluids() {
+    protected boolean shouldSwimInFluids() {
         return false;
     }
-    *///?} else {
-    public boolean shouldSwimInFluids() {
+    //?} else {
+    /*public boolean shouldSwimInFluids() {
         return false;
     }
-    //?}
+    *///?}
 
     @Override
     public boolean isTouchingWater() {

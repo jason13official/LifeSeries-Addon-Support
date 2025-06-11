@@ -26,9 +26,9 @@ public class EnchantmentHelperMixin {
         if (damageSource.getAttacker() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        /*damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
-        *///?} else {
-        damageSource.getAttacker().damage(PlayerUtils.getServerWorld(victim), victim.getDamageSources().thorns(victim), 1F);
-        //?}
+        damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
+        //?} else {
+        /*damageSource.getAttacker().damage(PlayerUtils.getServerWorld(victim), victim.getDamageSources().thorns(victim), 1F);
+        *///?}
     }
 }

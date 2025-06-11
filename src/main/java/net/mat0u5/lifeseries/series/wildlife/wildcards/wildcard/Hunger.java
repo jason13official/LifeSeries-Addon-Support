@@ -30,11 +30,11 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 
 
 //? if >= 1.21.2 {
-import net.minecraft.component.type.ConsumableComponent;
+/*import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
 import net.minecraft.item.consume.ConsumeEffect;
 import net.minecraft.item.consume.UseAction;
-//?}
+*///?}
 
 public class Hunger extends Wildcard {
     private static final Random rnd = new Random();
@@ -197,8 +197,8 @@ public class Hunger extends Wildcard {
 
             stack.set(DataComponentTypes.FOOD, stack.getDefaultComponents().get(DataComponentTypes.FOOD));
             //? if >= 1.21.2 {
-            stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
-            //?}
+            /*stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
+            *///?}
 
             ComponentChanges changes = stack.getComponentChanges();
             inventory.setStack(i, new ItemStack(stack.getItem(), stack.getCount()));
@@ -226,13 +226,13 @@ public class Hunger extends Wildcard {
     );
 
     //? if <= 1.21 {
-    /*public static void defaultFoodComponents(Item item, ComponentMapImpl components) {
+    public static void defaultFoodComponents(Item item, ComponentMapImpl components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false, 1.6f, Optional.empty(), List.of()));
     }
-    *///?} else {
-    public static void defaultFoodComponents(Item item, MergedComponentMap components) {
+    //?} else {
+    /*public static void defaultFoodComponents(Item item, MergedComponentMap components) {
         if (item == null) return;
         if (bannedFoodItems.contains(item)) return;
         components.set(DataComponentTypes.CONSUMABLE,
@@ -240,7 +240,7 @@ public class Hunger extends Wildcard {
         );
         components.set(DataComponentTypes.FOOD, new FoodComponent(0, 0, false));
     }
-    //?}
+    *///?}
 
     public static void finishUsing(Item item, ComponentMap normalComponents, LivingEntity entity) {
         if (!(entity instanceof ServerPlayerEntity player)) return;

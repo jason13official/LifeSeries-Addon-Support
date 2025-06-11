@@ -17,7 +17,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 //? if <=1.21
-/*import net.minecraft.item.EnchantedBookItem;*/
+import net.minecraft.item.EnchantedBookItem;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -95,12 +95,12 @@ public class ItemStackUtils {
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        /*return nbtComp.getString(componentKey);
-        *///?} else {
-        Optional<String> optional = nbtComp.getString(componentKey);
+        return nbtComp.getString(componentKey);
+        //?} else {
+        /*Optional<String> optional = nbtComp.getString(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        //?}
+        *///?}
 
     }
 
@@ -111,12 +111,12 @@ public class ItemStackUtils {
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        /*return nbtComp.getInt(componentKey);
-        *///?} else {
-        Optional<Integer> optional = nbtComp.getInt(componentKey);
+        return nbtComp.getInt(componentKey);
+        //?} else {
+        /*Optional<Integer> optional = nbtComp.getInt(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        //?}
+        *///?}
     }
 
     public static Byte getCustomComponentByte(ItemStack itemStack, String componentKey) {
@@ -126,12 +126,12 @@ public class ItemStackUtils {
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        /*return nbtComp.getByte(componentKey);
-        *///?} else {
-        Optional<Byte> optional = nbtComp.getByte(componentKey);
+        return nbtComp.getByte(componentKey);
+        //?} else {
+        /*Optional<Byte> optional = nbtComp.getByte(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        //?}
+        *///?}
     }
 
     public static Boolean getCustomComponentBoolean(ItemStack itemStack, String componentKey) {
@@ -141,12 +141,12 @@ public class ItemStackUtils {
         NbtCompound nbtComp = nbtComponent.copyNbt();
         if (!nbtComp.contains(componentKey)) return null;
         //? if <= 1.21.4 {
-        /*return nbtComp.getBoolean(componentKey);
-        *///?} else {
-        Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
+        return nbtComp.getBoolean(componentKey);
+        //?} else {
+        /*Optional<Boolean> optional = nbtComp.getBoolean(componentKey);
         if (optional.isEmpty()) return null;
         return optional.get();
-        //?}
+        *///?}
     }
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
@@ -199,32 +199,32 @@ public class ItemStackUtils {
     public static ItemStack createEnchantedBook(RegistryKey<Enchantment> enchantment, int level) {
         if (server == null) return null;
         //? if <=1.21 {
-        /*RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
+        RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantedBookItem.forEnchantment(
                 new EnchantmentLevelEntry(entry, level)
         );
         return enchantedBook;
-        *///?} else {
+        //?} else {
 
-        RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
+        /*RegistryEntry<Enchantment> entry = getEnchantmentEntry(enchantment);
         ItemStack enchantedBook = EnchantmentHelper.getEnchantedBookWith(
                 new EnchantmentLevelEntry(entry, level)
         );
         return enchantedBook;
-        //?}
+        *///?}
     }
 
     @Nullable
     public static RegistryEntry<Enchantment> getEnchantmentEntry(RegistryKey<Enchantment> enchantment) {
         if (server == null) return null;
         //? if <=1.21 {
-        /*return server.getRegistryManager()
+        return server.getRegistryManager()
                 .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
                 .getOrThrow(enchantment);
-        *///?} else {
-        return server.getRegistryManager()
+        //?} else {
+        /*return server.getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getOrThrow(enchantment);
-        //?}
+        *///?}
     }
 }

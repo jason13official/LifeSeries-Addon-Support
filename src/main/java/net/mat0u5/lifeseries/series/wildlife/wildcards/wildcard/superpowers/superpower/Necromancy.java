@@ -70,10 +70,10 @@ public class Necromancy extends Superpower {
                 for (ServerPlayerEntity deadPlayer : deadPlayers) {
                     BlockPos tpTo = getCloseBlockPos(updatedPlayerWorld, updatedPlayer.getBlockPos(), 3);
                     //? if <= 1.21 {
-                    /*deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
-                    *///?} else {
-                    deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);
-                    //?}
+                    deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
+                    //?} else {
+                    /*deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);
+                    *///?}
                     deadPlayer.changeGameMode(GameMode.SURVIVAL);
                     if (seriesConfig instanceof WildLifeConfig config) {
                         if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config)) {

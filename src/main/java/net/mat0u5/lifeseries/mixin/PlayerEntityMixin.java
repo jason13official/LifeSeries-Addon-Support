@@ -43,9 +43,9 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
     //? if <=1.21 {
-    /*private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
-     *///?} else
-    private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+    private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
+     //?} else
+    /*private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {*/
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -55,10 +55,10 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    /*private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    *///?} else {
-    private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    //?}
+    private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
+    /*private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    *///?}
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -104,12 +104,12 @@ public abstract class PlayerEntityMixin {
     }
 
     //? if >= 1.21.2 {
-    @Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)
     protected void canGlide(CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isClient()) return;
         if (ClientUtils.shouldPreventGliding()) {
             cir.setReturnValue(false);
         }
     }
-    //?}
+    *///?}
 }

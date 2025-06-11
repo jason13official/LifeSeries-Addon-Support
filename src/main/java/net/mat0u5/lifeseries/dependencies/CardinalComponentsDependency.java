@@ -54,7 +54,7 @@ public class CardinalComponentsDependency implements EntityComponentInitializer 
     }
 
     //? if <= 1.21 {
-    /*public static void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
+    public static void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
         if (MORPH_COMPONENT.isProvidedBy(abstractClientPlayerEntity)) {
             MorphComponent morphComponent = MORPH_COMPONENT.get(abstractClientPlayerEntity);
             LivingEntity dummy = morphComponent.getDummy();
@@ -65,8 +65,8 @@ public class CardinalComponentsDependency implements EntityComponentInitializer 
             }
         }
     }
-    *///?} else {
-    public static <E extends Entity> void render(Entity entity, double x, double y, double z, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    //?} else {
+    /*public static <E extends Entity> void render(Entity entity, double x, double y, double z, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if(MORPH_COMPONENT.isProvidedBy(entity)){
             MorphComponent morphComponent = MORPH_COMPONENT.get(entity);
             LivingEntity dummy = morphComponent.getDummy();
@@ -77,7 +77,7 @@ public class CardinalComponentsDependency implements EntityComponentInitializer 
             }
         }
     }
-    //?}
+    *///?}
 
     public static void resetWildcardsOnPlayerJoin(ServerPlayerEntity player) {
         MORPH_COMPONENT.maybeGet(player).ifPresent(morphComponent -> morphComponent.setMorph(null));

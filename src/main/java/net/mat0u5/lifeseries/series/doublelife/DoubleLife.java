@@ -295,14 +295,14 @@ public class DoubleLife extends Series {
 
         if (soulmate.hurtTime == 0) {
             //? if <=1.21 {
-            /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+            DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
                     .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
             soulmate.damage(damageSource, 0.0000001F);
-            *///?} else {
-            DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+            //?} else {
+            /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
                     .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
             soulmate.damage(PlayerUtils.getServerWorld(soulmate), damageSource, 0.0000001F);
-            //?}
+            *///?}
         }
 
         float newHealth = player.getHealth();
@@ -325,22 +325,22 @@ public class DoubleLife extends Series {
         if (soulmate.isDead()) return;
 
         //? if <=1.21 {
-        /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+        DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
                 .get(RegistryKeys.DAMAGE_TYPE).entryOf(SOULMATE_DAMAGE));
         soulmate.setAttacker(player);
         soulmate.setAttacking(player);
         soulmate.damage(damageSource, 1000);
-         *///?} else {
-        DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
+         //?} else {
+        /*DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
                 .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SOULMATE_DAMAGE));
         soulmate.setAttacker(player);
         //? if <= 1.21.4 {
-        /*soulmate.setAttacking(player);
-        *///?} else {
-        soulmate.setAttacking(player, 100);
-        //?}
+        soulmate.setAttacking(player);
+        //?} else {
+        /^soulmate.setAttacking(player, 100);
+        ^///?}
         soulmate.damage(PlayerUtils.getServerWorld(soulmate), damageSource, 1000);
-        //?}
+        *///?}
 
     }
 

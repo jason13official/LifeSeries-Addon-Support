@@ -4,10 +4,10 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.listener.PacketListener;
 //? if <= 1.21.4 {
-/*import net.minecraft.network.NetworkState;
-*///?} else {
-import net.minecraft.network.state.NetworkState;
-//?}
+import net.minecraft.network.NetworkState;
+//?} else {
+/*import net.minecraft.network.state.NetworkState;
+*///?}
 
 /*
  * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
