@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -48,7 +49,7 @@ public class SuperPunch extends ToggleableSuperpower {
         if (player == null) return;
         if (ticks % 5 == 0) {
             if (riding != null && !player.hasVehicle()) {
-                syncEntityPassengers(riding, player.getServerWorld());
+                syncEntityPassengers(riding, PlayerUtils.getServerWorld(player));
                 riding = null;
             }
         }
@@ -60,18 +61,20 @@ public class SuperPunch extends ToggleableSuperpower {
 
         if (entity.hasPassengers()) return;
 
+        ServerWorld riderWorld = PlayerUtils.getServerWorld(rider);
+
         if (rider.hasVehicle()) {
             Entity vehicle = rider.getVehicle();
             rider.dismountVehicle();
 
-            syncEntityPassengers(vehicle, rider.getServerWorld());
+            syncEntityPassengers(vehicle, riderWorld);
         }
 
         boolean rideResult = rider.startRiding(entity, true);
 
         if (rideResult) {
             riding = entity;
-            syncEntityPassengers(entity, rider.getServerWorld());
+            syncEntityPassengers(entity, riderWorld);
         }
     }
 

@@ -207,8 +207,8 @@ public class WildcardManager {
                 MobSwap.killMobSwapMobs();
             }
             //? if >= 1.21.2 {
-            /*Creaking.killUnassignedMobs();
-            *///?}
+            Creaking.killUnassignedMobs();
+            //?}
         }
 
         if (TimeControl.changedSpeedFor > 0) TimeControl.changedSpeedFor--;

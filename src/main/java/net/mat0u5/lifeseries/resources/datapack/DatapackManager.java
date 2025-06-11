@@ -24,12 +24,31 @@ public class DatapackManager {
 
     public static String getMinecraftVersion() {
         //? if = 1.21
-        return "1.21-1.21.1";
+        /*return "1.21-1.21.1";*/
         //? if = 1.21.2
         /*return "1.21.2-1.21.3";*/
         //? if = 1.21.4
         /*return "1.21.4";*/
         //? if = 1.21.5
         /*return "1.21.5";*/
+        //? if = 1.21.6 || ~ 1.21.6
+        return "1.21.6";
+        //TODO remove ~ 1.21.6
+    }
+
+    public static String getResourceTriviaPackVersion() {
+        //? if <= 1.21.4 {
+        /*return "";
+         *///?} else {
+        return "_1.21.5";
+        //?}
+    }
+
+    public static String getResourceTaskPackVersion() {
+        //? if <= 1.21.4 {
+        /*return "";
+         *///?} else {
+        return "_1.21.5";
+        //?}
     }
 }

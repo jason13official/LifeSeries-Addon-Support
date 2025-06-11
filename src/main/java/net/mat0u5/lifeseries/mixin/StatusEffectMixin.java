@@ -19,10 +19,10 @@ import static net.mat0u5.lifeseries.Main.blacklist;
 public class StatusEffectMixin {
     @Inject(method = "applyInstantEffect", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
-    //?} else {
-    /*public void applyInstantEffect(ServerWorld world, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
-    *///?}
+    /*public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
+    *///?} else {
+    public void applyInstantEffect(ServerWorld world, Entity effectEntity, Entity attacker, LivingEntity target, int amplifier, double proximity, CallbackInfo ci) {
+    //?}
         if (!Main.isLogicalSide()) return;
         StatusEffect effect = (StatusEffect) (Object) this;
         if (target instanceof ServerPlayerEntity) {
@@ -33,10 +33,10 @@ public class StatusEffectMixin {
     }
     @Inject(method = "applyUpdateEffect", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
-    //?} else {
-    /*public void applyInstantEffect(ServerWorld world, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
-    *///?}
+    /*public void applyInstantEffect(LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
+    *///?} else {
+    public void applyInstantEffect(ServerWorld world, LivingEntity entity, int amplifier, CallbackInfoReturnable<Boolean> cir) {
+    //?}
         if (!Main.isLogicalSide()) return;
         StatusEffect effect = (StatusEffect) (Object) this;
         if (entity instanceof ServerPlayerEntity) {

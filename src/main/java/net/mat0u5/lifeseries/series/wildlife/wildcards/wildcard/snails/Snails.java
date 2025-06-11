@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -80,7 +81,7 @@ public class Snails extends Wildcard {
 
     public static void spawnSnailFor(ServerPlayerEntity player, BlockPos pos) {
         if (player == null || pos == null) return;
-        Snail snail = MobRegistry.SNAIL.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND);
+        Snail snail = MobRegistry.SNAIL.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (snail != null) {
             snail.setBoundPlayer(player);
             snail.updateSkin(player);

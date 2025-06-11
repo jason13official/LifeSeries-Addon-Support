@@ -124,7 +124,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 if (element instanceof ItemDisplayElement itemDisplayElement) {
                     ItemStack currentItem = itemDisplayElement.getItem();
                     //? if <= 1.21 {
-                    CustomModelDataComponent modelDataComponent = currentItem.get(DataComponentTypes.CUSTOM_MODEL_DATA);
+                    /*CustomModelDataComponent modelDataComponent = currentItem.get(DataComponentTypes.CUSTOM_MODEL_DATA);
                     if (modelDataComponent == null) continue;
                     int oldValue = modelDataComponent.value();
                     if (oldValue > 10000) {
@@ -133,8 +133,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     int newValue = 9999 + oldValue + snailSkin * 10;
                     CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
                     currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
-                    //?} else {
-                    /*Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
+                    *///?} else {
+                    Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
                     if (customModelComponent == null) continue;
                     int modelIndex = 0;
                     int oldCMD = 0;
@@ -169,15 +169,15 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                         oldCMD = (oldCMD - 9999) % 10;
                     }
                     int newCMD = 9999 + oldCMD + snailSkin * 10;
-                    *///?}
+                    //?}
 
                     //? if = 1.21.2 {
                     /*Identifier finalIdentifier = Identifier.of("snailtextures", "snail/body"+modelIndex+"_"+newCMD);
                     currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
                     *///?} else if >= 1.21.4 {
-                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
+                    Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
                     currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
-                    *///?}
+                    //?}
 
                     ItemStack newItem = Items.GOLDEN_HORSE_ARMOR.getDefaultStack();
                     newItem.applyComponentsFrom(currentItem.getComponents());
@@ -262,7 +262,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         //? if <= 1.21 {
-        return MobEntity.createMobAttributes()
+        /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, FLYING_SPEED)
@@ -271,8 +271,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20);
-        //?} else {
-        /*return MobEntity.createMobAttributes()
+        *///?} else {
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
                 .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.FLYING_SPEED, FLYING_SPEED)
@@ -281,7 +281,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                 .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.ATTACK_DAMAGE, 20);
-        *///?}
+        //?}
     }
 
     @Override
@@ -415,10 +415,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void addTicket(ServerWorld world) {
         //? if <= 1.21.4 {
-        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
-        //?} else {
-        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
-        *///?}
+        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
+        *///?} else {
+        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
+        //?}
     }
 
     public void despawn() {
@@ -428,21 +428,21 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
         killPathFinders();
         //? if <= 1.21 {
-        this.kill();
-        //?} else {
-        /*this.kill((ServerWorld) getWorld());
-        *///?}
+        /*this.kill();
+        *///?} else {
+        this.kill((ServerWorld) getWorld());
+        //?}
         this.discard();
     }
 
     public void killPathFinders() {
         //? if <= 1.21 {
-        if (groundPathFinder != null) groundPathFinder.kill();
+        /*if (groundPathFinder != null) groundPathFinder.kill();
         if (pathFinder != null) pathFinder.kill();
-        //?} else {
-        /*if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) groundPathFinder.getWorld());
+        *///?} else {
+        if (groundPathFinder != null) groundPathFinder.kill((ServerWorld) groundPathFinder.getWorld());
         if (pathFinder != null) pathFinder.kill((ServerWorld) pathFinder.getWorld());
-        *///?}
+        //?}
         if (groundPathFinder != null) groundPathFinder.discard();
         if (pathFinder != null) pathFinder.discard();
     }
@@ -461,34 +461,37 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
 
+        ServerWorld world = PlayerUtils.getServerWorld(player);
+
         //? if <=1.21 {
-        DamageSource damageSource = new DamageSource( player.getServerWorld().getRegistryManager()
+        /*DamageSource damageSource = new DamageSource(world.getRegistryManager()
                 .get(RegistryKeys.DAMAGE_TYPE).entryOf(SNAIL_DAMAGE));
         player.setAttacker(this);
         player.damage(damageSource, 1000);
-        //?} else {
-        /*DamageSource damageSource = new DamageSource( player.getServerWorld().getRegistryManager()
+        *///?} else {
+        DamageSource damageSource = new DamageSource(world.getRegistryManager()
                 .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(SNAIL_DAMAGE));
         player.setAttacker(this);
-        player.damage(player.getServerWorld(), damageSource, 1000);
-        *///?}
+        player.damage(world, damageSource, 1000);
+        //?}
     }
 
     public void damageFromDrowning() {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
         if (player.isDead()) return;
+        ServerWorld world = PlayerUtils.getServerWorld(player);
         //? if <=1.21 {
-        DamageSource damageSource = new DamageSource( player.getServerWorld().getRegistryManager()
+        /*DamageSource damageSource = new DamageSource(world.getRegistryManager()
                 .get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.DROWN));
         player.setAttacker(this);
         player.damage(damageSource, 2);
-        //?} else {
-        /*DamageSource damageSource = new DamageSource( player.getServerWorld().getRegistryManager()
+        *///?} else {
+        DamageSource damageSource = new DamageSource(world.getRegistryManager()
                 .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(DamageTypes.DROWN));
         player.setAttacker(this);
-        player.damage(player.getServerWorld(), damageSource, 2);
-        *///?}
+        player.damage(world, damageSource, 2);
+        //?}
         if (player.isDead()) {
             despawn();
         }
@@ -574,16 +577,16 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
         ServerWorld world = (ServerWorld) this.getWorld();
         //? if <= 1.21 {
-        if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
+        /*if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
         if (groundPathFinder != null) this.groundPathFinder.teleport(world, this.getX(), pos.getY() + 1.0, this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch());
-        //?} else {
-        /*if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
+        *///?} else {
+        if (pathFinder != null) this.pathFinder.teleport(world, this.getX(), this.getY(), this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
         BlockPos pos = getGroundBlock();
         if (pos == null) return;
         if (groundPathFinder != null) this.groundPathFinder.teleport(world, this.getX(), pos.getY()+1, this.getZ(), EnumSet.noneOf(PositionFlag.class), getYaw(), getPitch(), false);
-        *///?}
+        //?}
     }
 
     @Nullable
@@ -613,12 +616,13 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public void fakeTeleportNearPlayer(double minDistanceFromPlayer) {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         if (getWorld() instanceof ServerWorld world) {
             BlockPos tpTo = getBlockPosNearTarget(player, minDistanceFromPlayer);
             world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
-            player.getServerWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             AnimationUtils.spawnTeleportParticles(world, getPos());
-            AnimationUtils.spawnTeleportParticles(player.getServerWorld(), tpTo.toCenterPos());
+            AnimationUtils.spawnTeleportParticles(playerWorld, tpTo.toCenterPos());
             despawn();
             Snails.spawnSnailFor(player, tpTo);
         }
@@ -638,7 +642,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
 
-            BlockPos validPos = findNearestAirBlock(pos, target.getServerWorld());
+            BlockPos validPos = findNearestAirBlock(pos, PlayerUtils.getServerWorld(target));
             if (validPos != null) {
                 return validPos;
             }
@@ -763,12 +767,12 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     flyingSpeed *= 0.6;
                 }
                 //? if <= 1.21 {
-                Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(movementSpeed);
+                /*Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(movementSpeed);
                 Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED)).setBaseValue(flyingSpeed);
-                //?} else {
-                /*Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
+                *///?} else {
+                Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)).setBaseValue(movementSpeed);
                 Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.FLYING_SPEED)).setBaseValue(flyingSpeed);
-                *///?}
+                //?}
             }
         }
     }
@@ -815,14 +819,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     @Override
     //? if <= 1.21.4 {
-    protected boolean shouldSwimInFluids() {
+    /*protected boolean shouldSwimInFluids() {
         return false;
     }
-    //?} else {
-    /*public boolean shouldSwimInFluids() {
+    *///?} else {
+    public boolean shouldSwimInFluids() {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     public boolean isTouchingWater() {

@@ -53,9 +53,10 @@ public class Necromancy extends Superpower {
             return;
         }
 
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_EMERGE, SoundCategory.MASTER, 1, 1);
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_EMERGE, SoundCategory.MASTER, 1, 1);
 
-        List<ServerPlayerEntity> affectedPlayers = player.getServerWorld().getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
+        List<ServerPlayerEntity> affectedPlayers = playerWorld.getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), playerEntity -> playerEntity.distanceTo(player) <= 10);
         StatusEffectInstance blindness = new StatusEffectInstance(StatusEffects.BLINDNESS, 115, 0);
         for (ServerPlayerEntity affectedPlayer : affectedPlayers) {
             affectedPlayer.addStatusEffect(blindness);
@@ -64,14 +65,15 @@ public class Necromancy extends Superpower {
         TaskScheduler.scheduleTask(100, () -> {
             ServerPlayerEntity updatedPlayer = getPlayer();
             if (updatedPlayer != null) {
+                ServerWorld updatedPlayerWorld = PlayerUtils.getServerWorld(updatedPlayer);
                 List<ServerPlayerEntity> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayerEntity deadPlayer : deadPlayers) {
-                    BlockPos tpTo = getCloseBlockPos(updatedPlayer.getServerWorld(), updatedPlayer.getBlockPos(), 3);
+                    BlockPos tpTo = getCloseBlockPos(updatedPlayerWorld, updatedPlayer.getBlockPos(), 3);
                     //? if <= 1.21 {
-                    deadPlayer.teleport(updatedPlayer.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
-                    //?} else {
-                    /*deadPlayer.teleport(player.getServerWorld(), tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);
-                    *///?}
+                    /*deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
+                    *///?} else {
+                    deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch(), true);
+                    //?}
                     deadPlayer.changeGameMode(GameMode.SURVIVAL);
                     if (seriesConfig instanceof WildLifeConfig config) {
                         if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config)) {
@@ -79,7 +81,7 @@ public class Necromancy extends Superpower {
                         }
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
-                    WorldUitls.summonHarmlessLightning(deadPlayer.getServerWorld(), deadPlayer.getPos());
+                    WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(deadPlayer), deadPlayer.getPos());
                     ressurectedPlayers.add(deadPlayer.getUuid());
                     perPlayerRessurections.add(deadPlayer.getUuid());
                 }
@@ -94,7 +96,7 @@ public class Necromancy extends Superpower {
         for (ServerPlayerEntity player : getDeadPlayers()) {
             if (player.isSpectator()) continue;
             if (perPlayerRessurections.contains(player.getUuid())) {
-                WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
+                WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
                 player.changeGameMode(GameMode.SPECTATOR);
             }
         }

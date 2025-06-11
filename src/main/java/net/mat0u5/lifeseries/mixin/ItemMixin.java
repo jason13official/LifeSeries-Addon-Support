@@ -33,10 +33,10 @@ public abstract class ItemMixin {
             if ((WildcardManager.isActiveWildcard(Wildcards.HUNGER) && isLogicalSide) || (clientActiveWildcards.contains(Wildcards.HUNGER) && !isLogicalSide)) {
                 Item item = (Item) (Object) this;
                 //? if <= 1.21 {
-                ComponentMapImpl components = new ComponentMapImpl(normalComponents());
-                 //?} else {
-                /*MergedComponentMap components = new MergedComponentMap(normalComponents());
-                *///?}
+                /*ComponentMapImpl components = new ComponentMapImpl(normalComponents());
+                 *///?} else {
+                MergedComponentMap components = new MergedComponentMap(normalComponents());
+                //?}
                 Hunger.defaultFoodComponents(item, components);
                 cir.setReturnValue(components);
             }

@@ -292,7 +292,7 @@ public abstract class Series extends Session {
         dropItemsOnLastDeath(player);
         if (livesBefore > 0) {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
-            WorldUitls.summonHarmlessLightning(player.getServerWorld(), player.getPos());
+            WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
             showDeathTitle(player);
         }
         SessionTranscript.onPlayerLostAllLives(player);
@@ -300,13 +300,13 @@ public abstract class Series extends Session {
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
         boolean doDrop = seriesConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seriesConfig);
-        boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+        boolean keepInventory = player.getServer().getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
         if (doDrop && keepInventory) {
             for (ItemStack item : PlayerUtils.getPlayerInventory(player)) {
                 //? if <= 1.21 {
-                player.dropStack(item);
-                //?} else
-                /*player.dropStack(player.getServerWorld(), item);*/
+                /*player.dropStack(item);
+                *///?} else
+                player.dropStack(PlayerUtils.getServerWorld(player), item);
             }
             player.getInventory().clear();
         }
@@ -409,10 +409,10 @@ public abstract class Series extends Session {
         respawnPositions.remove(player.getUuid());
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             //? if <= 1.21 {
-            player.teleport(player.getServerWorld(), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
-            //?} else {
-            /*player.teleport(player.getServerWorld(), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
-            *///?}
+            /*player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
+            *///?} else {
+            player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
+            //?}
             break;
         }
     }
@@ -441,7 +441,7 @@ public abstract class Series extends Session {
     }
 
     public void modifyEntityDrops(LivingEntity entity, DamageSource damageSource) {
-        if (!entity.getEntityWorld().isClient() && (damageSource.getAttacker() instanceof ServerPlayerEntity)) {
+        if (!entity.getWorld().isClient() && (damageSource.getAttacker() instanceof ServerPlayerEntity)) {
             spawnEggChance(entity);
         }
     }
@@ -470,9 +470,9 @@ public abstract class Series extends Session {
         // Drop the spawn egg with a 5% chance
         if (Math.random() <= chance) {
             //? if <=1.21 {
-            entity.dropStack(spawnEggItem);
-            //?} else
-            /*entity.dropStack((ServerWorld) entity.getWorld(), spawnEggItem);*/
+            /*entity.dropStack(spawnEggItem);
+            *///?} else
+            entity.dropStack((ServerWorld) entity.getWorld(), spawnEggItem);
         }
     }
 

@@ -159,7 +159,7 @@ public class TaskManager {
         Task task = getRandomTask(type);
         ItemStack book = getTaskBook(player, task);
         if (!player.giveItemStack(book)) {
-            ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), book, player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), book, player);
         }
     }
 

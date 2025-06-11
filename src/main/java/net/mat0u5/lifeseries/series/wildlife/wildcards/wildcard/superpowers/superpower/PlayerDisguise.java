@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -54,8 +55,9 @@ public class PlayerDisguise extends ToggleableSuperpower {
             return;
         }
 
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
-        player.getServerWorld().spawnParticles(
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
+        playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
                 player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
                 2, 0, 0, 0, 0
@@ -70,8 +72,9 @@ public class PlayerDisguise extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
-        player.getServerWorld().spawnParticles(
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
+        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
+        playerWorld.spawnParticles(
                 ParticleTypes.EXPLOSION,
                 player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
                 2, 0, 0, 0, 0

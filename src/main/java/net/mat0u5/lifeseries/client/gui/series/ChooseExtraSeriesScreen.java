@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.gui.series;
 import net.mat0u5.lifeseries.client.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
@@ -77,7 +78,7 @@ public class ChooseExtraSeriesScreen extends DefaultSmallScreen {
         // Background + images
         //? if <= 1.21 {
 
-        if (region != 0) {
+        /*if (region != 0) {
             if (region == 1) context.drawTexture(TEXTURE_SELECTED,centerX-25, startY + 35, 0, 0, 50, 50);
         }
 
@@ -87,7 +88,7 @@ public class ChooseExtraSeriesScreen extends DefaultSmallScreen {
         context.drawTexture(TEXTURE_SIMPLELIFE, (centerX-25) * 5, (startY + 35) * 5, 0, 0, 256, 256);
 
         context.getMatrices().pop();
-        //?} else {
+        *///?} else if <= 1.21.5 {
         /*if (region != 0) {
             if (region == 1) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-25, startY + 35, 0, 0, 50, 50, 64, 64);
         }
@@ -98,7 +99,18 @@ public class ChooseExtraSeriesScreen extends DefaultSmallScreen {
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SIMPLELIFE, (centerX-25) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
 
         context.getMatrices().pop();
-        *///?}
+        *///?} else {
+        if (region != 0) {
+            if (region == 1) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-25, startY + 35, 0, 0, 50, 50, 64, 64);
+        }
+
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(0.2f, 0.2f);
+
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SIMPLELIFE, (centerX-25) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
+
+        context.getMatrices().popMatrix();
+        //?}
 
         String prompt = "Select the series you want to play.";
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);

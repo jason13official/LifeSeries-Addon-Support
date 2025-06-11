@@ -3,10 +3,12 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
@@ -39,14 +41,15 @@ public class Invisibility extends ToggleableSuperpower {
         super.activate();
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
 
-        player.getServerWorld().spawnParticles(
+        playerWorld.spawnParticles(
                 ParticleTypes.SMOKE,
                 player.getX(), player.getY()+0.9, player.getZ(),
                 40, 0.3, 0.5, 0.3, 0
         );
 
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.MASTER, 1, 1);
+        playerWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.MASTER, 1, 1);
         NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), -1);
     }
 
@@ -55,7 +58,7 @@ public class Invisibility extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 1, 1);
+        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 1, 1);
         NetworkHandlerServer.sendPlayerInvisible(player.getUuid(), 0);
         player.removeStatusEffect(StatusEffects.INVISIBILITY);
     }

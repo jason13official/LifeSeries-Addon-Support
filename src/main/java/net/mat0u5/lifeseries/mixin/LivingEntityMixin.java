@@ -59,17 +59,17 @@ public abstract class LivingEntityMixin implements DummyInterface {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-     //?} else
-    /*public void damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {*/
+    /*public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+     *///?} else
+    public void damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         //? if >= 1.21.2 {
-        /*if (entity instanceof CreakingEntity creaking) {
+        if (entity instanceof CreakingEntity creaking) {
             creaking.hurtTime = 20;
         }
-        *///?}
+        //?}
 
         ItemStack weapon = source.getWeaponStack();
         if (amount <= WindCharge.MAX_MACE_DAMAGE) return;
@@ -78,9 +78,9 @@ public abstract class LivingEntityMixin implements DummyInterface {
         if (!weapon.isOf(Items.MACE)) return;
         if (!ItemStackUtils.hasCustomComponentEntry(weapon, "WindChargeSuperpower")) return;
         //? if <= 1.21 {
-        cir.setReturnValue(entity.damage(source, WindCharge.MAX_MACE_DAMAGE));
-         //?} else
-        /*cir.setReturnValue(entity.damage(world, source, WindCharge.MAX_MACE_DAMAGE));*/
+        /*cir.setReturnValue(entity.damage(source, WindCharge.MAX_MACE_DAMAGE));
+         *///?} else
+        cir.setReturnValue(entity.damage(world, source, WindCharge.MAX_MACE_DAMAGE));
     }
 
     //? if = 1.21.2 {
@@ -142,16 +142,16 @@ public abstract class LivingEntityMixin implements DummyInterface {
 
 
     //? if <= 1.21 {
-    @Inject(method = "damage", at = @At("HEAD"))
+    /*@Inject(method = "damage", at = @At("HEAD"))
     private void captureDamageSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.lastDamageSource = source;
     }
-    //?} else {
-    /*@Inject(method = "damage", at = @At("HEAD"))
+    *///?} else {
+    @Inject(method = "damage", at = @At("HEAD"))
     private void captureDamageSource(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.lastDamageSource = source;
     }
-    *///?}
+    //?}
 
     @ModifyArg(
             method = "damage",
@@ -181,10 +181,10 @@ public abstract class LivingEntityMixin implements DummyInterface {
 
     @ModifyArg(
             //? if <= 1.21 {
-            method = "travel",
-            //?} else {
-            /*method = "travelMidAir",
-            *///?}
+            /*method = "travel",
+            *///?} else {
+            method = "travelMidAir",
+            //?}
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyMovementInput(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"),
             index = 1
     )

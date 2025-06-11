@@ -21,6 +21,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
@@ -238,18 +239,18 @@ public class PlayerUtils {
 
     public static ItemStack getEquipmentSlot(PlayerEntity player, int slot) {
         //? if <= 1.21.4 {
-        return player.getInventory().getArmorStack(slot);
-        //?} else {
-        /*return player.getInventory().getStack(slot + 36);
-        *///?}
+        /*return player.getInventory().getArmorStack(slot);
+        *///?} else {
+        return player.getInventory().getStack(slot + 36);
+        //?}
     }
 
     //? if <= 1.21.4 {
-    public static Iterable<ItemStack> getArmorItems(ServerPlayerEntity player) {
+    /*public static Iterable<ItemStack> getArmorItems(ServerPlayerEntity player) {
         return player.getArmorItems();
     }
-    //?} else {
-    /*public static List<ItemStack> getArmorItems(ServerPlayerEntity player) {
+    *///?} else {
+    public static List<ItemStack> getArmorItems(ServerPlayerEntity player) {
         List<ItemStack> result = new ArrayList<>();
         result.add(getEquipmentSlot(player, 0));
         result.add(getEquipmentSlot(player, 1));
@@ -257,7 +258,7 @@ public class PlayerUtils {
         result.add(getEquipmentSlot(player, 3));
         return result;
     }
-    *///?}
+    //?}
 
     public static void updatePlayerLists() {
         if (server == null) return;
@@ -288,5 +289,13 @@ public class PlayerUtils {
                 receivingPlayer.networkHandler.sendPacket(hidePacket);
             }
         }
+    }
+
+    public static ServerWorld getServerWorld(ServerPlayerEntity player) {
+        //? if <= 1.21.5 {
+        /*return player.getServerWorld();
+        *///?} else {
+        return player.getWorld();
+        //?}
     }
 }

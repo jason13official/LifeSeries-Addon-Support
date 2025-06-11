@@ -59,31 +59,33 @@ public class Teleportation extends Superpower {
     public void activate() {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         boolean teleported = false;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 100);
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
+                    ServerWorld lookingAtPlayerWorld = PlayerUtils.getServerWorld(lookingAtPlayer);
 
-                    spawnTeleportParticles(player.getServerWorld(), player.getPos());
-                    spawnTeleportParticles(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getPos());
+                    spawnTeleportParticles(playerWorld, player.getPos());
+                    spawnTeleportParticles(lookingAtPlayerWorld, lookingAtPlayer.getPos());
 
                     Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-                    ServerWorld storedWorld = player.getServerWorld();
+                    ServerWorld storedWorld = playerWorld;
                     Vec3d storedPos = player.getPos();
                     float storedYaw = player.getYaw();
                     float storedPitch = player.getPitch();
 
                     //? if <= 1.21 {
-                    player.teleport(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
+                    /*player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
                     lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch);
-                    //?} else {
-                    /*player.teleport(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
+                    *///?} else {
+                    player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
                     lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch, true);
-                    *///?}
+                    //?}
 
-                    playTeleportSound(player.getServerWorld(), player.getPos());
-                    playTeleportSound(lookingAtPlayer.getServerWorld(), lookingAtPlayer.getPos());
+                    playTeleportSound(playerWorld, player.getPos());
+                    playTeleportSound(lookingAtPlayerWorld, lookingAtPlayer.getPos());
 
                     StatusEffectInstance resistance = new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 3);
                     lookingAtPlayer.addStatusEffect(resistance);
@@ -96,19 +98,19 @@ public class Teleportation extends Superpower {
         if (!teleported) {
             Vec3d lookingAtPos = PlayerUtils.getPosLookingAt(player, 100);
             if (lookingAtPos != null) {
-                playTeleportSound(player.getServerWorld(), player.getPos());
-                spawnTeleportParticles(player.getServerWorld(), player.getPos());
+                playTeleportSound(playerWorld, player.getPos());
+                spawnTeleportParticles(playerWorld, player.getPos());
 
                 Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
 
                 //? if <= 1.21 {
-                player.teleport(player.getServerWorld(), lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch());
-                //?} else {
-                /*player.teleport(player.getServerWorld(), lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch(), true);
-                *///?}
+                /*player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch());
+                *///?} else {
+                player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch(), true);
+                //?}
 
-                playTeleportSound(player.getServerWorld(), player.getPos());
-                spawnTeleportParticles(player.getServerWorld(), player.getPos());
+                playTeleportSound(playerWorld, player.getPos());
+                spawnTeleportParticles(playerWorld, player.getPos());
 
                 teleported = true;
             }

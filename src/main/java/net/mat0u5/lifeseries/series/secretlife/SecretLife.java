@@ -160,21 +160,21 @@ public class SecretLife extends Series {
         nbtCompCamel.putString("id", "camel");
 
         //? if <= 1.21.4 {
-        NbtCompound saddleItemComp = new NbtCompound();
+        /*NbtCompound saddleItemComp = new NbtCompound();
         saddleItemComp.putInt("Count", 1);
         saddleItemComp.putString("id", "saddle");
         nbtCompSkeleton.put("SaddleItem", saddleItemComp);
         nbtCompZombie.put("SaddleItem", saddleItemComp);
         nbtCompCamel.put("SaddleItem", saddleItemComp);
-        //?} else {
-        /*NbtCompound equipmentItemComp = new NbtCompound();
+        *///?} else {
+        NbtCompound equipmentItemComp = new NbtCompound();
         NbtCompound saddleItemComp = new NbtCompound();
         saddleItemComp.putString("id", "saddle");
         equipmentItemComp.put("saddle", saddleItemComp);
         nbtCompSkeleton.put("equipment", equipmentItemComp);
         nbtCompZombie.put("equipment", equipmentItemComp);
         nbtCompCamel.put("equipment", equipmentItemComp);
-        *///?}
+        //?}
 
 
         NbtComponent nbtSkeleton = NbtComponent.of(nbtCompSkeleton);
@@ -314,7 +314,7 @@ public class SecretLife extends Series {
         if (entity instanceof ServerPlayerEntity player && seriesConfig instanceof SecretLifeConfig config) {
             boolean dropBook = config.PLAYERS_DROP_TASK_ON_DEATH.get(config);
             if (dropBook) return;
-            boolean keepInventory = player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
+            boolean keepInventory = player.getServer().getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
             if (keepInventory) return;
             giveBookOnRespawn.put(player.getUuid(), TaskManager.getPlayersTaskBook(player));
             TaskManager.removePlayersTaskBook(player);

@@ -15,8 +15,8 @@ public class DynamicDatapackManager {
     private static final String CONFIG_TABLE_TRIVIA = "./config/lifeseries/wildlife/trivia_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
     private static final String CONFIG_TABLE_TASK = "./config/lifeseries/secretlife/task_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
 
-    private static final String LOCAL_TABLE_TRIVIA = "/assets/dynamicpack/loottables/trivia_reward_loottable"+getTriviaPackVersion()+".json";
-    private static final String LOCAL_TABLE_TASK = "/assets/dynamicpack/loottables/task_reward_loottable"+getTaskPackVersion()+".json";
+    private static final String LOCAL_TABLE_TRIVIA = "/assets/dynamicpack/loottables/trivia_reward_loottable"+DatapackManager.getResourceTriviaPackVersion()+".json";
+    private static final String LOCAL_TABLE_TASK = "/assets/dynamicpack/loottables/task_reward_loottable"+DatapackManager.getResourceTaskPackVersion()+".json";
     private static final String LOCAL_MCMETA = "/assets/dynamicpack/pack.mcmeta";
 
     private static final String DATAPACK_MAIN = "Life Series Dynamic Datapack";
@@ -67,21 +67,5 @@ public class DynamicDatapackManager {
 
     public static void enableDatapack() {
         OtherUtils.executeCommand("datapack enable \"file/Life Series Dynamic Datapack\"");
-    }
-
-    public static String getTriviaPackVersion() {
-        //? if <= 1.21.4 {
-        return "";
-        //?} else {
-        /*return "_1.21.5";
-         *///?}
-    }
-
-    public static String getTaskPackVersion() {
-        //? if <= 1.21.4 {
-        return "";
-        //?} else {
-        /*return "_1.21.5";
-        *///?}
     }
 }

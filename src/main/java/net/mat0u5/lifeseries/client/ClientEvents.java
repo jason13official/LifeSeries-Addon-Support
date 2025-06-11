@@ -105,14 +105,14 @@ public class ClientEvents {
     public static void sendPackets(ClientPlayerEntity player) {
         if (MainClient.clientCurrentSeries == SeriesList.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
-            if (player.input.jumping) {
+            /*if (player.input.jumping) {
                 NetworkHandlerClient.sendHoldingJumpPacket();
             }
-            //?} else {
-            /*if (player.input.playerInput.jump()) {
+            *///?} else {
+            if (player.input.playerInput.jump()) {
                 NetworkHandlerClient.sendHoldingJumpPacket();
             }
-            *///?}
+            //?}
         }
     }
 
@@ -141,10 +141,10 @@ public class ClientEvents {
 
         boolean shouldJump = false;
         //? if <= 1.21 {
-        boolean holdingJump = player.input.jumping;
-        //?} else {
-        /*boolean holdingJump = player.input.playerInput.jump();
-        *///?}
+        /*boolean holdingJump = player.input.jumping;
+        *///?} else {
+        boolean holdingJump = player.input.playerInput.jump();
+        //?}
 
         if (!lastJumping && holdingJump) {
             shouldJump = true;

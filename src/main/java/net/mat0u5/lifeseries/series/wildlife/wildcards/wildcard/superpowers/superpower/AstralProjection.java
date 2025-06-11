@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.OtherUtils;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.mat0u5.lifeseries.utils.TextUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerInventory;
@@ -80,12 +81,12 @@ public class AstralProjection extends ToggleableSuperpower {
         startedPos = player.getPos();
         startedLooking[0] = player.getYaw();
         startedLooking[1] = player.getPitch();
-        startedWorld = player.getServerWorld();
+        startedWorld = PlayerUtils.getServerWorld(player);
         startedGameMode = player.interactionManager.getGameMode();
         player.changeGameMode(GameMode.SPECTATOR);
         PlayerInventory inv = player.getInventory();
 
-        FakePlayer.createFake(fakePlayerName, player.server, startedPos, startedLooking[0], startedLooking[1], player.server.getOverworld().getRegistryKey(),
+        FakePlayer.createFake(fakePlayerName, player.getServer(), startedPos, startedLooking[0], startedLooking[1], player.getServer().getOverworld().getRegistryKey(),
                 startedGameMode, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
@@ -107,12 +108,12 @@ public class AstralProjection extends ToggleableSuperpower {
 
         if (startedWorld != null && toBackPos != null) {
             //? if <= 1.21 {
-            player.teleport(startedWorld, toBackPos.getX(), toBackPos.getY(), toBackPos.getZ(),
-                    EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1]);
-             //?} else {
             /*player.teleport(startedWorld, toBackPos.getX(), toBackPos.getY(), toBackPos.getZ(),
+                    EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1]);
+             *///?} else {
+            player.teleport(startedWorld, toBackPos.getX(), toBackPos.getY(), toBackPos.getZ(),
                     EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1], false);
-            *///?}
+            //?}
         }
         player.changeGameMode(startedGameMode);
         player.playSoundToPlayer(SoundEvents.ENTITY_EVOKER_DEATH, SoundCategory.MASTER, 0.3f, 1);
@@ -120,17 +121,17 @@ public class AstralProjection extends ToggleableSuperpower {
 
 
     //? if <= 1.21 {
-    public void onDamageClone(DamageSource source, float amount) {
-     //?} else {
-    /*public void onDamageClone(ServerWorld world, DamageSource source, float amount) {
-    *///?}
+    /*public void onDamageClone(DamageSource source, float amount) {
+     *///?} else {
+    public void onDamageClone(ServerWorld world, DamageSource source, float amount) {
+    //?}
         deactivate();
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         //? if <= 1.21 {
-        player.damage(source, amount);
-         //?} else {
-        /*player.damage(world, source, amount);
-        *///?}
+        /*player.damage(source, amount);
+         *///?} else {
+        player.damage(world, source, amount);
+        //?}
     }
 }

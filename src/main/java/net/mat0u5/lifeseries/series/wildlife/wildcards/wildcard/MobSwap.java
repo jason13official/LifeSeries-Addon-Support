@@ -258,10 +258,10 @@ public class MobSwap extends Wildcard {
             if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(false, world.getServer());
             for (Entity entity : toKill) {
                 //? if <=1.21 {
-                entity.kill();
-                 //?} else {
-                /*entity.kill((ServerWorld) entity.getWorld());
-                *///?}
+                /*entity.kill();
+                 *///?} else {
+                entity.kill((ServerWorld) entity.getWorld());
+                //?}
             }
             if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(true, world.getServer());
         }
@@ -350,10 +350,10 @@ public class MobSwap extends Wildcard {
             if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(false, world.getServer());
             for (Entity entity : toKill) {
                 //? if <=1.21 {
-                entity.kill();
-                 //?} else {
-                /*entity.kill((ServerWorld) entity.getWorld());
-                *///?}
+                /*entity.kill();
+                 *///?} else {
+                entity.kill((ServerWorld) entity.getWorld());
+                //?}
             }
             if (mobLoot) world.getGameRules().get(GameRules.DO_MOB_LOOT).set(true, world.getServer());
         }
@@ -380,10 +380,10 @@ public class MobSwap extends Wildcard {
             cir.setReturnValue(false);
         }
         //? if <= 1.21.4 {
-        cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.shouldTick(pos));
-        //?} else {
-        /*ChunkPos chunkPos = new ChunkPos(pos);
+        /*cir.setReturnValue(Objects.equals(new ChunkPos(pos), chunk.getPos()) || world.shouldTick(pos));
+        *///?} else {
+        ChunkPos chunkPos = new ChunkPos(pos);
         cir.setReturnValue(Objects.equals(chunkPos, chunk.getPos()) || world.canSpawnEntitiesAt(chunkPos));
-        *///?}
+        //?}
     }
 }

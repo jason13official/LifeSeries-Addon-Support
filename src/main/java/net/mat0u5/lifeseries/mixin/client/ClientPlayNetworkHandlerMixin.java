@@ -31,19 +31,19 @@ public class ClientPlayNetworkHandlerMixin {
         if (MinecraftClient.getInstance().player == null) return;
         if (Trivia.isDoingTrivia()) {
             //? if <= 1.21 {
-            MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
-            //?} else {
-            /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
-             *///?}
+            /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
+            *///?} else {
+            MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
+             //?}
             ci.cancel();
             return;
         }
         if (MainClient.mutedForTicks > 0) {
             //? if <= 1.21 {
-            MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."));
-             //?} else {
-            /*MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."), false);
-            *///?}
+            /*MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."));
+             *///?} else {
+            MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."), false);
+            //?}
             ci.cancel();
             return;
         }
@@ -58,10 +58,10 @@ public class ClientPlayNetworkHandlerMixin {
         for (String s : notAllowedCommand) {
             if (command.startsWith(s+" ")) {
                 //? if <= 1.21 {
-                MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
-                //?} else {
-                /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
-                 *///?}
+                /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
+                *///?} else {
+                MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
+                 //?}
                 ci.cancel();
                 return;
             }

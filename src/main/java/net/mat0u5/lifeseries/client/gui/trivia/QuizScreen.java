@@ -10,7 +10,10 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
@@ -220,23 +223,28 @@ public class QuizScreen extends DefaultScreen {
         entity.setPitch(0);
         Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f * p, 0.0F);
         float q = size / p;
-        drawEntity(context, g, h, q, vector3f, quaternionf, quaternionf2, entity);
+        //? if <= 1.21.5 {
+        /*drawEntity(context, g, h, q, vector3f, quaternionf, quaternionf2, entity);
+        *///?} else {
+        drawEntity(context, x1, y1, x2, y2, g, vector3f, quaternionf, quaternionf2, entity);
+        //?}
         entity.setYaw(l);
         entity.setPitch(m);
         context.disableScissor();
     }
 
-    public static void drawEntity(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, Entity entity) {
+    //? if <= 1.21.5 {
+    /*public static void drawEntity(DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, Entity entity) {
         context.getMatrices().push();
         context.getMatrices().translate(x, y, 50.0);
         context.getMatrices().scale(size, size, -size);
         context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
         context.getMatrices().multiply(quaternionf);
         //? if <= 1.21.4 {
-        DiffuseLighting.method_34742();
-        //?} else {
-        /*DiffuseLighting.enableGuiShaderLighting();
-        *///?}
+        /^DiffuseLighting.method_34742();
+         ^///?} else {
+        DiffuseLighting.enableGuiShaderLighting();
+        //?}
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         if (quaternionf2 != null) {
             entityRenderDispatcher.setRotation(quaternionf2.conjugate(new Quaternionf()).rotateY(3.1415927F));
@@ -244,17 +252,26 @@ public class QuizScreen extends DefaultScreen {
 
         entityRenderDispatcher.setRenderShadows(false);
         //? if <= 1.21 {
-        RenderSystem.runAsFancy(() -> {
+        /^RenderSystem.runAsFancy(() -> {
             entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, context.getMatrices(), context.getVertexConsumers(), 15728880);
         });
-         //?} else {
-        /*context.draw((vertexConsumers) -> {
+         ^///?} else {
+        context.draw((vertexConsumers) -> {
             entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 1.0F, context.getMatrices(), vertexConsumers, 15728880);
         });
-        *///?}
+        //?}
         context.draw();
         entityRenderDispatcher.setRenderShadows(true);
         context.getMatrices().pop();
         DiffuseLighting.enableGuiDepthLighting();
     }
+    *///?} else {
+    public static void drawEntity(DrawContext drawer, int x1, int y1, int x2, int y2, float scale, Vector3f translation, Quaternionf rotation, @Nullable Quaternionf overrideCameraAngle, Entity entity) {
+        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<? super Entity, ?> entityRenderer = entityRenderDispatcher.getRenderer(entity);
+        EntityRenderState entityRenderState = entityRenderer.getAndUpdateRenderState(entity, 1.0F);
+        entityRenderState.hitbox = null;
+        drawer.addEntity(entityRenderState, scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
+    }
+    //?}
 }

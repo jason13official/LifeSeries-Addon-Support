@@ -7,6 +7,9 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.storage.NbtWriteView;
+import net.minecraft.storage.WriteView;
+import net.minecraft.util.ErrorReporter;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,18 +48,24 @@ public final class SnailPushProjectilesGoal extends Goal {
     public void start() {
         boolean playSound = false;
         for (ProjectileEntity projectile : projectiles) {
-            NbtCompound empty = new NbtCompound();
+            //? if <= 1.21.5 {
+            /*NbtCompound empty = new NbtCompound();
             NbtCompound nbt = projectile.writeNbt(empty);
+            *///?} else {
+            NbtWriteView writeView = NbtWriteView.create(ErrorReporter.EMPTY);
+            projectile.writeData(writeView);//TODO check
+            NbtCompound nbt = writeView.getNbt();
+            //?}
             //? if <= 1.21.4 {
-            if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
+            /*if (nbt.contains("inGround") && nbt.getBoolean("inGround")) {
                 continue;
             }
-            //?} else {
-            /*Optional<Boolean> bool = nbt.getBoolean("inGround");
+            *///?} else {
+            Optional<Boolean> bool = nbt.getBoolean("inGround");
             if (nbt.contains("inGround") && bool.isPresent()) {
                 if (bool.get()) continue;
             }
-            *///?}
+            //?}
 
             Entity sender = projectile.getOwner();
             if (sender instanceof LivingEntity target) {

@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 public class MobRegistry {
 
     //? if <= 1.21 {
-    public static final EntityType<Snail> SNAIL = register(
+    /*public static final EntityType<Snail> SNAIL = register(
             Snail.ID,
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Snail::new)
@@ -51,9 +51,9 @@ public class MobRegistry {
         PolymerEntityUtils.registerType(type);
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
-     //?} else {
+     *///?} else {
     
-    /*public static final EntityType<Snail> SNAIL = register(
+    public static final EntityType<Snail> SNAIL = register(
             Snail.ID,
             FabricEntityType.Builder.createMob(Snail::new, SpawnGroup.MONSTER, x -> x
                             .defaultAttributes(Snail::createAttributes))
@@ -81,7 +81,7 @@ public class MobRegistry {
 
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
-    *///?}
+    //?}
 
     public static void registerMobs() {}
 }

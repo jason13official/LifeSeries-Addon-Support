@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.superpowers;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
@@ -25,9 +26,9 @@ public class EnchantmentHelperMixin {
         if (damageSource.getAttacker() == null) return;
         if (!SuperpowersWildcard.hasActivatedPower(victim, Superpowers.SUPER_PUNCH)) return;
         //? if <= 1.21 {
-        damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
-        //?} else {
-        /*damageSource.getAttacker().damage(victim.getServerWorld(), victim.getDamageSources().thorns(victim), 1F);
-        *///?}
+        /*damageSource.getAttacker().damage(victim.getDamageSources().thorns(victim), 1F);
+        *///?} else {
+        damageSource.getAttacker().damage(PlayerUtils.getServerWorld(victim), victim.getDamageSources().thorns(victim), 1F);
+        //?}
     }
 }

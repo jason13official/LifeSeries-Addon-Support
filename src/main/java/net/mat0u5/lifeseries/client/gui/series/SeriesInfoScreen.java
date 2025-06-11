@@ -47,24 +47,33 @@ public class SeriesInfoScreen extends DefaultScreen {
     public void render(DrawContext context, int mouseX, int mouseY) {
         // Background + images
         //? if <= 1.21 {
-        Identifier logo = getSeriesLogo();
+        /*Identifier logo = getSeriesLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
         }
-        //?} else {
-        /*Identifier logo = getSeriesLogo();
+        *///?} else {
+        Identifier logo = getSeriesLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
         }
-        *///?}
+        //?}
 
-        context.getMatrices().push();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(1.5f, 1.5f, 1.0f);
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(1.5f, 1.5f);
+        //?}
         String seriesName = SeriesList.getFormattedStringNameFromSeries(series);
         RenderUtils.drawTextCenterScaled(context, this.textRenderer, Text.of("§0"+seriesName), centerX, startY + 10, 1.5f, 1.5f);
-        context.getMatrices().pop();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().popMatrix();
+        //?}
 
         int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
@@ -111,13 +120,21 @@ public class SeriesInfoScreen extends DefaultScreen {
             }
         }
 
-
-        context.getMatrices().push();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(1.15f, 1.15f, 1.0f);
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(1.15f, 1.15f);
+        //?}
         Text howToStart = Text.of("§0§nHow to start a session");
         RenderUtils.drawTextLeftScaled(context, this.textRenderer, howToStart, startX + 20, currentY+3, 1.15f, 1.15f);
         currentY += textRenderer.fontHeight + 13;
-        context.getMatrices().pop();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().popMatrix();
+        //?}
 
         Text sessionTimer = Text.of("§8Run §3'/session timer set <time>'§8 to set the desired session time.");
         RenderUtils.drawTextLeft(context, this.textRenderer, sessionTimer, startX + 20, currentY);

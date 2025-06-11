@@ -55,6 +55,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.storage.NbtWriteView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -114,40 +117,57 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return holder;
     }
 
-    @Override
+    //? if <= 1.21.5 {
+    /*@Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
+    *///?} else {
+    @Override
+    public void writeCustomData(WriteView nbt) {
+        super.writeCustomData(nbt);
+    //?}
         try {
             if (boundPlayerUUID == null) return;
             //? if <= 1.21.4 {
-            nbt.putUuid("boundPlayer", boundPlayerUUID);
-            //?} else {
-            /*nbt.putNullable("boundPlayer", Uuids.INT_STREAM_CODEC, boundPlayerUUID);
-            *///?}
+            /*nbt.putUuid("boundPlayer", boundPlayerUUID);
+            *///?} else {
+            nbt.putNullable("boundPlayer", Uuids.INT_STREAM_CODEC, boundPlayerUUID);
+            //?}
         }catch(Exception e) {}
     }
 
-    @Override
+    //? if <= 1.21.5 {
+    /*@Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
+    *///?} else {
+    @Override
+    public void readCustomData(ReadView nbt) {
+        super.readCustomData(nbt);
+    //?}
         try {
             //? if <= 1.21.4 {
-            UUID newUUID = nbt.getUuid("boundPlayer");
+            /*UUID newUUID = nbt.getUuid("boundPlayer");
             if (newUUID != null) {
                 boundPlayerUUID = newUUID;
             }
-            //?} else {
+            *///?} else if <= 1.21.5 {
             /*UUID newUUID = nbt.get("boundPlayer", Uuids.INT_STREAM_CODEC).orElse(null);
             if (newUUID != null) {
                 boundPlayerUUID = newUUID;
             }
-            *///?}
+            *///?} else {
+            UUID newUUID = nbt.read("boundPlayer", Uuids.INT_STREAM_CODEC).orElse(null);
+            if (newUUID != null) {
+                boundPlayerUUID = newUUID;
+            }
+            //?}
         }catch(Exception e) {}
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         //? if <= 1.21 {
-        return MobEntity.createMobAttributes()
+        /*return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10000)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, MOVEMENT_SPEED)
@@ -156,8 +176,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 .add(EntityAttributes.GENERIC_WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0);
-        //?} else {
-        /*return MobEntity.createMobAttributes()
+        *///?} else {
+        return MobEntity.createMobAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 10000)
                 .add(EntityAttributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(EntityAttributes.FLYING_SPEED, MOVEMENT_SPEED)
@@ -166,7 +186,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 .add(EntityAttributes.WATER_MOVEMENT_EFFICIENCY, 1)
                 .add(EntityAttributes.SAFE_FALL_DISTANCE, 100)
                 .add(EntityAttributes.ATTACK_DAMAGE, 0);
-        *///?}
+        //?}
     }
 
     @Nullable
@@ -192,7 +212,11 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public void setBoundPlayer(ServerPlayerEntity player) {
         if (player == null) return;
         boundPlayerUUID = player.getUuid();
-        writeCustomDataToNbt(new NbtCompound());
+        //? if <= 1.21.5 {
+        /*writeCustomDataToNbt(new NbtCompound());
+        *///?} else {
+        writeCustomData(NbtWriteView.create(ErrorReporter.EMPTY));
+        //?}
         sendDisplayEntityPackets(player);
     }
 
@@ -302,10 +326,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void addTicket(ServerWorld world) {
         //? if <= 1.21.4 {
-        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
-         //?} else {
-        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
-        *///?}
+        /*world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2, getBlockPos());
+         *///?} else {
+        world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(getBlockPos()), 2);
+        //?}
     }
 
     public void despawn() {
@@ -313,10 +337,10 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
         //? if <= 1.21 {
-        this.kill();
-        //?} else {
-        /*this.kill((ServerWorld) getWorld());
-         *///?}
+        /*this.kill();
+        *///?} else {
+        this.kill((ServerWorld) getWorld());
+         //?}
         this.discard();
     }
 
@@ -407,12 +431,13 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public void fakeTeleportToPlayer() {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
+        ServerWorld playerWorld = PlayerUtils.getServerWorld(player);
         if (getWorld() instanceof ServerWorld world) {
             BlockPos tpTo = getBlockPosNearTarget(player, player.getBlockPos(),5);
             world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
-            player.getServerWorld().playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
+            playerWorld.playSound(null, tpTo.getX(), tpTo.getY(), tpTo.getZ(), SoundEvents.ENTITY_PLAYER_TELEPORT, this.getSoundCategory(), this.getSoundVolume(), this.getSoundPitch());
             AnimationUtils.spawnTeleportParticles(world, getPos());
-            AnimationUtils.spawnTeleportParticles(player.getServerWorld(), tpTo.toCenterPos());
+            AnimationUtils.spawnTeleportParticles(playerWorld, tpTo.toCenterPos());
             despawn();
             TriviaWildcard.spawnBotFor(player, tpTo);
         }
@@ -440,7 +465,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
 
-            BlockPos validPos = findNearestAirBlock(pos, target.getServerWorld());
+            BlockPos validPos = findNearestAirBlock(pos, PlayerUtils.getServerWorld(target));
             if (validPos != null) {
                 return validPos;
             }
@@ -765,7 +790,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void curseRavager(ServerPlayerEntity player) {
         BlockPos spawnPos = getBlockPosNearTarget(player, getBlockPos(), 5);
-        EntityType.RAVAGER.spawn(player.getServerWorld(), spawnPos, SpawnReason.COMMAND);
+        EntityType.RAVAGER.spawn(PlayerUtils.getServerWorld(player), spawnPos, SpawnReason.COMMAND);
     }
 
     public void curseInfestation(ServerPlayerEntity player) {
@@ -786,7 +811,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public void curseBindingArmor(ServerPlayerEntity player) {
         for (ItemStack item : PlayerUtils.getArmorItems(player)) {
-            ItemStackUtils.spawnItemForPlayer(player.getServerWorld(), player.getPos(), item.copy(), player);
+            ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), item.copy(), player);
         }
         ItemStack head = Items.LEATHER_HELMET.getDefaultStack();
         ItemStack chest = Items.LEATHER_CHESTPLATE.getDefaultStack();
@@ -860,14 +885,14 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     @Override
     //? if <= 1.21.4 {
-    protected boolean shouldSwimInFluids() {
+    /*protected boolean shouldSwimInFluids() {
         return false;
     }
-    //?} else {
-    /*public boolean shouldSwimInFluids() {
+    *///?} else {
+    public boolean shouldSwimInFluids() {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     public boolean isTouchingWater() {

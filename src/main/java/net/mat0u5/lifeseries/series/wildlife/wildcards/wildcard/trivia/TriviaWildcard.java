@@ -208,7 +208,7 @@ public class TriviaWildcard extends Wildcard {
     }
     public static void spawnBotFor(ServerPlayerEntity player, BlockPos pos) {
         resetPlayerOnBotSpawn(player);
-        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(player.getServerWorld(), pos, SpawnReason.COMMAND);
+        TriviaBot bot = MobRegistry.TRIVIA_BOT.spawn(PlayerUtils.getServerWorld(player), pos, SpawnReason.COMMAND);
         if (bot != null) {
             SessionTranscript.newTriviaBot(player);
             bot.setBoundPlayer(player);

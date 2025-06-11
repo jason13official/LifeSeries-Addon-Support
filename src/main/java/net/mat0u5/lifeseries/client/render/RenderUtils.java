@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.render;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.OrderedText;
@@ -22,7 +23,7 @@ public class RenderUtils {
     }
 
     //? if <= 1.21 {
-    public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, float scaleX, float scaleY) {
+    /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawTexture(texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height);
@@ -31,17 +32,28 @@ public class RenderUtils {
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height) {
         context.drawTexture(texture, x, y, u, v, width, height);
     }
-    //?} else {
-    /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
-        context.getMatrices().push();
+    *///?} else {
+    public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawTexture(RenderLayer::getGuiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
         context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scaleX, scaleY);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
+        context.getMatrices().popMatrix();
+        //?}
     }
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+        //? if <= 1.21.5 {
+        /*context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+        *///?} else {
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+        //?}
     }
-    *///?}
+    //?}
 
     //Center Fixed Text
     public static void drawTextCenter(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
@@ -57,10 +69,17 @@ public class RenderUtils {
     }
 
     public static void drawTextCenterScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
-        context.getMatrices().push();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)/2.0), (int)(y / (scaleY*scaleY)), textColor, false);
         context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scaleX, scaleY);
+        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)/2.0), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.getMatrices().popMatrix();
+        //?}
     }
 
 
@@ -78,10 +97,17 @@ public class RenderUtils {
     }
 
     public static void drawTextLeftScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
-        context.getMatrices().push();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX)), (int)(y / (scaleY*scaleY)), textColor, false);
         context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scaleX, scaleY);
+        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.getMatrices().popMatrix();
+        //?}
     }
 
     public static int drawTextLeftWrapLines(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y, int maxWidth, int gapY) {
@@ -108,9 +134,16 @@ public class RenderUtils {
     }
 
     public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
-        context.getMatrices().push();
+        //? if <= 1.21.5 {
+        /*context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)), (int)(y / (scaleY*scaleY)), textColor, false);
         context.getMatrices().pop();
+        *///?} else {
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scaleX, scaleY);
+        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.getMatrices().popMatrix();
+        //?}
     }
 }

@@ -15,20 +15,20 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public class EntityRendererMixin<T extends Entity> {
 
     //? if <= 1.21 {
-    @ModifyArg(
+    /*@ModifyArg(
             method = "render",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;renderLabelIfPresent(Lnet/minecraft/entity/Entity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V"),
             index = 1
     )
     public Text render(Text text) {
-    //?} else {
-    /*@ModifyArg(
+    *///?} else {
+    @ModifyArg(
             method = "render",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/EntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"),
             index = 1
     )
     public Text render(Text text) {
-    *///?}
+    //?}
         if (text != null) {
             if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
                 String name = MainClient.playerDisguiseNames.get(text.getString());

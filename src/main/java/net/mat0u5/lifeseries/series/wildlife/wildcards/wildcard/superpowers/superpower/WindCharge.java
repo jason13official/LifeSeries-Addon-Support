@@ -69,10 +69,10 @@ public class WindCharge extends ToggleableSuperpower {
             mace.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.VANISHING_CURSE), 1);
             mace.addEnchantment(ItemStackUtils.getEnchantmentEntry(Enchantments.WIND_BURST), 3);
             //? if <= 1.21.4 {
-            mace.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
-            //?} else {
-            /*mace.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
-            *///?}
+            /*mace.set(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
+            *///?} else {
+            mace.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
+            //?}
             mace.set(DataComponentTypes.MAX_DAMAGE, 1);
             mace.set(DataComponentTypes.DAMAGE, 1);
             ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);

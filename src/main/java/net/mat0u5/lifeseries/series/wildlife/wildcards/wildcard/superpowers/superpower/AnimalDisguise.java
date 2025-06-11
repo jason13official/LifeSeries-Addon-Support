@@ -54,7 +54,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         if (morph == null) {
             morph = defaultRandom.get(player.getRandom().nextInt(defaultRandom.size()));
         }
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
+        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, SoundCategory.MASTER, 1, 1);
 
         EntityType<?> finalMorph = morph;
 
@@ -68,7 +68,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         super.deactivate();
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
+        PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
 
         if (DependencyManager.cardinalComponentsLoaded()) {
             CardinalComponentsDependency.resetMorph(player);

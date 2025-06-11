@@ -33,8 +33,8 @@ public enum Superpowers {
                 ANIMAL_DISGUISE, SUPER_PUNCH, MIMICRY, TELEPORTATION, SHADOW_PLAY, INVISIBILITY,
                 TRIPLE_JUMP, SUPERSPEED, NECROMANCY
                 //? if >= 1.21.2 {
-                /*, CREAKING, FLIGHT
-                 *///?}
+                , CREAKING, FLIGHT
+                 //?}
 
         ));
         if (DependencyManager.voicechatLoaded()) result.add(LISTENING);
@@ -57,9 +57,9 @@ public enum Superpowers {
         if (superpower == SUPERSPEED) return new Superspeed(player);
         if (superpower == NECROMANCY) return new Necromancy(player);
         //? if >= 1.21.2 {
-        /*if (superpower == CREAKING) return new Creaking(player);
+        if (superpower == CREAKING) return new Creaking(player);
         if (superpower == FLIGHT) return new Flight(player);
-        *///?}
+        //?}
         if (DependencyManager.voicechatLoaded()) {
             if (superpower == LISTENING) return new Listening(player);
         }

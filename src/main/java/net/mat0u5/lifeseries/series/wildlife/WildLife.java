@@ -204,10 +204,10 @@ public class WildLife extends Series {
         if (damageSource.getSource() instanceof PlayerEntity) {
             if (entity instanceof WardenEntity || entity instanceof WitherEntity || entity instanceof EnderDragonEntity) {
                 //? if <= 1.21 {
-                entity.dropStack(Items.TOTEM_OF_UNDYING.getDefaultStack());
-                 //?} else {
-                /*entity.dropStack((ServerWorld) entity.getWorld(), Items.TOTEM_OF_UNDYING.getDefaultStack());
-                *///?}
+                /*entity.dropStack(Items.TOTEM_OF_UNDYING.getDefaultStack());
+                 *///?} else {
+                entity.dropStack((ServerWorld) entity.getWorld(), Items.TOTEM_OF_UNDYING.getDefaultStack());
+                //?}
             }
         }
     }

@@ -160,9 +160,9 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.getRegistryManager()
 
                 //? if <=1.21 {
-                .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
-                 //?} else
-                /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+                /*.get(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
+                 *///?} else
+                .getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
 
 
         for (String enchantmentId : loadClampedEnchants()) {
@@ -195,9 +195,9 @@ public class Blacklist {
         Registry<Enchantment> enchantmentRegistry = server.getRegistryManager()
 
                 //? if <=1.21 {
-                .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
-        //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));*/
+                /*.get(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
+        *///?} else
+        .getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "enchantment")));
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
@@ -229,9 +229,9 @@ public class Blacklist {
 
         Registry<StatusEffect> effectsRegistry = server.getRegistryManager()
         //? if <=1.21 {
-        .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
-        //?} else
-        /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
+        /*.get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
+        *///?} else
+        .getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
 
         for (String potionId : loadBannedPotions()) {
             if (!potionId.startsWith("minecraft:")) potionId = "minecraft:" + potionId;
@@ -340,12 +340,12 @@ public class Blacklist {
                 }
             }
             //? if >= 1.21.2 {
-            /*if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
+            if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
                 if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
                     remove = false;
                 }
             }
-            *///?}
+            //?}
             if (remove) {
                 itemStack.setCount(0);
                 player.getInventory().updateItems();
