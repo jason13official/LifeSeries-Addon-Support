@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.gui.series;
 
 import net.mat0u5.lifeseries.client.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.TextColors;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.gui.DrawContext;
@@ -121,13 +122,13 @@ public class ChooseExtraSeriesScreen extends DefaultSmallScreen {
 
         Rectangle rect = new Rectangle(startX+9, endY-11-textHeight, textWidth+1, textHeight+1);
 
-        context.fill(rect.x - 1, rect.y - 1, rect.x + rect.width + 1, rect.y, 0xFF3c3c3c); // top border
-        context.fill(rect.x - 1, rect.y + rect.height, rect.x + rect.width + 2, rect.y + rect.height + 2, 0xFF3c3c3c); // bottom
-        context.fill(rect.x - 1, rect.y, rect.x, rect.y + rect.height, 0xFF3c3c3c); // left
-        context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, 0xFF3c3c3c); // right
+        context.fill(rect.x - 1, rect.y - 1, rect.x + rect.width + 1, rect.y, DEFAULT_TEXT_COLOR); // top border
+        context.fill(rect.x - 1, rect.y + rect.height, rect.x + rect.width + 2, rect.y + rect.height + 2, DEFAULT_TEXT_COLOR); // bottom
+        context.fill(rect.x - 1, rect.y, rect.x, rect.y + rect.height, DEFAULT_TEXT_COLOR); // left
+        context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, DEFAULT_TEXT_COLOR); // right
 
         if (region == 2) {
-            RenderUtils.drawTextLeft(context, this.textRenderer, 0xffffff, goBack, rect.x+1, rect.y+1);
+            RenderUtils.drawTextLeft(context, this.textRenderer, TextColors.WHITE, goBack, rect.x+1, rect.y+1);
         }
         else {
             RenderUtils.drawTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, goBack, rect.x+1, rect.y+1);

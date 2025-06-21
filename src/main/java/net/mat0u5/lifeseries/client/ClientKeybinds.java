@@ -17,7 +17,11 @@ public class ClientKeybinds {
         superpower = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.lifeseries.superpower",
                 InputUtil.Type.KEYSYM,
+                //? if <= 1.21.5 {
                 GLFW.GLFW_KEY_G,
+                //?} else {
+                /*GLFW.GLFW_KEY_R,
+                *///?}
                 "key.categories.lifeseries"));
     }
 }
