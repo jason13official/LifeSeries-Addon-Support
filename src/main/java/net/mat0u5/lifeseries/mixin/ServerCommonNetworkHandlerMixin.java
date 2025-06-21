@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import io.netty.channel.ChannelFutureListener;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;
@@ -29,6 +30,7 @@ public class ServerCommonNetworkHandlerMixin {
         }
     }
 
+    //? if <= 1.21.5 {
     @WrapOperation(
             method = "send",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V")
@@ -37,6 +39,16 @@ public class ServerCommonNetworkHandlerMixin {
         if (connection instanceof FakeClientConnection) return;
         original.call(instance, packet, callbacks, flush);
     }
+    //?} else {
+    /*@WrapOperation(
+            method = "send",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
+    )
+    public void send(ClientConnection instance, Packet packet, ChannelFutureListener channelFutureListener, boolean b, Operation<Void> original) {
+        if (connection instanceof FakeClientConnection) return;
+        original.call(instance, packet, channelFutureListener, b);
+    }
+    *///?}
 
     @Inject(method = "disconnect(Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
     public void disconnect(Text reason, CallbackInfo ci) {

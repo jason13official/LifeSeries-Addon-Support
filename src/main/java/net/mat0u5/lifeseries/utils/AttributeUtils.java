@@ -15,20 +15,13 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 import static net.mat0u5.lifeseries.Main.seriesConfig;
 
 public class AttributeUtils {
-    public static final double DEFAULT_PLAYER_MAX_HEALTH = 20.0;
     public static final double DEFAULT_PLAYER_JUMP_HEIGHT = 0.41999998688697815;
     public static final double DEFAULT_PLAYER_SAFE_FALL_HEIGHT = 3.0;
     public static final double DEFAULT_PLAYER_MOVEMENT_SPEED = 0.10000000149011612;
 
 
     public static void resetAttributesOnPlayerJoin(ServerPlayerEntity player) {
-
-        if (currentSeries.getSeries() != SeriesList.SECRET_LIFE &&
-            !(DependencyManager.wildLifeModsLoaded() && player.getMaxHealth() == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) &&
-            !(player.getMaxHealth() == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid()))
-        ) {
-            resetMaxPlayerHealth(player);
-        }
+        resetMaxPlayerHealthIfNecessary(player);
         if (DependencyManager.wildLifeModsLoaded()) {
             if (!TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
                 resetPlayerJumpHeight(player);
@@ -38,6 +31,14 @@ public class AttributeUtils {
             resetSafeFallHeight(player);
         }
         resetMovementSpeed(player);
+    }
+
+    public static void resetMaxPlayerHealthIfNecessary(ServerPlayerEntity player) {
+        if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) return;
+        double currentMaxHealth = getMaxPlayerHealth(player);
+        if (DependencyManager.wildLifeModsLoaded() && currentMaxHealth == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) return;
+        if (currentMaxHealth == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid())) return;
+        resetMaxPlayerHealth(player);
     }
 
     public static void resetMaxPlayerHealth(ServerPlayerEntity player) {

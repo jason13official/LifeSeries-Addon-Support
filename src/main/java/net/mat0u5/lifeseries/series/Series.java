@@ -68,14 +68,11 @@ public abstract class Series extends Session {
             OtherUtils.executeCommand("worldborder set 500");
         }
 
-        OtherUtils.executeCommand("gamerule keepInventory " + seriesConfig.AUTO_KEEP_INVENTORY.get(seriesConfig));
-
-        if (NO_HEALING) {
-            OtherUtils.executeCommand("gamerule naturalRegeneration false");
-        }
-        else {
-            OtherUtils.executeCommand("gamerule naturalRegeneration true");
-        }
+        server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seriesConfig.KEEP_INVENTORY.get(seriesConfig), server);
+        server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(!NO_HEALING, server);
+        //? if >= 1.21.6 {
+        /*server.getGameRules().get(GameRules.LOCATOR_BAR).set(seriesConfig.LOCATOR_BAR.get(seriesConfig), server);
+        *///?}
 
         ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.LIST);
         if (TAB_LIST_SHOW_LIVES) {
@@ -98,7 +95,14 @@ public abstract class Series extends Session {
         createScoreboards();
         updateStuff();
         reloadAllPlayerTeams();
+        reloadPlayers();
         Events.updatePlayerListsNextTick = true;
+    }
+
+    public void reloadPlayers() {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            AttributeUtils.resetAttributesOnPlayerJoin(player);
+        }
     }
 
     public void createTeams() {

@@ -11,7 +11,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-public class TextRenderer {
+public class TextInfo {
     private static long renderTicks = 0;
     public static void renderText(DrawContext context) {
         renderTicks++;
@@ -44,7 +44,7 @@ public class TextRenderer {
             int screenWidth = client.getWindow().getScaledWidth();
             int x = screenWidth - 5;
 
-            renderTextLeft(context, timerText, x, y);
+            RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
 
             return -client.textRenderer.fontHeight-5;
         }catch(Exception e) {}
@@ -70,7 +70,7 @@ public class TextRenderer {
 
             int screenWidth = client.getWindow().getScaledWidth();
             int x = screenWidth - 5;
-            renderTextLeft(context, text, x, y);
+            RenderUtils.drawTextRight(context, client.textRenderer, text, x, y);
 
             return -client.textRenderer.fontHeight-10;
         }
@@ -96,8 +96,8 @@ public class TextRenderer {
 
             int screenWidth = client.getWindow().getScaledWidth();
             int x = screenWidth - 5;
-            renderTextLeft(context, text1, x, y);
-            renderTextLeft(context, text0, x - ((client.textRenderer.getWidth(text1)-client.textRenderer.getWidth(text0))/2),  y - (client.textRenderer.fontHeight+1));
+            RenderUtils.drawTextRight(context, client.textRenderer, text1, x, y);
+            RenderUtils.drawTextRight(context, client.textRenderer, text0, x - ((client.textRenderer.getWidth(text1)-client.textRenderer.getWidth(text0))/2),  y - (client.textRenderer.fontHeight+1));
 
             return -client.textRenderer.fontHeight*2-15;
         }
@@ -120,7 +120,7 @@ public class TextRenderer {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        renderTextLeft(context, timerText, x, y);
+        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
 
         return -client.textRenderer.fontHeight-5;
     }
@@ -143,7 +143,7 @@ public class TextRenderer {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        renderTextLeft(context, timerText, x, y);
+        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
 
         return -client.textRenderer.fontHeight-5;
     }
@@ -160,11 +160,11 @@ public class TextRenderer {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        if (millisLeft <= 5_000) renderTextLeft(context, actualTimer, x, y, 0xFFbf2222);
-        else if (millisLeft <= 30_000) renderTextLeft(context, actualTimer, x, y, 0xFFd6961a);
-        else renderTextLeft(context, actualTimer, x, y, 0xFFffffff);
+        if (millisLeft <= 5_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.TIMER_RED, actualTimer, x, y);
+        else if (millisLeft <= 30_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.TIMER_ORANGE, actualTimer, x, y);
+        else RenderUtils.drawTextRight(context, client.textRenderer, TextColors.WHITE, actualTimer, x, y);
 
-        renderTextLeft(context, timerText, x - client.textRenderer.getWidth(actualTimer), y);
+        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x - client.textRenderer.getWidth(actualTimer), y);
 
         return -client.textRenderer.fontHeight-5;
     }
@@ -187,7 +187,7 @@ public class TextRenderer {
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
-        renderTextLeft(context, timerText, x, y);
+        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
 
         return -client.textRenderer.fontHeight-5;
     }
@@ -203,18 +203,9 @@ public class TextRenderer {
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
-        renderTextLeft(context, timerText, x, y);
+        RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
 
         return -client.textRenderer.fontHeight-5;
-    }
-
-    public static void renderTextLeft(DrawContext context, Text text, int x, int y) {
-        renderTextLeft(context, text, x, y, 0x3c3c3c);
-    }
-
-    public static void renderTextLeft(DrawContext context, Text text, int x, int y, int color) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        context.drawText(client.textRenderer, text, x - client.textRenderer.getWidth(text), y - client.textRenderer.fontHeight, color, false);
     }
 
     public static long roundTime(long time) {

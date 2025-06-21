@@ -218,7 +218,7 @@ public class WildLife extends Series {
 
         TriviaBot.cursedGigantificationPlayers.remove(player.getUuid());
         TriviaBot.cursedHeartPlayers.remove(player.getUuid());
-        AttributeUtils.resetMaxPlayerHealth(player);
+        AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
 
         TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
         AttributeUtils.resetPlayerJumpHeight(player);

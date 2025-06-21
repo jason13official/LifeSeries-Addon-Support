@@ -233,7 +233,7 @@ public class TriviaWildcard extends Wildcard {
         }
         if (TriviaBot.cursedHeartPlayers.contains(player.getUuid())) {
             TriviaBot.cursedHeartPlayers.remove(player.getUuid());
-            AttributeUtils.resetMaxPlayerHealth(player);
+            AttributeUtils.resetMaxPlayerHealthIfNecessary(player);
         }
         if (TriviaBot.cursedMoonJumpPlayers.contains(player.getUuid())) {
             TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());

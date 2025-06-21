@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.gui.DefaultScreen;
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.TextColors;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.Trivia;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -30,9 +31,8 @@ import java.util.List;
 *///?}
 
 public class QuizScreen extends DefaultScreen {
-    public static final int TEXT_COLOR_HIGHLIGHTED = 0xffffff;
     private static final int[] ANSWER_COLORS = {
-            0xFF5c57f3, 0xFFf8aa13, 0xFF5ef961, 0xFFf5fd6e, 0xFFed5b64
+            TextColors.TRIVIA_BLUE, TextColors.TRIVIA_ORANGE, TextColors.TRIVIA_LIME, TextColors.TRIVIA_YELLOW, TextColors.TRIVIA_RED
     };
 
     private final List<List<OrderedText>> answers = new ArrayList<>();
@@ -153,8 +153,8 @@ public class QuizScreen extends DefaultScreen {
         while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
-        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, 0xFFbf2222, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
-        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, 0xFFd6961a, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.TIMER_RED, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.TIMER_ORANGE, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
         else RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
 
         // Difficulty
@@ -164,7 +164,7 @@ public class QuizScreen extends DefaultScreen {
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.literal("Question").formatted(Formatting.UNDERLINE), fifth1, minY);
         List<OrderedText> wrappedQuestion = this.textRenderer.wrapLines(Text.literal(Trivia.question), questionWidth);
         for (int i = 0; i < wrappedQuestion.size(); i++) {
-            context.drawText(this.textRenderer, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight, DEFAULT_TEXT_COLOR, false);
+            RenderUtils.drawOrderedTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, wrappedQuestion.get(i), questionX, questionY + i * this.textRenderer.fontHeight);
         }
 
         // Answers
@@ -179,18 +179,18 @@ public class QuizScreen extends DefaultScreen {
 
             // Check if the mouse is hovering over this answer
             boolean hovered = rect.contains(mouseX, mouseY);
-            int textColor = hovered ? TEXT_COLOR_HIGHLIGHTED : DEFAULT_TEXT_COLOR;
+            int textColor = hovered ? TextColors.WHITE : DEFAULT_TEXT_COLOR;
 
             // Draw each line
             int lineY = rect.y + 2;
             for (OrderedText line : answers.get(i)) {
-                context.drawText(this.textRenderer, line, rect.x+1, lineY, textColor, false);
+                RenderUtils.drawOrderedTextLeft(context, this.textRenderer, textColor, line, rect.x+1, lineY);
                 lineY += this.textRenderer.fontHeight;
             }
         }
 
         // Entity in the middle
-        context.fill(centerX-33, centerY-55, centerX+33, centerY+55, 0xFF000000);
+        context.fill(centerX-33, centerY-55, centerX+33, centerY+55, TextColors.BLACK);
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
     }
 

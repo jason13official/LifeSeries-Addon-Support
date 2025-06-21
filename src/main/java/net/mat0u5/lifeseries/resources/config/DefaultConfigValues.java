@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.resources.config;
 
+import java.util.List;
+
 public class DefaultConfigValues {
 
     /*
@@ -26,8 +28,8 @@ public class DefaultConfigValues {
     public final ConfigEntry<Boolean> AUTO_SET_WORLDBORDER = new ConfigEntry<>(
             "auto_set_worldborder", true, "boolean", "Auto Set Worldborder", "Decides whether the world border should be shrunk when the server starts."
     );
-    public final ConfigEntry<Boolean> AUTO_KEEP_INVENTORY = new ConfigEntry<>(
-            "auto_keep_inventory", true, "boolean", "Keep Inventory", "Decides whether players drop their items when they die."
+    public final ConfigEntry<Boolean> KEEP_INVENTORY = new ConfigEntry<>(
+            "keep_inventory", true, "boolean", "Keep Inventory", "Decides whether players drop their items when they die."
     );
     public final ConfigEntry<Boolean> PLAYERS_DROP_ITEMS_ON_FINAL_DEATH = new ConfigEntry<>(
             "players_drop_items_on_final_death", false, "boolean", "Players Drop Items on Final Death", "Controls whether players drop their items on the final death (even if keepInventory is on)."
@@ -87,5 +89,15 @@ public class DefaultConfigValues {
     );
     public final ConfigEntry<Boolean> TAB_LIST_SHOW_LIVES = new ConfigEntry<>(
             "tab_list_show_lives", false, "boolean", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
+    );
+
+    public final ConfigEntry<Boolean> LOCATOR_BAR = new ConfigEntry<>(
+            "locator_bar", false, "boolean", "Locator Bar", "Enables the player Locator Bar."
+    );
+
+
+
+    public static final List<String> RELOAD_NEEDED = List.of(
+            "spawner_recipe"
     );
 }

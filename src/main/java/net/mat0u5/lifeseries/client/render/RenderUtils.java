@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.render;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -11,15 +12,13 @@ import net.minecraft.client.font.TextRenderer;
 import java.util.List;
 
 public class RenderUtils {
-    public static final int DEFAULT_TEXT_COLOR = 0x3c3c3c;
-    public static final int DEBUG_COLOR = 0xFFff00f2;
 
     public void testDrawX(DrawContext context, int x, int height) {
-        context.fill(x, 0, x+1, height, DEBUG_COLOR);
+        context.fill(x, 0, x+1, height, TextColors.DEBUG);
     }
 
     public void testDrawY(DrawContext context, int y, int width) {
-        context.fill(0, y, width, y+1, DEBUG_COLOR);
+        context.fill(0, y, width, y+1, TextColors.DEBUG);
     }
 
     //? if <= 1.21 {
@@ -32,36 +31,35 @@ public class RenderUtils {
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height) {
         context.drawTexture(texture, x, y, u, v, width, height);
     }
-    //?} else {
+    //?} else if <= 1.21.5 {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
-        //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawTexture(RenderLayer::getGuiTextured, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
         context.getMatrices().pop();
-        //?} else {
-        /^context.getMatrices().pushMatrix();
+    }
+    public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
+        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+    *///?} else {
+    /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
+        context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
         context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height, textureWidth, textureHeight);
         context.getMatrices().popMatrix();
-        ^///?}
     }
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
-        //? if <= 1.21.5 {
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
-        //?} else {
-        /^context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
-        ^///?}
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
     *///?}
 
     //Center Fixed Text
     public static void drawTextCenter(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
-        drawTextCenter(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
+        drawTextCenter(context, textRenderer, TextColors.DEFAULT, text, x, y);
     }
 
     public static void drawTextCenterScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
-        drawTextCenterScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
+        drawTextCenterScaled(context, textRenderer, TextColors.DEFAULT, text, x, y, scaleX, scaleY);
     }
 
     public static void drawTextCenter(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
@@ -85,14 +83,18 @@ public class RenderUtils {
 
     //Left Fixed Text
     public static void drawTextLeft(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
-        drawTextLeft(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
+        drawTextLeft(context, textRenderer, TextColors.DEFAULT, text, x, y);
     }
 
     public static void drawTextLeftScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
-        drawTextLeftScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
+        drawTextLeftScaled(context, textRenderer, TextColors.DEFAULT, text, x, y, scaleX, scaleY);
     }
 
     public static void drawTextLeft(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
+        context.drawText(textRenderer, text, x, y, textColor, false);
+    }
+
+    public static void drawOrderedTextLeft(DrawContext context, TextRenderer textRenderer, int textColor, OrderedText text, int x, int y) {
         context.drawText(textRenderer, text, x, y, textColor, false);
     }
 
@@ -122,11 +124,11 @@ public class RenderUtils {
 
     //Right Fixed Text
     public static void drawTextRight(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
-        drawTextRight(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y);
+        drawTextRight(context, textRenderer, TextColors.DEFAULT, text, x, y);
     }
 
     public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
-        drawTextRightScaled(context, textRenderer, DEFAULT_TEXT_COLOR, text, x, y, scaleX, scaleY);
+        drawTextRightScaled(context, textRenderer, TextColors.DEFAULT, text, x, y, scaleX, scaleY);
     }
 
     public static void drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {

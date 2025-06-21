@@ -50,7 +50,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 FINAL_DEATH_MESSAGE,
                 MUTE_DEAD_PLAYERS,
                 AUTO_SET_WORLDBORDER,
-                AUTO_KEEP_INVENTORY,
+                KEEP_INVENTORY,
                 SPAWN_EGG_DROP_CHANCE,
                 SPAWN_EGG_DROP_ONLY_NATURAL,
                 SPAWN_EGG_ALLOW_ON_SPAWNER,
@@ -59,6 +59,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 GIVELIFE_LIVES_MAX,
                 TAB_LIST_SHOW_DEAD_PLAYERS,
                 TAB_LIST_SHOW_LIVES
+
+                //? if >= 1.21.6 {
+                /*,LOCATOR_BAR
+                *///?}
         ));
     }
 
@@ -134,6 +138,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         renamedProperty("show_death_title_on_last_death", "final_death_title_show");
         renamedProperty("players_drop_items_on_last_death", "players_drop_items_on_final_death");
         renamedProperty("blacklist_banned_potions", "blacklist_banned_potion_effects");
+        renamedProperty("auto_keep_inventory", "keep_inventory");
     }
 
     private void renamedProperty(String from, String to) {

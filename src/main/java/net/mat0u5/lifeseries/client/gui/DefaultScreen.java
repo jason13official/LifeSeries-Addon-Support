@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.gui;
 
 import net.mat0u5.lifeseries.client.render.RenderUtils;
+import net.mat0u5.lifeseries.client.render.TextColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,7 +18,7 @@ public abstract class DefaultScreen extends Screen {
     protected int BG_HEIGHT;
     protected float scaleX = 1;
     protected float scaleY = 1;
-    protected static final int DEFAULT_TEXT_COLOR = 0x3c3c3c;
+    protected static final int DEFAULT_TEXT_COLOR = TextColors.DEFAULT;
 
     protected DefaultScreen(Text name, float scaleX, float scaleY) {
         super(name);

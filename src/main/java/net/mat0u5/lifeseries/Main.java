@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.4.16";
+	public static final String MOD_VERSION = "dev-1.3.4.17";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -136,8 +136,8 @@ public class Main implements ModInitializer {
 		if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) {
 			TaskManager.initialize();
 		}
-		if (currentSeries.getSeries() == SeriesList.DOUBLE_LIFE) {
-			((DoubleLife) currentSeries).loadSoulmates();
+		if (currentSeries.getSeries() == SeriesList.DOUBLE_LIFE && currentSeries instanceof DoubleLife doubleLife) {
+			doubleLife.loadSoulmates();
 		}
 		seriesConfig.loadProperties();
 		blacklist.reloadBlacklist();

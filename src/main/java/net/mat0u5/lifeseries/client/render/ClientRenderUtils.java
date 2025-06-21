@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.mat0u5.lifeseries.client.ClientSounds;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 
@@ -12,7 +11,7 @@ public class ClientRenderUtils {
     }
 
     private static void renderText(DrawContext context, RenderTickCounter renderTickCounter) {
-        TextRenderer.renderText(context);
+        TextInfo.renderText(context);
         VignetteRenderer.renderVignette(context);
     }
 }

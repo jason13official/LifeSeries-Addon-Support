@@ -13,6 +13,10 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
 import java.util.Optional;
+//? if >= 1.21.6 {
+/*import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
+*///?}
 
 import static net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency.MORPH_COMPONENT;
 
@@ -181,25 +185,38 @@ public class MorphComponent implements AutoSyncedComponent, ClientTickingCompone
         return dummy;
     }
 
+    //? if <= 1.21.5 {
     @Override
     public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
+    //?} else {
+    /*@Override
+    public void readData(ReadView nbt) {
+    *///?}
         //? if <= 1.21.4 {
-        if(nbt.contains("type")){
+        if (nbt.contains("type")) {
             morph = Registries.ENTITY_TYPE.get(Identifier.of(nbt.getString("type")));
         }
         shouldMorph = nbt.getBoolean("morph");
-        //?} else {
-        /*if(nbt.contains("type")){
+        //?} else if <= 1.21.5 {
+        /*if (nbt.contains("type")) {
             Optional<String> type = nbt.getString("type");
             if (type.isPresent()) morph = Registries.ENTITY_TYPE.get(Identifier.of(type.get()));
         }
         Optional<Boolean> shouldMorphNbt = nbt.getBoolean("morph");
         if (shouldMorphNbt.isPresent()) shouldMorph = shouldMorphNbt.get();
+        *///?} else {
+        /*nbt.getOptionalString("type").ifPresent(s -> morph = Registries.ENTITY_TYPE.get(Identifier.of(s)));
+        shouldMorph = nbt.getBoolean("morph", false);
         *///?}
     }
 
+    //? if <= 1.21.5 {
     @Override
     public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
+    //?} else {
+    /*@Override
+    public void writeData(WriteView nbt) {
+    *///?}
         if(morph != null){
             nbt.putString("type", Registries.ENTITY_TYPE.getId(morph).toString());
         } else {

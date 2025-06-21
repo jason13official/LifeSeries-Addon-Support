@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.client.config.IntegerObject;
 import net.mat0u5.lifeseries.client.config.StringObject;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.lifeseries.resources.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
@@ -83,6 +84,7 @@ public class NetworkHandlerServer {
     }
 
     public static boolean updatedConfigThisTick = false;
+    public static boolean configNeedsReload = false;
     public static void handleConfigPacket(ServerPlayerEntity player, ConfigPayload payload) {
         if (PermissionManager.isAdmin(player)) {
             String configType = payload.configType();
@@ -92,38 +94,43 @@ public class NetworkHandlerServer {
             String description = payload.description();
             List<String> args = payload.args();
 
+
             if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
                 seriesConfig.setProperty(id, args.getFirst());
                 updatedConfigThisTick = true;
-                return;
             }
-            if (configType.equalsIgnoreCase("boolean") && !args.isEmpty()) {
+            else if (configType.equalsIgnoreCase("boolean") && !args.isEmpty()) {
                 seriesConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
                 updatedConfigThisTick = true;
-                return;
             }
-            if (configType.equalsIgnoreCase("double") && !args.isEmpty()) {
+            else if (configType.equalsIgnoreCase("double") && !args.isEmpty()) {
                 try {
                     double value = Double.parseDouble(args.getFirst());
                     seriesConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
-                    return;
                 }catch(Exception e){}
             }
-            if (configType.equalsIgnoreCase("integer") && !args.isEmpty()) {
+            else if (configType.equalsIgnoreCase("integer") && !args.isEmpty()) {
                 try {
                     int value = Integer.parseInt(args.getFirst());
                     seriesConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
-                    return;
                 }catch(Exception e){}
+            }
+
+            if (updatedConfigThisTick && DefaultConfigValues.RELOAD_NEEDED.contains(id)) {
+                configNeedsReload = true;
             }
         }
     }
 
     public static void onUpdatedConfig() {
-        updatedConfigThisTick = false;
         OtherUtils.broadcastMessageToAdmins(Text.of("§7Config has been successfully updated."));
+        if (configNeedsReload) {
+            OtherUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
+        }
+        updatedConfigThisTick = false;
+        configNeedsReload = false;
         Main.softReloadStart();
     }
 
