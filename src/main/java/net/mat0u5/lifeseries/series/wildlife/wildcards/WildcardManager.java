@@ -140,57 +140,51 @@ public class WildcardManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
         String colorCrypt = "§r§6§l§k";
         String colorNormal = "§r§6§l";
-        String cryptedText = "";
-        for (Character character : text.toCharArray()) {
-            cryptedText += "<"+character;
+
+        List<Integer> encryptedIndexes = new ArrayList<>();
+        for (int i = 0; i < text.length(); i++) {
+            encryptedIndexes.add(i);
         }
 
-        float pos = 0;
         for (int i = 0; i < text.length(); i++) {
-            pos += 4;
-            if (!cryptedText.contains("<")) return;
-            String[] split = cryptedText.split("<");
-            int timesRemaining = split.length;
-            int random = rnd.nextInt(1, timesRemaining);
-            split[random] = ">"+split[random];
-            cryptedText = String.join("<", split).replaceAll("<>", colorNormal);
+            if (!encryptedIndexes.isEmpty()) {
+                encryptedIndexes.remove(rnd.nextInt(encryptedIndexes.size()));
+            }
 
-            String finalCryptedText = cryptedText.replaceAll("<",colorCrypt);
-            TaskScheduler.scheduleTask((int) pos, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(finalCryptedText),0,30,20));
+            StringBuilder result = new StringBuilder();
+            for (int j = 0; j < text.length(); j++) {
+                result.append(encryptedIndexes.contains(j) ? colorCrypt : colorNormal);
+                result.append(text.charAt(j));
+            }
+
+            TaskScheduler.scheduleTask((i + 1) * 4, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(String.valueOf(result)), 0, 30, 20));
         }
     }
 
-    private static final List<String> allColorCodes = List.of("_","9","a","b","c","d","e");
+    private static final List<String> allColorCodes = List.of("6","9","a","b","c","d","e");
     public static void showRainbowCryptTitle(String text) {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
-        String colorCrypt = "§r§6§l§k";
-        String colorNormal = "§r§6§l";
-        String cryptedText = "";
-        for (Character character : text.toCharArray()) {
-            cryptedText += "<"+character;
+        String colorCrypt = "§r§_§l§k";
+        String colorNormal = "§r§_§l";
+
+        List<Integer> encryptedIndexes = new ArrayList<>();
+        for (int i = 0; i < text.length(); i++) {
+            encryptedIndexes.add(i);
         }
 
-        float pos = 0;
         for (int i = 0; i < text.length()+24; i++) {
-            pos += 2;
-            String newCryptedText = cryptedText;
-            if (cryptedText.contains("<")) {
-                String[] split = cryptedText.split("<");
-                int timesRemaining = split.length;
-                int random = rnd.nextInt(1, timesRemaining);
-                split[random] = ">"+split[random];
-                cryptedText = String.join("<", split).replaceAll("<>", colorNormal);
-                newCryptedText =  cryptedText.replaceAll("<",colorCrypt);
+            if (!encryptedIndexes.isEmpty()) {
+                encryptedIndexes.remove(rnd.nextInt(encryptedIndexes.size()));
             }
 
-            while (newCryptedText.contains("§6")) {
-                String randomColor = "§" + allColorCodes.get(rnd.nextInt(allColorCodes.size()));
-                newCryptedText = newCryptedText.replaceFirst("§6", randomColor);
+            StringBuilder result = new StringBuilder();
+            for (int j = 0; j < text.length(); j++) {
+                String randomColor = allColorCodes.get(rnd.nextInt(allColorCodes.size()));
+                result.append(encryptedIndexes.contains(j) ? colorCrypt.replace("_", randomColor) : colorNormal.replace("_", randomColor));
+                result.append(text.charAt(j));
             }
 
-            newCryptedText = newCryptedText.replaceAll("§_","§6");
-            String finalCryptedText = newCryptedText;
-            TaskScheduler.scheduleTask((int) pos, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(finalCryptedText),0,4,4));
+            TaskScheduler.scheduleTask((i + 1) * 2, () -> PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.literal(String.valueOf(result)), 0, 4, 4));
         }
     }
 

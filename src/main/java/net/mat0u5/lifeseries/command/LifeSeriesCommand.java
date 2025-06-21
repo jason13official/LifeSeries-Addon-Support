@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -212,6 +213,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
+        WildcardManager.showCryptTitle("A wildcard is active!");
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command"));
 
         return 1;
@@ -221,6 +223,7 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
+        WildcardManager.showRainbowCryptTitle("All wildcards are active!");
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 1"));
 
         return 1;

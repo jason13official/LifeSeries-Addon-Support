@@ -16,7 +16,7 @@ public class TextInfo {
     public static void renderText(DrawContext context) {
         renderTicks++;
         MinecraftClient client = MinecraftClient.getInstance();
-        int yPos = client.getWindow().getScaledHeight() - 5;
+        int yPos = client.getWindow().getScaledHeight() - 5 - client.textRenderer.fontHeight;
 
         if (Main.DEBUG) {
             yPos += _renderSnailDistance(client, context, yPos);
