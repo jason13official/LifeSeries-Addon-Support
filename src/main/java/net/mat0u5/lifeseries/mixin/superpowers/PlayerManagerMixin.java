@@ -6,7 +6,6 @@ import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.storage.ReadView;
 import net.minecraft.text.Text;
 import net.minecraft.util.ErrorReporter;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+//?if >= 1.21.6 {
+/*import net.minecraft.storage.ReadView;
+*///?}
 
 /*
  * This file includes code from the Fabric Carpet project: https://github.com/gnembon/fabric-carpet
