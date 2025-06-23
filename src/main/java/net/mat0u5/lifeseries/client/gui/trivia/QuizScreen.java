@@ -191,7 +191,11 @@ public class QuizScreen extends DefaultScreen {
 
         // Entity in the middle
         context.fill(centerX-33, centerY-55, centerX+33, centerY+55, TextColors.BLACK);
+        //? if <= 1.21.5 {
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
+        //?} else {
+        /*RenderUtils.drawTextLeftWrapLines(context, client.textRenderer, TextColors.DEFAULT_LIGHTER, Text.of("Bot display temporarily disabled\nin 1.21.6 because mojang broke it :<"), centerX-28, centerY-46, 60, 5);
+        *///?}
     }
 
     private void drawEntity(DrawContext context, int i, int j, int mouseX, int mouseY, int x, int y, int size) {
@@ -211,27 +215,24 @@ public class QuizScreen extends DefaultScreen {
             drawEntity(context, x-30, y-55, x+30, y+85, size, 0.0625F, mouseX, mouseY, entity);
         }
     }
+
     public static void drawEntity(DrawContext context, int x1, int y1, int x2, int y2, int size, float f, float mouseX, float mouseY, Entity entity) {
-        float g = (x1 + x2) / 2.0F;
-        float h = (y1 + y2) / 2.0F;
         context.enableScissor(x1, y1, x2, y2);
         Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
         Quaternionf quaternionf2 = (new Quaternionf()).rotateX(0);
         quaternionf.mul(quaternionf2);
-        float p = 1;
-        float l = entity.getYaw();
-        float m = entity.getPitch();
+        float originalYaw = entity.getYaw();
+        float originalPitch = entity.getPitch();
         entity.setYaw(180);
         entity.setPitch(0);
-        Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f * p, 0.0F);
-        float q = size / p;
+        Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f, 0.0F);
         //? if <= 1.21.5 {
-        drawEntity(context, g, h, q, vector3f, quaternionf, quaternionf2, entity);
+        drawEntity(context, (x1 + x2) / 2.0F, (y1 + y2) / 2.0F, size, vector3f, quaternionf, quaternionf2, entity);
         //?} else {
-        /*drawEntity(context, x1, y1, x2, y2, g, vector3f, quaternionf, quaternionf2, entity);
+        /*drawEntity(context, x1, y1, x2, y2, size, vector3f, quaternionf, quaternionf2, entity);
         *///?}
-        entity.setYaw(l);
-        entity.setPitch(m);
+        entity.setYaw(originalYaw);
+        entity.setPitch(originalPitch);
         context.disableScissor();
     }
 

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.render;
 
 public class TextColors {
     public static int DEFAULT = 0xFF3c3c3c;
+    public static int DEFAULT_LIGHTER = 0xFF5e5e5e;
     public static int DEBUG = 0xFFff00f2;
     public static int WHITE = 0xFFffffff;
     public static int BLACK = 0xFF000000;

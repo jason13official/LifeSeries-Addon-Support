@@ -127,15 +127,12 @@ public class TextInfo {
 
     public static int renderLimitedLifeTimer(MinecraftClient client, DrawContext context, int y) {
         if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
-        if (MainClient.limitedLifeTime == 0) return 0;
 
         MutableText timerText = Text.literal("");
-        if (MainClient.limitedLifeTime == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
+        if (MainClient.limitedLifeLives == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
         else {
-            long remainingTime = roundTime(MainClient.limitedLifeTime) - System.currentTimeMillis();
-            if (MainClient.clientSessionStatus != SessionStatus.STARTED) {
-                remainingTime = roundTime(MainClient.limitedLifeTime-MainClient.limitedLifeTimeLastActuallyUpdated);
-            }
+            long remainingTime = roundTime(MainClient.limitedLifeLives*1000);
+
             if (remainingTime < 0) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
             else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
         }

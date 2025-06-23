@@ -56,7 +56,7 @@ public final class SnailPushProjectilesGoal extends Goal {
             NbtCompound nbt = projectile.writeNbt(empty);
             //?} else {
             /*NbtWriteView writeView = NbtWriteView.create(ErrorReporter.EMPTY);
-            projectile.writeData(writeView);//TODO check
+            projectile.writeData(writeView);
             NbtCompound nbt = writeView.getNbt();
             *///?}
             //? if <= 1.21.4 {

@@ -218,13 +218,8 @@ public class NetworkHandlerClient {
 
         if (name.startsWith("limited_life_timer__")) {
             MainClient.limitedLifeTimerColor = name.replaceFirst("limited_life_timer__","");
-            long currentTime = System.currentTimeMillis();
-            long runOutOfLivesAt = currentTime + number * 1000;
-            if (Math.abs(MainClient.limitedLifeTime-runOutOfLivesAt) > 2000) {
-                MainClient.limitedLifeTime = runOutOfLivesAt;
-                MainClient.limitedLifeTimeLastActuallyUpdated = currentTime;
-            }
-            MainClient.limitedLifeTimeLastUpdated = currentTime;
+            MainClient.limitedLifeLives = number;
+            MainClient.limitedLifeTimeLastUpdated = System.currentTimeMillis();
         }
 
         if (name.equalsIgnoreCase("curse_sliding")) {

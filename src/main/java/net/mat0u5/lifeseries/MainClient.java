@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -12,6 +13,7 @@ import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.SessionStatus;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.EntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -43,10 +45,10 @@ public class MainClient implements ClientModInitializer {
     public static int mutedForTicks = 0;
     public static long sessionTime = 0;
     public static long sessionTimeLastUpdated = 0;
+
     public static String limitedLifeTimerColor = "";
-    public static long limitedLifeTime = 0;
-    public static long limitedLifeTimeLastActuallyUpdated = 0;
     public static long limitedLifeTimeLastUpdated = 0;
+    public static long limitedLifeLives = 0;
 
     @Override
     public void onInitializeClient() {
