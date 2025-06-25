@@ -1,3 +1,5 @@
+#Available Tags: {skip_ping}, {skip_build}, {skip_discord}
+
 name: build
 
 on:
