@@ -43,8 +43,13 @@ import java.util.*;
 import static net.mat0u5.lifeseries.Main.*;
 
 public abstract class Series extends Session {
-    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-af45fc947c22c9ee91ec021d998318a5f2d5bdaf/RP.zip";
-    public static final String RESOURCEPACK_MAIN_SHA ="38a74dc7c112e1e9c009e71f544b1b050a01560e";
+    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/main.zip";
+    public static final String RESOURCEPACK_MAIN_SHA ="231f5fa0022317a0798fd6d73906b95be0db87c3";
+    public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/secretlife.zip";
+    public static final String RESOURCEPACK_SECRETLIFE_SHA ="92a7c3dfc6641509de72a7c687a3707ba3843e6c";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/minimal_armor.zip";
+    public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA ="d5e9e21ab788974ef3a58bd8b14ccc7d34ea422c";
+
     public boolean NO_HEALING = false;
     public boolean SHOW_DEATH_TITLE = false;
     public int GIVELIFE_MAX_LIVES = 99;
@@ -412,10 +417,13 @@ public abstract class Series extends Session {
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
+            Vec3d pos = entry.getKey();
+            if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;
+
             //? if <= 1.21 {
-            player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
+            player.teleport(PlayerUtils.getServerWorld(player), pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
             //?} else {
-            /*player.teleport(PlayerUtils.getServerWorld(player), entry.getKey().x, entry.getKey().y, entry.getKey().z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
+            /*player.teleport(PlayerUtils.getServerWorld(player), pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
             *///?}
             break;
         }

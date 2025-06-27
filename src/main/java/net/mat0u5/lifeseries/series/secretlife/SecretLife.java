@@ -30,8 +30,6 @@ import static net.mat0u5.lifeseries.Main.seriesConfig;
 public class SecretLife extends Series {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health, /secretlife";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /gift";
-    public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-4b42f33cede049a0b747e7bd807488b5c8cae2ce/RP.zip";
-    public static final String RESOURCEPACK_SECRETLIFE_SHA ="e175488de7a0545265f8f8dc078325b4745970d6";
     public static double MAX_HEALTH = 60.0d;
     public ItemSpawner itemSpawner;
     SessionAction taskWarningAction = new SessionAction(OtherUtils.minutesToTicks(-5)+1) {

@@ -20,6 +20,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 @Environment(EnvType.CLIENT)
 public class ClientResourcePacks {
     private static final String SECRET_LIFE_RESOURCEPACK = "lifeseries:secretlife";
+    private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
     public static final String SNAILS_RESOURCEPACK = "file/" + SnailSkinsClient.PACK_NAME;
     public static void applyResourcepack(UUID uuid) {
         if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {

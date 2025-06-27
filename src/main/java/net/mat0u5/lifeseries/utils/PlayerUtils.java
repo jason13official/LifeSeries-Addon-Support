@@ -133,11 +133,12 @@ public class PlayerUtils {
         ServerPlayerEntity player = getPlayer(uuid);
         if (player == null) return;
         applySingleResourcepack(player, Series.RESOURCEPACK_MAIN_URL, Series.RESOURCEPACK_MAIN_SHA, "Life Series Main Resourcepack.");
+        applySingleResourcepack(player, Series.RESOURCEPACK_MINIMAL_ARMOR_URL, Series.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Minimal Armor Resourcepack.");
         if (currentSeries instanceof SecretLife) {
-            applySingleResourcepack(player, SecretLife.RESOURCEPACK_SECRETLIFE_URL, SecretLife.RESOURCEPACK_SECRETLIFE_SHA, "Secret Life Resourcepack.");
+            applySingleResourcepack(player, Series.RESOURCEPACK_SECRETLIFE_URL, Series.RESOURCEPACK_SECRETLIFE_SHA, "Secret Life Resourcepack.");
         }
         else {
-            removeSingleResourcepack(player, SecretLife.RESOURCEPACK_SECRETLIFE_URL);
+            removeSingleResourcepack(player, Series.RESOURCEPACK_SECRETLIFE_URL);
         }
     }
 
