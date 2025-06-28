@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ModRegistries;
+import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
@@ -58,9 +58,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
 
         EntityType<?> finalMorph = morph;
 
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            CardinalComponentsDependency.setMorph(player, finalMorph);
-        }
+        MorphManager.setMorph(player, finalMorph);
     }
 
     @Override
@@ -70,9 +68,7 @@ public class AnimalDisguise extends ToggleableSuperpower {
         if (player == null) return;
         PlayerUtils.getServerWorld(player).playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, SoundCategory.MASTER, 1, 1);
 
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            CardinalComponentsDependency.resetMorph(player);
-        }
+        MorphManager.resetMorph(player);
     }
 
     public void onTakeDamage() {

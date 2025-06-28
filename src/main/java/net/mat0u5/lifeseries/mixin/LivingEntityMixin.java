@@ -4,16 +4,15 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.series.wildlife.morph.IMorph;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.ItemStackUtils;
-import net.mat0u5.lifeseries.series.wildlife.morph.DummyInterface;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -36,7 +35,7 @@ import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = LivingEntity.class, priority = 1)
-public abstract class LivingEntityMixin implements DummyInterface {
+public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
         if (!Main.isLogicalSide())return;
@@ -93,34 +92,19 @@ public abstract class LivingEntityMixin implements DummyInterface {
     }
     *///?}
 
-
-    /*
-        Morphing
-     */
-    public boolean dummy;
-    public PlayerEntity player;
-
-    @Override
-    public void makeDummy() {
-        dummy = true;
-    }
-    @Override
-    public void setPlayer(PlayerEntity playerEntity) {
-        player = playerEntity;
-    }
-
     @Inject(method = "tickMovement", at = @At("HEAD"), cancellable = true)
     public void stopTickingMovement(CallbackInfo ci){
-        if(dummy){
+        if (((IMorph) this).fromMorph()) {
             ci.cancel();
         }
     }
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void stopTicking(CallbackInfo ci){
-        if(dummy){
+        if(((IMorph) this).fromMorph()) {
             ci.cancel();
         }
     }
+
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;

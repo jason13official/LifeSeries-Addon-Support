@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard;
 
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
@@ -69,9 +69,7 @@ public class SizeShifting extends Wildcard {
         }
 
 
-        if (DependencyManager.cardinalComponentsLoaded()) {
-           if (!CardinalComponentsDependency.allowPlayerSizeChange(player)) return;
-        }
+        if (MorphManager.getOrCreateComponent(player).isMorphed()) return;
         /*
         if (saveFromFalling) {
             Has to be done client-side :/

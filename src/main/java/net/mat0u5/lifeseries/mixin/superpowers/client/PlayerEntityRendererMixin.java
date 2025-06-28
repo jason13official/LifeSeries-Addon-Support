@@ -1,8 +1,7 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,13 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-
-/*
- * This file includes code from the RiftMorph project: https://gitlab.nexusrealms.de/Farpo/riftmorph
- *
- * Used and modified under the MIT License.
- */
 
 //? if <= 1.21 {
 @Mixin(value = PlayerEntityRenderer.class, priority = 1)
@@ -41,9 +33,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             }
         }
 
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            CardinalComponentsDependency.replaceRendering(abstractClientPlayerEntity, f, g, matrixStack, vertexConsumerProvider, i, ci);
-        }
+        Morph.replaceRendering(abstractClientPlayerEntity, f, g, matrixStack, vertexConsumerProvider, i, ci);
 
     }
 }

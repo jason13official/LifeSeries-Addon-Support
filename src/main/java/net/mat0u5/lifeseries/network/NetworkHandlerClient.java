@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.client.gui.series.ChooseSeriesScreen;
 import net.mat0u5.lifeseries.client.gui.series.SeriesInfoScreen;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.SessionStatus;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.VersionControl;
 import net.mat0u5.lifeseries.client.ClientResourcePacks;
@@ -23,7 +24,10 @@ import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -66,6 +70,25 @@ public class NetworkHandlerClient {
             MinecraftClient client = context.client();
             client.execute(() -> handleConfigPacket(payload));
         });
+        ClientPlayNetworking.registerGlobalReceiver(StringListPayload.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            client.execute(() -> handleStringListPacket(payload.name(),payload.value()));
+        });
+    }
+    public static void handleStringListPacket(String name, List<String> value) {
+        if (name.equalsIgnoreCase("morph")) {
+            try {
+                String morphUUIDStr = value.get(0);
+                UUID morphUUID = UUID.fromString(morphUUIDStr);
+                String morphTypeStr = value.get(1);
+                EntityType<?> morphType = null;
+                if (!morphTypeStr.equalsIgnoreCase("null") && !morphUUIDStr.isEmpty()) {
+                    morphType = Registries.ENTITY_TYPE.get(Identifier.of(morphTypeStr));
+                }
+                if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Received morph packet: {} ({})", morphType, morphUUID);
+                MorphManager.setFromPacket(morphUUID, morphType);
+            } catch (Exception e) {}
+        }
     }
 
     public static void handleConfigPacket(ConfigPayload payload) {

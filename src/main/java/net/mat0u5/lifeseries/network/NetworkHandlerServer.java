@@ -44,6 +44,7 @@ public class NetworkHandlerServer {
     public static void registerPackets() {
         PayloadTypeRegistry.playS2C().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(StringPayload.ID, StringPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(StringListPayload.ID, StringListPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(LongPayload.ID, LongPayload.CODEC);
@@ -53,6 +54,7 @@ public class NetworkHandlerServer {
 
         PayloadTypeRegistry.playC2S().register(NumberPayload.ID, NumberPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StringPayload.ID, StringPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(StringListPayload.ID, StringListPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(HandshakePayload.ID, HandshakePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(TriviaQuestionPayload.ID, TriviaQuestionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LongPayload.ID, LongPayload.CODEC);
@@ -254,6 +256,18 @@ public class NetworkHandlerServer {
     public static void sendStringPacket(ServerPlayerEntity player, String name, String value) {
         StringPayload payload = new StringPayload(name, value);
         ServerPlayNetworking.send(player, payload);
+    }
+
+    public static void sendStringListPacket(ServerPlayerEntity player, String name, List<String> value) {
+        StringListPayload payload = new StringListPayload(name, value);
+        ServerPlayNetworking.send(player, payload);
+    }
+
+    public static void sendStringListPackets(String name, List<String> value) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            StringListPayload payload = new StringListPayload(name, value);
+            ServerPlayNetworking.send(player, payload);
+        }
     }
 
     public static void sendNumberPacket(ServerPlayerEntity player, String name, double number) {

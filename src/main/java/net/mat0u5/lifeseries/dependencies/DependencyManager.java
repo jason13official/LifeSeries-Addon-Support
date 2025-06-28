@@ -7,10 +7,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class DependencyManager {
-    public static boolean cardinalComponentsLoaded() {
-        if (isModLoaded("cardinal-components")) return true;
-        return isModLoaded("cardinal-components-base") && isModLoaded("cardinal-components-entity");
-    }
 
     public static boolean blockbenchImportLibraryLoaded() {
         return isModLoaded("bil");
@@ -29,7 +25,7 @@ public class DependencyManager {
     }
 
     public static boolean wildLifeModsLoaded() {
-        return cardinalComponentsLoaded() && blockbenchImportLibraryLoaded() && polymerLoaded();
+        return blockbenchImportLibraryLoaded() && polymerLoaded();
     }
 
     public static boolean isModLoaded(String modId) {
@@ -56,18 +52,6 @@ public class DependencyManager {
                                     .styled(style -> style
                                             .withColor(Formatting.BLUE)
                                             .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/blockbench-import-library"))
-                                            .withUnderline(true)
-                                    )
-                    ).append(Text.of(" §cto play Wild Life."))
-            );
-        }
-        if (!cardinalComponentsLoaded()) {
-            OtherUtils.broadcastMessage(
-                    Text.literal("§cYou must install the ").append(
-                            Text.literal("Cardinal Components API mod")
-                                    .styled(style -> style
-                                            .withColor(Formatting.BLUE)
-                                            .withClickEvent(TextUtils.openURLClickEvent("https://modrinth.com/mod/cardinal-components-api"))
                                             .withUnderline(true)
                                     )
                     ).append(Text.of(" §cto play Wild Life."))

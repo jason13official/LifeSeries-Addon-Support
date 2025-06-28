@@ -6,9 +6,11 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
+import net.mat0u5.lifeseries.series.wildlife.morph.IMorph;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.utils.IEntityDataSaver;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -17,16 +19,55 @@ import net.minecraft.entity.mob.EvokerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = Entity.class, priority = 1)
-public abstract class EntityMixin {
+public abstract class EntityMixin implements IEntityDataSaver, IMorph {
+    private NbtCompound persistentData;
+    @Override
+    public NbtCompound getPersistentData() {
+        if (persistentData == null) {
+            persistentData = new NbtCompound();
+        }
+        return persistentData;
+    }
+
+    @Inject(method = "writeNbt", at = @At("HEAD"))
+    protected void writeNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+        if (persistentData != null) {
+            nbt.put("lifeseries", persistentData);
+        }
+    }
+
+    @Inject(method = "readNbt", at = @At("HEAD"))
+    protected void readNbt(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains("lifeseries")) {
+            persistentData = nbt.getCompound("lifeseries");
+        }
+    }
+
+
+    private boolean fromMorph = false;
+
+    @Override
+    public void setMorph(boolean fromMorph) {
+        this.fromMorph = fromMorph;
+    }
+
+    @Override
+    public boolean fromMorph() {
+        return fromMorph;
+    }
+
+
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (Main.isLogicalSide()) {

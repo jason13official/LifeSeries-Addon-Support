@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.gui.other.UpdateInfoScreen;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.utils.UpdateChecker;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.series.SeriesList;
@@ -73,6 +74,23 @@ public class ClientEvents {
             ClientTaskScheduler.onClientTick();
         }catch(Exception ignored) {}
     }
+
+    public static void onClientTickMovementEnd() {
+        try {
+            MinecraftClient client = MinecraftClient.getInstance();
+            //morphTick(client);
+        }catch(Exception ignored) {}
+    }
+
+    public static void morphTick(MinecraftClient client) {
+        try {
+            if (client.world == null) return;
+            for (PlayerEntity player : client.world.getPlayers()) {
+                MorphManager.clientTick(player);
+            }
+        } catch (Exception ignored) {}
+    }
+
     public static void checkOnGroundFor(ClientPlayerEntity player) {
         if (!player.isOnGround()) {
             onGroundFor = 0;

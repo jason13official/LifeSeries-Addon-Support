@@ -1,11 +1,12 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards;
 
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.SessionAction;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
+import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.*;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -88,9 +89,7 @@ public class WildcardManager {
         }
         TaskScheduler.scheduleTask(20, () -> Hunger.updateInventory(player));
 
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            CardinalComponentsDependency.resetWildcardsOnPlayerJoin(player);
-        }
+        MorphManager.resetMorph(player);
     }
 
     public static void onPlayerFinishJoining(ServerPlayerEntity player) {

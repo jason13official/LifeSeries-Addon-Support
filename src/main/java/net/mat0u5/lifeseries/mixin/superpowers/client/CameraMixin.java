@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin.superpowers.client;
 
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,9 +23,6 @@ public class CameraMixin {
             index = 0
     )
     private float modifyEntityScale(float originalDistance) {
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            return CardinalComponentsDependency.modifyEntityScale(focusedEntity, originalDistance);
-        }
-        return originalDistance;
+        return Morph.modifyEntityScale(focusedEntity, originalDistance);
     }
 }

@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientUtils;
-import net.mat0u5.lifeseries.dependencies.CardinalComponentsDependency;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.OtherUtils;
@@ -81,9 +81,7 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "getBaseDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if (DependencyManager.cardinalComponentsLoaded()) {
-            CardinalComponentsDependency.getBaseDimensions(player, pose, cir);
-        }
+        Morph.getBaseDimensions(player, pose, cir);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
