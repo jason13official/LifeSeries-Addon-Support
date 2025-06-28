@@ -31,6 +31,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph {
+    /*
     private NbtCompound persistentData;
     @Override
     public NbtCompound getPersistentData() {
@@ -53,6 +54,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
             persistentData = nbt.getCompound("lifeseries");
         }
     }
+    */
 
 
     private boolean fromMorph = false;

@@ -1,13 +1,10 @@
 package net.mat0u5.lifeseries.series.wildlife.morph;
 
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
-import net.mat0u5.lifeseries.utils.IEntityDataSaver;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class MorphComponent {
@@ -144,8 +141,6 @@ public class MorphComponent {
             /*dummy.limbAnimator.updateLimbs(player.limbAnimator.getAnimationProgress() - dummy.limbAnimator.getAnimationProgress(), 1, 1);
              *///?}
             dummy.limbAnimator.setSpeed(player.limbAnimator.getSpeed());
-            if (dummy.limbAnimator.getSpeed() != player.limbAnimator.getSpeed()) System.out.println("___"+dummy.limbAnimator.getSpeed()+"_"+player.limbAnimator.getSpeed());
-            if (dummy.limbAnimator.getPos() != player.limbAnimator.getPos()) System.out.println(dummy.limbAnimator.getPos()+"_"+player.limbAnimator.getPos());
 
             dummy.lastHandSwingProgress = player.lastHandSwingProgress;
             dummy.handSwingProgress = player.handSwingProgress;

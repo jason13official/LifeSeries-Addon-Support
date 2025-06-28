@@ -52,9 +52,7 @@ public class PlayerEntityRendererMixin {
                     return;
                 }
             }
-            if (DependencyManager.cardinalComponentsLoaded()) {
-                CardinalComponentsDependency.render(entity, x, y, z, tickDelta, matrices, vertexConsumers, light, ci);
-            }
+            Morph.render(entity, x, y, z, tickDelta, matrices, vertexConsumers, light, ci);
         }
     }
 }

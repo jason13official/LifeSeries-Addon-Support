@@ -2,14 +2,10 @@ package net.mat0u5.lifeseries.series.wildlife.morph;
 
 import net.mat0u5.lifeseries.client.ClientUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.utils.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

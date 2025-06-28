@@ -51,8 +51,10 @@ public class Morph {
     }
     //?} else {
     /*public static <E extends Entity> void render(Entity entity, double x, double y, double z, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if(MORPH_COMPONENT.isProvidedBy(entity)){
-            MorphComponent morphComponent = MORPH_COMPONENT.get(entity);
+        if (!(entity instanceof PlayerEntity player)) return;
+        MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
+        if(morphComponent.isMorphed()) {
+            morphComponent.clientTick();
             LivingEntity dummy = morphComponent.getDummy();
             if(morphComponent.isMorphed() && dummy != null){
                 MinecraftClient.getInstance().getEntityRenderDispatcher().render(

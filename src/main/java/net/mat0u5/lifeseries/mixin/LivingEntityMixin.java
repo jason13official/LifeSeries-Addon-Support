@@ -34,6 +34,10 @@ import java.util.function.Predicate;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
+//? if >= 1.21.2 {
+/*import net.minecraft.entity.mob.CreakingEntity;
+*///?}
+
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
