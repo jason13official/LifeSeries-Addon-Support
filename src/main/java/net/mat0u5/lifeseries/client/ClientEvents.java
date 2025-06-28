@@ -75,22 +75,6 @@ public class ClientEvents {
         }catch(Exception ignored) {}
     }
 
-    public static void onClientTickMovementEnd() {
-        try {
-            MinecraftClient client = MinecraftClient.getInstance();
-            //morphTick(client);
-        }catch(Exception ignored) {}
-    }
-
-    public static void morphTick(MinecraftClient client) {
-        try {
-            if (client.world == null) return;
-            for (PlayerEntity player : client.world.getPlayers()) {
-                MorphManager.clientTick(player);
-            }
-        } catch (Exception ignored) {}
-    }
-
     public static void checkOnGroundFor(ClientPlayerEntity player) {
         if (!player.isOnGround()) {
             onGroundFor = 0;

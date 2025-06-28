@@ -17,8 +17,11 @@ public class MorphManager {
     private static final Map<UUID, MorphComponent> morphComponents = new HashMap<>();
 
     public static MorphComponent getOrCreateComponent(PlayerEntity player) {
-        UUID playerId = player.getUuid();
-        return morphComponents.computeIfAbsent(playerId, k -> new MorphComponent(player));
+        return getOrCreateComponent(player.getUuid());
+    }
+
+    public static MorphComponent getOrCreateComponent(UUID playerUUID) {
+        return morphComponents.computeIfAbsent(playerUUID, k -> new MorphComponent(playerUUID));
     }
 
     public static void removeComponent(ServerPlayerEntity player) {
@@ -78,11 +81,8 @@ public class MorphManager {
     }
 
     public static void setFromPacket(UUID uuid, EntityType<?> morph) {
-        PlayerEntity player = ClientUtils.getPlayer(uuid);
-        if (player != null) {
-            MorphComponent component = getOrCreateComponent(player);
-            component.setMorph(morph);
-        }
+        MorphComponent component = getOrCreateComponent(uuid);
+        component.setMorph(morph);
     }
 
     /*

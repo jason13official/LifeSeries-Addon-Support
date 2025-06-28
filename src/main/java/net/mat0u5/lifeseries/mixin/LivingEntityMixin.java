@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.series.wildlife.morph.IMorph;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
@@ -95,19 +94,6 @@ public abstract class LivingEntityMixin {
         }
     }
     *///?}
-
-    @Inject(method = "tickMovement", at = @At("HEAD"), cancellable = true)
-    public void stopTickingMovement(CallbackInfo ci){
-        if (((IMorph) this).fromMorph()) {
-            ci.cancel();
-        }
-    }
-    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    public void stopTicking(CallbackInfo ci){
-        if(((IMorph) this).fromMorph()) {
-            ci.cancel();
-        }
-    }
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     public void addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {

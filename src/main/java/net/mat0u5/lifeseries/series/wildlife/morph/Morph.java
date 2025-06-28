@@ -38,9 +38,9 @@ public class Morph {
 
     //? if <= 1.21 {
     public static void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
+        if (abstractClientPlayerEntity.isSpectator() || abstractClientPlayerEntity.isInvisible()) return;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(abstractClientPlayerEntity);
         if (morphComponent.isMorphed()) {
-            morphComponent.clientTick();
             LivingEntity dummy = morphComponent.getDummy();
             if(morphComponent.isMorphed() && dummy != null){
                 MinecraftClient.getInstance().getEntityRenderDispatcher().render(
@@ -52,9 +52,9 @@ public class Morph {
     //?} else {
     /*public static <E extends Entity> void render(Entity entity, double x, double y, double z, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (!(entity instanceof PlayerEntity player)) return;
+        if (player.isSpectator() || player.isInvisible()) return;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
         if(morphComponent.isMorphed()) {
-            morphComponent.clientTick();
             LivingEntity dummy = morphComponent.getDummy();
             if(morphComponent.isMorphed() && dummy != null){
                 MinecraftClient.getInstance().getEntityRenderDispatcher().render(

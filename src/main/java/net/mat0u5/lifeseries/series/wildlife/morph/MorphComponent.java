@@ -1,45 +1,51 @@
 package net.mat0u5.lifeseries.series.wildlife.morph;
 
+import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.client.ClientUtils;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
+import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class MorphComponent {
     private static final String MORPH_NBT_KEY = "morph";
     private static final String TYPE_KEY = "type";
 
-    private final PlayerEntity player;
+    private UUID playerUUID;
     @Nullable
     private EntityType<?> morph = null;
     private LivingEntity dummy = null;
 
-    public MorphComponent(PlayerEntity player) {
-        this.player = player;
+    public MorphComponent(UUID playerUUID) {
+        this.playerUUID = playerUUID;
     }
 
-    public void setMorph(EntityType<?> morph){
+    public void setMorph(EntityType<?> morph) {
         this.morph = morph;
 
-        if (player != null) {
-            if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (Main.isLogicalSide()) {
+            ServerPlayerEntity serverPlayer = PlayerUtils.getPlayer(playerUUID);
+            if (serverPlayer != null) {
                 if (morph == null) {
                     SizeShifting.setPlayerSizeUnchecked(serverPlayer, 1);
                 }
                 else {
                     //? if <= 1.21 {
-                    Entity entity = morph.create(player.getWorld());
+                    Entity entity = morph.create(serverPlayer.getWorld());
                     //?} else {
-                    /*Entity entity = morph.create(player.getWorld(), SpawnReason.COMMAND);
+                    /*Entity entity = morph.create(serverPlayer.getWorld(), SpawnReason.COMMAND);
                      *///?}
                     if (entity != null) {
                         EntityDimensions dimensions = entity.getDimensions(EntityPose.STANDING);
                         double scaleY = dimensions.height() / PlayerEntity.STANDING_DIMENSIONS.height();
                         double scaleX = dimensions.width() / PlayerEntity.STANDING_DIMENSIONS.width();
                         double scale = Math.clamp(Math.min(scaleX, scaleY), 0.1, 1.0);
-                        if (scale != player.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);
+                        if (scale != serverPlayer.getScale()) SizeShifting.setPlayerSizeUnchecked(serverPlayer, 0.1);
                     }
                 }
             }
@@ -67,6 +73,9 @@ public class MorphComponent {
 
     public void clientTick() {
         if(isMorphed() && morph != null){
+            PlayerEntity player = ClientUtils.getPlayer(playerUUID);
+            if (player == null) return;
+
             boolean isHorse = morph == EntityType.HORSE || morph == EntityType.SKELETON_HORSE || morph == EntityType.ZOMBIE_HORSE;
             boolean fixedHead = isHorse || morph == EntityType.GOAT;
             boolean clampedPitch = isHorse || morph == EntityType.GOAT;
@@ -83,8 +92,6 @@ public class MorphComponent {
                     return;
                 }
                 dummy = (LivingEntity) entity;
-
-                ((IMorph) dummy).setMorph(true);
             }
             //? if <= 1.21.4 {
             dummy.prevX = player.prevX;

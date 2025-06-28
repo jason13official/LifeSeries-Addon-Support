@@ -13,8 +13,4 @@ public class ClientPlayerEntityMixin {
     private void tickTail(CallbackInfo ci) {
         ClientEvents.onClientTickEnd();
     }
-    @Inject(method = "tickMovement", at = @At("TAIL"))
-    private void tickMovementTail(CallbackInfo ci) {
-        ClientEvents.onClientTickMovementEnd();
-    }
 }
