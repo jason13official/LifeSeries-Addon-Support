@@ -185,6 +185,7 @@ This command **always** available
   - `/task reroll <player>` - Re-rolls `<player>`'s task.
   - `/task assignRandom <player/s>` - Assigns a random task to `<player/s>`.
   - `/task clearTask <player>` - Clears the task book from `<player>`.
+  - `/task set <player> <difficulty> <task>` - Sets the `<player>`'s task to be `<task>` on the next randomization.
 
 - `/soulmate` - *These commands are only available when playing Double Life.*
   - `/soulmate get <player>` - Shows you who `<player>`'s soulmate is.

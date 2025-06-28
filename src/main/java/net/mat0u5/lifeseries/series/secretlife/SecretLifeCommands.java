@@ -2,12 +2,16 @@ package net.mat0u5.lifeseries.series.secretlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.utils.AnimationUtils;
+import net.mat0u5.lifeseries.utils.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -148,6 +152,22 @@ public class SecretLifeCommands {
                                     )
                             )
                     )
+                    .then(literal("set")
+                            .then(argument("player", EntityArgumentType.player())
+                                    .then(argument("type", StringArgumentType.string())
+                                            .suggests((context, builder) -> CommandSource.suggestMatching(List.of("easy","hard","red"), builder))
+                                            .then(argument("task", StringArgumentType.greedyString())
+                                                    .executes(context -> setTask(
+                                                            context.getSource(),
+                                                            EntityArgumentType.getPlayer(context, "player"),
+                                                            StringArgumentType.getString(context, "type"),
+                                                            StringArgumentType.getString(context, "task")
+                                                            )
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
         );
         dispatcher.register(
             literal("gift")
@@ -166,6 +186,30 @@ public class SecretLifeCommands {
                     )
                 )
         );
+    }
+
+    public static int setTask(ServerCommandSource source, ServerPlayerEntity target, String type, String task) {
+        if (checkBanned(source)) return -1;
+        if (target == null) return -1;
+
+        TaskType taskType = TaskType.EASY;
+
+        if (type.equalsIgnoreCase("hard")) taskType = TaskType.HARD;
+        if (type.equalsIgnoreCase("red")) taskType = TaskType.RED;
+
+        TaskManager.preAssignedTasks.put(target.getUuid(), new Task(task, taskType));
+
+        if (TaskManager.removePlayersTaskBook(target)) {
+            TaskManager.assignRandomTaskToPlayer(target, taskType);
+            AnimationUtils.playTotemAnimation(target);
+            OtherUtils.sendCommandFeedback(source, Text.of("Changed "+target.getNameForScoreboard()+"'s task."));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, Text.of("Pre-assigned "+target.getNameForScoreboard()+"'s task for randomization."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("They will be given the task book once you / the game rolls the tasks."));
+        }
+
+        return 1;
     }
 
     public static int changeLocations(ServerCommandSource source) {

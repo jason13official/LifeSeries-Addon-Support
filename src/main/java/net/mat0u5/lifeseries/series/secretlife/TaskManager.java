@@ -25,10 +25,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
 
@@ -51,6 +48,7 @@ public class TaskManager {
     public static int secretKeeperBeingUsedFor = 0;
     public static StringListConfig usedTasksConfig;
     public static SecretLifeLocationConfig locationsConfig;
+    public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
 
     public static SessionAction actionChooseTasks = new SessionAction(
             OtherUtils.minutesToTicks(1),"§7Assign Tasks §f[00:01:00]", "Assign Tasks"
@@ -155,8 +153,16 @@ public class TaskManager {
     }
 
     public static void assignRandomTaskToPlayer(ServerPlayerEntity player, TaskType type) {
+        removePlayersTaskBook(player);
         if (!currentSeries.isAlive(player)) return;
-        Task task = getRandomTask(type);
+        Task task;
+        if (preAssignedTasks.containsKey(player.getUuid())) {
+            task = preAssignedTasks.get(player.getUuid());
+            preAssignedTasks.remove(player.getUuid());
+        }
+        else {
+            task = getRandomTask(type);
+        }
         ItemStack book = getTaskBook(player, task);
         if (!player.giveItemStack(book)) {
             ItemStackUtils.spawnItemForPlayer(PlayerUtils.getServerWorld(player), player.getPos(), book, player);
@@ -171,7 +177,6 @@ public class TaskManager {
                 thisType = TaskType.EASY;
                 if (currentSeries.isOnLastLife(player, false)) thisType = TaskType.RED;
             }
-            removePlayersTaskBook(player);
             assignRandomTaskToPlayer(player, thisType);
         }
     }
@@ -398,7 +403,6 @@ public class TaskManager {
             });
             TaskScheduler.scheduleTask(200, () -> AnimationUtils.playTotemAnimation(player));
             TaskScheduler.scheduleTask(240, () -> {
-                removePlayersTaskBook(player);
                 assignRandomTaskToPlayer(player, newType);
                 secretKeeperBeingUsed = false;
             });
