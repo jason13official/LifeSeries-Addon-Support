@@ -41,8 +41,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Events {
     public static boolean skipNextTickReload = false;
@@ -129,6 +128,7 @@ public class Events {
     private static void onServerStopping(MinecraftServer server) {
         try {
             UpdateChecker.shutdownExecutor();
+            currentSession.sessionEnd();
         }catch (Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 

@@ -136,6 +136,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigEntry<>(
             "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "boolean", "Superpower - Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
     );
+    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigEntry<>(
+            "wildcard_superpowers_superspeed_step", false, "boolean", "Superpower - Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
+    );
 
     public WildLifeConfig() {
         super("./config/"+ Main.MOD_ID,"wildlife.properties");
@@ -170,7 +173,8 @@ public class WildLifeConfig extends ConfigManager {
 
                 WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE,
                 WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS,
-                WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
+                WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN,
+                WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
         ));
     }
 

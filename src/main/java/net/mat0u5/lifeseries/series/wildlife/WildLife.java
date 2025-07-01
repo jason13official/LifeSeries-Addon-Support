@@ -98,6 +98,8 @@ public class WildLife extends Series {
                     }
                     else {
                         addPlayerLife(killer);
+                        Necromancy.removeRessurectedPlayer(killer);
+                        AttributeUtils.resetAttributesOnPlayerJoin(killer);
                     }
                     gaveLife = true;
                 }
@@ -164,32 +166,33 @@ public class WildLife extends Series {
     public void reload() {
         super.reload();
         if (!(seriesConfig instanceof WildLifeConfig config)) return;
-        Hunger.SWITCH_DELAY = config.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get(config);
+        Hunger.SWITCH_DELAY = WildLifeConfig.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get(config);
 
-        SizeShifting.MIN_SIZE = config.WILDCARD_SIZESHIFTING_MIN_SIZE.get(config);
-        SizeShifting.MAX_SIZE = config.WILDCARD_SIZESHIFTING_MAX_SIZE.get(config);
-        SizeShifting.SIZE_CHANGE_MULTIPLIER = config.WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER.get(config);
+        SizeShifting.MIN_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MIN_SIZE.get(config);
+        SizeShifting.MAX_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MAX_SIZE.get(config);
+        SizeShifting.SIZE_CHANGE_MULTIPLIER = WildLifeConfig.WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER.get(config);
         //SizeShifting.SAVE_FROM_FALLING = config.WILDCARD_SIZESHIFTING_PREVENT_SHIFT_FALLING.get(config);
 
 
-        Snail.GLOBAL_SPEED_MULTIPLIER = config.WILDCARD_SNAILS_SPEED_MULTIPLIER.get(config);
-        Snail.SHOULD_DROWN_PLAYER = config.WILDCARD_SNAILS_DROWN_PLAYERS.get(config);
+        Snail.GLOBAL_SPEED_MULTIPLIER = WildLifeConfig.WILDCARD_SNAILS_SPEED_MULTIPLIER.get(config);
+        Snail.SHOULD_DROWN_PLAYER = WildLifeConfig.WILDCARD_SNAILS_DROWN_PLAYERS.get(config);
 
-        TimeDilation.MIN_TICK_RATE = (float) (20.0 * config.WILDCARD_TIMEDILATION_MIN_SPEED.get(config));
-        TimeDilation.MAX_TICK_RATE = (float) (20.0 * config.WILDCARD_TIMEDILATION_MAX_SPEED.get(config));
-        TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / config.WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED.get(config));
+        TimeDilation.MIN_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MIN_SPEED.get(config));
+        TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MAX_SPEED.get(config));
+        TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / WildLifeConfig.WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED.get(config));
 
-        MobSwap.MAX_DELAY = config.WILDCARD_MOBSWAP_START_SPAWN_DELAY.get(config);
-        MobSwap.MIN_DELAY = config.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get(config);
-        MobSwap.SPAWN_MOBS = config.WILDCARD_MOBSWAP_SPAWN_MOBS.get(config);
-        MobSwap.BOSS_CHANCE_MULTIPLIER = config.WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER.get(config);
+        MobSwap.MAX_DELAY = WildLifeConfig.WILDCARD_MOBSWAP_START_SPAWN_DELAY.get(config);
+        MobSwap.MIN_DELAY = WildLifeConfig.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get(config);
+        MobSwap.SPAWN_MOBS = WildLifeConfig.WILDCARD_MOBSWAP_SPAWN_MOBS.get(config);
+        MobSwap.BOSS_CHANCE_MULTIPLIER = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER.get(config);
 
-        TriviaBot.CAN_START_RIDING = config.WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS.get(config);
-        TriviaWildcard.TRIVIA_BOTS_PER_PLAYER = config.WILDCARD_TRIVIA_BOTS_PER_PLAYER.get(config);
-        TriviaBot.EASY_TIME = config.WILDCARD_TRIVIA_SECONDS_EASY.get(config);
-        TriviaBot.NORMAL_TIME = config.WILDCARD_TRIVIA_SECONDS_NORMAL.get(config);
-        TriviaBot.HARD_TIME = config.WILDCARD_TRIVIA_SECONDS_HARD.get(config);
-        WindCharge.MAX_MACE_DAMAGE = config.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
+        TriviaBot.CAN_START_RIDING = WildLifeConfig.WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS.get(config);
+        TriviaWildcard.TRIVIA_BOTS_PER_PLAYER = WildLifeConfig.WILDCARD_TRIVIA_BOTS_PER_PLAYER.get(config);
+        TriviaBot.EASY_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_EASY.get(config);
+        TriviaBot.NORMAL_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_NORMAL.get(config);
+        TriviaBot.HARD_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_HARD.get(config);
+        WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
+        Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
 
         Snails.loadConfig();
         Snails.loadSnailNames();

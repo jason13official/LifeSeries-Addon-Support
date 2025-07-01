@@ -18,6 +18,7 @@ public class AttributeUtils {
     public static final double DEFAULT_PLAYER_JUMP_HEIGHT = 0.41999998688697815;
     public static final double DEFAULT_PLAYER_SAFE_FALL_HEIGHT = 3.0;
     public static final double DEFAULT_PLAYER_MOVEMENT_SPEED = 0.10000000149011612;
+    public static final double DEFAULT_PLAYER_STEP_HEIGHT = 0.6;
 
 
     public static void resetAttributesOnPlayerJoin(ServerPlayerEntity player) {
@@ -31,6 +32,7 @@ public class AttributeUtils {
             resetSafeFallHeight(player);
         }
         resetMovementSpeed(player);
+        resetStepHeight(player);
     }
 
     public static void resetMaxPlayerHealthIfNecessary(ServerPlayerEntity player) {
@@ -56,6 +58,10 @@ public class AttributeUtils {
 
     public static void resetMovementSpeed(ServerPlayerEntity player) {
         setMovementSpeed(player, DEFAULT_PLAYER_MOVEMENT_SPEED);
+    }
+
+    public static void resetStepHeight(ServerPlayerEntity player) {
+        setStepHeight(player, DEFAULT_PLAYER_STEP_HEIGHT);
     }
 
     /*
@@ -97,13 +103,21 @@ public class AttributeUtils {
         //?} else
         /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.JUMP_STRENGTH)).setBaseValue(value);*/
     }
-    
+
     public static void setMovementSpeed(ServerPlayerEntity player, double value) {
         if (player == null) return;
         //? if <=1.21 {
         Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)).setBaseValue(value);
         //?} else
         /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)).setBaseValue(value);*/
+    }
+
+    public static void setStepHeight(ServerPlayerEntity player, double value) {
+        if (player == null) return;
+        //? if <=1.21 {
+        Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT)).setBaseValue(value);
+        //?} else
+        /*Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.STEP_HEIGHT)).setBaseValue(value);*/
     }
 
     /*

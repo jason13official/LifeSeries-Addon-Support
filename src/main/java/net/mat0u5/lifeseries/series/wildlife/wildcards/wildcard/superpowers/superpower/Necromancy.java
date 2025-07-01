@@ -93,15 +93,18 @@ public class Necromancy extends Superpower {
     @Override
     public void deactivate() {
         super.deactivate();
+        List<UUID> deadAgain = new ArrayList<>();
         for (ServerPlayerEntity player : getDeadPlayers()) {
             if (player.isSpectator()) continue;
-            if (perPlayerRessurections.contains(player.getUuid())) {
+            UUID uuid = player.getUuid();
+            if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
                 WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
                 player.changeGameMode(GameMode.SPECTATOR);
+                deadAgain.add(uuid);
             }
         }
-        ressurectedPlayers.clear();
-        perPlayerRessurections.clear();
+        ressurectedPlayers.removeAll(deadAgain);
+        perPlayerRessurections.removeAll(deadAgain);
     }
 
     public BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {
@@ -158,5 +161,9 @@ public class Necromancy extends Superpower {
 
     public static boolean isRessurectedPlayer(ServerPlayerEntity player) {
         return ressurectedPlayers.contains(player.getUuid());
+    }
+
+    public static boolean removeRessurectedPlayer(ServerPlayerEntity player) {
+        return ressurectedPlayers.remove(player.getUuid());
     }
 }

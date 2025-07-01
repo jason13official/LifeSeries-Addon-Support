@@ -75,9 +75,11 @@ public class Session {
 
     public void sessionEnd() {
         SessionTranscript.sessionEnd();
+        if (status != SessionStatus.FINISHED && status != SessionStatus.NOT_STARTED) {
+            SessionTranscript.sendTranscriptToAdmins();
+            OtherUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
+        }
         status = SessionStatus.FINISHED;
-        OtherUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
-        SessionTranscript.sendTranscriptToAdmins();
         passedTime = 0;
     }
 
