@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.client.ClientUtils;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
@@ -41,6 +42,7 @@ public class MorphComponent {
                     /*Entity entity = morph.create(serverPlayer.getWorld(), SpawnReason.COMMAND);
                      *///?}
                     if (entity != null) {
+                        ((IMorph) entity).setFromMorph(true);
                         EntityDimensions dimensions = entity.getDimensions(EntityPose.STANDING);
                         double scaleY = dimensions.height() / PlayerEntity.STANDING_DIMENSIONS.height();
                         double scaleX = dimensions.width() / PlayerEntity.STANDING_DIMENSIONS.width();
@@ -87,6 +89,7 @@ public class MorphComponent {
                 //?} else {
                 /*Entity entity = morph.create(player.getWorld(), SpawnReason.COMMAND);
                  *///?}
+                if (entity != null) ((IMorph) entity).setFromMorph(true);
                 if(!(entity instanceof LivingEntity)){
                     morph = null;
                     return;
@@ -153,6 +156,10 @@ public class MorphComponent {
             dummy.handSwingProgress = player.handSwingProgress;
             dummy.handSwinging = player.handSwinging;
             dummy.handSwingTicks = player.handSwingTicks;
+
+            dummy.lastRenderX = player.lastRenderX;
+            dummy.lastRenderY = player.lastRenderY;
+            dummy.lastRenderZ = player.lastRenderZ;
 
             dummy.setPosition(player.getPos());
             dummy.setBodyYaw(player.bodyYaw);

@@ -9,7 +9,8 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.utils.IEntityDataSaver;
+import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
+import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -29,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
 @Mixin(value = Entity.class, priority = 1)
-public abstract class EntityMixin implements IEntityDataSaver {
+public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     /*
     private NbtCompound persistentData;
     @Override
@@ -54,6 +55,18 @@ public abstract class EntityMixin implements IEntityDataSaver {
         }
     }
     */
+
+    private boolean fromMorph = false;
+
+    @Override
+    public void setFromMorph(boolean fromMorph) {
+        this.fromMorph = fromMorph;
+    }
+
+    @Override
+    public boolean isFromMorph() {
+        return fromMorph;
+    }
 
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {

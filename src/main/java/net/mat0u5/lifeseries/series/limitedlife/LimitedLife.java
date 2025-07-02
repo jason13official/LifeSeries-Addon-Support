@@ -277,7 +277,7 @@ public class LimitedLife extends Series {
             if (wasAllowedToAttack) return;
             OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
                     "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §agreen name§7), and is not a §cboogeyman§f!"));
-            OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove or add time (using §f/lives add/remove <player> <time>§7) if this was indeed an unjustified kill."));
+            OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove or add time (using §f/limitedlife time add/remove <player> <time>§7) if this was indeed an unjustified kill."));
             return;
         }
 
