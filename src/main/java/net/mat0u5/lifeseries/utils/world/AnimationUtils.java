@@ -1,5 +1,7 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.world;
 
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -8,8 +10,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector3f;
-
-import java.awt.*;
 
 public class AnimationUtils {
     private static int spiralDuration = 175;

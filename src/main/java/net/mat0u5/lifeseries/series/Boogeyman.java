@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.series;
 
-import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.UUID;

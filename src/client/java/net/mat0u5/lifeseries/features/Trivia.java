@@ -5,7 +5,7 @@ import net.mat0u5.lifeseries.gui.trivia.ConfirmQuizAnswerScreen;
 import net.mat0u5.lifeseries.gui.trivia.QuizScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.TriviaQuestionPayload;
-import net.mat0u5.lifeseries.utils.VersionControl;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;

@@ -1,26 +1,16 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
-import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.TeamUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -31,8 +21,6 @@ import java.util.UUID;
 import net.minecraft.particle.TrailParticleEffect;
 *///?}
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.server;
 
 public class Creaking extends ToggleableSuperpower {
     public static final List<UUID> allCreatedEntities = new ArrayList<>();

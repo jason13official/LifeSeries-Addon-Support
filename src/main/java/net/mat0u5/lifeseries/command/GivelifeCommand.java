@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.utils.AnimationUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.world.AnimationUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;

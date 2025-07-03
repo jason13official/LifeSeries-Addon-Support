@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;

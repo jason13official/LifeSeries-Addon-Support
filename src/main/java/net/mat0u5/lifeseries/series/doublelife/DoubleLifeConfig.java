@@ -1,9 +1,7 @@
 package net.mat0u5.lifeseries.series.doublelife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
-import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.mat0u5.lifeseries.config.ConfigManager;
 
 import java.util.List;
 

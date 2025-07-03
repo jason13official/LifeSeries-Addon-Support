@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.series.lastlife;
 
 import net.mat0u5.lifeseries.series.SessionAction;
 import net.mat0u5.lifeseries.series.SessionTranscript;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;

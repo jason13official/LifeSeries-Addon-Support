@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.series.thirdlife;
 
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PermissionManager;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 

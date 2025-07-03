@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.world;
 
 import net.mat0u5.lifeseries.Main;
 import net.minecraft.item.ItemStack;

@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
 import net.minecraft.enchantment.effect.entity.ReplaceDiskEnchantmentEffect;

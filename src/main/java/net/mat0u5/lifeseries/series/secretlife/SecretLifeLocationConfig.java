@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
-import net.mat0u5.lifeseries.resources.config.ConfigEntry;
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;

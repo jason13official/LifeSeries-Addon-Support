@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.player;
 
 import net.minecraft.scoreboard.*;
 import net.minecraft.text.Text;

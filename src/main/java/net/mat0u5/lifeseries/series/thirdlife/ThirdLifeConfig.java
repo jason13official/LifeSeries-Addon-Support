@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.series.thirdlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigManager;
 
 import java.util.ArrayList;
 import java.util.List;

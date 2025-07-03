@@ -9,8 +9,8 @@ import net.mat0u5.lifeseries.series.lastlife.LastLifeCommands;
 import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeCommands;
 import net.mat0u5.lifeseries.series.secretlife.SecretLifeCommands;
 import net.mat0u5.lifeseries.series.wildlife.WildLifeCommands;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
-import net.mat0u5.lifeseries.utils.TextUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 public class ModRegistries {
     public static void registerModStuff() {

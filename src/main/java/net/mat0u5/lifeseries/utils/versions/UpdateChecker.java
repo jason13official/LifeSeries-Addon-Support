@@ -1,10 +1,12 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.versions;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;

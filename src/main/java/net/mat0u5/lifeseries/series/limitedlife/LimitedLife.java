@@ -1,10 +1,13 @@
 package net.mat0u5.lifeseries.series.limitedlife;
 
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.*;
-import net.mat0u5.lifeseries.series.secretlife.SecretLifeConfig;
-import net.mat0u5.lifeseries.utils.*;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.scoreboard.ScoreboardEntry;

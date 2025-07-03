@@ -1,7 +1,9 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.other;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;

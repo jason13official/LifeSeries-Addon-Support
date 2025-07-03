@@ -1,9 +1,8 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.other;
 
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

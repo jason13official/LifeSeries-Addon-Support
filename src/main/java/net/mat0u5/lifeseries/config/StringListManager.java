@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.resources.config;
+package net.mat0u5.lifeseries.config;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

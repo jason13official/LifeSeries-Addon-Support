@@ -1,13 +1,16 @@
 package net.mat0u5.lifeseries.series.doublelife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
-import net.mat0u5.lifeseries.resources.config.StringListConfig;
+import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.SeriesList;
 import net.mat0u5.lifeseries.series.SessionAction;
 import net.mat0u5.lifeseries.series.SessionTranscript;
-import net.mat0u5.lifeseries.utils.*;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKey;

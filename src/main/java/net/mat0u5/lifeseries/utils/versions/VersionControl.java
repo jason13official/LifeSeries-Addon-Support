@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.versions;
 
 import static net.mat0u5.lifeseries.Main.MOD_VERSION;
 

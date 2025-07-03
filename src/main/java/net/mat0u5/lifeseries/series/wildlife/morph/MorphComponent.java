@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.series.wildlife.morph;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;

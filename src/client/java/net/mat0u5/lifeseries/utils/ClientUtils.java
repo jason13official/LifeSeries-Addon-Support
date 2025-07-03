@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

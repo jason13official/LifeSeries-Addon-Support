@@ -1,12 +1,9 @@
 package net.mat0u5.lifeseries.series.lastlife;
 
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.series.*;
-import net.mat0u5.lifeseries.series.limitedlife.LimitedLifeConfig;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PermissionManager;
-import net.mat0u5.lifeseries.utils.ScoreboardUtils;
-import net.minecraft.scoreboard.ScoreHolder;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 

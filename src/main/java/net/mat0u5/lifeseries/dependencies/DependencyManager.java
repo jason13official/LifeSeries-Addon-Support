@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.dependencies;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.TextUtils;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 

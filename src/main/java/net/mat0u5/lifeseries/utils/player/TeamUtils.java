@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.Main;
 import net.minecraft.entity.Entity;
@@ -7,10 +7,8 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.server;
 

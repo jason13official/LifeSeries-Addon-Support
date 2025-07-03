@@ -1,11 +1,11 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.player;
 
-import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.Session;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;

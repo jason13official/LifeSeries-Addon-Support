@@ -1,18 +1,14 @@
-package net.mat0u5.lifeseries.utils;
+package net.mat0u5.lifeseries.utils.world;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.border.WorldBorder;
 
 import java.util.List;
-import java.util.Random;
 
 public class WorldUitls {
 

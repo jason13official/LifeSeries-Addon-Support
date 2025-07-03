@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.resources.config;
+package net.mat0u5.lifeseries.config;
 
 import java.util.ArrayList;
 import java.util.List;

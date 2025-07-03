@@ -1,20 +1,18 @@
 package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
-import net.mat0u5.lifeseries.utils.AttributeUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
-import static net.mat0u5.lifeseries.Main.seriesConfig;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class Superspeed extends ToggleableSuperpower {

@@ -16,7 +16,7 @@ import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
-import net.mat0u5.lifeseries.utils.VersionControl;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.series.SeriesList;

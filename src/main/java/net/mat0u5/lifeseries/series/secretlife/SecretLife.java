@@ -1,9 +1,14 @@
 package net.mat0u5.lifeseries.series.secretlife;
 
-import net.mat0u5.lifeseries.resources.config.ConfigManager;
+import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.series.*;
-import net.mat0u5.lifeseries.series.wildlife.WildLifeConfig;
-import net.mat0u5.lifeseries.utils.*;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.player.AttributeUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.ItemSpawner;
+import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.component.type.PotionContentsComponent;

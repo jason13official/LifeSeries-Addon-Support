@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.series.lastlife;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -14,7 +14,7 @@ import net.minecraft.text.Text;
 import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.utils.PermissionManager.isAdmin;
+import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 

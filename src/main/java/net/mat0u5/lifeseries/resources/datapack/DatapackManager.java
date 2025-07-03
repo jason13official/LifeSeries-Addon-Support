@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.resources.datapack;
 
-import net.mat0u5.lifeseries.utils.OtherUtils;
-import net.mat0u5.lifeseries.utils.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.server.MinecraftServer;
 
 import static net.mat0u5.lifeseries.Main.server;
