@@ -16,12 +16,11 @@ public class Morph {
 
     public static void clientTick(MorphComponent morphComponent) {
         //TODO check.
-        UUID playerUUID = morphComponent.playerUUID;
         EntityType<?> morph = morphComponent.morph;
         LivingEntity dummy = morphComponent.dummy;
 
         if(morphComponent.isMorphed() && morph != null){
-            PlayerEntity player = ClientUtils.getPlayer(playerUUID);
+            PlayerEntity player = ClientUtils.getPlayer(morphComponent.playerUUID);
             if (player == null) return;
 
             boolean isHorse = morph == EntityType.HORSE || morph == EntityType.SKELETON_HORSE || morph == EntityType.ZOMBIE_HORSE;
@@ -126,6 +125,9 @@ public class Morph {
 
             dummy.setSneaking(player.isSneaking());
             dummy.age = player.age;
+
+            morphComponent.morph = morph;
+            morphComponent.dummy = dummy;
         }
     }
 }
