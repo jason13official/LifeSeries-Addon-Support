@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.server.network.ServerCommonNetworkHandler;
 import net.minecraft.text.Text;
@@ -14,6 +13,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+//? if <= 1.21.5
+import net.minecraft.network.PacketCallbacks;
+//? if >= 1.21.6
+/*import io.netty.channel.ChannelFutureListener;*/
 
 @Mixin(value = ServerCommonNetworkHandler.class, priority = 1)
 public class ServerCommonNetworkHandlerMixin {

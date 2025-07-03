@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentMapImpl;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+
+//? if <= 1.21
+import net.minecraft.component.ComponentMapImpl;
+//? if >= 1.21.2
+/*import net.minecraft.component.MergedComponentMap;*/
 
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {

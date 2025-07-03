@@ -83,6 +83,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.server;
+//? if >= 1.21.4
+/*import net.minecraft.util.Uuids;*/
+//? if >= 1.21.6 {
+/*import net.minecraft.util.ErrorReporter;
+import net.minecraft.storage.NbtWriteView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
+*///?}
 
 public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "triviabot");

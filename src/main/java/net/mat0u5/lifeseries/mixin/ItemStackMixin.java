@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.minecraft.component.ComponentMapImpl;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
@@ -12,6 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+//? if <= 1.21
+import net.minecraft.component.ComponentMapImpl;
+//? if >= 1.21.2
+/*import net.minecraft.component.MergedComponentMap;*/
 
 @Mixin(value = ItemStack.class, priority = 1)
 public class ItemStackMixin {

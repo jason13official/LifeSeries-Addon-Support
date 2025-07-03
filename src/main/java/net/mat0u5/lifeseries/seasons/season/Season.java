@@ -47,6 +47,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+//? if >= 1.21.2
+/*import net.minecraft.server.world.ServerWorld;*/
 
 public abstract class Season extends Session {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/main.zip";

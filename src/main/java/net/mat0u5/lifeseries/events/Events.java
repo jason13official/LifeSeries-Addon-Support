@@ -3,10 +3,6 @@ package net.mat0u5.lifeseries.events;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
@@ -45,6 +41,10 @@ import net.minecraft.world.World;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+//? if <= 1.21.2
+import net.fabricmc.fabric.api.event.player.*;
+//? if >= 1.21.2
+/*import net.fabricmc.fabric.api.event.player.*;*/
 
 public class Events {
     public static boolean skipNextTickReload = false;

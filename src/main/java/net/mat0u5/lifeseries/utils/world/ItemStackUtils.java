@@ -7,7 +7,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
@@ -19,7 +18,14 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
 import static net.mat0u5.lifeseries.Main.server;
+//? if <= 1.21
+import net.minecraft.item.EnchantedBookItem;
+//? if >= 1.21.2
+/*import net.minecraft.enchantment.EnchantmentHelper;*/
+//? if >= 1.21.4
+/*import java.util.Optional;*/
 
 public class ItemStackUtils {
     public static void clearItemLore(ItemStack itemStack) {

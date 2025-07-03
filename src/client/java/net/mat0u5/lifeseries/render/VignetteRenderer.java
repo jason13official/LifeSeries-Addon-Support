@@ -1,11 +1,20 @@
 package net.mat0u5.lifeseries.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+//? if <= 1.21 {
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+//?}
+//? if >= 1.21.2 {
+/*import net.minecraft.util.math.ColorHelper;
+*///?}
+//? if >= 1.21.2 && <= 1.21.5
+/*import net.minecraft.client.render.RenderLayer;*/
+//? if >= 1.21.6
+/*import net.minecraft.client.gl.RenderPipelines;*/
 
 public class VignetteRenderer {
     private static final Identifier VIGNETTE_TEXTURE = Identifier.ofVanilla("textures/misc/vignette.png");

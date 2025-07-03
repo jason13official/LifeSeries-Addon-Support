@@ -21,6 +21,8 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeason;
+//? if >= 1.21.2
+/*import net.minecraft.network.packet.s2c.play.PositionFlag;*/
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();

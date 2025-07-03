@@ -25,9 +25,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
-//? if >= 1.21.2 {
-/*import net.minecraft.entity.mob.CreakingEntity;
+//? if = 1.21.2 {
+/*import java.util.function.DoubleSupplier;
+import java.util.function.Predicate;
 *///?}
+//? if >= 1.21.2
+/*import net.minecraft.entity.mob.CreakingEntity;*/
 
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {

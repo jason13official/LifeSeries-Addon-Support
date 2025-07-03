@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.PlayerManager;
@@ -16,9 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
+//? if <= 1.21.5
+import net.minecraft.nbt.NbtCompound;
 //? if >= 1.21.6 {
-/*import net.minecraft.storage.ReadView;
+/*import net.minecraft.util.ErrorReporter;
+import net.minecraft.storage.ReadView;
 *///?}
 
 @Mixin(value = PlayerManager.class, priority = 1)

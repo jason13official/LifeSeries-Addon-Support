@@ -22,6 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
+//? if >= 1.21.2 {
+/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.entity.EntityType;
+import net.minecraft.server.world.ServerWorld;
+*///?}
+
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     /*

@@ -7,7 +7,6 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,6 +15,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 
 import java.util.Set;
+//? if <= 1.21.4
+import net.minecraft.component.type.UnbreakableComponent;
+//? if >= 1.21.4
+/*import net.minecraft.util.Unit;*/
 
 public class WindCharge extends ToggleableSuperpower {
     public static int MAX_MACE_DAMAGE = 2;

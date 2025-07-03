@@ -1,17 +1,24 @@
 package net.mat0u5.lifeseries.registries;
 
 import eu.pb4.polymer.core.api.entity.PolymerEntityUtils;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
+//? if <= 1.21 {
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.entity.EntityDimensions;
+//?}
+//? if >= 1.21.2 {
+/*import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
+import net.minecraft.registry.RegistryKey;
+*///?}
 
 public class MobRegistry {
 

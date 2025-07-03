@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+//? if >= 1.21.4
+/*import java.net.URI;*/
 
 public class TextUtils {
     private static HashMap<List<String>, List<String>> emotes = new HashMap<List<String>, List<String>>();

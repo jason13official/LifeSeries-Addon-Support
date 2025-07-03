@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.gui.trivia;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
@@ -8,7 +7,6 @@ import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.DisplayEntity;
@@ -22,6 +20,15 @@ import org.joml.Vector3f;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+//? if <= 1.21
+import com.mojang.blaze3d.systems.RenderSystem;
+//? if <= 1.21.5
+import net.minecraft.client.render.DiffuseLighting;
+//? if >= 1.21.6 {
+/*import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.state.EntityRenderState;
+*///?}
 
 public class QuizScreen extends DefaultScreen {
     private static final int[] ANSWER_COLORS = {

@@ -11,6 +11,12 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+//? if >= 1.21.4
+/*import java.util.Optional;*/
+//? if >= 1.21.6 {
+/*import net.minecraft.storage.NbtWriteView;
+import net.minecraft.util.ErrorReporter;
+*///?}
 
 public final class SnailPushProjectilesGoal extends Goal {
 

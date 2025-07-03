@@ -23,6 +23,9 @@ import java.util.Set;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
+//? if >= 1.21.2
+/*import net.minecraft.entity.player.PlayerPosition;*/
+
 @Mixin(value = ServerPlayNetworkHandler.class, priority = 1)
 public class ServerPlayNetworkHandlerMixin {
 

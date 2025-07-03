@@ -33,6 +33,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+//? if >= 1.21.2
+/*import net.minecraft.server.world.ServerWorld;*/
 
 @Mixin(value = PlayerEntity.class, priority = 1)
 public abstract class PlayerEntityMixin {

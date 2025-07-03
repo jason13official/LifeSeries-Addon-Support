@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -20,6 +19,18 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Unit;
+
+//? if >= 1.21.2 {
+/*import net.minecraft.component.type.EquippableComponent;
+import net.minecraft.util.Identifier;
+import java.util.Optional;
+*///?}
+//? if <= 1.21.4
+import net.minecraft.component.type.UnbreakableComponent;
+//? if >= 1.21.5
+/*import net.minecraft.component.type.TooltipDisplayComponent;*/
+//? if >= 1.21.6
+/*import net.minecraft.registry.Registries;*/
 
 public class Flight extends Superpower {
     public boolean isLaunchedUp = false;

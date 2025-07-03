@@ -24,6 +24,8 @@ import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
+//? if >= 1.21.2
+/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;*/
 
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();

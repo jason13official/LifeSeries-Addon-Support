@@ -9,6 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.UUID;
+//? if >= 1.21.2
+/*import net.minecraft.entity.SpawnReason;*/
 
 public class Morph {
 

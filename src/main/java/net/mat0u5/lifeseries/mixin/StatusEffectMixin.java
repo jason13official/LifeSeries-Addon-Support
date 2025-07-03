@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
+//? if >= 1.21.2
+/*import net.minecraft.server.world.ServerWorld;*/
+
 @Mixin(value = StatusEffect.class, priority = 1)
 public class StatusEffectMixin {
     @Inject(method = "applyInstantEffect", at = @At("HEAD"), cancellable = true)
