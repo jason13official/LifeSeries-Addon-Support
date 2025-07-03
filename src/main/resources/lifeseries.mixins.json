@@ -25,33 +25,14 @@
     "SpawnHelperMixin",
     "StatusEffectMixin",
     "WanderingTraderManagerMixin",
-    "superpowers.AdvancedExplosionBehaviorMixin",
-    "superpowers.EnchantmentHelperMixin",
-    "superpowers.EnderPearlEntityMixin",
-    "superpowers.PlayerManagerMixin",
-    "superpowers.SavePropertiesMixin",
-    "superpowers.SleepManagerMixin",
-    "superpowers.WindChargeItemMixin"
+    "AdvancedExplosionBehaviorMixin",
+    "EnderPearlEntityMixin",
+    "PlayerManagerMixin",
+    "SavePropertiesMixin",
+    "SleepManagerMixin",
+    "WindChargeItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "client.AbstractSoundInstanceMixin",
-    "client.ClientCommonNetworkHandlerMixin",
-    "client.ClientPlayerEntityMixin",
-    "client.ClientPlayNetworkHandlerMixin",
-    "client.ClientWorldMixin",
-    "client.EntityTrackingSoundInstanceAccessor",
-    "client.EntityTrackingSoundInstanceMixin",
-    "client.LivingEntityRendererMixin",
-    "client.MinecraftClientMixin",
-    "client.PlayerListHudMixin",
-    "client.SoundManagerMixin",
-    "client.SoundSystemMixin",
-    "superpowers.client.AbstractClientPlayerEntityMixin",
-    "superpowers.client.CameraMixin",
-    "superpowers.client.EntityRendererMixin",
-    "superpowers.client.PlayerEntityRendererMixin"
-  ]
+  }
 }

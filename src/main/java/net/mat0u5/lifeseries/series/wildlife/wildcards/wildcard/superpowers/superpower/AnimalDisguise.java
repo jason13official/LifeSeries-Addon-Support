@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.sup
 
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.registries.ModRegistries;
-import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
 import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;

@@ -15,8 +15,7 @@ import java.util.Set;
 public class ItemStackMixin {
     @Inject(method = "areItemsAndComponentsEqual", at = @At("HEAD"), cancellable = true)
     private static void areItemsAndComponentsEqual(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
-        if (!stack.isOf(otherStack.getItem())) {
-        } else {
+        if (stack.isOf(otherStack.getItem())) {
             if (stack.isEmpty() && otherStack.isEmpty()) {
                 cir.setReturnValue(true);
                 return;

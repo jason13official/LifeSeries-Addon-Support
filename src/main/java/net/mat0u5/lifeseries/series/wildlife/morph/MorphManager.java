@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.series.wildlife.morph;
 
-import net.mat0u5.lifeseries.client.ClientUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.entity.*;

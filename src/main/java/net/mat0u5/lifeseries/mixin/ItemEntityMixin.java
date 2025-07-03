@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
+import net.mat0u5.lifeseries.Main;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ public abstract class ItemEntityMixin {
 
     @Inject(method = "onPlayerCollision", at = @At("HEAD"), cancellable = true)
     private void onPlayerPickup(PlayerEntity player, CallbackInfo ci) {
+        if (!Main.isLogicalSide()) return;
         if (player instanceof ServerPlayerEntity serverPlayer) {
             if (blacklist == null) return;
             ItemEntity itemEntity = (ItemEntity) (Object) this;

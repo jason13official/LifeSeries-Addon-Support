@@ -1,8 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.client.ClientEvents;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -27,9 +25,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Predicate;
-
 import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeries;
 
@@ -41,7 +36,7 @@ import static net.mat0u5.lifeseries.Main.currentSeries;
 public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
-        if (!Main.isLogicalSide())return;
+        if (!Main.isLogicalSide()) return;
         if (!currentSeries.NO_HEALING) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -143,50 +138,6 @@ public abstract class LivingEntityMixin {
             }
         }
         return strength;
-    }
-
-
-    @Inject(method = "jump", at = @At("TAIL"))
-    private void onJump(CallbackInfo ci) {
-        if (!Main.isClient()) return;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        ClientEvents.onClientJump(entity);
-    }
-
-    @ModifyArg(
-            //? if <= 1.21 {
-            method = "travel",
-            //?} else {
-            /*method = "travelMidAir",
-            *///?}
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyMovementInput(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"),
-            index = 1
-    )
-    private float applyMovementInput(float slipperiness) {
-        if (!Main.isClient()) return slipperiness;
-        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000) return slipperiness;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
-            return 1.198f;
-        }
-        return slipperiness;
-    }
-
-    @ModifyArg(
-            method = "applyMovementInput",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"),
-            index = 0
-    )
-    private Vec3d applyMovementInput(Vec3d velocity) {
-        if (!Main.isClient()) return velocity;
-        if ((System.currentTimeMillis() - MainClient.CURSE_SLIDING) > 5000) return velocity;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof PlayerEntity playerr && MainClient.isClientPlayer(playerr.getUuid()) && playerr.isOnGround() && ClientEvents.onGroundFor >= 5) {
-            BlockPos blockPos = playerr.getVelocityAffectingPos();
-            float originalSlipperiness = playerr.getWorld().getBlockState(blockPos).getBlock().getSlipperiness();
-            return new Vec3d((velocity.x/originalSlipperiness)*0.995f, velocity.y, (velocity.z/originalSlipperiness)*0.995f);
-        }
-        return velocity;
     }
 
     @Inject(method = "drop", at = @At("HEAD"))

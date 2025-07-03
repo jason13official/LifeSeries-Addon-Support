@@ -1,16 +1,13 @@
 package net.mat0u5.lifeseries.utils;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.client.ClientResourcePacks;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.series.Series;
 import net.mat0u5.lifeseries.series.Session;
 import net.mat0u5.lifeseries.series.secretlife.SecretLife;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -18,8 +15,6 @@ import net.minecraft.network.packet.s2c.common.ResourcePackRemoveS2CPacket;
 import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -121,10 +116,13 @@ public class PlayerUtils {
     }
 
     public static void applyResourcepack(UUID uuid) {
+        /*
+        //TODO check.
         if (Main.isClient()) {
             ClientResourcePacks.applyResourcepack(uuid);
             return;
         }
+        */
         if (NetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
         applyServerResourcepack(uuid);
     }

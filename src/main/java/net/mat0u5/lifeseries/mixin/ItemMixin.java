@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.component.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -18,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.MainClient.clientActiveWildcards;
-import static net.mat0u5.lifeseries.MainClient.clientCurrentSeries;
 
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {
@@ -28,18 +27,30 @@ public abstract class ItemMixin {
 
     @Inject(method = "getComponents", at = @At("HEAD"), cancellable = true)
     public void getComponents(CallbackInfoReturnable<ComponentMap> cir) {
+        //TODO check.
         boolean isLogicalSide = Main.isLogicalSide();
-        if ((currentSeries instanceof WildLife && isLogicalSide) || (clientCurrentSeries == SeriesList.WILD_LIFE && !isLogicalSide)) {
-            if ((WildcardManager.isActiveWildcard(Wildcards.HUNGER) && isLogicalSide) || (clientActiveWildcards.contains(Wildcards.HUNGER) && !isLogicalSide)) {
-                Item item = (Item) (Object) this;
-                //? if <= 1.21 {
-                ComponentMapImpl components = new ComponentMapImpl(normalComponents());
-                 //?} else {
-                /*MergedComponentMap components = new MergedComponentMap(normalComponents());
-                *///?}
-                Hunger.defaultFoodComponents(item, components);
-                cir.setReturnValue(components);
+        boolean hungerActive = false;
+        if (isLogicalSide) {
+            if (currentSeries instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+                hungerActive = true;
             }
+        }
+        else {
+            if (Main.clientHelper != null &&
+                    Main.clientHelper.getCurrentSeries() == SeriesList.WILD_LIFE &&
+                    Main.clientHelper.getActiveWildcards().contains(Wildcards.HUNGER)) {
+                hungerActive = true;
+            }
+        }
+        if (hungerActive) {
+            Item item = (Item) (Object) this;
+            //? if <= 1.21 {
+            ComponentMapImpl components = new ComponentMapImpl(normalComponents());
+             //?} else {
+            /*MergedComponentMap components = new MergedComponentMap(normalComponents());
+            *///?}
+            Hunger.defaultFoodComponents(item, components);
+            cir.setReturnValue(components);
         }
     }
 

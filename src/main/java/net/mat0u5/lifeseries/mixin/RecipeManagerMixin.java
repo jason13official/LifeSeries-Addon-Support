@@ -58,6 +58,7 @@ public abstract class RecipeManagerMixin {
 
     @Inject(method = "apply", at = @At("HEAD"), cancellable = true)
     private void applyMixin(PreparedRecipes preparedRecipes, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci) {
+        if (!Main.isLogicalSide()) return;
         if (blacklist == null) return;
         if (blacklist.loadedListItemIdentifier == null)  {
             blacklist.getItemBlacklist();

@@ -1,14 +1,11 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.client.ClientUtils;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.series.wildlife.morph.Morph;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.utils.OtherUtils;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
@@ -21,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.event.GameEvent;
@@ -81,7 +77,14 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "getBaseDimensions", at = @At("HEAD"), cancellable = true)
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        Morph.getBaseDimensions(player, pose, cir);
+        MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
+        if (morphComponent.isMorphed()) {
+            float scaleRatio = 1 / player.getScale();
+            LivingEntity dummy = morphComponent.getDummy();
+            if (morphComponent.isMorphed() && dummy != null){
+                cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
+            }
+        }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -100,14 +103,4 @@ public abstract class PlayerEntityMixin {
             frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.getPos());
         }
     }
-
-    //? if >= 1.21.2 {
-    /*@Inject(method = "canGlide", at = @At("HEAD"), cancellable = true)
-    protected void canGlide(CallbackInfoReturnable<Boolean> cir) {
-        if (!Main.isClient()) return;
-        if (ClientUtils.shouldPreventGliding()) {
-            cir.setReturnValue(false);
-        }
-    }
-    *///?}
 }

@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
@@ -70,31 +69,21 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
 
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        if (Main.isLogicalSide()) {
-            if (currentSeries instanceof WildLife) {
-                if (Snail.SHOULD_DROWN_PLAYER) {
-                    if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
-                        Entity entity = (Entity) (Object) this;
-                        if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                            if (!Snails.snails.containsKey(player.getUuid())) return;
-                            Snail snail = Snails.snails.get(player.getUuid());
-                            if (snail == null) return;
-                            int snailAir = snail.getAir();
-                            int initialAir = cir.getReturnValue();
-                            if (snailAir < initialAir) {
-                                cir.setReturnValue(snailAir);
-                            }
+        if (!Main.isLogicalSide()) return;
+        if (currentSeries instanceof WildLife) {
+            if (Snail.SHOULD_DROWN_PLAYER) {
+                if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
+                    Entity entity = (Entity) (Object) this;
+                    if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+                        if (!Snails.snails.containsKey(player.getUuid())) return;
+                        Snail snail = Snails.snails.get(player.getUuid());
+                        if (snail == null) return;
+                        int snailAir = snail.getAir();
+                        int initialAir = cir.getReturnValue();
+                        if (snailAir < initialAir) {
+                            cir.setReturnValue(snailAir);
                         }
                     }
-                }
-            }
-        }
-        else if (MainClient.snailAir < 300) {
-            Entity entity = (Entity) (Object) this;
-            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                int initialAir = cir.getReturnValue();
-                if (MainClient.snailAir < initialAir) {
-                    cir.setReturnValue(MainClient.snailAir);
                 }
             }
         }

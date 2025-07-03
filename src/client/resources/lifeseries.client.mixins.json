@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "package": "net.mat0u5.lifeseries.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "AbstractClientPlayerEntityMixin",
+    "AbstractSoundInstanceMixin",
+    "CameraMixin",
+    "ClientCommonNetworkHandlerMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "ClientWorldMixin",
+    "EntityRendererMixin",
+    "EntityTrackingSoundInstanceAccessor",
+    "EntityTrackingSoundInstanceMixin",
+    "LivingEntityRendererMixin",
+    "MinecraftClientMixin",
+    "PlayerEntityRendererMixin",
+    "PlayerListHudMixin",
+    "SoundManagerMixin",
+    "SoundSystemMixin"
+  ],
+  "mixins": [
+    "EntityMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin"
+  ]
+}

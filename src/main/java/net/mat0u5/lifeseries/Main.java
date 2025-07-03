@@ -25,6 +25,7 @@ import net.mat0u5.lifeseries.series.wildlife.WildLife;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.PlayerUtils;
+import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +43,7 @@ public class Main implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final boolean DEBUG = false;
 	private static ConfigManager config;
+	public static IClientHelper clientHelper;
 
 	@Nullable
 	public static MinecraftServer server;
@@ -79,14 +81,18 @@ public class Main implements ModInitializer {
 		return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
 	}
 
+	public static void setClientHelper(IClientHelper helper) {
+		clientHelper = helper;
+	}
+
 	public static boolean isLogicalSide() {
 		if (!isClient()) return true;
-		return MainClient.isRunningIntegratedServer();
+		return clientHelper != null && clientHelper.isRunningIntegratedServer();
 	}
 
 	public static boolean isClientPlayer(UUID uuid) {
 		if (!isClient()) return false;
-		return MainClient.isClientPlayer(uuid);
+		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 
 	public static void parseSeries(String series) {
@@ -127,7 +133,6 @@ public class Main implements ModInitializer {
 
 	public static void reloadStart() {
 		if (Events.skipNextTickReload) return;
-		if (!isLogicalSide()) return;
 		softReloadStart();
 		DatapackManager.onReloadStart();
 	}

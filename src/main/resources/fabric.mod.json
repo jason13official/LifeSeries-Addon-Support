@@ -21,15 +21,16 @@
 		"client": [
 			"net.mat0u5.lifeseries.MainClient"
 		],
-		"fabric-datagen": [
-			"net.mat0u5.lifeseries.MainDataGenerator"
-		],
 		"voicechat": [
 			"net.mat0u5.lifeseries.voicechat.VoicechatMain"
 		]
 	},
 	"mixins": [
-		"lifeseries.mixins.json"
+		"lifeseries.mixins.json",
+		{
+			"config": "lifeseries.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",
