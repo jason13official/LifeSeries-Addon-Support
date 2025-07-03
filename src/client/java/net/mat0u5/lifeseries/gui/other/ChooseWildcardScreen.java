@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.gui.other;
 
 import net.mat0u5.lifeseries.gui.DefaultScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.render.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;

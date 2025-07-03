@@ -19,7 +19,8 @@ import net.minecraft.util.Formatting;
 
 import java.io.File;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.ALLOWED_SEASON_NAMES;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;

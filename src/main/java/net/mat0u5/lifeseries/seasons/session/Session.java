@@ -19,7 +19,8 @@ import net.minecraft.world.border.WorldBorder;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 public class Session {
     public Map<UUID, Integer> playerNaturalDeathLog = new HashMap<>();

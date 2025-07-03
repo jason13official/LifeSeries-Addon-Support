@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import io.netty.channel.ChannelFutureListener;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakeClientConnection;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;

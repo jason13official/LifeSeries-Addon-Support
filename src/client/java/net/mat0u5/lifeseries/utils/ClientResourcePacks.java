@@ -4,8 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
 

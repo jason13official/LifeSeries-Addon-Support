@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.morph;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;

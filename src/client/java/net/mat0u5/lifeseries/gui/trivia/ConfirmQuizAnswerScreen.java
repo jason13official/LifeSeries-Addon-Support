@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.gui.trivia;
 
+import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
-import net.mat0u5.lifeseries.features.Trivia;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;

@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.seasons;
 
 import net.mat0u5.lifeseries.gui.DefaultScreen;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
-import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;

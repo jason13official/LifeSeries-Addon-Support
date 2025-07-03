@@ -12,7 +12,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;

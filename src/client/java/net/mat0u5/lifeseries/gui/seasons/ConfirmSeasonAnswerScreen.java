@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.gui.seasons;
 
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
-import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.render.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;

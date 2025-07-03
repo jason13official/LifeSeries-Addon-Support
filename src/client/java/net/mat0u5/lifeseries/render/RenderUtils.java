@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.render;
 
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.client.font.TextRenderer;
 
 import java.util.List;
 

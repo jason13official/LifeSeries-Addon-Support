@@ -7,6 +7,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
@@ -15,14 +16,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-//? if <=1.21
-import net.minecraft.item.EnchantedBookItem;
 import org.jetbrains.annotations.Nullable;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static net.mat0u5.lifeseries.Main.server;
 
 public class ItemStackUtils {

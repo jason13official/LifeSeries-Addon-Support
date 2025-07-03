@@ -6,7 +6,8 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class OldDatapackManager {
     public static boolean deletedOldDatapacks = false;

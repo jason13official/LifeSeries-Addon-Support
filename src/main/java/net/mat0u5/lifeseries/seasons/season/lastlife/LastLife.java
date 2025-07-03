@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 

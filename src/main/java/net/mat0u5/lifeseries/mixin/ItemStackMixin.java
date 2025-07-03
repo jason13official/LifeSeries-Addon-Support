@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.mixin;
 
-import net.minecraft.component.*;
+import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

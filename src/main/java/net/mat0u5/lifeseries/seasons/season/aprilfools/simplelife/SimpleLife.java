@@ -23,7 +23,9 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Random;
 
 public class SimpleLife extends ThirdLife {
     private Random rnd = new Random();

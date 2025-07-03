@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 @Mixin(value = EnchantmentHelper.class, priority = 1)
 public class EnchantmentHelperMixin {

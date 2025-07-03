@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 
 import static net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager.getSeason;
 
