@@ -5,6 +5,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.*;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -30,7 +31,11 @@ public class Morph {
                 float playerHeight = PlayerEntity.STANDING_DIMENSIONS.height();
                 float morphedHeight = dummy.getDimensions(EntityPose.STANDING).height();
                 float heightScale = morphedHeight / playerHeight;
-                return heightScale * 4.0F;
+                float cameraDistance = 4.0F;
+                //? if >= 1.21.6 {
+                /*cameraDistance = (float)player.getAttributeValue(EntityAttributes.CAMERA_DISTANCE);
+                 *///?}
+                return heightScale * cameraDistance;
             }
         }
         return originalDistance;
