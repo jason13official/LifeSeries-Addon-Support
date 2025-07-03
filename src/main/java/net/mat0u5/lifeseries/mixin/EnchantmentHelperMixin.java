@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import com.google.common.collect.Lists;
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -41,7 +41,7 @@ public class EnchantmentHelperMixin {
             return;
         }
 
-        if (seriesConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seriesConfig)) {
+        if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
             customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
         }
         else {

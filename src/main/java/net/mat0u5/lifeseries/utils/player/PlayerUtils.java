@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.Series;
-import net.mat0u5.lifeseries.series.Session;
-import net.mat0u5.lifeseries.series.secretlife.SecretLife;
+import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class PlayerUtils {
@@ -130,13 +130,13 @@ public class PlayerUtils {
         if (server == null) return;
         ServerPlayerEntity player = getPlayer(uuid);
         if (player == null) return;
-        applySingleResourcepack(player, Series.RESOURCEPACK_MAIN_URL, Series.RESOURCEPACK_MAIN_SHA, "Life Series Main Resourcepack.");
-        applySingleResourcepack(player, Series.RESOURCEPACK_MINIMAL_ARMOR_URL, Series.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Minimal Armor Resourcepack.");
-        if (currentSeries instanceof SecretLife) {
-            applySingleResourcepack(player, Series.RESOURCEPACK_SECRETLIFE_URL, Series.RESOURCEPACK_SECRETLIFE_SHA, "Secret Life Resourcepack.");
+        applySingleResourcepack(player, Season.RESOURCEPACK_MAIN_URL, Season.RESOURCEPACK_MAIN_SHA, "Life Series Main Resourcepack.");
+        applySingleResourcepack(player, Season.RESOURCEPACK_MINIMAL_ARMOR_URL, Season.RESOURCEPACK_MINIMAL_ARMOR_SHA, "Minimal Armor Resourcepack.");
+        if (currentSeason instanceof SecretLife) {
+            applySingleResourcepack(player, Season.RESOURCEPACK_SECRETLIFE_URL, Season.RESOURCEPACK_SECRETLIFE_SHA, "Secret Life Resourcepack.");
         }
         else {
-            removeSingleResourcepack(player, Series.RESOURCEPACK_SECRETLIFE_URL);
+            removeSingleResourcepack(player, Season.RESOURCEPACK_SECRETLIFE_URL);
         }
     }
 
@@ -261,7 +261,7 @@ public class PlayerUtils {
 
     public static void updatePlayerLists() {
         if (server == null) return;
-        if (currentSeries == null) return;
+        if (currentSeason == null) return;
 
 
         List<ServerPlayerEntity> allPlayers = server.getPlayerManager().getPlayerList();
@@ -273,7 +273,7 @@ public class PlayerUtils {
             for (ServerPlayerEntity player : allPlayers) {
                 if (player == receivingPlayer) continue;
 
-                if (!currentSeries.isAlive(receivingPlayer) || currentSeries.TAB_LIST_SHOW_DEAD_PLAYERS || currentSeries.isAlive(player)) {
+                if (!currentSeason.isAlive(receivingPlayer) || currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS || currentSeason.isAlive(player)) {
                     visiblePlayers.add(player);
                     continue;
                 }

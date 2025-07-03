@@ -6,18 +6,18 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.SizeShifting;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpower;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -92,24 +92,24 @@ public class NetworkHandlerServer {
 
 
             if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
-                seriesConfig.setProperty(id, args.getFirst());
+                seasonConfig.setProperty(id, args.getFirst());
                 updatedConfigThisTick = true;
             }
             else if (configType.equalsIgnoreCase("boolean") && !args.isEmpty()) {
-                seriesConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
+                seasonConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
                 updatedConfigThisTick = true;
             }
             else if (configType.equalsIgnoreCase("double") && !args.isEmpty()) {
                 try {
                     double value = Double.parseDouble(args.getFirst());
-                    seriesConfig.setProperty(id, String.valueOf(value));
+                    seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
             }
             else if (configType.equalsIgnoreCase("integer") && !args.isEmpty()) {
                 try {
                     int value = Integer.parseInt(args.getFirst());
-                    seriesConfig.setProperty(id, String.valueOf(value));
+                    seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
             }
@@ -138,10 +138,10 @@ public class NetworkHandlerServer {
         }
     }
     public static void handleStringPacket(ServerPlayerEntity player, String name, String value) {
-        if (name.equalsIgnoreCase("holding_jump") && currentSeries.getSeries() == SeriesList.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+        if (name.equalsIgnoreCase("holding_jump") && currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
             SizeShifting.onHoldingJump(player);
         }
-        if (name.equalsIgnoreCase("superpower_key") && currentSeries.getSeries() == SeriesList.WILD_LIFE) {
+        if (name.equalsIgnoreCase("superpower_key") && currentSeason.getSeason() == Seasons.WILD_LIFE) {
             SuperpowersWildcard.pressedSuperpowerKey(player);
         }
         if (PermissionManager.isAdmin(player)) {
@@ -152,15 +152,15 @@ public class NetworkHandlerServer {
                 }
             }
             if (name.equalsIgnoreCase("request_config")) {
-                seriesConfig.sendConfigTo(player);
+                seasonConfig.sendConfigTo(player);
             }
         }
-        if (name.equalsIgnoreCase("set_series")) {
-            if (PermissionManager.isAdmin(player) || currentSeries.getSeries() == SeriesList.UNASSIGNED) {
-                SeriesList newSeries = SeriesList.getSeriesFromStringName(value);
-                if (newSeries == SeriesList.UNASSIGNED) return;
-                if (Main.changeSeriesTo(SeriesList.getStringNameFromSeries(newSeries))) {
-                    OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + value + ".").formatted(Formatting.GREEN));
+        if (name.equalsIgnoreCase("set_season")) {
+            if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
+                Seasons newSeason = Seasons.getSeasonFromStringName(value);
+                if (newSeason == Seasons.UNASSIGNED) return;
+                if (Main.changeSeasonTo(Seasons.getStringNameFromSeason(newSeason))) {
+                    OtherUtils.broadcastMessage(Text.literal("Successfully changed the season to " + value + ".").formatted(Formatting.GREEN));
                 }
             }
         }
@@ -175,7 +175,7 @@ public class NetworkHandlerServer {
             }
         }
         if (name.equalsIgnoreCase("triple_jump")) {
-            if (currentSeries.getSeries() == SeriesList.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
                 Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
                 if (power instanceof TripleJump tripleJump) {
                     tripleJump.isInAir = true;
@@ -294,7 +294,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendUpdatePacketTo(ServerPlayerEntity player) {
-        if (currentSeries instanceof WildLife) {
+        if (currentSeason instanceof WildLife) {
             sendNumberPacket(player, "player_min_mspt", TimeDilation.MIN_PLAYER_MSPT);
 
             List<String> activeWildcards = new ArrayList<>();
@@ -303,7 +303,7 @@ public class NetworkHandlerServer {
             }
             sendStringPacket(player, "activeWildcards", String.join("__", activeWildcards));
         }
-        sendStringPacket(player, "currentSeries", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+        sendStringPacket(player, "currentSeason", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
     }
 
     public static void sendUpdatePackets() {
@@ -333,7 +333,7 @@ public class NetworkHandlerServer {
 
     public static void tryKickFailedHandshake(ServerPlayerEntity player) {
         if (server == null) return;
-        if (currentSeries.getSeries() != SeriesList.WILD_LIFE) return;
+        if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
         if (wasHandshakeSuccessful(player)) return;
         Text disconnectText = Text.literal("You must have the §2Life Series mod\n§l installed on the client§r§r§f to play Wild Life!\n").append(
                 Text.literal("§9§nThe Life Series mod is available on Modrinth."));

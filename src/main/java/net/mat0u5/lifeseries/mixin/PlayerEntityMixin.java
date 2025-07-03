@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentLevelBasedValue;
@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = PlayerEntity.class, priority = 1)
 public abstract class PlayerEntityMixin {
@@ -45,7 +45,7 @@ public abstract class PlayerEntityMixin {
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            currentSeries.onPlayerDamage(serverPlayer, source, amount, ci);
+            currentSeason.onPlayerDamage(serverPlayer, source, amount, ci);
         }
     }
 
@@ -58,14 +58,14 @@ public abstract class PlayerEntityMixin {
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            currentSeries.onPrePlayerDamage(serverPlayer, source, amount, cir);
+            currentSeason.onPrePlayerDamage(serverPlayer, source, amount, cir);
         }
     }
 
     @Inject(method = "canFoodHeal", at = @At("HEAD"), cancellable = true)
     private void canFoodHeal(CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;
-        if (currentSeries instanceof DoubleLife doubleLife)  {
+        if (currentSeason instanceof DoubleLife doubleLife)  {
             PlayerEntity player = (PlayerEntity) (Object) this;
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 doubleLife.canFoodHeal(serverPlayer, cir);

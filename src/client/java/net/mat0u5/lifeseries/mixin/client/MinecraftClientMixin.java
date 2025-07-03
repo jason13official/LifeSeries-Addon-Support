@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.render.ClientRenderer;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.world.tick.TickManager;
 import org.spongepowered.asm.mixin.Mixin;

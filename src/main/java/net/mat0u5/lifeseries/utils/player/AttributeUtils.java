@@ -2,17 +2,17 @@ package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
-import static net.mat0u5.lifeseries.Main.seriesConfig;
+import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class AttributeUtils {
     public static final double DEFAULT_PLAYER_JUMP_HEIGHT = 0.41999998688697815;
@@ -36,7 +36,7 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealthIfNecessary(ServerPlayerEntity player) {
-        if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) return;
+        if (currentSeason.getSeason() == Seasons.SECRET_LIFE) return;
         double currentMaxHealth = getMaxPlayerHealth(player);
         if (DependencyManager.wildLifeModsLoaded() && currentMaxHealth == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) return;
         if (currentMaxHealth == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid())) return;
@@ -44,7 +44,7 @@ public class AttributeUtils {
     }
 
     public static void resetMaxPlayerHealth(ServerPlayerEntity player) {
-        double health = seriesConfig.MAX_PLAYER_HEALTH.get(seriesConfig);
+        double health = seasonConfig.MAX_PLAYER_HEALTH.get(seasonConfig);
         setMaxPlayerHealth(player, health);
     }
 

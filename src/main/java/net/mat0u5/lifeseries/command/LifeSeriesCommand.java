@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -42,7 +42,7 @@ public class LifeSeriesCommand {
                     .executes(context -> getDiscord(context.getSource()))
                 )
                 .then(literal("getSeries")
-                    .executes(context -> getSeries(context.getSource()))
+                    .executes(context -> getSeason(context.getSource()))
                 )
                 .then(literal("version")
                     .executes(context -> getVersion(context.getSource()))
@@ -57,18 +57,18 @@ public class LifeSeriesCommand {
                 )
                 .then(literal("chooseSeries")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .executes(context -> chooseSeries(context.getSource()))
+                        .executes(context -> chooseSeason(context.getSource()))
                 )
                 .then(literal("setSeries")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                    .then(argument("series", StringArgumentType.string())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(ALLOWED_SERIES_NAMES, builder))
-                        .executes(context -> setSeries(
-                            context.getSource(), StringArgumentType.getString(context, "series"), false)
+                    .then(argument("season", StringArgumentType.string())
+                        .suggests((context, builder) -> CommandSource.suggestMatching(ALLOWED_SEASON_NAMES, builder))
+                        .executes(context -> setSeason(
+                            context.getSource(), StringArgumentType.getString(context, "season"), false)
                         )
                         .then(literal("confirm")
-                            .executes(context -> setSeries(
-                                context.getSource(), StringArgumentType.getString(context, "series"), true)
+                            .executes(context -> setSeason(
+                                context.getSource(), StringArgumentType.getString(context, "season"), true)
                             )
                         )
                     )
@@ -96,33 +96,33 @@ public class LifeSeriesCommand {
 
     }
 
-    public static int chooseSeries(ServerCommandSource source) {
+    public static int chooseSeason(ServerCommandSource source) {
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the series GUI."));
-            source.sendError(Text.of("§7Use the §f'/lifeseries setSeries <series>'§7 command instead."));
+            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
+            source.sendError(Text.of("§7Use the §f'/lifeseries setSeries <season>'§7 command instead."));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the series selection GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_series", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the season selection GUI..."));
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_season", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
         return 1;
     }
 
-    public static int setSeries(ServerCommandSource source, String setTo, boolean confirmed) {
-        if (!ALLOWED_SERIES_NAMES.contains(setTo)) {
-            source.sendError(Text.of("That is not a valid series!"));
-            source.sendError(Text.literal("You must choose one of the following: ").append(Text.literal(String.join(", ", ALLOWED_SERIES_NAMES)).formatted(Formatting.GRAY)));
+    public static int setSeason(ServerCommandSource source, String setTo, boolean confirmed) {
+        if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
+            source.sendError(Text.of("That is not a valid season!"));
+            source.sendError(Text.literal("You must choose one of the following: ").append(Text.literal(String.join(", ", ALLOWED_SEASON_NAMES)).formatted(Formatting.GRAY)));
             return -1;
         }
         if (confirmed) {
-            setSeriesFinal(source, setTo);
+            setSeasonFinal(source, setTo);
         }
         else {
-            if (currentSeries.getSeries() == SeriesList.UNASSIGNED) {
-                setSeriesFinal(source, setTo);
+            if (currentSeason.getSeason() == Seasons.UNASSIGNED) {
+                setSeasonFinal(source, setTo);
             }
             else {
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("WARNING: you have already selected a series, changing it might cause some saved data to be lost (lives, ...)"));
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)"));
                 OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("If you are sure, use '")
                         .append(Text.literal("/lifeseries chooseSeries").formatted(Formatting.GRAY))
                         .append(Text.literal(" confirm").formatted(Formatting.GREEN)).append(Text.of("'")));
@@ -131,15 +131,15 @@ public class LifeSeriesCommand {
         return 1;
     }
 
-    public static void setSeriesFinal(ServerCommandSource source, String setTo) {
-        if (Main.changeSeriesTo(setTo)) {
-            OtherUtils.sendCommandFeedback(source, Text.literal("Changing the series to " + setTo + "..."));
-            OtherUtils.broadcastMessage(Text.literal("Successfully changed the series to " + setTo + ".").formatted(Formatting.GREEN));
+    public static void setSeasonFinal(ServerCommandSource source, String setTo) {
+        if (Main.changeSeasonTo(setTo)) {
+            OtherUtils.sendCommandFeedback(source, Text.literal("Changing the season to " + setTo + "..."));
+            OtherUtils.broadcastMessage(Text.literal("Successfully changed the season to " + setTo + ".").formatted(Formatting.GREEN));
         }
     }
 
     public static int config(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The life series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The Life Series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
 
         if (source.getPlayer() != null) {
             OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
@@ -177,10 +177,10 @@ public class LifeSeriesCommand {
         return 1;
     }
 
-    public static int getSeries(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current series: "+ SeriesList.getStringNameFromSeries(currentSeries.getSeries())));
+    public static int getSeason(ServerCommandSource source) {
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current season: "+ Seasons.getStringNameFromSeason(currentSeason.getSeason())));
         if (source.getPlayer() != null) {
-            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "season_info", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
         }
         return 1;
     }

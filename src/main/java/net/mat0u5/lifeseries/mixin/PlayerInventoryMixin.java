@@ -1,10 +1,10 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = net.minecraft.entity.player.PlayerInventory.class, priority = 1)
 public abstract class PlayerInventoryMixin {
@@ -27,7 +27,7 @@ public abstract class PlayerInventoryMixin {
             if (blacklist != null) {
                 blacklist.onInventoryUpdated(serverPlayer,inventory);
             }
-            if (currentSeries instanceof WildLife) {
+            if (currentSeason instanceof WildLife) {
                 if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
                     Hunger.updateInventory(serverPlayer);
                 }

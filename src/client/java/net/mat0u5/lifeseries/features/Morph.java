@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.features;
 
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.entity.Entity;

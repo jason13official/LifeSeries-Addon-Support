@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.resources.datapack;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
@@ -16,8 +16,8 @@ public class OldDatapackManager {
         deletedOldDatapacks = true;
         Path datapackFolder = server.getSavePath(WorldSavePath.DATAPACKS);
         try {
-            for (SeriesList series : SeriesList.getAllImplemented()) {
-                String datapackName = SeriesList.getDatapackName(series);
+            for (Seasons season : Seasons.getAllImplemented()) {
+                String datapackName = Seasons.getDatapackName(season);
                 if (datapackName == null) continue;
                 Path datapackPath = datapackFolder.resolve(datapackName);
                 if (Files.exists(datapackPath) && Files.isRegularFile(datapackPath)) {
@@ -31,8 +31,8 @@ public class OldDatapackManager {
     }
 
     public static void disableOldDatapacks() {
-        for (SeriesList series : SeriesList.getAllImplemented()) {
-            String datapackName = SeriesList.getDatapackName(series);
+        for (Seasons season : Seasons.getAllImplemented()) {
+            String datapackName = Seasons.getDatapackName(season);
             OtherUtils.executeCommand("datapack disable \"file/"+datapackName+"\"");
         }
     }

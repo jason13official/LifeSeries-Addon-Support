@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Set;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = ServerPlayNetworkHandler.class, priority = 1)
 public class ServerPlayNetworkHandlerMixin {
@@ -52,7 +52,7 @@ public class ServerPlayNetworkHandlerMixin {
         if (!Main.isLogicalSide()) return;
         ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
         ServerPlayerEntity player = handler.player;
-        if (currentSeries instanceof WildLife) {
+        if (currentSeason instanceof WildLife) {
             WildcardManager.onUseItem(player);
         }
     }

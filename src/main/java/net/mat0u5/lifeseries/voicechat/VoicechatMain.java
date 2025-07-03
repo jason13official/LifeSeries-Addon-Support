@@ -9,12 +9,12 @@ import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.voicechat.soundeffects.*;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 public class VoicechatMain implements VoicechatPlugin {
 
@@ -52,7 +52,7 @@ public class VoicechatMain implements VoicechatPlugin {
     }
 
     private void roboticVoice(MicrophonePacketEvent event) {
-        if (currentSeries.getSeries() != SeriesList.WILD_LIFE) {
+        if (currentSeason.getSeason() != Seasons.WILD_LIFE) {
             return;
         }
         if (!WildcardManager.isActiveWildcard(Wildcards.TRIVIA)) {
@@ -76,7 +76,7 @@ public class VoicechatMain implements VoicechatPlugin {
     }
 
     private void listeningPower(MicrophonePacketEvent event) {
-        if (currentSeries.getSeries() != SeriesList.WILD_LIFE) {
+        if (currentSeason.getSeason() != Seasons.WILD_LIFE) {
             return;
         }
         if (Listening.listeningPlayers.isEmpty()) {

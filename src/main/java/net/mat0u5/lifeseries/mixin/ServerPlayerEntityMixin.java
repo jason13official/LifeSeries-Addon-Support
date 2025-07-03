@@ -20,7 +20,7 @@ import java.util.OptionalInt;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = ServerPlayerEntity.class, priority = 1)
 public class ServerPlayerEntityMixin {
@@ -29,7 +29,7 @@ public class ServerPlayerEntityMixin {
         if (!Main.isLogicalSide()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         UUID uuid = player.getUuid();
-        TaskScheduler.scheduleTask(1, () -> currentSeries.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid))));
+        TaskScheduler.scheduleTask(1, () -> currentSeason.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid))));
     }
 
     @Inject(method = "openHandledScreen", at = @At("HEAD"))

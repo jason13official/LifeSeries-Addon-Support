@@ -7,23 +7,27 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
+import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
+import net.mat0u5.lifeseries.seasons.season.Season;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.dependencies.PolymerDependency;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.*;
-import net.mat0u5.lifeseries.series.aprilfools.simplelife.SimpleLife;
-import net.mat0u5.lifeseries.series.secretlife.SecretLife;
-import net.mat0u5.lifeseries.series.secretlife.TaskManager;
-import net.mat0u5.lifeseries.series.unassigned.UnassignedSeries;
-import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.series.lastlife.LastLife;
-import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
-import net.mat0u5.lifeseries.series.thirdlife.ThirdLife;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
+import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.registries.ModRegistries;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.server.MinecraftServer;
@@ -36,7 +40,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.5.7";
+	public static final String MOD_VERSION = "dev-1.3.5.8";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -47,11 +51,11 @@ public class Main implements ModInitializer {
 
 	@Nullable
 	public static MinecraftServer server;
-	public static Series currentSeries;
+	public static Season currentSeason;
 	public static Session currentSession;
 	public static Blacklist blacklist;
-	public static ConfigManager seriesConfig;
-	public static final List<String> ALLOWED_SERIES_NAMES = SeriesList.getImplementedSeriesNames();
+	public static ConfigManager seasonConfig;
+	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getImplementedSeasonNames();
 
 	@Override
 	public void onInitialize() {
@@ -64,9 +68,9 @@ public class Main implements ModInitializer {
 		}
 
 		config = new MainConfig();
-		String series = config.getOrCreateProperty("currentSeries", "unassigned");
+		String season = config.getOrCreateProperty("currentSeries", "unassigned");
 
-		parseSeries(series);
+		parseSeason(season);
 		ConfigManager.createConfigs();
 
 		ModRegistries.registerModStuff();
@@ -95,40 +99,40 @@ public class Main implements ModInitializer {
 		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 
-	public static void parseSeries(String series) {
-		if (!ALLOWED_SERIES_NAMES.contains(series)) {
-			currentSeries = new UnassignedSeries();
+	public static void parseSeason(String season) {
+		if (!ALLOWED_SEASON_NAMES.contains(season)) {
+			currentSeason = new UnassignedSeason();
 		}
-		if (series.equalsIgnoreCase("thirdlife")) {
-			currentSeries = new ThirdLife();
+		if (season.equalsIgnoreCase("thirdlife")) {
+			currentSeason = new ThirdLife();
 		}
-		if (series.equalsIgnoreCase("lastlife")) {
-			currentSeries = new LastLife();
+		if (season.equalsIgnoreCase("lastlife")) {
+			currentSeason = new LastLife();
 		}
-		if (series.equalsIgnoreCase("doublelife")) {
-			currentSeries = new DoubleLife();
+		if (season.equalsIgnoreCase("doublelife")) {
+			currentSeason = new DoubleLife();
 		}
-		if (series.equalsIgnoreCase("limitedlife")) {
-			currentSeries = new LimitedLife();
+		if (season.equalsIgnoreCase("limitedlife")) {
+			currentSeason = new LimitedLife();
 		}
-		if (series.equalsIgnoreCase("secretlife")) {
-			currentSeries = new SecretLife();
+		if (season.equalsIgnoreCase("secretlife")) {
+			currentSeason = new SecretLife();
 		}
-		if (series.equalsIgnoreCase("wildlife")) {
+		if (season.equalsIgnoreCase("wildlife")) {
 			if (DependencyManager.polymerLoaded() && DependencyManager.wildLifeModsLoaded()) {
-				currentSeries = new WildLife();
+				currentSeason = new WildLife();
 			}
 			else {
-				currentSeries = new UnassignedSeries();
-				changeSeriesTo("unassigned");
+				currentSeason = new UnassignedSeason();
+				changeSeasonTo("unassigned");
 			}
 		}
-		if (series.equalsIgnoreCase("simplelife")) {
-			currentSeries = new SimpleLife();
+		if (season.equalsIgnoreCase("simplelife")) {
+			currentSeason = new SimpleLife();
 		}
-		currentSession = currentSeries;
-		seriesConfig = currentSeries.getConfig();
-		blacklist = currentSeries.createBlacklist();
+		currentSession = currentSeason;
+		seasonConfig = currentSeason.getConfig();
+		blacklist = currentSeason.createBlacklist();
 	}
 
 	public static void reloadStart() {
@@ -138,15 +142,15 @@ public class Main implements ModInitializer {
 	}
 
 	public static void softReloadStart() {
-		if (currentSeries.getSeries() == SeriesList.SECRET_LIFE) {
+		if (currentSeason.getSeason() == Seasons.SECRET_LIFE) {
 			TaskManager.initialize();
 		}
-		if (currentSeries.getSeries() == SeriesList.DOUBLE_LIFE && currentSeries instanceof DoubleLife doubleLife) {
+		if (currentSeason.getSeason() == Seasons.DOUBLE_LIFE && currentSeason instanceof DoubleLife doubleLife) {
 			doubleLife.loadSoulmates();
 		}
-		seriesConfig.loadProperties();
+		seasonConfig.loadProperties();
 		blacklist.reloadBlacklist();
-		currentSeries.reload();
+		currentSeason.reload();
 		NetworkHandlerServer.sendUpdatePackets();
 		SnailSkinsServer.sendStoredImages();
 		PlayerUtils.resendCommandTrees();
@@ -155,22 +159,22 @@ public class Main implements ModInitializer {
 		DatapackManager.onReloadEnd();
 	}
 
-	public static boolean changeSeriesTo(String changeTo) {
+	public static boolean changeSeasonTo(String changeTo) {
 		if (changeTo.equalsIgnoreCase("wildlife")) {
 			if (!DependencyManager.checkWildLifeDependencies()) return false;
 		}
 
 		config.setProperty("currentSeries", changeTo);
-		currentSeries.resetAllPlayerLives();
+		currentSeason.resetAllPlayerLives();
 		currentSession.sessionEnd();
-		Main.parseSeries(changeTo);
-		currentSeries.initialize();
+		Main.parseSeason(changeTo);
+		currentSeason.initialize();
 		reloadStart();
 		for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-			currentSeries.onPlayerJoin(player);
-			currentSeries.onPlayerFinishJoining(player);
+			currentSeason.onPlayerJoin(player);
+			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
-			NetworkHandlerServer.sendStringPacket(player, "series_info", SeriesList.getStringNameFromSeries(currentSeries.getSeries()));
+			NetworkHandlerServer.sendStringPacket(player, "season_info", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
 			NetworkHandlerServer.sendLongPacket(player, "session_timer", -1);
 		}
 		SessionTranscript.resetStats();

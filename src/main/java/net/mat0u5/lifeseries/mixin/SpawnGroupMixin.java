@@ -1,17 +1,17 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.MobSwap;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.MobSwap;
 import net.minecraft.entity.SpawnGroup;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = SpawnGroup.class, priority = 1)
 public class SpawnGroupMixin {
@@ -21,7 +21,7 @@ public class SpawnGroupMixin {
         if (!Main.isLogicalSide()) return;
         SpawnGroup group = (SpawnGroup)(Object)this;
         if (group.getName().equalsIgnoreCase("monster") || group.getName().equalsIgnoreCase("creature")) {
-            if (currentSeries instanceof WildLife) {
+            if (currentSeason instanceof WildLife) {
                 if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) return;
                 MobSwap.getSpawnCapacity(group, cir);
             }
@@ -34,7 +34,7 @@ public class SpawnGroupMixin {
         if (!Main.isLogicalSide()) return;
         SpawnGroup group = (SpawnGroup)(Object)this;
         if (group.getName().equalsIgnoreCase("creature")) {
-            if (currentSeries instanceof WildLife) {
+            if (currentSeason instanceof WildLife) {
                 if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) return;
                 MobSwap.isRare(group, cir);
             }

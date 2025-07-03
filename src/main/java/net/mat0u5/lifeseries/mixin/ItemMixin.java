@@ -1,12 +1,11 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.Hunger;
-import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.minecraft.component.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = Item.class, priority = 1)
 public abstract class ItemMixin {
@@ -31,13 +30,13 @@ public abstract class ItemMixin {
         boolean isLogicalSide = Main.isLogicalSide();
         boolean hungerActive = false;
         if (isLogicalSide) {
-            if (currentSeries instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+            if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
                 hungerActive = true;
             }
         }
         else {
             if (Main.clientHelper != null &&
-                    Main.clientHelper.getCurrentSeries() == SeriesList.WILD_LIFE &&
+                    Main.clientHelper.getCurrentSeason() == Seasons.WILD_LIFE &&
                     Main.clientHelper.getActiveWildcards().contains(Wildcards.HUNGER)) {
                 hungerActive = true;
             }
@@ -57,7 +56,7 @@ public abstract class ItemMixin {
     @Inject(method = "finishUsing", at = @At("HEAD"))
     public void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (!Main.isLogicalSide()) return;
-        if (currentSeries instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+        if (currentSeason instanceof WildLife && WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
             Item item = (Item) (Object) this;
             Hunger.finishUsing(item, normalComponents(), user);
         }

@@ -8,9 +8,9 @@ import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.SessionStatus;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.SessionStatus;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -21,7 +21,7 @@ import java.util.*;
 
 public class MainClient implements ClientModInitializer, IClientHelper {
 
-    public static SeriesList clientCurrentSeries = SeriesList.UNASSIGNED;
+    public static Seasons clientCurrentSeason = Seasons.UNASSIGNED;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
     public static List<Wildcards> clientActiveWildcards = new ArrayList<>();
     public static long TIME_DILATION_TIMESTAMP = 0;
@@ -84,8 +84,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     }
 
     @Override
-    public SeriesList getCurrentSeries() {
-        return clientCurrentSeries;
+    public Seasons getCurrentSeason() {
+        return clientCurrentSeason;
     }
 
     @Override

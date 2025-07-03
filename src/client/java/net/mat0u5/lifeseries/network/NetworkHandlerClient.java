@@ -7,21 +7,21 @@ import net.mat0u5.lifeseries.config.ClientsideConfig;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.ConfigScreen;
 import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
-import net.mat0u5.lifeseries.gui.series.ChooseSeriesScreen;
-import net.mat0u5.lifeseries.gui.series.SeriesInfoScreen;
+import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
+import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.render.VignetteRenderer;
-import net.mat0u5.lifeseries.series.SessionStatus;
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
+import net.mat0u5.lifeseries.seasons.session.SessionStatus;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.TimeDilation;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
@@ -101,9 +101,9 @@ public class NetworkHandlerClient {
     }
     
     public static void handleStringPacket(String name, String value) {
-        if (name.equalsIgnoreCase("currentSeries")) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current series to {}", value);
-            MainClient.clientCurrentSeries = SeriesList.getSeriesFromStringName(value);
+        if (name.equalsIgnoreCase("currentSeason")) {
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", value);
+            MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(value);
             ClientResourcePacks.checkClientPacks();
         }
         if (name.equalsIgnoreCase("sessionStatus")) {
@@ -138,12 +138,12 @@ public class NetworkHandlerClient {
                 MinecraftClient.getInstance().player.sendMessage(Text.of("§cPlease install the Cloth Config mod (client-side) to modify the config from in-game."), false);
             }
         }
-        if (name.equalsIgnoreCase("select_series")) {
-            MinecraftClient.getInstance().setScreen(new ChooseSeriesScreen(!value.isEmpty()));
+        if (name.equalsIgnoreCase("select_season")) {
+            MinecraftClient.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
         }
-        if (name.equalsIgnoreCase("series_info")) {
-            SeriesList series = SeriesList.getSeriesFromStringName(value);
-            if (series != SeriesList.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeriesInfoScreen(series));
+        if (name.equalsIgnoreCase("season_info")) {
+            Seasons season = Seasons.getSeasonFromStringName(value);
+            if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
         }
         if (name.equalsIgnoreCase("trivia_bot_part")) {
             try {

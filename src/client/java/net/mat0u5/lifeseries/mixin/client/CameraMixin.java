@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphComponent;
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;

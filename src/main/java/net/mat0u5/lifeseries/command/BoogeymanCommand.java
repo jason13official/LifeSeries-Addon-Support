@@ -1,11 +1,11 @@
 package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.mat0u5.lifeseries.series.Boogeyman;
-import net.mat0u5.lifeseries.series.BoogeymanManager;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.lastlife.LastLife;
-import net.mat0u5.lifeseries.series.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
+import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -17,7 +17,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -25,7 +25,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class BoogeymanCommand {
 
     public static boolean isAllowed() {
-        return currentSeries.getSeries() == SeriesList.LAST_LIFE || currentSeries.getSeries() == SeriesList.LIMITED_LIFE;
+        return currentSeason.getSeason() == Seasons.LAST_LIFE || currentSeason.getSeason() == Seasons.LIMITED_LIFE;
     }
 
     public static boolean checkBanned(ServerCommandSource source) {
@@ -39,7 +39,7 @@ public class BoogeymanCommand {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("boogeyman")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeries.isAlive(source.getPlayer())))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeason.isAlive(source.getPlayer())))
                 .then(literal("clear")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> boogeyClear(
@@ -47,7 +47,7 @@ public class BoogeymanCommand {
                     ))
                 )
                 .then(literal("list")
-                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeries.isAlive(source.getPlayer())))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeason.isAlive(source.getPlayer())))
                     .executes(context -> boogeyList(
                         context.getSource()
                     ))
@@ -87,8 +87,8 @@ public class BoogeymanCommand {
     }
 
     public static BoogeymanManager getBM() {
-        if (currentSeries.getSeries() == SeriesList.LAST_LIFE) return ((LastLife) currentSeries).boogeymanManager;
-        if (currentSeries.getSeries() == SeriesList.LIMITED_LIFE) return ((LimitedLife) currentSeries).boogeymanManager;
+        if (currentSeason.getSeason() == Seasons.LAST_LIFE) return ((LastLife) currentSeason).boogeymanManager;
+        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) return ((LimitedLife) currentSeason).boogeymanManager;
         return null;
     }
 

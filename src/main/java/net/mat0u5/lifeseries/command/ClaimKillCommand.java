@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -28,12 +28,12 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class ClaimKillCommand {
 
     public static boolean isAllowed() {
-        return currentSeries.getSeries() != SeriesList.UNASSIGNED;
+        return currentSeason.getSeason() != Seasons.UNASSIGNED;
     }
 
     public static boolean checkBanned(ServerCommandSource source) {
         if (isAllowed()) return false;
-        source.sendError(Text.of("This command is only available when you have selected a Series."));
+        source.sendError(Text.of("This command is only available when you have selected a Season."));
         return true;
     }
 
@@ -114,7 +114,7 @@ public class ClaimKillCommand {
 
         Text message = Text.literal("").append(killer.getStyledDisplayName()).append(Text.of("§7's kill claim on ")).append(victim.getStyledDisplayName()).append(Text.of("§7 was accepted."));
         OtherUtils.broadcastMessage(message);
-        currentSeries.onClaimKill(killer, victim);
+        currentSeason.onClaimKill(killer, victim);
         currentSession.playerNaturalDeathLog.remove(victim.getUuid());
 
         return 1;

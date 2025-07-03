@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.utils.interfaces;
 
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface IClientHelper {
     boolean isRunningIntegratedServer();
     boolean isMainClientPlayer(UUID uuid);
-    SeriesList getCurrentSeries();
+    Seasons getCurrentSeason();
     List<Wildcards>  getActiveWildcards();
 }

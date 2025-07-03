@@ -5,8 +5,8 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
@@ -106,7 +106,7 @@ public class ClientEvents {
     }
 
     public static void sendPackets(ClientPlayerEntity player) {
-        if (MainClient.clientCurrentSeries == SeriesList.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
+        if (MainClient.clientCurrentSeason == Seasons.WILD_LIFE && MainClient.clientActiveWildcards.contains(Wildcards.SIZE_SHIFTING)) {
             //? if <= 1.21 {
             if (player.input.jumping) {
                 NetworkHandlerClient.sendHoldingJumpPacket();

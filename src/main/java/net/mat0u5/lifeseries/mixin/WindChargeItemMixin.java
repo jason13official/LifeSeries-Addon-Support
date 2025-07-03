@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = WindChargeItem.class, priority = 1)
 public class WindChargeItemMixin {
@@ -30,7 +30,7 @@ public class WindChargeItemMixin {
     /*public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {*/
         if (!Main.isLogicalSide()) return;
         if (user instanceof ServerPlayerEntity player) {
-            if (currentSeries.getSeries() == SeriesList.WILD_LIFE) {
+            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
                 if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
                     TaskScheduler.scheduleTask(1, () -> {
                         player.getInventory().insertStack(Items.WIND_CHARGE.getDefaultStack());

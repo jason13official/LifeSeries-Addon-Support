@@ -7,16 +7,16 @@ import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
-import net.mat0u5.lifeseries.series.SessionTranscript;
-import net.mat0u5.lifeseries.series.wildlife.morph.MorphManager;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.series.secretlife.SecretLife;
-import net.mat0u5.lifeseries.series.secretlife.TaskManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -94,7 +94,7 @@ public class Events {
 
         try {
             playerStartJoining(player);
-            currentSeries.onPlayerJoin(player);
+            currentSeason.onPlayerJoin(player);
             blacklist.onInventoryUpdated(player, player.getInventory());
             SessionTranscript.playerJoin(player);
             MorphManager.onPlayerJoin(player);
@@ -106,7 +106,7 @@ public class Events {
 
         try {
             UpdateChecker.onPlayerJoin(player);
-            currentSeries.onPlayerFinishJoining(player);
+            currentSeason.onPlayerFinishJoining(player);
             TaskScheduler.scheduleTask(20, () -> {
                 NetworkHandlerServer.tryKickFailedHandshake(player);
                 PlayerUtils.resendCommandTree(player);
@@ -120,7 +120,7 @@ public class Events {
         if (isFakePlayer(player)) return;
 
         try {
-            currentSeries.onPlayerDisconnect(player);
+            currentSeason.onPlayerDisconnect(player);
             SessionTranscript.playerLeave(player);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
@@ -139,10 +139,10 @@ public class Events {
     private static void onServerStart(MinecraftServer server) {
         try {
             Main.server = server;
-            currentSeries.initialize();
+            currentSeason.initialize();
             blacklist.reloadBlacklist();
-            if (currentSeries.getSeries() == SeriesList.DOUBLE_LIFE) {
-                ((DoubleLife) currentSeries).loadSoulmates();
+            if (currentSeason.getSeason() == Seasons.DOUBLE_LIFE) {
+                ((DoubleLife) currentSeason).loadSoulmates();
             }
             DatapackManager.onServerStarted(server);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
@@ -178,14 +178,14 @@ public class Events {
                 Events.onPlayerDeath(player, source);
                 return;
             }
-            currentSeries.onMobDeath(entity, source);
+            currentSeason.onMobDeath(entity, source);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
     public static void onEntityDropItems(LivingEntity entity, DamageSource source) {
         if (isFakePlayer(entity)) return;
         try {
             if (!Main.isLogicalSide()) return;
-            currentSeries.onEntityDropItems(entity, source);
+            currentSeason.onEntityDropItems(entity, source);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
@@ -194,7 +194,7 @@ public class Events {
 
         try {
             if (!Main.isLogicalSide()) return;
-            currentSeries.onPlayerDeath(player, source);
+            currentSeason.onPlayerDeath(player, source);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}
     }
 
@@ -204,7 +204,7 @@ public class Events {
         if (player instanceof ServerPlayerEntity serverPlayer &&
                 world instanceof ServerWorld serverWorld && Main.isLogicalSide()) {
             try {
-                if (currentSeries instanceof SecretLife) {
+                if (currentSeason instanceof SecretLife) {
                     TaskManager.onBlockUse(
                             serverPlayer,
                             serverWorld,
@@ -259,7 +259,7 @@ public class Events {
         try {
             if (!Main.isLogicalSide()) return ActionResult.PASS;
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                currentSeries.onRightClickEntity(serverPlayer, world, hand, entity, hitResult);
+                currentSeason.onRightClickEntity(serverPlayer, world, hand, entity, hitResult);
             }
         } catch(Exception e) {
             Main.LOGGER.error(e.getMessage());
@@ -272,7 +272,7 @@ public class Events {
         try {
             if (!Main.isLogicalSide()) return ActionResult.PASS;
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                currentSeries.onAttackEntity(serverPlayer, world, hand, entity, hitResult);
+                currentSeason.onAttackEntity(serverPlayer, world, hand, entity, hitResult);
             }
         } catch(Exception e) {
             Main.LOGGER.error(e.getMessage());

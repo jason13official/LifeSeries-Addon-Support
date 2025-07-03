@@ -1,32 +1,26 @@
 package net.mat0u5.lifeseries.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.snail.Snail;
-import net.mat0u5.lifeseries.series.wildlife.WildLife;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.Wildcards;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.snails.Snails;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.interfaces.IEntityDataSaver;
 import net.mat0u5.lifeseries.utils.interfaces.IMorph;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.EvokerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph {
@@ -70,7 +64,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide()) return;
-        if (currentSeries instanceof WildLife) {
+        if (currentSeason instanceof WildLife) {
             if (Snail.SHOULD_DROWN_PLAYER) {
                 if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
                     Entity entity = (Entity) (Object) this;
@@ -99,7 +93,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
         public void dropStack(ServerWorld world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
     *///?}
         if (!Main.isLogicalSide()) return;
-        if (currentSeries instanceof WildLife) {
+        if (currentSeason instanceof WildLife) {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof EvokerEntity && stack.isOf(Items.TOTEM_OF_UNDYING)) {
                 cir.setReturnValue(null);

@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -16,7 +16,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.Collection;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -24,7 +24,7 @@ import static net.minecraft.server.command.CommandManager.*;
 public class LivesCommand {
 
     public static boolean isAllowed() {
-        return currentSeries.getSeries() != SeriesList.LIMITED_LIFE && currentSeries.getSeries() != SeriesList.UNASSIGNED;
+        return currentSeason.getSeason() != Seasons.LIMITED_LIFE && currentSeason.getSeason() != Seasons.UNASSIGNED;
     }
 
     public static boolean checkBanned(ServerCommandSource source) {
@@ -118,13 +118,13 @@ public class LivesCommand {
         final ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!currentSeries.hasAssignedLives(self)) {
+        if (!currentSeason.hasAssignedLives(self)) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any lives yet."));
             return 1;
         }
 
-        Integer playerLives = currentSeries.getPlayerLives(self);
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeries.getFormattedLives(playerLives)).append(Text.of((playerLives==1?" life.":" lives."))));
+        Integer playerLives = currentSeason.getPlayerLives(self);
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeason.getFormattedLives(playerLives)).append(Text.of((playerLives==1?" life.":" lives."))));
         if (playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
@@ -150,7 +150,7 @@ public class LivesCommand {
             String name = entry.owner();
             if (name.startsWith("`")) continue;
             int lives = entry.value();
-            Formatting color = currentSeries.getColorForLives(lives);
+            Formatting color = currentSeason.getColorForLives(lives);
 
             MutableText pt1 = Text.literal("").append(Text.literal(name).formatted(color)).append(Text.literal(" has "));
             Text pt2 = Text.literal(String.valueOf(lives)).formatted(color);
@@ -166,13 +166,13 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        if (!currentSeries.hasAssignedLives(target)) {
+        if (!currentSeason.hasAssignedLives(target)) {
             source.sendError(Text.of(target.getNameForScoreboard()+" has not been assigned any lives."));
             return -1;
         }
-        Integer lives = currentSeries.getPlayerLives(target);
+        Integer lives = currentSeason.getPlayerLives(target);
         MutableText pt1 = Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" has "));
-        Text pt2 = currentSeries.getFormattedLives(lives);
+        Text pt2 = currentSeason.getFormattedLives(lives);
         Text pt3 = Text.of(" "+(Math.abs(lives)==1?"life":"lives")+".");
 
         OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2).append(pt3));
@@ -182,7 +182,7 @@ public class LivesCommand {
     public static int reloadLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
         OtherUtils.sendCommandFeedback(source, Text.of("Reloading lives..."));
-        currentSeries.reloadAllPlayerTeams();
+        currentSeason.reloadAllPlayerTeams();
         return 1;
     }
 
@@ -191,12 +191,12 @@ public class LivesCommand {
         if (target == null) return -1;
 
         if (setNotGive) {
-            currentSeries.setPlayerLives(target,amount);
+            currentSeason.setPlayerLives(target,amount);
             Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s lives to " + amount + "."));
             OtherUtils.sendCommandFeedback(source, finalText);
         }
         else {
-            currentSeries.addToPlayerLives(target,amount);
+            currentSeason.addToPlayerLives(target,amount);
             String pt1 = amount >= 0 ? "Added" : "Removed";
             String pt2 = " "+Math.abs(amount)+" ";
             String pt3 = Math.abs(amount)==1?"life":"lives";
@@ -211,7 +211,7 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        currentSeries.resetPlayerLife(target);
+        currentSeason.resetPlayerLife(target);
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
         return 1;
     }
@@ -219,7 +219,7 @@ public class LivesCommand {
     public static int resetAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        currentSeries.resetAllPlayerLives();
+        currentSeason.resetAllPlayerLives();
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives."));
         return 1;
     }

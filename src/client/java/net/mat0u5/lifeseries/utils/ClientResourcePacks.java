@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.series.SeriesList;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
@@ -20,7 +20,7 @@ public class ClientResourcePacks {
     public static void applyResourcepack(UUID uuid) {
         if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
                 if (MinecraftClient.getInstance().player.getUuid().equals(uuid)) {
-                    if (currentSeries instanceof SecretLife) {
+                    if (currentSeason instanceof SecretLife) {
                         enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
                     }
                     else {
@@ -36,7 +36,7 @@ public class ClientResourcePacks {
      */
 
     public static void checkClientPacks() {
-        if (MainClient.clientCurrentSeries == SeriesList.SECRET_LIFE) {
+        if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE) {
             enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
         }
         else {

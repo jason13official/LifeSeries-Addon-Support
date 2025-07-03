@@ -2,8 +2,8 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.mat0u5.lifeseries.series.SeriesList;
-import net.mat0u5.lifeseries.series.SessionTranscript;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -26,12 +26,12 @@ public class SessionCommand {
     public static final String INVALID_TIME_FORMAT_ERROR = "Invalid time format. Use h, m, s for hours, minutes, and seconds.";
 
     public static boolean isAllowed() {
-        return currentSeries.getSeries() != SeriesList.UNASSIGNED;
+        return currentSeason.getSeason() != Seasons.UNASSIGNED;
     }
 
     public static boolean checkBanned(ServerCommandSource source) {
         if (isAllowed()) return false;
-        source.sendError(Text.of("This command is only available when you have selected a Series."));
+        source.sendError(Text.of("This command is only available when you have selected a Season."));
         return true;
     }
 

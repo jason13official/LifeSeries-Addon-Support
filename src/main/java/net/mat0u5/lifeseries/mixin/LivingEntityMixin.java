@@ -2,9 +2,9 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
-import net.mat0u5.lifeseries.series.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeries;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 //? if >= 1.21.2 {
 /*import net.minecraft.entity.mob.CreakingEntity;
@@ -34,7 +34,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void onHealHead(float amount, CallbackInfo info) {
         if (!Main.isLogicalSide()) return;
-        if (!currentSeries.NO_HEALING) return;
+        if (!currentSeason.NO_HEALING) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayerEntity player) {
@@ -47,7 +47,7 @@ public abstract class LivingEntityMixin {
         if (!Main.isLogicalSide()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayerEntity player) {
-            currentSeries.onPlayerHeal(player, amount);
+            currentSeason.onPlayerHeal(player, amount);
         }
     }
 
