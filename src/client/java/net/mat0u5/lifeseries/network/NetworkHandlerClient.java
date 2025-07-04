@@ -47,7 +47,7 @@ public class NetworkHandlerClient {
         });
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
-            client.execute(() -> handleHandshake(payload));
+            client.execute(NetworkHandlerClient::sendHandshake);
         });
         ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
@@ -269,7 +269,7 @@ public class NetworkHandlerClient {
         }
     }
 
-    public static void handleHandshake(HandshakePayload payload) {
+    public static void sendHandshake() {
         String clientVersionStr = Main.MOD_VERSION;
         String clientCompatibilityStr = VersionControl.clientCmpatibilityMin();
 
@@ -305,5 +305,9 @@ public class NetworkHandlerClient {
 
     public static void sendStringPacket(String name, String value) {
         ClientPlayNetworking.send(new StringPayload(name, value));
+    }
+
+    public static void sendNumberPacket(String name, double value) {
+        ClientPlayNetworking.send(new NumberPayload(name, value));
     }
 }

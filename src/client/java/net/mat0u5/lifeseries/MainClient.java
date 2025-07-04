@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.registries.ClientRegistries;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
@@ -60,8 +61,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
 
         NetworkHandlerClient.registerClientReceiver();
         ClientRenderer.onInitialize();
-        ClientKeybinds.registerKeybinds();
-        ClientEvents.registerEvents();
+        ClientRegistries.registerModStuff();
         Main.setClientHelper(this);
     }
 

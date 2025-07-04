@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.events;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
@@ -36,10 +34,6 @@ import java.util.Map;
 
 public class ClientEvents {
     public static long onGroundFor = 0;
-    public static void registerEvents() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
-        ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
-    }
 
     private static boolean hasShownUpdateScreen = false;
     public static void onScreenOpen(MinecraftClient client, Screen screen, int scaledWidth, int scaledHeight) {

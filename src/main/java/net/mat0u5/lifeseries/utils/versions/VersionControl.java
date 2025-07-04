@@ -1,10 +1,12 @@
 package net.mat0u5.lifeseries.utils.versions;
 
+import net.mat0u5.lifeseries.Main;
+
 import static net.mat0u5.lifeseries.Main.MOD_VERSION;
 
 public class VersionControl {
     public static boolean isDevVersion() {
-        return MOD_VERSION.contains("dev");
+        return MOD_VERSION.contains("dev") || Main.DEBUG;
     }
 
 

@@ -87,10 +87,7 @@ public class NetworkHandlerServer {
     public static void handleConfigPacket(ServerPlayerEntity player, ConfigPayload payload) {
         if (PermissionManager.isAdmin(player)) {
             String configType = payload.configType();
-            int index = payload.index();
             String id = payload.id();
-            String name = payload.name();
-            String description = payload.description();
             List<String> args = payload.args();
 
 
