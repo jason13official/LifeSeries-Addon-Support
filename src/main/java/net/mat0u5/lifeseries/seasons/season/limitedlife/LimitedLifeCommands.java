@@ -140,7 +140,7 @@ public class LimitedLifeCommands {
     public static int getAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        if (ScoreboardUtils.existsObjective("Lives")) {
+        if (!ScoreboardUtils.existsObjective("Lives")) {
             source.sendError(Text.of("Nobody has been assigned time yet."));
             return -1;
         }

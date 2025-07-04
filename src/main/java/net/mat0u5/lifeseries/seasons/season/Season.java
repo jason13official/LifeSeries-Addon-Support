@@ -424,6 +424,7 @@ public abstract class Season extends Session {
         if (!respawnPositions.containsKey(player.getUuid())) return;
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
+        if (isAlive(player)) return;
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             Vec3d pos = entry.getKey();
             if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;

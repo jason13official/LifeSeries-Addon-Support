@@ -195,6 +195,7 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("snail_air")) {
             MainClient.snailAir = intNumber;
+            MainClient.snailAirTimestamp = System.currentTimeMillis();
         }
         if (name.equalsIgnoreCase("fake_thunder") && MinecraftClient.getInstance().world != null) {
             MinecraftClient.getInstance().world.setLightningTicksLeft(intNumber);

@@ -15,8 +15,8 @@ public class EntityMixin {
 
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
-        //TODO check.
         if (Main.isLogicalSide()) return;
+        if (System.currentTimeMillis() - MainClient.snailAirTimestamp > 5000) return;
         if (MainClient.snailAir < 300) {
             Entity entity = (Entity) (Object) this;
             if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.ToggleableSuperpower;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.Team;
@@ -70,7 +71,7 @@ public class Creaking extends ToggleableSuperpower {
 
         //? if >= 1.21.2 {
         /*for (int i = 0; i < 3; i++) {
-            BlockPos spawnPos =  getCloseBlockPos(playerWorld, player.getBlockPos(), 6);
+            BlockPos spawnPos =  WorldUitls.getCloseBlockPos(playerWorld, player.getBlockPos(), 6, 3, true);
             CreakingEntity creaking = EntityType.CREAKING.spawn(playerWorld, spawnPos, SpawnReason.COMMAND);
             if (creaking != null) {
                 creaking.setInvulnerable(true);
@@ -107,35 +108,6 @@ public class Creaking extends ToggleableSuperpower {
     @Override
     public int deactivateCooldownMillis() {
         return 10000;
-    }
-
-    public BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {
-        for (int attempts = 0; attempts < 20; attempts++) {
-            Vec3d offset = new Vec3d(
-                    world.random.nextDouble() * 2 - 1,
-                    1,
-                    world.random.nextDouble() * 2 - 1
-            ).normalize().multiply(minDistanceFromTarget);
-
-            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
-
-            BlockPos validPos = findNearestAirBlock(pos, world);
-            if (validPos != null) {
-                return validPos;
-            }
-        }
-
-        return targetPos;
-    }
-
-    private BlockPos findNearestAirBlock(BlockPos pos, World world) {
-        for (int yOffset = -5; yOffset <= 5; yOffset++) {
-            BlockPos newPos = pos.up(yOffset);
-            if (world.getBlockState(newPos).isAir() && world.getBlockState(pos.up(yOffset+1)).isAir() && world.getBlockState(pos.up(yOffset+2)).isAir()) {
-                return newPos;
-            }
-        }
-        return null;
     }
 
     private static void makeFriendly(String teamName, Entity entity, ServerPlayerEntity player) {

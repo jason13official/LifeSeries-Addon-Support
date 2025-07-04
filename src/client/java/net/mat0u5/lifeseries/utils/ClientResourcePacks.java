@@ -14,26 +14,6 @@ public class ClientResourcePacks {
     private static final String SECRET_LIFE_RESOURCEPACK = "lifeseries:secretlife";
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
     public static final String SNAILS_RESOURCEPACK = "file/" + SnailSkinsClient.PACK_NAME;
-    /*
-
-    //TODO check.
-    public static void applyResourcepack(UUID uuid) {
-        if (MinecraftClient.getInstance() != null && MinecraftClient.getInstance().player != null) {
-                if (MinecraftClient.getInstance().player.getUuid().equals(uuid)) {
-                    if (currentSeason instanceof SecretLife) {
-                        enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
-                    }
-                    else {
-                        disableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
-                    }
-                }
-                else {
-                    PlayerUtils.applyServerResourcepack(uuid);
-                }
-            }
-
-    }
-     */
 
     public static void checkClientPacks() {
         if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE) {

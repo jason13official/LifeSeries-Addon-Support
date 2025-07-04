@@ -31,7 +31,6 @@ public abstract class ItemMixin {
 
     @Inject(method = "getComponents", at = @At("HEAD"), cancellable = true)
     public void getComponents(CallbackInfoReturnable<ComponentMap> cir) {
-        //TODO check.
         boolean isLogicalSide = Main.isLogicalSide();
         boolean hungerActive = false;
         if (isLogicalSide) {

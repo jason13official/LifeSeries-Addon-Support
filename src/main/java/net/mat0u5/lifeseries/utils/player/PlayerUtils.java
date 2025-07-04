@@ -116,16 +116,10 @@ public class PlayerUtils {
     }
 
     public static void applyResourcepack(UUID uuid) {
-        /*
-        //TODO check.
-        if (Main.isClient()) {
-            ClientResourcePacks.applyResourcepack(uuid);
-            return;
-        }
-        */
         if (NetworkHandlerServer.wasHandshakeSuccessful(uuid)) return;
         applyServerResourcepack(uuid);
     }
+
     public static void applyServerResourcepack(UUID uuid) {
         if (server == null) return;
         ServerPlayerEntity player = getPlayer(uuid);

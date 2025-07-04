@@ -52,7 +52,7 @@ public class FakePlayer extends ServerPlayerEntity {
                     gameprofile = opt.get();
                 }
             }
-        }
+        } catch(Exception ignored) {}
         finally {
             UserCache.setUseRemote(server.isDedicated() && server.isRemote());
         }

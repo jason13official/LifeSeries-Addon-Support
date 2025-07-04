@@ -71,7 +71,7 @@ public class Necromancy extends Superpower {
                 ServerWorld updatedPlayerWorld = PlayerUtils.getServerWorld(updatedPlayer);
                 List<ServerPlayerEntity> deadPlayers = getDeadSpectatorPlayers();
                 for (ServerPlayerEntity deadPlayer : deadPlayers) {
-                    BlockPos tpTo = getCloseBlockPos(updatedPlayerWorld, updatedPlayer.getBlockPos(), 3);
+                    BlockPos tpTo = WorldUitls.getCloseBlockPos(updatedPlayerWorld, updatedPlayer.getBlockPos(), 3, 2, true);
                     //? if <= 1.21 {
                     deadPlayer.teleport(updatedPlayerWorld, tpTo.getX(), tpTo.getY(), tpTo.getZ(), EnumSet.noneOf(PositionFlag.class), deadPlayer.getYaw(), deadPlayer.getPitch());
                     //?} else {
@@ -110,34 +110,6 @@ public class Necromancy extends Superpower {
         perPlayerRessurections.removeAll(deadAgain);
     }
 
-    public BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget) {
-        for (int attempts = 0; attempts < 20; attempts++) {
-            Vec3d offset = new Vec3d(
-                    world.random.nextDouble() * 2 - 1,
-                    1,
-                    world.random.nextDouble() * 2 - 1
-            ).normalize().multiply(minDistanceFromTarget);
-
-            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
-
-            BlockPos validPos = findNearestAirBlock(pos, world);
-            if (validPos != null) {
-                return validPos;
-            }
-        }
-
-        return targetPos;
-    }
-
-    private BlockPos findNearestAirBlock(BlockPos pos, World world) {
-        for (int yOffset = -5; yOffset <= 5; yOffset++) {
-            BlockPos newPos = pos.up(yOffset);
-            if (world.getBlockState(newPos).isAir() && world.getBlockState(pos.up(yOffset + 1)).isAir()) {
-                return newPos;
-            }
-        }
-        return null;
-    }
 
     public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();

@@ -15,7 +15,6 @@ import java.util.UUID;
 public class Morph {
 
     public static void clientTick(MorphComponent morphComponent) {
-        //TODO check.
         EntityType<?> morph = morphComponent.morph;
         LivingEntity dummy = morphComponent.dummy;
 

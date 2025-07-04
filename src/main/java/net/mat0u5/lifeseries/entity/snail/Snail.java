@@ -23,6 +23,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
@@ -640,36 +641,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, double minDistanceFromTarget) {
         if (target == null) return null;
-
         BlockPos targetPos = target.getBlockPos();
-
-        for (int attempts = 0; attempts < 25; attempts++) {
-            Vec3d offset = new Vec3d(
-                    target.getRandom().nextDouble() * 2 - 1,
-                    0,
-                    target.getRandom().nextDouble() * 2 - 1
-            ).normalize().multiply(minDistanceFromTarget);
-
-            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
-
-            BlockPos validPos = findNearestAirBlock(pos, PlayerUtils.getServerWorld(target));
-            if (validPos != null) {
-                return validPos;
-            }
-        }
-
-        return targetPos;
+        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, minDistanceFromTarget, 1, false);
     }
 
-    private static BlockPos findNearestAirBlock(BlockPos pos, World world) {
-        for (int yOffset = 5; yOffset >= -5; yOffset--) {
-            BlockPos newPos = pos.up(yOffset);
-            if (world.getBlockState(newPos).isAir()) {
-                return newPos;
-            }
-        }
-        return null;
-    }
 
     public boolean canPathToPlayer(boolean flying) {
         if (pathFinder == null) return false;

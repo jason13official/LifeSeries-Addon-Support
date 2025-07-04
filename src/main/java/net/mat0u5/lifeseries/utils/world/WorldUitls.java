@@ -5,6 +5,7 @@ import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -44,5 +45,48 @@ public class WorldUitls {
         lightning.setPos(pos.x, pos.y, pos.z);
         lightning.setCosmetic(true);
         world.spawnEntity(lightning);
+    }
+
+    public static BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget, int height, boolean bottomSupport) {
+        for (int attempts = 0; attempts < 20; attempts++) {
+            Vec3d offset = new Vec3d(
+                    world.random.nextDouble() * 2 - 1,
+                    1,
+                    world.random.nextDouble() * 2 - 1
+            ).normalize().multiply(minDistanceFromTarget);
+
+            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
+
+            BlockPos validPos = findNearestAirBlock(pos, world, height, bottomSupport);
+            if (validPos != null) {
+                return validPos;
+            }
+        }
+
+        return targetPos;
+    }
+
+    private static BlockPos findNearestAirBlock(BlockPos pos, World world, int height, boolean bottomSupport) {
+        for (int yOffset = 5; yOffset >= -5; yOffset--) {
+            BlockPos newPos = pos.up(yOffset);
+            if (bottomSupport) {
+                BlockPos bottomPos = newPos.down();
+                if (!world.getBlockState(bottomPos).isSideSolidFullSquare(world, bottomPos, Direction.UP)) {
+                    continue;
+                }
+            }
+            boolean allAir = true;
+            for (int i = 0; i < height; i++) {
+                BlockPos airTest = newPos.up(i);
+                if (!world.getBlockState(airTest).isAir()) {
+                    allAir = false;
+                }
+            }
+            if (allAir) {
+                return newPos;
+            }
+
+        }
+        return null;
     }
 }

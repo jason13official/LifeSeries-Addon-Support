@@ -18,6 +18,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -145,6 +146,9 @@ public class NetworkHandlerServer {
         }
         if (name.equalsIgnoreCase("superpower_key") && currentSeason.getSeason() == Seasons.WILD_LIFE) {
             SuperpowersWildcard.pressedSuperpowerKey(player);
+        }
+        if (name.equalsIgnoreCase("transcript")) {
+            player.sendMessage(SessionTranscript.getTranscriptMessage());
         }
         if (PermissionManager.isAdmin(player)) {
             if (name.equalsIgnoreCase("selected_wildcard")) {

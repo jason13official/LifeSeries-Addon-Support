@@ -31,6 +31,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantments;
@@ -474,34 +475,9 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
 
     public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, BlockPos targetPos, double minDistanceFromTarget) {
         if (target == null) return targetPos;
-
-        for (int attempts = 0; attempts < 10; attempts++) {
-            Vec3d offset = new Vec3d(
-                    target.getRandom().nextDouble() * 2 - 1,
-                    1,
-                    target.getRandom().nextDouble() * 2 - 1
-            ).normalize().multiply(minDistanceFromTarget);
-
-            BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
-
-            BlockPos validPos = findNearestAirBlock(pos, PlayerUtils.getServerWorld(target));
-            if (validPos != null) {
-                return validPos;
-            }
-        }
-
-        return targetPos;
+        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, minDistanceFromTarget, 2, false);
     }
 
-    private static BlockPos findNearestAirBlock(BlockPos pos, World world) {
-        for (int yOffset = -5; yOffset <= 5; yOffset++) {
-            BlockPos newPos = pos.up(yOffset);
-            if (world.getBlockState(newPos).isAir() && world.getBlockState(pos.up(yOffset+1)).isAir()) {
-                return newPos;
-            }
-        }
-        return null;
-    }
 
     public void updateNavigation() {
         moveControl = new MoveControl(this);

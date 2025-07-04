@@ -116,14 +116,7 @@ public class SessionCommand {
             source.sendError(Text.of("The session time has not been set yet."));
             return -1;
         }
-        if (!currentSession.statusFinished()) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("The session ends in " + currentSession.getRemainingTime()));
-        }
-        else {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("The session ends in ").append(Text.literal(currentSession.getRemainingTime()).styled(style ->
-                    style.withClickEvent(TextUtils.copyClipboardClickEvent(SessionTranscript.getStats()))
-            )));
-        }
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("The session ends in " + currentSession.getRemainingTime()));
         return 1;
     }
 
