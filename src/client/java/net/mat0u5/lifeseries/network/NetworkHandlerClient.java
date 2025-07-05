@@ -128,7 +128,7 @@ public class NetworkHandlerClient {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
         if (name.equalsIgnoreCase("open_config")) {
-            /*
+
             if (DependencyManager.clothConfigLoaded()) {
                 ClientsideConfig.load();
                 ClientTaskScheduler.scheduleTask(20, () -> {
@@ -139,7 +139,8 @@ public class NetworkHandlerClient {
                 MinecraftClient.getInstance().player.sendMessage(Text.of(""), false);
                 MinecraftClient.getInstance().player.sendMessage(Text.of("§cPlease install the Cloth Config mod (client-side) to modify the config from in-game."), false);
             }
-             */
+        }
+        if (name.equalsIgnoreCase("open_config_new")) {
             ClientConfig.openConfig();
         }
         if (name.equalsIgnoreCase("select_season")) {

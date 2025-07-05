@@ -1,5 +1,8 @@
 package net.mat0u5.lifeseries.mixin.client;
 
+import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.scoreboard.ReadableScoreboardScore;
@@ -22,11 +25,17 @@ public class PlayerListHudMixin {
     private MutableText modifyFormattedScore(ReadableScoreboardScore readableScoreboardScore, NumberFormat numberFormat) {
         ScoreboardObjective objective = getDisplayedObjective();
         MutableText originalText = ReadableScoreboardScore.getFormattedScore(readableScoreboardScore, numberFormat);
+        if (readableScoreboardScore == null || originalText == null) return originalText;
 
         if (objective != null && objective.getName().equals("Lives")) {
             int score = readableScoreboardScore.getScore();
-            if (score >= 4) {
-                return Text.literal("4+").setStyle(originalText.getStyle());
+            if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
+                if (score >= 4) {
+                    return Text.literal("4+").setStyle(originalText.getStyle());
+                }
+            }
+            else {
+                return Text.literal(OtherUtils.formatTime(score*20)).setStyle(originalText.getStyle());
             }
         }
 
