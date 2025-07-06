@@ -6,7 +6,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 
 public abstract class ConfigEntry {
     protected TextRenderer textRenderer;
@@ -16,7 +15,6 @@ public abstract class ConfigEntry {
     protected boolean hasError = false;
     protected String errorMessage = "";
 
-    // Enhanced fields for better UX
     protected ButtonWidget resetButton;
     protected float highlightAlpha = 0.0f;
     protected boolean isHovered = false;
@@ -27,53 +25,53 @@ public abstract class ConfigEntry {
         this.fieldName = fieldName;
         this.displayName = displayName;
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
-        this.initializeResetButton();
+        initializeResetButton();
     }
 
     private void initializeResetButton() {
-        this.resetButton = ButtonWidget.builder(Text.of("Reset"), this::onResetClicked)
+        resetButton = ButtonWidget.builder(Text.of("Reset"), this::onResetClicked)
                 .dimensions(0, 0, RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT)
                 .build();
     }
 
     private void onResetClicked(ButtonWidget button) {
-        this.resetToDefault();
-        this.markChanged();
+        resetToDefault();
+        markChanged();
     }
 
     public void setScreen(ModernConfigScreen screen) {
-        this.screen = screen;
+        screen = screen;
     }
 
     public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        this.isHovered = hovered;
-        this.updateHighlightAnimation(tickDelta);
+        isHovered = hovered;
+        updateHighlightAnimation(tickDelta);
 
-        if (this.highlightAlpha > 0.0f) {
-            int highlightColor = (int)(this.highlightAlpha * 32) << 24 | 0x808080;
+        if (highlightAlpha > 0.0f) {
+            int highlightColor = (int)(highlightAlpha * 32) << 24 | 0x808080;
             context.fill(x, y, x + width, y + height, highlightColor);
         }
 
-        context.drawTextWithShadow(textRenderer, this.displayName, x + 5, y + 6, 0xFFFFFF);
+        context.drawTextWithShadow(textRenderer, displayName, x + 5, y + 6, 0xFFFFFF);
 
-        this.resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
-        this.resetButton.setY(y + 2);
-        this.resetButton.active = this.canReset();
-        this.resetButton.render(context, mouseX, mouseY, tickDelta);
+        resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
+        resetButton.setY(y + 2);
+        resetButton.active = canReset();
+        resetButton.render(context, mouseX, mouseY, tickDelta);
 
-        if (this.hasError()) {
+        if (hasError()) {
             int errorX = x + width - RESET_BUTTON_WIDTH - 20;
             context.drawTextWithShadow(textRenderer, "!", errorX, y + 6, 0xFF5555);
         }
 
-        this.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
+        renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
 
     protected void updateHighlightAnimation(float tickDelta) {
-        if (this.isHovered) {
-            this.highlightAlpha = 1.0f;
+        if (isHovered) {
+            highlightAlpha = 1.0f;
         } else {
-            this.highlightAlpha = Math.max(0.0f, this.highlightAlpha - tickDelta * 0.75f);
+            highlightAlpha = Math.max(0.0f, highlightAlpha - tickDelta * 0.75f);
         }
     }
 
@@ -82,18 +80,18 @@ public abstract class ConfigEntry {
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (this.resetButton.mouseClicked(mouseX, mouseY, button)) {
+        if (resetButton.mouseClicked(mouseX, mouseY, button)) {
             return true;
         }
-        return this.mouseClickedEntry(mouseX, mouseY, button);
+        return mouseClickedEntry(mouseX, mouseY, button);
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return this.keyPressedEntry(keyCode, scanCode, modifiers);
+        return keyPressedEntry(keyCode, scanCode, modifiers);
     }
 
     public boolean charTyped(char chr, int modifiers) {
-        return this.charTypedEntry(chr, modifiers);
+        return charTypedEntry(chr, modifiers);
     }
 
     protected abstract void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
@@ -107,34 +105,34 @@ public abstract class ConfigEntry {
     public abstract void setValue(Object value);
 
     public String getFieldName() {
-        return this.fieldName;
+        return fieldName;
     }
 
     public Text getDisplayName() {
-        return this.displayName;
+        return displayName;
     }
 
     public boolean hasError() {
-        return this.hasError;
+        return hasError;
     }
 
     public String getErrorMessage() {
-        return this.errorMessage;
+        return errorMessage;
     }
 
     protected void setError(String errorMessage) {
-        this.hasError = true;
-        this.errorMessage = errorMessage;
+        hasError = true;
+        errorMessage = errorMessage;
     }
 
     protected void clearError() {
-        this.hasError = false;
-        this.errorMessage = "";
+        hasError = false;
+        errorMessage = "";
     }
 
     protected void markChanged() {
-        if (this.screen != null) {
-            this.screen.markChanged();
+        if (screen != null) {
+            screen.markChanged();
         }
     }
 }

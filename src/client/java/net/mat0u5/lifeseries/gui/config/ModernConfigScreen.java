@@ -2,10 +2,8 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.mat0u5.lifeseries.gui.config.entries.BooleanConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.IntegerConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.StringConfigEntry;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -240,18 +238,28 @@ public class ModernConfigScreen extends Screen {
                 this.categoryName = categoryName;
             }
 
-            public CategoryBuilder addString(String fieldName, Text displayName, String defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new StringConfigEntry(fieldName, displayName, defaultValue));
+            public CategoryBuilder addString(String fieldName, Text displayName, String value, String defaultValue) {
+                this.parent.categories.get(this.categoryName).add(new StringConfigEntry(fieldName, displayName, value, defaultValue));
                 return this;
             }
 
-            public CategoryBuilder addBoolean(String fieldName, Text displayName, boolean defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new BooleanConfigEntry(fieldName, displayName, defaultValue));
+            public CategoryBuilder addBoolean(String fieldName, Text displayName, boolean value, boolean defaultValue) {
+                this.parent.categories.get(this.categoryName).add(new BooleanConfigEntry(fieldName, displayName, value, defaultValue));
                 return this;
             }
 
-            public CategoryBuilder addInteger(String fieldName, Text displayName, int defaultValue, int min, int max) {
-                this.parent.categories.get(this.categoryName).add(new IntegerConfigEntry(fieldName, displayName, defaultValue, min, max));
+            public CategoryBuilder addInteger(String fieldName, Text displayName, int value, int defaultValue, int min, int max) {
+                this.parent.categories.get(this.categoryName).add(new IntegerConfigEntry(fieldName, displayName, value, defaultValue, min, max));
+                return this;
+            }
+
+            public CategoryBuilder addDouble(String fieldName, Text displayName, double value, double defaultValue, double min, double max) {
+                this.parent.categories.get(this.categoryName).add(new DoubleConfigEntry(fieldName, displayName, value, defaultValue, min, max));
+                return this;
+            }
+
+            public CategoryBuilder addFloat(String fieldName, Text displayName, float value, float defaultValue, float min, float max) {
+                this.parent.categories.get(this.categoryName).add(new FloatConfigEntry(fieldName, displayName, value, defaultValue, min, max));
                 return this;
             }
 
