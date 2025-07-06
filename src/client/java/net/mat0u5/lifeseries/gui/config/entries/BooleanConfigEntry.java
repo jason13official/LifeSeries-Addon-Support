@@ -1,3 +1,4 @@
+
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.DrawContext;
@@ -25,23 +26,41 @@ public class BooleanConfigEntry extends ConfigEntry {
     }
 
     private Text getButtonText() {
-        return this.value ? Text.of("True") : Text.of("False");
+        return this.value ? Text.of("§aYes") : Text.of("§cNo");
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        // Render label
-        context.drawTextWithShadow(textRenderer, this.displayName, x + 5, y + 6, 0xFFFFFF);
-
-        // Position and render button
-        this.button.setX(x + width - 65);
-        this.button.setY(y + 2);
+    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        int entryWidth = this.getEntryContentWidth(width);
+        this.button.setX(x + entryWidth - 65);
+        this.button.setY(y + 3);
         this.button.render(context, mouseX, mouseY, tickDelta);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         return this.button.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
+        return false;
+    }
+
+    @Override
+    protected boolean charTypedEntry(char chr, int modifiers) {
+        return false;
+    }
+
+    @Override
+    protected boolean canReset() {
+        return this.value != this.defaultValue;
+    }
+
+    @Override
+    protected void resetToDefault() {
+        this.value = this.defaultValue;
+        this.button.setMessage(this.getButtonText());
     }
 
     @Override

@@ -51,20 +51,20 @@ public class ModernConfigScreen extends Screen {
         super.init();
 
         int listTop = this.categoryNames.size() > 1 ? 60 : 40;
-        this.listWidget = new ConfigListWidget(this.client, this.width, this.height, listTop, this.height - 40, 25);
+        this.listWidget = new ConfigListWidget(this.client, this.width, this.height, listTop, this.height - 40, 24);
 
         this.addSelectableChild(this.listWidget);
         this.addDrawableChild(this.listWidget);
 
         this.refreshList();
 
-        this.saveButton = ButtonWidget.builder(Text.of("Save"), button -> this.save())
-                .dimensions(this.width / 2 - 154, this.height - 32, 150, 20)
+        this.saveButton = ButtonWidget.builder(Text.of("Save & Quit"), button -> this.save())
+                .dimensions(this.width / 2 + 4, this.height - 32, 150, 20)
                 .build();
         this.addDrawableChild(this.saveButton);
 
-        this.cancelButton = ButtonWidget.builder(Text.of("Cancel"), button -> this.close())
-                .dimensions(this.width / 2 + 4, this.height - 32, 150, 20)
+        this.cancelButton = ButtonWidget.builder(Text.of("Discard Changes"), button -> this.close())
+                .dimensions(this.width / 2 - 154, this.height - 32, 150, 20)
                 .build();
         this.addDrawableChild(this.cancelButton);
 
@@ -132,9 +132,9 @@ public class ModernConfigScreen extends Screen {
                             this.client.setScreen(this);
                         }
                     },
-                    Text.of("Title"),
-                    Text.of("Message"),
-                    Text.of("Confirm"),
+                    Text.of("Changes Not Saved"),
+                    Text.of("Are you sure you want to quit editing the config? Changes will not be saved!"),
+                    Text.of("Quit & Discard Changes"),
                     Text.of("Cancel")
             ));
         } else {
@@ -144,7 +144,8 @@ public class ModernConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
+        //this.renderBackground(context, mouseX, mouseY, delta);
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 12, 0xFFFFFF);
 
@@ -156,7 +157,6 @@ public class ModernConfigScreen extends Screen {
             context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, 20, 0xFF5555);
         }
 
-        super.render(context, mouseX, mouseY, delta);
     }
 
     private void renderCategoryTabs(DrawContext context, int mouseX, int mouseY) {

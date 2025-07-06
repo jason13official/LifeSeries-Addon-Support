@@ -1,3 +1,4 @@
+
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.DrawContext;
@@ -17,7 +18,7 @@ public class IntegerConfigEntry extends ConfigEntry {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.value = defaultValue;
-        this.textField = new TextFieldWidget(textRenderer, 0, 0, 80, 20, Text.empty());
+        this.textField = new TextFieldWidget(textRenderer, 0, 0, 80, 18, Text.empty());
         this.textField.setText(String.valueOf(defaultValue));
         this.textField.setChangedListener(this::onTextChanged);
     }
@@ -38,34 +39,43 @@ public class IntegerConfigEntry extends ConfigEntry {
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        context.drawTextWithShadow(textRenderer, this.displayName, x + 5, y + 6, 0xFFFFFF);
-
+    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         String rangeText = "(" + this.minValue + "-" + this.maxValue + ")";
-        context.drawTextWithShadow(textRenderer, rangeText, x + width - 170, y + 6, 0xAAAAAA);
+        int rangeWidth = textRenderer.getWidth(rangeText);
+        int entryWidth = this.getEntryContentWidth(width);
 
-        this.textField.setX(x + width - 85);
-        this.textField.setY(y + 2);
+        context.drawTextWithShadow(textRenderer, rangeText, x + entryWidth - rangeWidth - 90, y + 6, 0xAAAAAA);
+
+        this.textField.setX(x + entryWidth - 85);
+        this.textField.setY(y + 3);
         this.textField.render(context, mouseX, mouseY, tickDelta);
-
-        if (this.hasError()) {
-            context.drawTextWithShadow(textRenderer, "!", x + width - 100, y + 6, 0xFF5555);
-        }
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         return this.textField.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
         return this.textField.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
+    protected boolean charTypedEntry(char chr, int modifiers) {
         return this.textField.charTyped(chr, modifiers);
+    }
+
+    @Override
+    protected boolean canReset() {
+        return this.value != this.defaultValue;
+    }
+
+    @Override
+    protected void resetToDefault() {
+        this.value = this.defaultValue;
+        this.textField.setText(String.valueOf(this.defaultValue));
+        this.clearError();
     }
 
     @Override

@@ -40,10 +40,6 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            if (hovered) {
-                context.fill(x, y, x + entryWidth, y + entryHeight, 0x20FFFFFF);
-            }
-
             this.configEntry.render(context, x, y, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
         }
 

@@ -5,17 +5,24 @@ import net.minecraft.text.Text;
 
 public class ClientConfig {
     public static void openConfig() {
-        ModernConfigScreen configScreen = new ModernConfigScreen.Builder(MinecraftClient.getInstance().currentScreen, Text.of("My Config"))
-                .addCategory("General")
-                .addString("username", Text.of("Username"), "player")
-                .addBoolean("enabled", Text.of("Enabled"), true)
-                .addInteger("count", Text.of("Count"), 10, 1, 100)
-                .endCategory()
-                .setOnSave(configData -> {
-                    System.out.println("Config saved: " + configData);
-                })
-                .build();
+        ModernConfigScreen.Builder builder = new ModernConfigScreen.Builder(MinecraftClient.getInstance().currentScreen, Text.of("My Config"));
+        ModernConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("General");
+        categoryGeneral.addString("username", Text.of("Username"), "player");
+        categoryGeneral.addBoolean("enabled", Text.of("Enabled"), true);
+        categoryGeneral.addInteger("count", Text.of("Count"), 10, 1, 100);
+        categoryGeneral.endCategory();
 
-        MinecraftClient.getInstance().setScreen(configScreen);
+        ModernConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
+        categoryClient.addString("usernamee", Text.of("1Username"), "player");
+        categoryClient.addBoolean("enabledd", Text.of("1Enabled"), true);
+        categoryClient.addInteger("countt", Text.of("1Count"), 10, 1, 100);
+        categoryClient.endCategory();
+
+
+        builder.setOnSave(configData -> {
+            System.out.println("Config saved: " + configData);
+        });
+
+        MinecraftClient.getInstance().setScreen(builder.build());
     }
 }

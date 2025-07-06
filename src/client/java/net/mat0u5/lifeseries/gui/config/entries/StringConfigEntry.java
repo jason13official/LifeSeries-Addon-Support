@@ -1,3 +1,4 @@
+
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.DrawContext;
@@ -11,7 +12,7 @@ public class StringConfigEntry extends ConfigEntry {
     public StringConfigEntry(String fieldName, Text displayName, String defaultValue) {
         super(fieldName, displayName);
         this.defaultValue = defaultValue;
-        this.textField = new TextFieldWidget(textRenderer, 0, 0, 150, 20, Text.empty());
+        this.textField = new TextFieldWidget(textRenderer, 0, 0, 150, 18, Text.empty());
         this.textField.setText(defaultValue);
         this.textField.setChangedListener(this::onTextChanged);
     }
@@ -22,31 +23,36 @@ public class StringConfigEntry extends ConfigEntry {
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        context.drawTextWithShadow(textRenderer, this.displayName, x + 5, y + 6, 0xFFFFFF);
-
-        this.textField.setX(x + width - 155);
-        this.textField.setY(y + 2);
+    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        int entryWidth = this.getEntryContentWidth(width);
+        this.textField.setX(x + entryWidth - 155);
+        this.textField.setY(y + 3);
         this.textField.render(context, mouseX, mouseY, tickDelta);
-
-        if (this.hasError()) {
-            context.drawTextWithShadow(textRenderer, "!", x + width - 170, y + 6, 0xFF5555);
-        }
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         return this.textField.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
         return this.textField.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
+    protected boolean charTypedEntry(char chr, int modifiers) {
         return this.textField.charTyped(chr, modifiers);
+    }
+
+    @Override
+    protected boolean canReset() {
+        return !this.textField.getText().equals(this.defaultValue);
+    }
+
+    @Override
+    protected void resetToDefault() {
+        this.textField.setText(this.defaultValue);
     }
 
     @Override
