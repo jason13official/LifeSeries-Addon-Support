@@ -111,6 +111,7 @@ public class BoogeymanManager {
         if (boogeymen == null) return;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player,Text.of("§aYou are cured!"), 20, 30, 20);
+        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
     }
 
     public void prepareToChooseBoogeymen() {
@@ -212,6 +213,8 @@ public class BoogeymanManager {
     public void playerFailBoogeyman(ServerPlayerEntity player) {
         if (!currentSeason.isAlive(player)) return;
         if (currentSeason.isOnLastLife(player, true)) return;
+        PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
+        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
         OtherUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
         currentSeason.setPlayerLives(player, 1);
     }

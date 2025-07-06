@@ -14,6 +14,16 @@
             "lastlife/boogeyman_no"
         ]
     },
+    "lastlife_boogeyman_cure": {
+        "sounds": [
+            "lastlife/boogeyman_cure"
+        ]
+    },
+    "lastlife_boogeyman_fail": {
+        "sounds": [
+            "lastlife/boogeyman_fail"
+        ]
+    },
     "doublelife_soulmate_wait": {
         "sounds": [
             "doublelife/soulmate_wait"

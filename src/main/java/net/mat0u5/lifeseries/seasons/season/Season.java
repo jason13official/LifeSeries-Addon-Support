@@ -51,8 +51,8 @@ import static net.mat0u5.lifeseries.Main.*;
 /*import net.minecraft.server.world.ServerWorld;*/
 
 public abstract class Season extends Session {
-    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/main.zip";
-    public static final String RESOURCEPACK_MAIN_SHA ="231f5fa0022317a0798fd6d73906b95be0db87c3";
+    public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-a2267cdefcc227356dfa14261923a140cb4635e6/main.zip";
+    public static final String RESOURCEPACK_MAIN_SHA ="328550e43f517a5ed26a0a9597c255d15783645e";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/secretlife.zip";
     public static final String RESOURCEPACK_SECRETLIFE_SHA ="92a7c3dfc6641509de72a7c687a3707ba3843e6c";
     public static final String RESOURCEPACK_MINIMAL_ARMOR_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-minimal_armor-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/minimal_armor.zip";
