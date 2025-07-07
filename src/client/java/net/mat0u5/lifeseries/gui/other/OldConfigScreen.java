@@ -10,7 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
-public class ConfigScreen {
+public class OldConfigScreen {
     public static Screen create(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)

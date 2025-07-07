@@ -8,7 +8,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     protected String value;
 
     public StringConfigEntry(String fieldName, Text displayName, String value, String defaultValue) {
-        super(fieldName, displayName, 150, 18);
+        super(fieldName, displayName, 150);
         this.defaultValue = defaultValue;
         this.value = value;
         initializeTextField();
@@ -37,12 +37,18 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof String) {
-            textField.setText((String) value);
+        if (value instanceof String stringValue) {
+            this.value = stringValue;
+            textField.setText(stringValue);
         }
     }
 
     public String getDefaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public int getPreferredHeight() {
+        return isHovered ? 40 : super.getPreferredHeight(); //TODO remove
     }
 }

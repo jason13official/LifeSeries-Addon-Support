@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
-import net.mat0u5.lifeseries.gui.config.ModernConfigScreen;
+import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -9,7 +9,7 @@ import net.minecraft.text.Text;
 
 public abstract class ConfigEntry {
     protected TextRenderer textRenderer;
-    protected ModernConfigScreen screen;
+    protected ConfigScreen screen;
     protected final String fieldName;
     protected final Text displayName;
     protected boolean hasError = false;
@@ -39,8 +39,8 @@ public abstract class ConfigEntry {
         markChanged();
     }
 
-    public void setScreen(ModernConfigScreen screen) {
-        screen = screen;
+    public void setScreen(ConfigScreen screen) {
+        this.screen = screen;
     }
 
     public void render(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
@@ -48,11 +48,11 @@ public abstract class ConfigEntry {
         updateHighlightAnimation(tickDelta);
 
         if (highlightAlpha > 0.0f) {
-            int highlightColor = (int)(highlightAlpha * 32) << 24 | 0x808080;
+            int highlightColor = (int)(highlightAlpha * 128) << 24 | 0x808080;
             context.fill(x, y, x + width, y + height, highlightColor);
         }
 
-        context.drawTextWithShadow(textRenderer, displayName, x + 5, y + 6, 0xFFFFFF);
+        context.drawTextWithShadow(textRenderer, displayName, x + 25, y + 6, 0xFFFFFF);
 
         resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
         resetButton.setY(y + 2);
@@ -71,12 +71,12 @@ public abstract class ConfigEntry {
         if (isHovered) {
             highlightAlpha = 1.0f;
         } else {
-            highlightAlpha = Math.max(0.0f, highlightAlpha - tickDelta * 0.75f);
+            highlightAlpha = Math.max(0.0f, highlightAlpha - tickDelta * 0.1f);
         }
     }
 
     protected int getEntryContentWidth(int totalWidth) {
-        return totalWidth - RESET_BUTTON_WIDTH - 30;
+        return totalWidth - RESET_BUTTON_WIDTH - 15;
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -92,6 +92,10 @@ public abstract class ConfigEntry {
 
     public boolean charTyped(char chr, int modifiers) {
         return charTypedEntry(chr, modifiers);
+    }
+
+    public int getPreferredHeight() {
+        return 20;
     }
 
     protected abstract void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
@@ -121,13 +125,13 @@ public abstract class ConfigEntry {
     }
 
     protected void setError(String errorMessage) {
-        hasError = true;
-        errorMessage = errorMessage;
+        this.hasError = true;
+        this.errorMessage = errorMessage;
     }
 
     protected void clearError() {
-        hasError = false;
-        errorMessage = "";
+        this.hasError = false;
+        this.errorMessage = "";
     }
 
     protected void markChanged() {

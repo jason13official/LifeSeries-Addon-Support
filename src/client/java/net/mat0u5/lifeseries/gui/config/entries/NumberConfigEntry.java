@@ -10,7 +10,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     protected T value;
 
     public NumberConfigEntry(String fieldName, Text displayName, T value, T defaultValue, T minValue, T maxValue) {
-        super(fieldName, displayName, 80, 18);
+        super(fieldName, displayName);
         this.defaultValue = defaultValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -47,7 +47,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
         context.drawTextWithShadow(textRenderer, rangeText,
                 x + entryWidth - rangeWidth - textField.getWidth() - 15,
-                y + (height - textRenderer.fontHeight) / 2, 0xAAAAAA);
+                y + (height - textRenderer.fontHeight) / 2+1, 0xAAAAAA);
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     @Override
     public void setValue(Object value) {
         if (isValidType(value)) {
-            value = castValue(value);
+            this.value = castValue(value);
             textField.setText(value.toString());
         }
     }

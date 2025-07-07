@@ -12,23 +12,18 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
         super(fieldName, displayName, 60, 20);
         this.defaultValue = defaultValue;
         this.value = value;
-    }
-
-    @Override
-    protected ButtonWidget createButton(int width, int height) {
-        return ButtonWidget.builder(getButtonText(), this::onButtonClick)
-                .dimensions(0, 0, width, height)
-                .build();
+        updateButtonText();
     }
 
     @Override
     protected void onButtonClick(ButtonWidget button) {
         value = !value;
-        button.setMessage(getButtonText());
+        updateButtonText();
         markChanged();
     }
 
-    private Text getButtonText() {
+    @Override
+    public Text getButtonText() {
         return value ? Text.of("§aYes") : Text.of("§cNo");
     }
 
@@ -40,7 +35,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
     @Override
     protected void resetToDefault() {
         value = defaultValue;
-        button.setMessage(getButtonText());
+        updateButtonText();
     }
 
     @Override
@@ -50,9 +45,9 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof Boolean) {
-            value = (Boolean) value;
-            button.setMessage(getButtonText());
+        if (value instanceof Boolean booleanValue) {
+            this.value = booleanValue;
+            updateButtonText();
         }
     }
 

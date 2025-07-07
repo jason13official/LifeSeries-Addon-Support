@@ -6,6 +6,16 @@ import net.minecraft.text.Text;
 
 public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected final TextFieldWidget textField;
+    private static final int DEFAULT_TEXT_FIELD_WIDTH = 100;
+    private static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
+
+    public TextFieldConfigEntry(String fieldName, Text displayName) {
+        this(fieldName, displayName, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
+    }
+
+    public TextFieldConfigEntry(String fieldName, Text displayName, int textFieldWidth) {
+        this(fieldName, displayName, textFieldWidth, DEFAULT_TEXT_FIELD_HEIGHT);
+    }
 
     public TextFieldConfigEntry(String fieldName, Text displayName, int textFieldWidth, int textFieldHeight) {
         super(fieldName, displayName);
@@ -26,9 +36,18 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
         renderAdditionalContent(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
 
-        textField.setX(x + entryWidth - textField.getWidth() - 5);
-        textField.setY(y + (height - textField.getHeight()) / 2);
+        textField.setX(getTextFieldPosX(x, entryWidth));
+        textField.setY(getTextFieldPosY(y, height));
         textField.render(context, mouseX, mouseY, tickDelta);
+    }
+
+    protected int getTextFieldPosX(int x, int entryWidth) {
+        return x + entryWidth - textField.getWidth() - 5;
+    }
+
+    protected int getTextFieldPosY(int y, int height) {
+        //return y + (height - textField.getHeight()) / 2; CENTER
+        return y+1;
     }
 
     @Override

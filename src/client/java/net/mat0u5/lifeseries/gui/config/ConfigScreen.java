@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ModernConfigScreen extends Screen {
+public class ConfigScreen extends Screen {
     private final Screen parent;
     private final Map<String, List<ConfigEntry>> categories;
     private final List<String> categoryNames;
@@ -26,7 +26,7 @@ public class ModernConfigScreen extends Screen {
     private int selectedCategory = 0;
     private boolean hasChanges = false;
 
-    public ModernConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories, Consumer<Map<String, Map<String, Object>>> onSaveCallback) {
+    public ConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories, Consumer<Map<String, Map<String, Object>>> onSaveCallback) {
         super(title);
         this.parent = parent;
         this.categories = categories;
@@ -48,8 +48,9 @@ public class ModernConfigScreen extends Screen {
     protected void init() {
         super.init();
 
-        int listTop = this.categoryNames.size() > 1 ? 60 : 40;
-        this.listWidget = new ConfigListWidget(this.client, this.width, this.height, listTop, this.height - 40, 24);
+        int listTop = this.categoryNames.size() > 1 ? 50 : 30;
+
+        this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - 30, listTop, 20);
 
         this.addSelectableChild(this.listWidget);
         this.addDrawableChild(this.listWidget);
@@ -57,12 +58,12 @@ public class ModernConfigScreen extends Screen {
         this.refreshList();
 
         this.saveButton = ButtonWidget.builder(Text.of("Save & Quit"), button -> this.save())
-                .dimensions(this.width / 2 + 4, this.height - 32, 150, 20)
+                .dimensions(this.width / 2 + 4, this.height - 24, 150, 20)
                 .build();
         this.addDrawableChild(this.saveButton);
 
         this.cancelButton = ButtonWidget.builder(Text.of("Discard Changes"), button -> this.close())
-                .dimensions(this.width / 2 - 154, this.height - 32, 150, 20)
+                .dimensions(this.width / 2 - 154, this.height - 24, 150, 20)
                 .build();
         this.addDrawableChild(this.cancelButton);
 
@@ -145,7 +146,7 @@ public class ModernConfigScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         //this.renderBackground(context, mouseX, mouseY, delta);
 
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 12, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
 
         if (this.categoryNames.size() > 1) {
             this.renderCategoryTabs(context, mouseX, mouseY);
@@ -158,12 +159,12 @@ public class ModernConfigScreen extends Screen {
     }
 
     private void renderCategoryTabs(DrawContext context, int mouseX, int mouseY) {
-        int tabWidth = Math.min(150, this.width / this.categoryNames.size());
-        int startX = (this.width - (tabWidth * this.categoryNames.size())) / 2;
+        int tabWidth = Math.min(130, this.width / this.categoryNames.size());
+        int startX = (this.width - ((tabWidth+5) * this.categoryNames.size())) / 2;
 
         for (int i = 0; i < this.categoryNames.size(); i++) {
-            int tabX = startX + i * tabWidth;
-            int tabY = 35;
+            int tabX = startX + i * (tabWidth+5);
+            int tabY = 24;
             int tabHeight = 20;
 
             boolean isSelected = i == this.selectedCategory;
@@ -181,12 +182,12 @@ public class ModernConfigScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.categoryNames.size() > 1 && button == 0) {
-            int tabWidth = Math.min(150, this.width / this.categoryNames.size());
+            int tabWidth = Math.min(130, this.width / this.categoryNames.size());
             int startX = (this.width - (tabWidth * this.categoryNames.size())) / 2;
 
             for (int i = 0; i < this.categoryNames.size(); i++) {
                 int tabX = startX + i * tabWidth;
-                int tabY = 35;
+                int tabY = 24;
                 int tabHeight = 20;
 
                 if (mouseX >= tabX && mouseX < tabX + tabWidth && mouseY >= tabY && mouseY < tabY + tabHeight) {
@@ -225,8 +226,8 @@ public class ModernConfigScreen extends Screen {
             return new CategoryBuilder(this, name);
         }
 
-        public ModernConfigScreen build() {
-            return new ModernConfigScreen(this.parent, this.title, this.categories, this.onSave);
+        public ConfigScreen build() {
+            return new ConfigScreen(this.parent, this.title, this.categories, this.onSave);
         }
 
         public static class CategoryBuilder {

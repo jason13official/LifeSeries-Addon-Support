@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.config.ClientConfig;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
-import net.mat0u5.lifeseries.gui.other.ConfigScreen;
+import net.mat0u5.lifeseries.gui.other.OldConfigScreen;
 import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
@@ -132,7 +132,7 @@ public class NetworkHandlerClient {
             if (DependencyManager.clothConfigLoaded()) {
                 ClientsideConfig.load();
                 ClientTaskScheduler.scheduleTask(20, () -> {
-                    MinecraftClient.getInstance().setScreen(ConfigScreen.create(MinecraftClient.getInstance().currentScreen));
+                    MinecraftClient.getInstance().setScreen(OldConfigScreen.create(MinecraftClient.getInstance().currentScreen));
                 });
             }
             else if (MinecraftClient.getInstance().player != null){
