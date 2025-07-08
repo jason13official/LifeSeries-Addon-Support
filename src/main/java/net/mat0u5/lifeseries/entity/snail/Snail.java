@@ -150,7 +150,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
                     int modelIndex = 0;
                     int oldCMD = 0;
 
-                    String path = customModelComponent.getPath().replaceAll("snail/","");
+                    String path = customModelComponent.getPath().replaceAll("snail/","").replaceAll("snail_snail_","");
 
                     if (customModelComponent.getNamespace().equalsIgnoreCase("bil")) {
                         if (path.startsWith("e4d04078")) modelIndex = 1;

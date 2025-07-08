@@ -110,7 +110,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         return Math.max(0, totalHeight - height + 8);
     }
 
-    //?if <= 1.21.2 {
+    //? if <= 1.21.2 {
     @Override
     protected boolean isScrollbarVisible() {
         return false;
