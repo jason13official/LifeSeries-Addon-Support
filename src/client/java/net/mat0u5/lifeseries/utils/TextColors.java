@@ -15,4 +15,6 @@ public class TextColors {
     public static int TRIVIA_LIME = 0xFF5ef961;
     public static int TRIVIA_YELLOW = 0xFFf5fd6e;
     public static int TRIVIA_RED = 0xFFed5b64;
+
+    public static int GUI_RED = TRIVIA_RED;
 }

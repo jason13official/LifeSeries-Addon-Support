@@ -90,7 +90,6 @@ public class NetworkHandlerServer {
             String id = payload.id();
             List<String> args = payload.args();
 
-
             if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
                 seasonConfig.setProperty(id, args.getFirst());
                 updatedConfigThisTick = true;
@@ -127,7 +126,7 @@ public class NetworkHandlerServer {
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
-        Main.softReloadStart();
+        Main.softestReloadStart();
     }
 
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {

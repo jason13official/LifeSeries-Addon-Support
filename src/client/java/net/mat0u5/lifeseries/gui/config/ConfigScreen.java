@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -14,13 +13,13 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ConfigScreen extends Screen {
     private final Screen parent;
     private final Map<String, List<ConfigEntry>> categories;
     private final List<String> categoryNames;
 
+    private ConfigEntry focusedEntry;
     private ConfigListWidget listWidget;
     private ButtonWidget saveButton;
     private ButtonWidget cancelButton;
@@ -83,12 +82,20 @@ public class ConfigScreen extends Screen {
         }
     }
 
-    public void markChanged() {
-        this.hasChanges = true;
+    public void onEntryValueChanged() {
         this.updateButtonStates();
     }
 
     private void updateButtonStates() {
+        this.hasChanges = false;
+        for (List<ConfigEntry> entries : this.categories.values()) {
+            for (ConfigEntry entry : entries) {
+                if (entry.modified()) {
+                    this.hasChanges = true;
+                    break;
+                }
+            }
+        }
         this.saveButton.active = this.hasChanges && !this.hasErrors();
     }
 
@@ -206,12 +213,11 @@ public class ConfigScreen extends Screen {
         return this.textRenderer;
     }
 
-    public void unfocusTextEntries() {
-        for (ConfigListWidget.ConfigEntryWidget entry : this.listWidget.children()) {
-            if (entry.getConfigEntry() instanceof TextFieldConfigEntry textFieldEntry) {
-                textFieldEntry.setFocused(false);
-            }
+    public void setFocusedEntry(ConfigEntry entry) {
+        if (focusedEntry != null) {
+            focusedEntry.setFocused(false);
         }
+        focusedEntry = entry;
     }
 
     public static class Builder {

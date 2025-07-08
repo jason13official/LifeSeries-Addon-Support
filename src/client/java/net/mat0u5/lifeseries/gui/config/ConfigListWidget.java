@@ -6,7 +6,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.text.Text;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
+    private static final int ENTRY_GAP = 2;
+    private static final int MAX_HIGHLIGHTED_ENTRIES = 2;
 
     public ConfigListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
@@ -34,11 +39,14 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         context.fill(listLeft, listTop, listRight, listBottom, 0x20000000);
 
-        int currentY = listTop + 4 - (int)getScrollAmount();
+        int currentY = listTop + 4 - (int)getScrolledAmount();
+
+        Map<Float, ConfigEntry> highlightedEntries = new TreeMap<>();
 
         for (int i = 0; i < getEntryCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
-            int entryHeight = entry.getConfigEntry().getPreferredHeight();
+            ConfigEntry configEntry = entry.getConfigEntry();
+            int entryHeight = configEntry.getPreferredHeight();
 
             if (currentY + entryHeight >= listTop && currentY < listBottom) {
                 int entryWidth = getRowWidth();
@@ -48,12 +56,33 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
                         mouseY >= currentY && mouseY < currentY + entryHeight;
 
                 entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
+
+                if (configEntry.highlightAlpha > 0.0f) {
+                    highlightedEntries.put(configEntry.highlightAlpha, configEntry);
+                }
             }
 
-            currentY += entryHeight + 2;
+            currentY += entryHeight + ENTRY_GAP;
         }
 
+        int highlightedCount = highlightedEntries.size();
+        if (highlightedCount > MAX_HIGHLIGHTED_ENTRIES) {
+            int pos = 0;
+            for (ConfigEntry entry : highlightedEntries.values()) {
+                if (pos >= MAX_HIGHLIGHTED_ENTRIES) {
+                    break;
+                }
+                entry.highlightAlpha = 0.0f;
+                pos++;
+            }
+        }
+
+        //? if <= 1.21.2 {
         int maxScroll = getMaxScroll();
+        //?} else {
+        /*int maxScroll = getMaxScrollY();
+        *///?}
+
         if (maxScroll > 0) {
             int scrollbarX = listRight - 6;
             int scrollbarTop = listTop;
@@ -63,13 +92,17 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
             context.fill(scrollbarX, scrollbarTop, scrollbarX + 6, scrollbarBottom, 0x40000000);
 
             int handleHeight = Math.max(10, scrollbarHeight * scrollbarHeight / (scrollbarHeight + maxScroll));
-            int handleY = scrollbarTop + (int)((scrollbarHeight - handleHeight) * getScrollAmount() / maxScroll);
+            int handleY = scrollbarTop + (int)((scrollbarHeight - handleHeight) * getScrolledAmount() / maxScroll);
             context.fill(scrollbarX + 1, handleY, scrollbarX + 5, handleY + handleHeight, 0x80FFFFFF);
         }
     }
 
     @Override
+    //? if <= 1.21.2 {
     public int getMaxScroll() {
+    //?} else {
+    /*public int getMaxScrollY() {
+    *///?}
         int totalHeight = 0;
         for (int i = 0; i < getEntryCount(); i++) {
             totalHeight += getEntry(i).getConfigEntry().getPreferredHeight();
@@ -77,15 +110,12 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         return Math.max(0, totalHeight - height + 8);
     }
 
-    @Override
-    protected boolean isSelectButton(int button) {
-        return false;
-    }
-    
+    //?if <= 1.21.2 {
     @Override
     protected boolean isScrollbarVisible() {
         return false;
     }
+    //?}
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -94,11 +124,11 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         }
 
         int listTop = getY();
-        int currentY = listTop + 4 - (int)getScrollAmount();
+        int currentY = listTop + 4 - (int)getScrolledAmount();
 
         for (int i = 0; i < getEntryCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
-            int entryHeight = entry.getConfigEntry().getPreferredHeight();
+            int entryHeight = entry.getConfigEntry().getPreferredHeight() + ENTRY_GAP;
 
             if (mouseY >= currentY && mouseY < currentY + entryHeight) {
                 setFocused(entry);
@@ -110,6 +140,14 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         }
 
         return false;
+    }
+
+    public double getScrolledAmount() {
+        //? if <= 1.21.2 {
+        return getScrollAmount();
+        //?} else {
+        /*return getScrollY();
+        *///?}
     }
 
     @Override
@@ -141,16 +179,19 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            configEntry.setFocused(true);
             return configEntry.mouseClicked(mouseX, mouseY, button);
         }
 
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            configEntry.setFocused(true);
             return configEntry.keyPressed(keyCode, scanCode, modifiers);
         }
 
         @Override
         public boolean charTyped(char chr, int modifiers) {
+            configEntry.setFocused(true);
             return configEntry.charTyped(chr, modifiers);
         }
 

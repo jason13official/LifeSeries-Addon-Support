@@ -44,7 +44,8 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
 
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
-        return this.button.mouseClicked(mouseX, mouseY, button);
+        this.button.mouseClicked(mouseX, mouseY, button);
+        return true;
     }
 
     @Override

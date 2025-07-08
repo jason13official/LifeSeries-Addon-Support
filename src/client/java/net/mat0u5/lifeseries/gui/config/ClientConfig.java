@@ -1,8 +1,6 @@
 package net.mat0u5.lifeseries.gui.config;
 
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.*;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -55,16 +53,16 @@ public class ClientConfig {
 
     public static void handleConfigObject(ConfigScreen.Builder.CategoryBuilder category, ConfigObject object) {
         if (object instanceof BooleanObject booleanObject) {
-            category.addBoolean(booleanObject.id, Text.of(booleanObject.name), booleanObject.booleanValue, booleanObject.startingValue);
+            category.addBoolean(booleanObject.id, Text.of(booleanObject.name), booleanObject.booleanValue, booleanObject.defaultValue);
         }
         else if (object instanceof StringObject stringObject) {
-            category.addString(stringObject.id, Text.of(stringObject.name), stringObject.stringValue, stringObject.startingValue);
+            category.addString(stringObject.id, Text.of(stringObject.name), stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {
-            category.addInteger(intObject.id, Text.of(intObject.name), intObject.integerValue, intObject.startingValue);
+            category.addInteger(intObject.id, Text.of(intObject.name), intObject.integerValue, intObject.defaultValue);
         }
         else if (object instanceof DoubleObject doubleObject) {
-            category.addDouble(doubleObject.id, Text.of(doubleObject.name), doubleObject.doubleValue, doubleObject.startingValue);
+            category.addDouble(doubleObject.id, Text.of(doubleObject.name), doubleObject.doubleValue, doubleObject.defaultValue);
         }
     }
 }

@@ -6,21 +6,24 @@ import net.minecraft.text.Text;
 public class StringConfigEntry extends TextFieldConfigEntry {
     protected final String defaultValue;
     protected String value;
+    protected String startingValue;
 
     public StringConfigEntry(String fieldName, Text displayName, String value, String defaultValue) {
         super(fieldName, displayName, 150);
         this.defaultValue = defaultValue;
         this.value = value;
+        this.startingValue = value;
         initializeTextField();
     }
 
     @Override
     protected void initializeTextField() {
-        textField.setText(value);
+        setText(value);
     }
 
     @Override
     protected void onTextChanged(String text) {
+        this.value = text;
         clearError();
         markChanged();
     }
@@ -29,7 +32,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     public void setValue(Object value) {
         if (value instanceof String stringValue) {
             this.value = stringValue;
-            textField.setText(stringValue);
+            setText(stringValue);
         }
     }
 
@@ -51,6 +54,11 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     @Override
     public String getDefaultValueAsString() {
         return getDefaultValue();
+    }
+
+    @Override
+    public String getStartingValue() {
+        return startingValue;
     }
 
     @Override

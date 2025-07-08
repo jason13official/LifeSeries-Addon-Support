@@ -8,6 +8,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     protected final T minValue;
     protected final T maxValue;
     protected T value;
+    protected T startingValue;
 
     public NumberConfigEntry(String fieldName, Text displayName, T value, T defaultValue, T minValue, T maxValue) {
         super(fieldName, displayName);
@@ -15,12 +16,13 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.value = value;
+        this.startingValue = value;
         initializeTextField();
     }
 
     @Override
     protected void initializeTextField() {
-        textField.setText(value.toString());
+        setText(value.toString());
     }
 
     @Override
@@ -56,7 +58,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     public void setValue(Object value) {
         if (isValidType(value)) {
             this.value = castValue(value);
-            textField.setText(value.toString());
+            setText(value.toString());
         }
     }
 
@@ -86,6 +88,11 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     @Override
     public String getDefaultValueAsString() {
         return defaultValue.toString();
+    }
+
+    @Override
+    public T getStartingValue() {
+        return startingValue;
     }
 
     public T getMinValue() {

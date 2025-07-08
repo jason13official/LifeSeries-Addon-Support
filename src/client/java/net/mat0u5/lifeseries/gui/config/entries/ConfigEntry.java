@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -18,7 +19,7 @@ public abstract class ConfigEntry {
     protected String errorMessage = "";
 
     protected ButtonWidget resetButton;
-    protected float highlightAlpha = 0.0f;
+    public float highlightAlpha = 0.0f;
     protected boolean isHovered = false;
     protected static final int RESET_BUTTON_WIDTH = 50;
     protected static final int RESET_BUTTON_HEIGHT = 16;
@@ -54,17 +55,15 @@ public abstract class ConfigEntry {
             context.fill(x, y, x + width, y + height, highlightColor);
         }
 
-        context.drawTextWithShadow(textRenderer, displayName, x + 25, y + 6, 0xFFFFFF);
+        int textColor = hasError() ? TextColors.GUI_RED : TextColors.WHITE;
+
+        context.drawTextWithShadow(textRenderer, displayName, x + 25, y + 6, textColor);
 
         resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
         resetButton.setY(y + 2);
         resetButton.active = canReset();
         resetButton.render(context, mouseX, mouseY, tickDelta);
 
-        if (hasError()) {
-            int errorX = x + width - RESET_BUTTON_WIDTH - 20;
-            context.drawTextWithShadow(textRenderer, "!", errorX, y + 6, 0xFF5555);
-        }
 
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
     }
@@ -96,6 +95,12 @@ public abstract class ConfigEntry {
         return charTypedEntry(chr, modifiers);
     }
 
+    public void setFocused(boolean focused) {
+        if (focused && screen != null) {
+            screen.setFocusedEntry(this);
+        }
+    }
+
     public int getPreferredHeight() {
         return 20;
     }
@@ -105,22 +110,25 @@ public abstract class ConfigEntry {
     protected abstract boolean keyPressedEntry(int keyCode, int scanCode, int modifiers);
     protected abstract boolean charTypedEntry(char chr, int modifiers);
     protected abstract void resetToDefault();
-    protected boolean canReset() {
-        return modified();
-    }
 
     public abstract Object getValue();
     public abstract String getValueAsString();
     public abstract Object getDefaultValue();
     public abstract String getDefaultValueAsString();
+    public abstract Object getStartingValue();
     public abstract String getValueType();
     public abstract void setValue(Object value);
 
     public boolean modified() {
-        return !Objects.equals(getValueAsString(), getDefaultValueAsString());
+        return !Objects.equals(getValue(), getStartingValue());
+    }
+
+    public boolean canReset() {
+        return !Objects.equals(getValue(), getDefaultValue());
     }
 
     public void onFocused() {
+        setFocused(true);
     }
 
     public String getFieldName() {
@@ -151,7 +159,7 @@ public abstract class ConfigEntry {
 
     protected void markChanged() {
         if (screen != null) {
-            screen.markChanged();
+            screen.onEntryValueChanged();
         }
     }
 }

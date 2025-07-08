@@ -7,11 +7,13 @@ import net.minecraft.text.Text;
 public class BooleanConfigEntry extends ButtonConfigEntry {
     private final boolean defaultValue;
     private boolean value;
+    private boolean startingValue;
 
     public BooleanConfigEntry(String fieldName, Text displayName, boolean value, boolean defaultValue) {
         super(fieldName, displayName, 60, 20);
         this.defaultValue = defaultValue;
         this.value = value;
+        this.startingValue = value;
         updateButtonText();
     }
 
@@ -59,6 +61,11 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
     @Override
     public String getDefaultValueAsString() {
         return String.valueOf(defaultValue);
+    }
+
+    @Override
+    public Boolean getStartingValue() {
+        return startingValue;
     }
 
     @Override

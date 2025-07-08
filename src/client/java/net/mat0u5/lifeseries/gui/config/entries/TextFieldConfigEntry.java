@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
@@ -27,11 +28,17 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected abstract void initializeTextField();
 
     private void onChanged(String text) {
+        matchMaxLength(text);
+        onTextChanged(text);
+    }
+
+    protected void matchMaxLength(String text) {
         if (text.length() >= maxTextFieldLength) {
-            maxTextFieldLength *= 2;
+            while (text.length() >= maxTextFieldLength && maxTextFieldLength < 1_000_000_000) {
+                maxTextFieldLength *= 2;
+            }
             textField.setMaxLength(maxTextFieldLength);
         }
-        onTextChanged(text);
     }
 
     protected abstract void onTextChanged(String text);
@@ -60,38 +67,40 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     }
 
     public void setFocused(boolean focused) {
-        if (focused && screen != null) {
-            screen.unfocusTextEntries();
-        }
+        super.setFocused(focused);
         textField.setFocused(focused);
     }
 
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
-        setFocused(true);
-        return textField.mouseClicked(mouseX, mouseY, button);
+        textField.mouseClicked(mouseX, mouseY, button);
+        return true;
     }
 
     @Override
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
-        setFocused(true);
         return textField.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     protected boolean charTypedEntry(char chr, int modifiers) {
-        setFocused(true);
         return textField.charTyped(chr, modifiers);
     }
 
     @Override
     protected void resetToDefault() {
-        textField.setText(getDefaultValueAsString());
+        setText(getDefaultValueAsString());
         clearError();
     }
 
-    @Override
-    public void onFocused() {
-        setFocused(true);
+    public void setText(String text) {
+        matchMaxLength(text);
+        textField.setText(text);
+        if (hasError()) {
+            textField.setUneditableColor(TextColors.GUI_RED);
+        }
+        else {
+            textField.setUneditableColor(TextColors.WHITE);
+        }
     }
 }
