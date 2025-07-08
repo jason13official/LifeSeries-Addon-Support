@@ -28,19 +28,9 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
     }
 
     @Override
-    protected boolean canReset() {
-        return value != defaultValue;
-    }
-
-    @Override
     protected void resetToDefault() {
         value = defaultValue;
         updateButtonText();
-    }
-
-    @Override
-    public Object getValue() {
-        return value;
     }
 
     @Override
@@ -51,7 +41,28 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
         }
     }
 
-    public boolean getDefaultValue() {
+    @Override
+    public Boolean getValue() {
+        return value;
+    }
+
+    @Override
+    public String getValueAsString() {
+        return String.valueOf(value);
+    }
+
+    @Override
+    public Boolean getDefaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public String getDefaultValueAsString() {
+        return String.valueOf(defaultValue);
+    }
+
+    @Override
+    public String getValueType() {
+        return "boolean";
     }
 }

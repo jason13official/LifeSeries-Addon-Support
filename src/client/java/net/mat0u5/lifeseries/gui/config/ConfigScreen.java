@@ -2,8 +2,10 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,13 +14,12 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 public class ConfigScreen extends Screen {
     private final Screen parent;
     private final Map<String, List<ConfigEntry>> categories;
     private final List<String> categoryNames;
-    private final Consumer<Map<String, Map<String, Object>>> onSaveCallback;
 
     private ConfigListWidget listWidget;
     private ButtonWidget saveButton;
@@ -26,12 +27,11 @@ public class ConfigScreen extends Screen {
     private int selectedCategory = 0;
     private boolean hasChanges = false;
 
-    public ConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories, Consumer<Map<String, Map<String, Object>>> onSaveCallback) {
+    public ConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories) {
         super(title);
         this.parent = parent;
         this.categories = categories;
         this.categoryNames = Lists.newArrayList(categories.keySet());
-        this.onSaveCallback = onSaveCallback;
 
         this.initializeConfigEntries();
     }
@@ -104,19 +104,20 @@ public class ConfigScreen extends Screen {
     }
 
     private void save() {
-        Map<String, Map<String, Object>> configData = Maps.newLinkedHashMap();
 
         for (Map.Entry<String, List<ConfigEntry>> category : this.categories.entrySet()) {
-            Map<String, Object> categoryData = Maps.newLinkedHashMap();
+            if (category.getKey().equals("Client")) continue;
             for (ConfigEntry entry : category.getValue()) {
-                categoryData.put(entry.getFieldName(), entry.getValue());
+                if (!entry.modified()) continue;
+
+                NetworkHandlerClient.sendConfigUpdate(
+                        entry.getValueType(),
+                        entry.getFieldName(),
+                        List.of(entry.getValueAsString())
+                );
             }
-            configData.put(category.getKey(), categoryData);
         }
 
-        if (this.onSaveCallback != null) {
-            this.onSaveCallback.accept(configData);
-        }
         this.client.setScreen(this.parent);
     }
 
@@ -205,20 +206,22 @@ public class ConfigScreen extends Screen {
         return this.textRenderer;
     }
 
+    public void unfocusTextEntries() {
+        for (ConfigListWidget.ConfigEntryWidget entry : this.listWidget.children()) {
+            if (entry.getConfigEntry() instanceof TextFieldConfigEntry textFieldEntry) {
+                textFieldEntry.setFocused(false);
+            }
+        }
+    }
+
     public static class Builder {
         private final Screen parent;
         private final Text title;
         private final Map<String, List<ConfigEntry>> categories = Maps.newLinkedHashMap();
-        private Consumer<Map<String, Map<String, Object>>> onSave;
 
         public Builder(Screen parent, Text title) {
             this.parent = parent;
             this.title = title;
-        }
-
-        public Builder setOnSave(Consumer<Map<String, Map<String, Object>>> onSave) {
-            this.onSave = onSave;
-            return this;
         }
 
         public CategoryBuilder addCategory(String name) {
@@ -227,7 +230,7 @@ public class ConfigScreen extends Screen {
         }
 
         public ConfigScreen build() {
-            return new ConfigScreen(this.parent, this.title, this.categories, this.onSave);
+            return new ConfigScreen(this.parent, this.title, this.categories);
         }
 
         public static class CategoryBuilder {
@@ -261,6 +264,21 @@ public class ConfigScreen extends Screen {
 
             public CategoryBuilder addFloat(String fieldName, Text displayName, float value, float defaultValue, float min, float max) {
                 this.parent.categories.get(this.categoryName).add(new FloatConfigEntry(fieldName, displayName, value, defaultValue, min, max));
+                return this;
+            }
+
+            public CategoryBuilder addInteger(String fieldName, Text displayName, int value, int defaultValue) {
+                this.parent.categories.get(this.categoryName).add(new IntegerConfigEntry(fieldName, displayName, value, defaultValue, null, null));
+                return this;
+            }
+
+            public CategoryBuilder addDouble(String fieldName, Text displayName, double value, double defaultValue) {
+                this.parent.categories.get(this.categoryName).add(new DoubleConfigEntry(fieldName, displayName, value, defaultValue, null, null));
+                return this;
+            }
+
+            public CategoryBuilder addFloat(String fieldName, Text displayName, float value, float defaultValue) {
+                this.parent.categories.get(this.categoryName).add(new FloatConfigEntry(fieldName, displayName, value, defaultValue, null, null));
                 return this;
             }
 

@@ -116,7 +116,7 @@ public class ClientCommands {
             args = List.of(argsStr);
         }
 
-        NetworkHandlerClient.sendConfigUpdate(configType, id, -1, "", "", args);
+        NetworkHandlerClient.sendConfigUpdate(configType, id, args);
         self.sendMessage(Text.of("Config packet sent."), false);
         return 1;
     }

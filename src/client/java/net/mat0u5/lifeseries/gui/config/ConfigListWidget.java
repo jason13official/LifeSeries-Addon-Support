@@ -101,6 +101,8 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
             int entryHeight = entry.getConfigEntry().getPreferredHeight();
 
             if (mouseY >= currentY && mouseY < currentY + entryHeight) {
+                setFocused(entry);
+                entry.getConfigEntry().onFocused();
                 return entry.mouseClicked(mouseX, mouseY, button);
             }
 
@@ -108,6 +110,20 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         }
 
         return false;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        ConfigEntryWidget entry = getFocused();
+        if (entry == null) return false;
+        return entry.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        ConfigEntryWidget entry = getFocused();
+        if (entry == null) return false;
+        return entry.charTyped(chr, modifiers);
     }
 
     public static class ConfigEntryWidget extends AlwaysSelectedEntryListWidget.Entry<ConfigEntryWidget> {

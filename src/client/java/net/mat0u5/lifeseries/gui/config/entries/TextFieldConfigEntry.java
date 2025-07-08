@@ -8,6 +8,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected final TextFieldWidget textField;
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 100;
     private static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
+    private int maxTextFieldLength = 32;
 
     public TextFieldConfigEntry(String fieldName, Text displayName) {
         this(fieldName, displayName, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
@@ -20,10 +21,18 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     public TextFieldConfigEntry(String fieldName, Text displayName, int textFieldWidth, int textFieldHeight) {
         super(fieldName, displayName);
         textField = new TextFieldWidget(textRenderer, 0, 0, textFieldWidth, textFieldHeight, Text.empty());
-        textField.setChangedListener(this::onTextChanged);
+        textField.setChangedListener(this::onChanged);
     }
 
     protected abstract void initializeTextField();
+
+    private void onChanged(String text) {
+        if (text.length() >= maxTextFieldLength) {
+            maxTextFieldLength *= 2;
+            textField.setMaxLength(maxTextFieldLength);
+        }
+        onTextChanged(text);
+    }
 
     protected abstract void onTextChanged(String text);
 
@@ -50,24 +59,29 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         return y+1;
     }
 
+    public void setFocused(boolean focused) {
+        if (focused && screen != null) {
+            screen.unfocusTextEntries();
+        }
+        textField.setFocused(focused);
+    }
+
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
+        setFocused(true);
         return textField.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
+        setFocused(true);
         return textField.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     protected boolean charTypedEntry(char chr, int modifiers) {
+        setFocused(true);
         return textField.charTyped(chr, modifiers);
-    }
-
-    @Override
-    protected boolean canReset() {
-        return !textField.getText().equals(getDefaultValueAsString());
     }
 
     @Override
@@ -76,5 +90,8 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         clearError();
     }
 
-    protected abstract String getDefaultValueAsString();
+    @Override
+    public void onFocused() {
+        setFocused(true);
+    }
 }

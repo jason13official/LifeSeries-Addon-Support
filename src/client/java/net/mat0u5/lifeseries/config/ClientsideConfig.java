@@ -22,9 +22,6 @@ public class ClientsideConfig {
             NetworkHandlerClient.sendConfigUpdate(
                     object.configType,
                     object.id,
-                    -1,
-                    object.name,
-                    object.description,
                     object.getArgs()
             );
         }

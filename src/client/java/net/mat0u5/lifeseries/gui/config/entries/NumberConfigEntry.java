@@ -41,23 +41,15 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     protected void renderAdditionalContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        String rangeText = "(" + minValue + "-" + maxValue + ")";
-        int rangeWidth = textRenderer.getWidth(rangeText);
-        int entryWidth = getEntryContentWidth(width);
+        if (minValue != null && maxValue != null) {
+            String rangeText = "(" + minValue + "-" + maxValue + ")";
+            int rangeWidth = textRenderer.getWidth(rangeText);
+            int entryWidth = getEntryContentWidth(width);
 
-        context.drawTextWithShadow(textRenderer, rangeText,
-                x + entryWidth - rangeWidth - textField.getWidth() - 15,
-                y + (height - textRenderer.fontHeight) / 2+1, 0xAAAAAA);
-    }
-
-    @Override
-    protected String getDefaultValueAsString() {
-        return defaultValue.toString();
-    }
-
-    @Override
-    public Object getValue() {
-        return value;
+            context.drawTextWithShadow(textRenderer, rangeText,
+                    x + entryWidth - rangeWidth - textField.getWidth() - 15,
+                    y + (height - textRenderer.fontHeight) / 2+1, 0xAAAAAA);
+        }
     }
 
     @Override
@@ -76,8 +68,24 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     protected abstract T castValue(Object value);
 
+    @Override
+    public T getValue() {
+        return value;
+    }
+
+    @Override
+    public String getValueAsString() {
+        return value.toString();
+    }
+
+    @Override
     public T getDefaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public String getDefaultValueAsString() {
+        return defaultValue.toString();
     }
 
     public T getMinValue() {

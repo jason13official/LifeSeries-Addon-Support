@@ -7,6 +7,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
 public abstract class ConfigEntry {
     protected TextRenderer textRenderer;
     protected ConfigScreen screen;
@@ -102,11 +104,24 @@ public abstract class ConfigEntry {
     protected abstract boolean mouseClickedEntry(double mouseX, double mouseY, int button);
     protected abstract boolean keyPressedEntry(int keyCode, int scanCode, int modifiers);
     protected abstract boolean charTypedEntry(char chr, int modifiers);
-    protected abstract boolean canReset();
     protected abstract void resetToDefault();
+    protected boolean canReset() {
+        return modified();
+    }
 
     public abstract Object getValue();
+    public abstract String getValueAsString();
+    public abstract Object getDefaultValue();
+    public abstract String getDefaultValueAsString();
+    public abstract String getValueType();
     public abstract void setValue(Object value);
+
+    public boolean modified() {
+        return !Objects.equals(getValueAsString(), getDefaultValueAsString());
+    }
+
+    public void onFocused() {
+    }
 
     public String getFieldName() {
         return fieldName;

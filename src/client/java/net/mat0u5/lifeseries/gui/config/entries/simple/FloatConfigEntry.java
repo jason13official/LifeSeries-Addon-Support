@@ -5,7 +5,7 @@ import net.minecraft.text.Text;
 
 public class FloatConfigEntry extends NumberConfigEntry<Float> {
 
-    public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue, float minValue, float maxValue) {
+    public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue, Float minValue, Float maxValue) {
         super(fieldName, displayName, value, defaultValue, minValue, maxValue);
     }
 
@@ -16,6 +16,7 @@ public class FloatConfigEntry extends NumberConfigEntry<Float> {
 
     @Override
     protected boolean isValueInRange(Float value) {
+        if (minValue == null || maxValue == null) return true;
         return value >= minValue && value <= maxValue;
     }
 
@@ -27,5 +28,10 @@ public class FloatConfigEntry extends NumberConfigEntry<Float> {
     @Override
     protected Float castValue(Object value) {
         return (Float) value;
+    }
+
+    @Override
+    public String getValueType() {
+        return "float";
     }
 }

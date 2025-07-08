@@ -5,7 +5,7 @@ import net.minecraft.text.Text;
 
 public class DoubleConfigEntry extends NumberConfigEntry<Double> {
 
-    public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue, double minValue, double maxValue) {
+    public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue, Double minValue, Double maxValue) {
         super(fieldName, displayName, value, defaultValue, minValue, maxValue);
     }
 
@@ -16,6 +16,7 @@ public class DoubleConfigEntry extends NumberConfigEntry<Double> {
 
     @Override
     protected boolean isValueInRange(Double value) {
+        if (minValue == null || maxValue == null) return true;
         return value >= minValue && value <= maxValue;
     }
 
@@ -27,5 +28,10 @@ public class DoubleConfigEntry extends NumberConfigEntry<Double> {
     @Override
     protected Double castValue(Object value) {
         return (Double) value;
+    }
+
+    @Override
+    public String getValueType() {
+        return "double";
     }
 }

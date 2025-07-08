@@ -56,9 +56,4 @@ public abstract class ButtonConfigEntry extends ConfigEntry {
     protected boolean charTypedEntry(char chr, int modifiers) {
         return false;
     }
-
-    @Override
-    public int getPreferredHeight() {
-        return isHovered ? 40 : super.getPreferredHeight(); //TODO remove
-    }
 }

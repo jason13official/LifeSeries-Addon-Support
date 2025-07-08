@@ -26,16 +26,6 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     }
 
     @Override
-    protected String getDefaultValueAsString() {
-        return defaultValue;
-    }
-
-    @Override
-    public Object getValue() {
-        return textField.getText();
-    }
-
-    @Override
     public void setValue(Object value) {
         if (value instanceof String stringValue) {
             this.value = stringValue;
@@ -43,12 +33,28 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         }
     }
 
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
     public String getDefaultValue() {
         return defaultValue;
     }
 
     @Override
-    public int getPreferredHeight() {
-        return isHovered ? 40 : super.getPreferredHeight(); //TODO remove
+    public String getValueAsString() {
+        return getValue();
+    }
+
+    @Override
+    public String getDefaultValueAsString() {
+        return getDefaultValue();
+    }
+
+    @Override
+    public String getValueType() {
+        return "string";
     }
 }

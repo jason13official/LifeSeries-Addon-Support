@@ -141,7 +141,8 @@ public class NetworkHandlerClient {
             }
         }
         if (name.equalsIgnoreCase("open_config_new")) {
-            ClientConfig.openConfig();
+            ClientsideConfig.load();
+            ClientTaskScheduler.scheduleTask(20, ClientConfig::openConfig);
         }
         if (name.equalsIgnoreCase("select_season")) {
             MinecraftClient.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
@@ -290,8 +291,8 @@ public class NetworkHandlerClient {
         Sending
      */
 
-    public static void sendConfigUpdate(String configType, String id, int index, String name, String description, List<String> args) {
-        ConfigPayload configPacket = new ConfigPayload(configType, id, index, name, description, args);
+    public static void sendConfigUpdate(String configType, String id, List<String> args) {
+        ConfigPayload configPacket = new ConfigPayload(configType, id, -1, "", "", args);
         ClientPlayNetworking.send(configPacket);
     }
 
