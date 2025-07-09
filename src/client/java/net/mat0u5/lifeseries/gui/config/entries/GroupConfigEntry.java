@@ -2,29 +2,32 @@ package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.gui.config.ConfigListWidget;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.gui.config.entries.simple.BooleanConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.simple.TextConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupConfigEntry extends EmptyConfigEntry {
-    private final ConfigEntry mainEntry;
+public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
+    private final T mainEntry;
     private final List<ConfigEntry> childEntries;
     private boolean isExpanded = false;
+    private boolean showSidebar = false;
     private static final int CHILD_INDENT = 20;
 
-    private int x;
     private int y;
 
-    public GroupConfigEntry(ConfigEntry mainEntry, List<ConfigEntry> childEntries) {
+    public GroupConfigEntry(T mainEntry, List<ConfigEntry> childEntries, boolean showSidebar, boolean openByDefault) {
         super("", Text.empty());
         this.mainEntry = mainEntry;
         this.childEntries = new ArrayList<>(childEntries);
+        this.showSidebar = showSidebar;
+        if (openByDefault) {
+            mainEntry.expand();
+        }
     }
 
     @Override
@@ -80,17 +83,13 @@ public class GroupConfigEntry extends EmptyConfigEntry {
     private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY) {
         String text = expanded ? "- " : "+ ";
         RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Text.of(text), x + 15, y + 6);
-        context.fill(1, y, 2, endY - ConfigListWidget.ENTRY_GAP, 0x80FFFFFF);
+        if (showSidebar) {
+            context.fill(1, y, 2, endY - ConfigListWidget.ENTRY_GAP, 0x80FFFFFF);
+        }
     }
 
     private boolean shouldExpand() {
-        if (mainEntry instanceof BooleanConfigEntry booleanEntry) {
-            return booleanEntry.getValue();
-        }
-        if (mainEntry instanceof TextConfigEntry textEntry) {
-            return textEntry.clicked;
-        }
-        return isExpanded;
+        return mainEntry.shouldExpand();
     }
 
     @Override
@@ -121,16 +120,15 @@ public class GroupConfigEntry extends EmptyConfigEntry {
 
     @Override
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
-        if (mainEntry != null && (!isExpanded || mainEntry.isFocused)) {
-            mainEntry.setFocused(true);
-            boolean handled = mainEntry.keyPressed(keyCode, scanCode, modifiers);
-            if (handled) return true;
+        if (mainEntry != null && mainEntry.isFocused) {
+            if (mainEntry.keyPressed(keyCode, scanCode, modifiers)) {
+                return true;
+            }
         }
 
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
                 if (!child.isFocused) continue;
-                child.setFocused(true);
                 if (child.keyPressed(keyCode, scanCode, modifiers)) {
                     return true;
                 }
@@ -142,16 +140,15 @@ public class GroupConfigEntry extends EmptyConfigEntry {
 
     @Override
     protected boolean charTypedEntry(char chr, int modifiers) {
-        if (mainEntry != null && (!isExpanded || mainEntry.isFocused)) {
-            mainEntry.setFocused(true);
-            boolean handled = mainEntry.charTyped(chr, modifiers);
-            if (handled) return true;
+        if (mainEntry != null && mainEntry.isFocused) {
+            if (mainEntry.charTyped(chr, modifiers)) {
+                return true;
+            }
         }
 
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
                 if (!child.isFocused) continue;
-                child.setFocused(true);
                 if (child.charTyped(chr, modifiers)) {
                     return true;
                 }

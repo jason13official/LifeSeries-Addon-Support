@@ -1,10 +1,11 @@
 package net.mat0u5.lifeseries.gui.config.entries.simple;
 
 import net.mat0u5.lifeseries.gui.config.entries.ButtonConfigEntry;
+import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
-public class BooleanConfigEntry extends ButtonConfigEntry {
+public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroupHeader {
     private final boolean defaultValue;
     private boolean value;
     private boolean startingValue;
@@ -71,5 +72,14 @@ public class BooleanConfigEntry extends ButtonConfigEntry {
     @Override
     public String getValueType() {
         return "boolean";
+    }
+
+    @Override
+    public void expand() {
+    }
+
+    @Override
+    public boolean shouldExpand() {
+        return getValue();
     }
 }

@@ -89,6 +89,7 @@ public class NetworkHandlerServer {
             String configType = payload.configType();
             String id = payload.id();
             List<String> args = payload.args();
+            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received config update from "+player.getNameForScoreboard()+": {"+configType+", "+id+", "+args+"}");
 
             if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
                 seasonConfig.setProperty(id, args.getFirst());

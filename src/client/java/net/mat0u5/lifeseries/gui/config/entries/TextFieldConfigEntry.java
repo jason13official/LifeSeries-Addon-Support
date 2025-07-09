@@ -70,6 +70,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         return y+1;
     }
 
+    @Override
     public void setFocused(boolean focused) {
         super.setFocused(focused);
         textField.setFocused(focused);

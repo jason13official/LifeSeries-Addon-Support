@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.gui.config.entries.simple;
 
 import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
+import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.text.Text;
 
-public class TextConfigEntry extends EmptyConfigEntry {
+public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHeader {
     private final boolean clickable;
     public boolean clicked;
 
@@ -27,5 +28,15 @@ public class TextConfigEntry extends EmptyConfigEntry {
     @Override
     public String getValueType() {
         return "text";
+    }
+
+    @Override
+    public void expand() {
+        clicked = true;
+    }
+
+    @Override
+    public boolean shouldExpand() {
+        return clicked;
     }
 }
