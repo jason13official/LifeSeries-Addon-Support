@@ -28,11 +28,10 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected abstract void initializeTextField();
 
     private void onChanged(String text) {
-        matchMaxLength(text);
         onTextChanged(text);
     }
 
-    protected void matchMaxLength(String text) {
+    protected void onTextChanged(String text) {
         if (text.length() >= maxTextFieldLength) {
             while (text.length() >= maxTextFieldLength && maxTextFieldLength < 1_000_000_000) {
                 maxTextFieldLength *= 2;
@@ -40,8 +39,6 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
             textField.setMaxLength(maxTextFieldLength);
         }
     }
-
-    protected abstract void onTextChanged(String text);
 
     protected void renderAdditionalContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
     }
@@ -55,6 +52,13 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         textField.setX(getTextFieldPosX(x, entryWidth));
         textField.setY(getTextFieldPosY(y, height));
         textField.render(context, mouseX, mouseY, tickDelta);
+
+        if (hasError()) {
+            textField.setEditableColor(TextColors.GUI_RED);
+        }
+        else {
+            textField.setEditableColor(TextColors.WHITE);
+        }
     }
 
     protected int getTextFieldPosX(int x, int entryWidth) {
@@ -94,13 +98,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     }
 
     public void setText(String text) {
-        matchMaxLength(text);
+        onTextChanged(text);
         textField.setText(text);
-        if (hasError()) {
-            textField.setUneditableColor(TextColors.GUI_RED);
-        }
-        else {
-            textField.setUneditableColor(TextColors.WHITE);
-        }
     }
 }

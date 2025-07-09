@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,7 +23,7 @@ public class ConfigScreen extends Screen {
     private final List<String> categoryNames;
 
     private ConfigEntry focusedEntry;
-    private ConfigListWidget listWidget;
+    public ConfigListWidget listWidget;
     private ButtonWidget saveButton;
     private ButtonWidget cancelButton;
     private int selectedCategory = 0;
@@ -52,6 +53,7 @@ public class ConfigScreen extends Screen {
         int listTop = this.categoryNames.size() > 1 ? 50 : 30;
 
         this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - 30, listTop, 20);
+        listWidget.setScreen(this);
 
         this.addSelectableChild(this.listWidget);
         this.addDrawableChild(this.listWidget);
@@ -229,8 +231,12 @@ public class ConfigScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    public net.minecraft.client.font.TextRenderer getTextRenderer() {
+    public TextRenderer getTextRenderer() {
         return this.textRenderer;
+    }
+
+    public ConfigEntry getFocusedEntry() {
+        return focusedEntry;
     }
 
     public void setFocusedEntry(ConfigEntry entry) {

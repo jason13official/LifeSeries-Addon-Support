@@ -23,6 +23,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
     @Override
     protected void onTextChanged(String text) {
+        super.onTextChanged(text);
         this.value = text;
         clearError();
         markChanged();

@@ -31,6 +31,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     @Override
     protected void onTextChanged(String text) {
+        super.onTextChanged(text);
         try {
             T newValue = parseValue(text);
             if (isValueInRange(newValue)) {

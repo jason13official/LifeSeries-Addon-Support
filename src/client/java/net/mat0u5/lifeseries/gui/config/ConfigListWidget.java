@@ -6,15 +6,21 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.text.Text;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
-    private static final int ENTRY_GAP = 2;
+    public static final int ENTRY_GAP = 2;
     private static final int MAX_HIGHLIGHTED_ENTRIES = 2;
+    protected ConfigScreen screen;
 
     public ConfigListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
+    }
+
+    public void setScreen(ConfigScreen screen) {
+        this.screen = screen;
     }
 
     public void addEntry(ConfigEntry configEntry) {
@@ -39,7 +45,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
         context.fill(listLeft, listTop, listRight, listBottom, 0x20000000);
 
-        int currentY = listTop + 4 - (int)getScrolledAmount();
+        int currentY = getCurrentY();
 
         Map<Float, ConfigEntry> highlightedEntries = new TreeMap<>();
 
@@ -57,9 +63,22 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
                 entry.render(context, i, currentY, entryLeft, entryWidth, entryHeight, mouseX, mouseY, hovered, delta);
 
-                if (configEntry.highlightAlpha > 0.0f) {
-                    highlightedEntries.put(configEntry.highlightAlpha, configEntry);
+
+                List<ConfigEntry> withChildren = List.of(configEntry);
+
+                if (screen != null) {
+                    withChildren = screen.getAllEntries(withChildren);
+                    if (!withChildren.contains(configEntry)) {
+                        withChildren.add(configEntry);
+                    }
                 }
+
+                for (ConfigEntry highlightEntry : withChildren) {
+                    if (highlightEntry.highlightAlpha > 0.0f) {
+                        highlightedEntries.put(highlightEntry.highlightAlpha, highlightEntry);
+                    }
+                }
+
             }
 
             currentY += entryHeight + ENTRY_GAP;
@@ -124,7 +143,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         }
 
         int listTop = getY();
-        int currentY = listTop + 4 - (int)getScrolledAmount();
+        int currentY = getCurrentY();
 
         for (int i = 0; i < getEntryCount(); i++) {
             ConfigEntryWidget entry = getEntry(i);
@@ -162,6 +181,10 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         ConfigEntryWidget entry = getFocused();
         if (entry == null) return false;
         return entry.charTyped(chr, modifiers);
+    }
+
+    public int getCurrentY() {
+        return getY() + 4 - (int)getScrolledAmount();
     }
 
     public static class ConfigEntryWidget extends AlwaysSelectedEntryListWidget.Entry<ConfigEntryWidget> {

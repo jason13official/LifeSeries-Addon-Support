@@ -125,29 +125,31 @@ public class RenderUtils {
     }
 
     //Right Fixed Text
-    public static void drawTextRight(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
-        drawTextRight(context, textRenderer, TextColors.DEFAULT, text, x, y);
+    public static int drawTextRight(DrawContext context, TextRenderer textRenderer, Text text, int x, int y) {
+        return drawTextRight(context, textRenderer, TextColors.DEFAULT, text, x, y);
     }
 
-    public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
-        drawTextRightScaled(context, textRenderer, TextColors.DEFAULT, text, x, y, scaleX, scaleY);
+    public static int drawTextRightScaled(DrawContext context, TextRenderer textRenderer, Text text, double x, double y, float scaleX, float scaleY) {
+        return drawTextRightScaled(context, textRenderer, TextColors.DEFAULT, text, x, y, scaleX, scaleY);
     }
 
-    public static void drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
-        context.drawText(textRenderer, text, x - textRenderer.getWidth(text), y, textColor, false);
+    public static int drawTextRight(DrawContext context, TextRenderer textRenderer, int textColor, Text text, int x, int y) {
+        return context.drawText(textRenderer, text, x - textRenderer.getWidth(text), y, textColor, false);
     }
 
-    public static void drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
+    public static int  drawTextRightScaled(DrawContext context, TextRenderer textRenderer, int textColor, Text text, double x, double y, float scaleX, float scaleY) {
+        int width = textRenderer.getWidth(text);
         //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - width), (int)(y / (scaleY*scaleY)), textColor, false);
         context.getMatrices().pop();
         //?} else {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - width), (int)(y / (scaleY*scaleY)), textColor, false);
         context.getMatrices().popMatrix();
         *///?}
+        return width;
     }
 }
