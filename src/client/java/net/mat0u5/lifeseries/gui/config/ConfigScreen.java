@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,43 +88,61 @@ public class ConfigScreen extends Screen {
         this.updateButtonStates();
     }
 
+    public List<ConfigEntry> getAllEntries() {
+        List<ConfigEntry> allSurfaceEntries = new ArrayList<>();
+        for (List<ConfigEntry> entries : this.categories.values()) {
+            allSurfaceEntries.addAll(entries);
+        }
+        return getAllEntries(allSurfaceEntries);
+    }
+    public List<ConfigEntry> getAllEntries(List<ConfigEntry> currentEntries) {
+        List<ConfigEntry> allEntries = new ArrayList<>();
+        for (ConfigEntry entry : currentEntries) {
+            if (entry instanceof GroupConfigEntry groupEntry) {
+                allEntries.addAll(getAllEntries(groupEntry.getChildEntries()));
+            }
+            else {
+                allEntries.add(entry);
+            }
+        }
+        return allEntries;
+    }
+
     private void updateButtonStates() {
         this.hasChanges = false;
-        for (List<ConfigEntry> entries : this.categories.values()) {
-            for (ConfigEntry entry : entries) {
-                if (entry.modified()) {
-                    this.hasChanges = true;
-                    break;
-                }
+        for (ConfigEntry entry : getAllEntries()) {
+            if (entry.modified()) {
+                this.hasChanges = true;
+                break;
             }
         }
         this.saveButton.active = this.hasChanges && !this.hasErrors();
     }
 
     private boolean hasErrors() {
-        for (List<ConfigEntry> entries : this.categories.values()) {
-            for (ConfigEntry entry : entries) {
-                if (entry.hasError()) {
-                    return true;
-                }
+        for (ConfigEntry entry : getAllEntries()) {
+            if (entry.hasError()) {
+                return true;
             }
         }
         return false;
     }
 
     private void save() {
-
+        List<ConfigEntry> allSurfaceEntries = new ArrayList<>();
         for (Map.Entry<String, List<ConfigEntry>> category : this.categories.entrySet()) {
             if (category.getKey().equals("Client")) continue;
-            for (ConfigEntry entry : category.getValue()) {
-                if (!entry.modified()) continue;
+            allSurfaceEntries.addAll(category.getValue());
+        }
 
-                NetworkHandlerClient.sendConfigUpdate(
-                        entry.getValueType(),
-                        entry.getFieldName(),
-                        List.of(entry.getValueAsString())
-                );
-            }
+        for (ConfigEntry entry : getAllEntries(allSurfaceEntries)) {
+            if (!entry.modified()) continue;
+            if (entry instanceof GroupConfigEntry) continue;
+            NetworkHandlerClient.sendConfigUpdate(
+                    entry.getValueType(),
+                    entry.getFieldName(),
+                    List.of(entry.getValueAsString())
+            );
         }
 
         this.client.setScreen(this.parent);
@@ -248,43 +268,8 @@ public class ConfigScreen extends Screen {
                 this.categoryName = categoryName;
             }
 
-            public CategoryBuilder addString(String fieldName, Text displayName, String value, String defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new StringConfigEntry(fieldName, displayName, value, defaultValue));
-                return this;
-            }
-
-            public CategoryBuilder addBoolean(String fieldName, Text displayName, boolean value, boolean defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new BooleanConfigEntry(fieldName, displayName, value, defaultValue));
-                return this;
-            }
-
-            public CategoryBuilder addInteger(String fieldName, Text displayName, int value, int defaultValue, int min, int max) {
-                this.parent.categories.get(this.categoryName).add(new IntegerConfigEntry(fieldName, displayName, value, defaultValue, min, max));
-                return this;
-            }
-
-            public CategoryBuilder addDouble(String fieldName, Text displayName, double value, double defaultValue, double min, double max) {
-                this.parent.categories.get(this.categoryName).add(new DoubleConfigEntry(fieldName, displayName, value, defaultValue, min, max));
-                return this;
-            }
-
-            public CategoryBuilder addFloat(String fieldName, Text displayName, float value, float defaultValue, float min, float max) {
-                this.parent.categories.get(this.categoryName).add(new FloatConfigEntry(fieldName, displayName, value, defaultValue, min, max));
-                return this;
-            }
-
-            public CategoryBuilder addInteger(String fieldName, Text displayName, int value, int defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new IntegerConfigEntry(fieldName, displayName, value, defaultValue, null, null));
-                return this;
-            }
-
-            public CategoryBuilder addDouble(String fieldName, Text displayName, double value, double defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new DoubleConfigEntry(fieldName, displayName, value, defaultValue, null, null));
-                return this;
-            }
-
-            public CategoryBuilder addFloat(String fieldName, Text displayName, float value, float defaultValue) {
-                this.parent.categories.get(this.categoryName).add(new FloatConfigEntry(fieldName, displayName, value, defaultValue, null, null));
+            public CategoryBuilder addEntry(ConfigEntry entry) {
+                this.parent.categories.get(this.categoryName).add(entry);
                 return this;
             }
 

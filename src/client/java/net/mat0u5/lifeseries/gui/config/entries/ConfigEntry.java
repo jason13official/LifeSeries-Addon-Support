@@ -21,6 +21,7 @@ public abstract class ConfigEntry {
     protected ButtonWidget resetButton;
     public float highlightAlpha = 0.0f;
     protected boolean isHovered = false;
+    protected boolean isFocused = false;
     protected static final int RESET_BUTTON_WIDTH = 50;
     protected static final int RESET_BUTTON_HEIGHT = 16;
 
@@ -32,6 +33,9 @@ public abstract class ConfigEntry {
     }
 
     private void initializeResetButton() {
+        if (!hasResetButton()) {
+            return;
+        }
         resetButton = ButtonWidget.builder(Text.of("Reset"), this::onResetClicked)
                 .dimensions(0, 0, RESET_BUTTON_WIDTH, RESET_BUTTON_HEIGHT)
                 .build();
@@ -57,12 +61,14 @@ public abstract class ConfigEntry {
 
         int textColor = hasError() ? TextColors.GUI_RED : TextColors.WHITE;
 
-        context.drawTextWithShadow(textRenderer, displayName, x + 25, y + 6, textColor);
+        context.drawTextWithShadow(textRenderer, getDisplayName(), x + 25, y + 6, textColor);
 
-        resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
-        resetButton.setY(y + 2);
-        resetButton.active = canReset();
-        resetButton.render(context, mouseX, mouseY, tickDelta);
+        if (hasResetButton()) {
+            resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
+            resetButton.setY(y + 2);
+            resetButton.active = canReset();
+            resetButton.render(context, mouseX, mouseY, tickDelta);
+        }
 
 
         renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
@@ -81,7 +87,7 @@ public abstract class ConfigEntry {
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (resetButton.mouseClicked(mouseX, mouseY, button)) {
+        if (hasResetButton() && resetButton.mouseClicked(mouseX, mouseY, button)) {
             return true;
         }
         return mouseClickedEntry(mouseX, mouseY, button);
@@ -96,6 +102,7 @@ public abstract class ConfigEntry {
     }
 
     public void setFocused(boolean focused) {
+        this.isFocused = focused;
         if (focused && screen != null) {
             screen.setFocusedEntry(this);
         }
@@ -125,10 +132,6 @@ public abstract class ConfigEntry {
 
     public boolean canReset() {
         return !Objects.equals(getValue(), getDefaultValue());
-    }
-
-    public void onFocused() {
-        setFocused(true);
     }
 
     public String getFieldName() {
@@ -161,5 +164,9 @@ public abstract class ConfigEntry {
         if (screen != null) {
             screen.onEntryValueChanged();
         }
+    }
+
+    protected boolean hasResetButton() {
+        return true;
     }
 }

@@ -5,6 +5,10 @@ import net.minecraft.text.Text;
 
 public class DoubleConfigEntry extends NumberConfigEntry<Double> {
 
+    public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue) {
+        super(fieldName, displayName, value, defaultValue);
+    }
+
     public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue, Double minValue, Double maxValue) {
         super(fieldName, displayName, value, defaultValue, minValue, maxValue);
     }

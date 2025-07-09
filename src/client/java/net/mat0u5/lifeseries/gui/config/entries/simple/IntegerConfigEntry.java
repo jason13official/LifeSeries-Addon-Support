@@ -5,6 +5,10 @@ import net.minecraft.text.Text;
 
 public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
 
+    public IntegerConfigEntry(String fieldName, Text displayName, int value, int defaultValue) {
+        super(fieldName, displayName, value, defaultValue);
+    }
+
     public IntegerConfigEntry(String fieldName, Text displayName, int value, int defaultValue, Integer minValue, Integer maxValue) {
         super(fieldName, displayName, value, defaultValue, minValue, maxValue);
     }

@@ -10,6 +10,10 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     protected T value;
     protected T startingValue;
 
+    public NumberConfigEntry(String fieldName, Text displayName, T value, T defaultValue) {
+        this(fieldName, displayName, value, defaultValue, null, null);
+    }
+
     public NumberConfigEntry(String fieldName, Text displayName, T value, T defaultValue, T minValue, T maxValue) {
         super(fieldName, displayName);
         this.defaultValue = defaultValue;

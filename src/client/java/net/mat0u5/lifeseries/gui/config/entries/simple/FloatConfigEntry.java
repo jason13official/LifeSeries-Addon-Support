@@ -5,6 +5,10 @@ import net.minecraft.text.Text;
 
 public class FloatConfigEntry extends NumberConfigEntry<Float> {
 
+    public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue) {
+        super(fieldName, displayName, value, defaultValue);
+    }
+
     public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue, Float minValue, Float maxValue) {
         super(fieldName, displayName, value, defaultValue, minValue, maxValue);
     }
