@@ -1,7 +1,8 @@
-package net.mat0u5.lifeseries.gui.config;
+package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.entries.*;
+import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
@@ -28,7 +29,7 @@ public class ClientConfig {
         Map<String, String> groupModifiers = new HashMap<>();
         Map<String, List<ConfigEntry>> groupChildren = new HashMap<>();
 
-        for (Map.Entry<Integer, ConfigObject> entry : ClientsideConfig.groupConfigObjects.entrySet()) {
+        for (Map.Entry<Integer, ConfigObject> entry : ClientConfigNetwork.groupConfigObjects.entrySet()) {
             ConfigObject configObject = entry.getValue();
             String groupInfo = configObject.getGroupInfo();
 
@@ -47,7 +48,7 @@ public class ClientConfig {
             }
         }
 
-        for (Map.Entry<Integer, ConfigObject> entry : ClientsideConfig.configObjects.entrySet()) {
+        for (Map.Entry<Integer, ConfigObject> entry : ClientConfigNetwork.configObjects.entrySet()) {
             ConfigObject configObject = entry.getValue();
             String groupInfo = configObject.getGroupInfo();
             ConfigEntry configEntry = handleConfigObject(configObject);

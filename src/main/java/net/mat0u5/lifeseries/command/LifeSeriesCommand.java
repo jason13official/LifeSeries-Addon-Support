@@ -52,10 +52,6 @@ public class LifeSeriesCommand {
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                         .executes(context -> config(context.getSource()))
                 )
-                .then(literal("configNew")
-                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .executes(context -> configNew(context.getSource()))
-                )
                 .then(literal("reload")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> reload(context.getSource()))
@@ -150,11 +146,6 @@ public class LifeSeriesCommand {
             OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
             NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
         }
-        return 1;
-    }
-
-    public static int configNew(ServerCommandSource source) {
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config_new","");
         return 1;
     }
 

@@ -3,13 +3,11 @@ package net.mat0u5.lifeseries.network;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.config.entries.ClientsideConfig;
-import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.gui.config.ClientConfig;
+import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
-import net.mat0u5.lifeseries.gui.other.OldConfigScreen;
 import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
 import net.mat0u5.lifeseries.gui.seasons.SeasonInfoScreen;
@@ -26,7 +24,6 @@ import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -92,7 +89,7 @@ public class NetworkHandlerClient {
     }
 
     public static void handleConfigPacket(ConfigPayload payload) {
-        ClientsideConfig.handleConfigPacket(payload);
+        ClientConfigNetwork.handleConfigPacket(payload);
     }
 
     public static void handleImagePacket(String name, ImagePayload payload) {
@@ -128,20 +125,7 @@ public class NetworkHandlerClient {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
         if (name.equalsIgnoreCase("open_config")) {
-
-            if (DependencyManager.clothConfigLoaded()) {
-                ClientsideConfig.load();
-                ClientTaskScheduler.scheduleTask(20, () -> {
-                    MinecraftClient.getInstance().setScreen(OldConfigScreen.create(MinecraftClient.getInstance().currentScreen));
-                });
-            }
-            else if (MinecraftClient.getInstance().player != null){
-                MinecraftClient.getInstance().player.sendMessage(Text.of(""), false);
-                MinecraftClient.getInstance().player.sendMessage(Text.of("§cPlease install the Cloth Config mod (client-side) to modify the config from in-game."), false);
-            }
-        }
-        if (name.equalsIgnoreCase("open_config_new")) {
-            ClientsideConfig.load();
+            ClientConfigNetwork.load();
             ClientTaskScheduler.scheduleTask(20, ClientConfig::openConfig);
         }
         if (name.equalsIgnoreCase("select_season")) {

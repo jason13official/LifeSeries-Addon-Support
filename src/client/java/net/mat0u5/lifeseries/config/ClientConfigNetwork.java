@@ -1,5 +1,6 @@
-package net.mat0u5.lifeseries.config.entries;
+package net.mat0u5.lifeseries.config;
 
+import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ClientsideConfig {
+public class ClientConfigNetwork {
 
     public static Map<Integer, ConfigObject> configObjects = new TreeMap<>();
     public static Map<Integer, ConfigObject> groupConfigObjects = new TreeMap<>();
