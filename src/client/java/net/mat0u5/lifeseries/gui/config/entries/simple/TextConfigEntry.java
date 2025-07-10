@@ -5,6 +5,8 @@ import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.text.Text;
 
 public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHeader {
+    private static final String VALUE_TYPE = "text";
+
     private final boolean clickable;
     public boolean clicked;
 
@@ -27,7 +29,7 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
 
     @Override
     public String getValueType() {
-        return "text";
+        return VALUE_TYPE;
     }
 
     @Override

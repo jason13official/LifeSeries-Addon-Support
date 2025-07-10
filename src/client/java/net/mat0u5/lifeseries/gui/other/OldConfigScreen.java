@@ -5,7 +5,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.config.*;
+import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;

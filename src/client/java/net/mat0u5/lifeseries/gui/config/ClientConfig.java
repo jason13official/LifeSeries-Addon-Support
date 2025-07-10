@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.gui.config;
 
-import net.mat0u5.lifeseries.config.*;
+import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
@@ -51,23 +51,13 @@ public class ClientConfig {
             TextConfigEntry seasonSpecificGroup = new TextConfigEntry("group_season_specific", Text.of("Season Specific Settings"), true);
             categoryGeneral.addEntry(new GroupConfigEntry<>(seasonSpecificGroup, seasonSpecificEntries, false, false));
         }
-        
 
 
 
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
 
-        GroupConfigEntry<TextConfigEntry> groupEntry = new GroupConfigEntry<>(
-                new TextConfigEntry("textEntry", Text.of("Da group")),
-                List.of(
-                        new BooleanConfigEntry("booleanEntry", Text.of("Boolean Entry"), true, false),
-                        new StringConfigEntry("stringEntry", Text.of("String Entry"), "default", "default"),
-                        new IntegerConfigEntry("integerEntry", Text.of("Integer Entry"), 42, 0),
-                        new DoubleConfigEntry("doubleEntry", Text.of("Double Entry"), 3.14, 0.0)
-                ), true, true
-        );
         GroupConfigEntry<BooleanConfigEntry> groupEntry2 = new GroupConfigEntry<>(
-                new BooleanConfigEntry("textEntry", Text.of("Da group2"),false,false),
+                new BooleanConfigEntry("textEntry2", Text.of("Da group2"),false,false),
                 List.of(
                         new BooleanConfigEntry("booleanEntry1", Text.of("Boolean Entry1"), true, false),
                         new StringConfigEntry("stringEntry1", Text.of("String Entry1"), "default", "default"),
@@ -75,28 +65,20 @@ public class ClientConfig {
                         new DoubleConfigEntry("doubleEntry1", Text.of("Double Entry1"), 3.14, 0.0)
                 ), true, true
         );
+        GroupConfigEntry<TextConfigEntry> groupEntry = new GroupConfigEntry<>(
+                new TextConfigEntry("textEntry", Text.of("Da group")),
+                List.of(
+                        new BooleanConfigEntry("booleanEntry", Text.of("Boolean Entry"), true, false),
+                        new StringConfigEntry("stringEntry", Text.of("String Entry"), "default", "default"),
+                        new IntegerConfigEntry("integerEntry", Text.of("Integer Entry"), 42, 0),
+                        groupEntry2,
+                        new DoubleConfigEntry("doubleEntry", Text.of("Double Entry"), 3.14, 0.0)
+                ), true, true
+        );
 
         categoryClient.addEntry(new StringConfigEntry("username", Text.of("Username"), "player", "player"));
         categoryClient.addEntry(groupEntry);
         categoryClient.addEntry(new BooleanConfigEntry("enabled", Text.of("Enabled"), true, true));
-        categoryClient.addEntry(groupEntry2);
-        categoryClient.addEntry(new BooleanConfigEntry("enabled", Text.of("Disabled"), false, false));
-
-        /*
-        categoryClient.addString("username", Text.of("Username"), "player", "player");
-        categoryClient.addBoolean("enabled", Text.of("Enabled"), true, true);
-        categoryClient.addInteger("count", Text.of("Count int"), 5, 10, 1, 100);
-        categoryClient.addDouble("count", Text.of("Count double"), 1, 0.5, 0, 1);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-        categoryClient.addFloat("count", Text.of("Count float"), 1f, 1f, 0, 100);
-         */
 
         MinecraftClient.getInstance().setScreen(builder.build());
     }
@@ -113,6 +95,9 @@ public class ClientConfig {
         }
         else if (object instanceof DoubleObject doubleObject) {
             return new DoubleConfigEntry(doubleObject.id, Text.of(doubleObject.name), doubleObject.doubleValue, doubleObject.defaultValue);
+        }
+        else if (object instanceof TextObject textObject) {
+            return new TextConfigEntry(textObject.id, Text.of(textObject.name), textObject.clickable);
         }
         return null;
     }

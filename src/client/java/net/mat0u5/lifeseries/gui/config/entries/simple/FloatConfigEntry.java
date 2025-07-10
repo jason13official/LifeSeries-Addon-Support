@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
 import net.minecraft.text.Text;
 
 public class FloatConfigEntry extends NumberConfigEntry<Float> {
+    private static final String VALUE_TYPE = "float";
 
     public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue) {
         super(fieldName, displayName, value, defaultValue);
@@ -36,6 +37,6 @@ public class FloatConfigEntry extends NumberConfigEntry<Float> {
 
     @Override
     public String getValueType() {
-        return "float";
+        return VALUE_TYPE;
     }
 }

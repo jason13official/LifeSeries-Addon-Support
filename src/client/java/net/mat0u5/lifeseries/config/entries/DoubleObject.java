@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.config;
+package net.mat0u5.lifeseries.config.entries;
 
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 

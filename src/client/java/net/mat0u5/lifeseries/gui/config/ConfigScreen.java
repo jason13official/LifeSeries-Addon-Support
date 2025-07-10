@@ -3,9 +3,9 @@ package net.mat0u5.lifeseries.gui.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.simple.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -18,6 +18,20 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigScreen extends Screen {
+    private static final int HEADER_HEIGHT_SMALL = 30;
+    private static final int HEADER_HEIGHT_LARGE = 50;
+    private static final int HEADER_TITLE_Y = 10;
+    private static final int HEADER_CATEGORY_GAP = 5;
+    private static final int HEADER_CATEGORY_Y = 24;
+    private static final int HEADER_CATEGORY_MIN_WIDTH = 130;
+    private static final int HEADER_CATEGORY_HEIGHT = 20;
+    private static final int HEADER_CATEGORY_NAME_OFFSET_Y = 6;
+
+    private static final int FOOTER_HEIGHT = 30;
+    private static final int FOOTER_BUTTON_GAP = 4;
+    private static final int FOOTER_BUTTON_WIDTH = 150;
+    private static final int FOOTER_BUTTON_HEIGHT = 20;
+
     private final Screen parent;
     private final Map<String, List<ConfigEntry>> categories;
     private final List<String> categoryNames;
@@ -50,9 +64,9 @@ public class ConfigScreen extends Screen {
     protected void init() {
         super.init();
 
-        int listTop = this.categoryNames.size() > 1 ? 50 : 30;
+        int listTop = this.categoryNames.size() > 1 ? HEADER_HEIGHT_LARGE : HEADER_HEIGHT_SMALL;
 
-        this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - 30, listTop, 20);
+        this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
         listWidget.setScreen(this);
 
         this.addSelectableChild(this.listWidget);
@@ -61,12 +75,12 @@ public class ConfigScreen extends Screen {
         this.refreshList();
 
         this.saveButton = ButtonWidget.builder(Text.of("Save & Quit"), button -> this.save())
-                .dimensions(this.width / 2 + 4, this.height - 24, 150, 20)
+                .dimensions(this.width / 2 + FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
                 .build();
         this.addDrawableChild(this.saveButton);
 
         this.cancelButton = ButtonWidget.builder(Text.of("Discard Changes"), button -> this.close())
-                .dimensions(this.width / 2 - 154, this.height - 24, 150, 20)
+                .dimensions(this.width / 2 - FOOTER_BUTTON_WIDTH - FOOTER_BUTTON_GAP, this.height - FOOTER_BUTTON_HEIGHT - FOOTER_BUTTON_GAP, FOOTER_BUTTON_WIDTH, FOOTER_BUTTON_HEIGHT)
                 .build();
         this.addDrawableChild(this.cancelButton);
 
@@ -176,49 +190,50 @@ public class ConfigScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
         //this.renderBackground(context, mouseX, mouseY, delta);
 
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, HEADER_TITLE_Y, TextColors.WHITE);
 
         if (this.categoryNames.size() > 1) {
             this.renderCategoryTabs(context, mouseX, mouseY);
         }
 
         if (this.hasErrors()) {
-            context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, 20, 0xFF5555);
+            //TODO
+            context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, 20, TextColors.LIGHT_RED);
         }
 
     }
 
     private void renderCategoryTabs(DrawContext context, int mouseX, int mouseY) {
-        int tabWidth = Math.min(130, this.width / this.categoryNames.size());
-        int startX = (this.width - ((tabWidth+5) * this.categoryNames.size())) / 2;
+        int tabWidth = Math.min(HEADER_CATEGORY_MIN_WIDTH, this.width / this.categoryNames.size());
+        int startX = (this.width - ((tabWidth+HEADER_CATEGORY_GAP) * this.categoryNames.size())) / 2;
 
         for (int i = 0; i < this.categoryNames.size(); i++) {
-            int tabX = startX + i * (tabWidth+5);
-            int tabY = 24;
-            int tabHeight = 20;
+            int tabX = startX + i * (tabWidth+HEADER_CATEGORY_GAP);
+            int tabY = HEADER_CATEGORY_Y;
+            int tabHeight = HEADER_CATEGORY_HEIGHT;
 
             boolean isSelected = i == this.selectedCategory;
             boolean isHovered = mouseX >= tabX && mouseX < tabX + tabWidth && mouseY >= tabY && mouseY < tabY + tabHeight;
 
-            int color = isSelected ? 0x80FFFFFF : (isHovered ? 0x40FFFFFF : 0x20FFFFFF);
+            int color = isSelected ? TextColors.WHITE_A128 : (isHovered ? TextColors.WHITE_A64 : TextColors.WHITE_A32);
             context.fill(tabX, tabY, tabX + tabWidth, tabY + tabHeight, color);
 
             String categoryName = this.categoryNames.get(i);
-            int textColor = isSelected ? 0xFFFFFF : 0xCCCCCC;
-            context.drawCenteredTextWithShadow(this.textRenderer, categoryName, tabX + tabWidth / 2, tabY + 6, textColor);
+            int textColor = isSelected ? TextColors.WHITE : TextColors.PASTEL_WHITE;
+            context.drawCenteredTextWithShadow(this.textRenderer, categoryName, tabX + tabWidth / 2, tabY + HEADER_CATEGORY_NAME_OFFSET_Y, textColor);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.categoryNames.size() > 1 && button == 0) {
-            int tabWidth = Math.min(130, this.width / this.categoryNames.size());
-            int startX = (this.width - (tabWidth * this.categoryNames.size())) / 2;
+            int tabWidth = Math.min(HEADER_CATEGORY_MIN_WIDTH, this.width / this.categoryNames.size());
+            int startX = (this.width - ((tabWidth+HEADER_CATEGORY_GAP) * this.categoryNames.size())) / 2;
 
             for (int i = 0; i < this.categoryNames.size(); i++) {
-                int tabX = startX + i * tabWidth;
-                int tabY = 24;
-                int tabHeight = 20;
+                int tabX = startX + i * (tabWidth+HEADER_CATEGORY_GAP);
+                int tabY = HEADER_CATEGORY_Y;
+                int tabHeight = HEADER_CATEGORY_HEIGHT;
 
                 if (mouseX >= tabX && mouseX < tabX + tabWidth && mouseY >= tabY && mouseY < tabY + tabHeight) {
                     this.selectedCategory = i;
@@ -240,6 +255,8 @@ public class ConfigScreen extends Screen {
     }
 
     public void setFocusedEntry(ConfigEntry entry) {
+        if (entry instanceof GroupConfigEntry) return;
+
         if (focusedEntry != null) {
             focusedEntry.setFocused(false);
         }

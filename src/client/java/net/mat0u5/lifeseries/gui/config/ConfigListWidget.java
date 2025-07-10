@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.gui.config;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
     private static final int MAX_HIGHLIGHTED_ENTRIES = 2;
+    private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
     public ConfigListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
@@ -43,7 +45,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         int listRight = listLeft + width;
         int listBottom = listTop + height;
 
-        context.fill(listLeft, listTop, listRight, listBottom, 0x20000000);
+        context.fill(listLeft, listTop, listRight, listBottom, TextColors.BLACK_A32);
 
         int currentY = getCurrentY();
 
@@ -103,16 +105,16 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         *///?}
 
         if (maxScroll > 0) {
-            int scrollbarX = listRight - 6;
+            int scrollbarX = listRight - SCROLLBAR_OFFSET_X;
             int scrollbarTop = listTop;
             int scrollbarBottom = listBottom;
             int scrollbarHeight = scrollbarBottom - scrollbarTop;
 
-            context.fill(scrollbarX, scrollbarTop, scrollbarX + 6, scrollbarBottom, 0x40000000);
+            context.fill(scrollbarX, scrollbarTop, scrollbarX + SCROLLBAR_OFFSET_X, scrollbarBottom, TextColors.BLACK_A64);
 
             int handleHeight = Math.max(10, scrollbarHeight * scrollbarHeight / (scrollbarHeight + maxScroll));
             int handleY = scrollbarTop + (int)((scrollbarHeight - handleHeight) * getScrolledAmount() / maxScroll);
-            context.fill(scrollbarX + 1, handleY, scrollbarX + 5, handleY + handleHeight, 0x80FFFFFF);
+            context.fill(scrollbarX + 1, handleY, scrollbarX + SCROLLBAR_OFFSET_X - 1, handleY + handleHeight, TextColors.WHITE_A128);
         }
     }
 

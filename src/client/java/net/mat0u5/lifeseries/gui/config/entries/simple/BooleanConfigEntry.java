@@ -6,12 +6,18 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroupHeader {
+    private static final String VALUE_TYPE = "boolean";
+    private static final int BUTTON_WIDTH = 60;
+    private static final int BUTTON_HEIGHT = 20;
+    private static final String TEXT_TRUE = "§aYes";
+    private static final String TEXT_FALSE = "§cNo";
+
     private final boolean defaultValue;
     private boolean value;
     private boolean startingValue;
 
     public BooleanConfigEntry(String fieldName, Text displayName, boolean value, boolean defaultValue) {
-        super(fieldName, displayName, 60, 20);
+        super(fieldName, displayName, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.defaultValue = defaultValue;
         this.value = value;
         this.startingValue = value;
@@ -27,7 +33,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
 
     @Override
     public Text getButtonText() {
-        return value ? Text.of("§aYes") : Text.of("§cNo");
+        return value ? Text.of(TEXT_TRUE) : Text.of(TEXT_FALSE);
     }
 
     @Override
@@ -71,7 +77,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
 
     @Override
     public String getValueType() {
-        return "boolean";
+        return VALUE_TYPE;
     }
 
     @Override

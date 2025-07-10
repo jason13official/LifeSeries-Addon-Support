@@ -32,7 +32,7 @@ import net.minecraft.client.render.entity.state.EntityRenderState;
 
 public class QuizScreen extends DefaultScreen {
     private static final int[] ANSWER_COLORS = {
-            TextColors.TRIVIA_BLUE, TextColors.TRIVIA_ORANGE, TextColors.TRIVIA_LIME, TextColors.TRIVIA_YELLOW, TextColors.TRIVIA_RED
+            TextColors.PASTEL_BLUE, TextColors.PASTEL_ORANGE, TextColors.PASTEL_LIME, TextColors.PASTEL_YELLOW, TextColors.PASTEL_RED
     };
 
     private final List<List<OrderedText>> answers = new ArrayList<>();
@@ -153,8 +153,8 @@ public class QuizScreen extends DefaultScreen {
         while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
-        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.TIMER_RED, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
-        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.TIMER_ORANGE, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.RED, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.ORANGE, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
         else RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
 
         // Difficulty

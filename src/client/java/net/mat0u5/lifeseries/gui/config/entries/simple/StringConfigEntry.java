@@ -4,12 +4,15 @@ import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
 import net.minecraft.text.Text;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
+    private static final String VALUE_TYPE = "string";
+    private static final int FIELD_WIDTH = 150;
+
     protected final String defaultValue;
     protected String value;
     protected String startingValue;
 
     public StringConfigEntry(String fieldName, Text displayName, String value, String defaultValue) {
-        super(fieldName, displayName, 150);
+        super(fieldName, displayName, FIELD_WIDTH);
         this.defaultValue = defaultValue;
         this.value = value;
         this.startingValue = value;
@@ -64,6 +67,6 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
     @Override
     public String getValueType() {
-        return "string";
+        return VALUE_TYPE;
     }
 }

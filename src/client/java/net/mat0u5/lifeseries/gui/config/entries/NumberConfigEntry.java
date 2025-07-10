@@ -1,9 +1,12 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry {
+    protected static final int RANGE_LABEL_OFFSET_X = -15;
+
     protected final T defaultValue;
     protected final T minValue;
     protected final T maxValue;
@@ -54,8 +57,8 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
             int entryWidth = getEntryContentWidth(width);
 
             context.drawTextWithShadow(textRenderer, rangeText,
-                    x + entryWidth - rangeWidth - textField.getWidth() - 15,
-                    y + (height - textRenderer.fontHeight) / 2+1, 0xAAAAAA);
+                    x + entryWidth - rangeWidth - textField.getWidth()  + RANGE_LABEL_OFFSET_X,
+                    getTextFieldPosY(y, height), TextColors.GRAY);
         }
     }
 

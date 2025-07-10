@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.config;
+package net.mat0u5.lifeseries.config.entries;
 
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
@@ -35,6 +35,12 @@ public class ClientsideConfig {
         String description = payload.description();
         List<String> args = payload.args();
 
+        if (configType.equalsIgnoreCase("text") && args.size() >= 2) {
+            boolean clickable = !args.get(1).equalsIgnoreCase("false");
+            TextObject resultObject = new TextObject(payload, args.getFirst(), clickable);
+            config.put(index, resultObject);
+            return;
+        }
         if (configType.equalsIgnoreCase("string") && args.size() >= 2) {
             StringObject resultObject = new StringObject(payload, args.getFirst(), args.get(1));
             config.put(index, resultObject);

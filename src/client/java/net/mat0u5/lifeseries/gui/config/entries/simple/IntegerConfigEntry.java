@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
 import net.minecraft.text.Text;
 
 public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
+    private static final String VALUE_TYPE = "integer";
 
     public IntegerConfigEntry(String fieldName, Text displayName, int value, int defaultValue) {
         super(fieldName, displayName, value, defaultValue);
@@ -36,6 +37,6 @@ public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
 
     @Override
     public String getValueType() {
-        return "integer";
+        return VALUE_TYPE;
     }
 }

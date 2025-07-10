@@ -157,8 +157,8 @@ public class TextHud {
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
 
-        if (millisLeft <= 5_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.TIMER_RED, actualTimer, x, y);
-        else if (millisLeft <= 30_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.TIMER_ORANGE, actualTimer, x, y);
+        if (millisLeft <= 5_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.RED, actualTimer, x, y);
+        else if (millisLeft <= 30_000) RenderUtils.drawTextRight(context, client.textRenderer, TextColors.ORANGE, actualTimer, x, y);
         else RenderUtils.drawTextRight(context, client.textRenderer, TextColors.WHITE, actualTimer, x, y);
 
         RenderUtils.drawTextRight(context, client.textRenderer, timerText, x - client.textRenderer.getWidth(actualTimer), y);

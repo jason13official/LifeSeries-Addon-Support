@@ -12,11 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
+    private static final String ENTRY_TYPE = "group";
+    private static final int CHILD_INDENT = 20;
+    protected static final int EXPAND_TEXT_OFFSET_X = LABEL_OFFSET_X - 10;
+    protected static final int EXPAND_TEXT_OFFSET_Y = LABEL_OFFSET_Y;
+    private static final int EXPAND_SIDEBAR_THICKNESS = 1;
+    private static final int EXPAND_SIDEBAR_OFFSET_X = -9;
+
     private final T mainEntry;
     private final List<ConfigEntry> childEntries;
     private boolean isExpanded = false;
-    private boolean showSidebar = false;
-    private static final int CHILD_INDENT = 20;
+    private boolean showSidebar;
+    private boolean renderBottomBar = false;
 
     private int y;
 
@@ -77,14 +84,17 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             }
         }
 
-        renderExpandIcon(context, x, y, isExpanded, currentY);
+        renderExpandIcon(context, x, y, isExpanded, currentY, width);
     }
 
-    private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY) {
+    private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY, int width) {
         String text = expanded ? "- " : "+ ";
-        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Text.of(text), x + 15, y + 6);
+        RenderUtils.drawTextRight(context, textRenderer, TextColors.WHITE, Text.of(text), x + EXPAND_TEXT_OFFSET_X, y + EXPAND_TEXT_OFFSET_Y);
         if (showSidebar) {
-            context.fill(1, y, 2, endY - ConfigListWidget.ENTRY_GAP, 0x80FFFFFF);
+            context.fill(x+EXPAND_SIDEBAR_OFFSET_X, y, x+EXPAND_SIDEBAR_OFFSET_X+EXPAND_SIDEBAR_THICKNESS, endY - ConfigListWidget.ENTRY_GAP, TextColors.WHITE_A128);
+        }
+        if (expanded && renderBottomBar) {
+            context.fill(x+EXPAND_SIDEBAR_OFFSET_X, endY - ConfigListWidget.ENTRY_GAP, Math.max(x + LABEL_OFFSET_X + CHILD_INDENT + 20, (x+width)/2), endY - ConfigListWidget.ENTRY_GAP+EXPAND_SIDEBAR_THICKNESS, TextColors.WHITE_A32);
         }
     }
 
@@ -120,7 +130,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     protected boolean keyPressedEntry(int keyCode, int scanCode, int modifiers) {
-        if (mainEntry != null && mainEntry.isFocused) {
+        if (mainEntry != null && mainEntry.isFocused()) {
             if (mainEntry.keyPressed(keyCode, scanCode, modifiers)) {
                 return true;
             }
@@ -128,7 +138,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
-                if (!child.isFocused) continue;
+                if (!child.isFocused()) continue;
                 if (child.keyPressed(keyCode, scanCode, modifiers)) {
                     return true;
                 }
@@ -140,7 +150,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     protected boolean charTypedEntry(char chr, int modifiers) {
-        if (mainEntry != null && mainEntry.isFocused) {
+        if (mainEntry != null && mainEntry.isFocused()) {
             if (mainEntry.charTyped(chr, modifiers)) {
                 return true;
             }
@@ -148,7 +158,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
-                if (!child.isFocused) continue;
+                if (!child.isFocused()) continue;
                 if (child.charTyped(chr, modifiers)) {
                     return true;
                 }
@@ -160,11 +170,14 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public int getPreferredHeight() {
-        int height = 20;
+        int height = PREFFERED_HEIGHT;
+        if (mainEntry != null) {
+            height = mainEntry.getPreferredHeight();
+        }
 
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
-                height += child.getPreferredHeight() + 2;
+                height += child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;
             }
         }
 
@@ -173,7 +186,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public String getValueType() {
-        return "group";
+        return ENTRY_TYPE;
     }
 
     @Override
@@ -224,14 +237,16 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    public void setFocused(boolean focused) {
-        this.isFocused = focused;
-
-        if (focused && screen != null) {
-            ConfigEntry currentlyFocused = screen.getFocusedEntry();
-            if (currentlyFocused != null && !childEntries.contains(currentlyFocused)) {
-                screen.setFocusedEntry(this);
+    public boolean isFocused() {
+        boolean isFocused = super.isFocused();
+        if (isFocused) {
+            return true;
+        }
+        for (ConfigEntry child : childEntries) {
+            if (child.isFocused()) {
+                return true;
             }
         }
+        return false;
     }
 }

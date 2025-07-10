@@ -11,6 +11,16 @@ import net.minecraft.text.Text;
 import java.util.Objects;
 
 public abstract class ConfigEntry {
+    public static final int PREFFERED_HEIGHT = 20;
+    protected static final int LABEL_OFFSET_X = 25;
+    protected static final int LABEL_OFFSET_Y = 6;
+    private static final float HIGHTLIGHT_FADE = 0.1f;
+
+    private static final int RESET_BUTTON_OFFSET_X = -5;
+    private static final int RESET_BUTTON_OFFSET_Y = 2;
+    protected static final int RESET_BUTTON_WIDTH = 50;
+    private static final int RESET_BUTTON_HEIGHT = 16;
+
     protected TextRenderer textRenderer;
     protected ConfigScreen screen;
     protected final String fieldName;
@@ -20,10 +30,8 @@ public abstract class ConfigEntry {
 
     protected ButtonWidget resetButton;
     public float highlightAlpha = 0.0f;
-    protected boolean isHovered = false;
-    protected boolean isFocused = false;
-    protected static final int RESET_BUTTON_WIDTH = 50;
-    protected static final int RESET_BUTTON_HEIGHT = 16;
+    private boolean isHovered = false;
+    private boolean isFocused = false;
 
     public ConfigEntry(String fieldName, Text displayName) {
         this.fieldName = fieldName;
@@ -55,17 +63,17 @@ public abstract class ConfigEntry {
         updateHighlightAnimation(tickDelta);
 
         if (highlightAlpha > 0.0f) {
-            int highlightColor = (int)(highlightAlpha * 128) << 24 | 0x808080;
+            int highlightColor = TextColors.argb((int)(highlightAlpha * 128), 128, 128, 128);
             context.fill(x, y, x + width, y + height, highlightColor);
         }
 
-        int textColor = hasError() ? TextColors.GUI_RED : TextColors.WHITE;
+        int textColor = hasError() ? TextColors.PASTEL_RED : TextColors.WHITE;
 
-        context.drawTextWithShadow(textRenderer, getDisplayName(), x + 25, y + 6, textColor);
+        context.drawTextWithShadow(textRenderer, getDisplayName(), x + LABEL_OFFSET_X, y + LABEL_OFFSET_Y, textColor);
 
         if (hasResetButton()) {
-            resetButton.setX(x + width - RESET_BUTTON_WIDTH - 5);
-            resetButton.setY(y + 2);
+            resetButton.setX(x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X);
+            resetButton.setY(y + RESET_BUTTON_OFFSET_Y);
             resetButton.active = canReset();
             resetButton.render(context, mouseX, mouseY, tickDelta);
         }
@@ -78,7 +86,7 @@ public abstract class ConfigEntry {
         if (isHovered) {
             highlightAlpha = 1.0f;
         } else {
-            highlightAlpha = Math.max(0.0f, highlightAlpha - tickDelta * 0.1f);
+            highlightAlpha = Math.max(0.0f, highlightAlpha - tickDelta * HIGHTLIGHT_FADE);
         }
     }
 
@@ -102,14 +110,22 @@ public abstract class ConfigEntry {
     }
 
     public void setFocused(boolean focused) {
-        this.isFocused = focused;
+        setActualFocused(focused);
         if (focused && screen != null) {
             screen.setFocusedEntry(this);
         }
     }
 
+    protected void setActualFocused(boolean focused) {
+        this.isFocused = focused;
+    }
+
+    public boolean isFocused() {
+        return isFocused;
+    }
+
     public int getPreferredHeight() {
-        return 20;
+        return PREFFERED_HEIGHT;
     }
 
     protected abstract void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta);
