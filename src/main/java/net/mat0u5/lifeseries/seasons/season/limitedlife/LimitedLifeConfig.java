@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 
 import java.util.ArrayList;
@@ -53,35 +53,35 @@ public class LimitedLifeConfig extends ConfigManager {
             "quick_charge"
     );
 
-    public static final ConfigEntry<Integer> BOOGEYMAN_AMOUNT = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> BOOGEYMAN_AMOUNT = new ConfigFileEntry<>(
             "boogeyman_amount", 1, "integer", "season", "Boogeyman Amount", "The exact amount of bogeymen for each session."
     );
-    public static final ConfigEntry<Integer> TIME_DEFAULT = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_DEFAULT = new ConfigFileEntry<>(
             "time_default", 86400, "integer", "season.time", "Time Default", "The time with which players start, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_YELLOW = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_YELLOW = new ConfigFileEntry<>(
             "time_yellow", 57600, "integer", "season.time", "Time Yellow", "The Green-Yellow time border, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_RED = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_RED = new ConfigFileEntry<>(
             "time_red", 28800, "integer", "season.time", "Time Red", "The Yellow-Red time border, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_DEATH = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_DEATH = new ConfigFileEntry<>(
             "time_death", -3600, "integer", "season.time", "Time Death", "Time time you lose for dying, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_DEATH_BOOGEYMAN = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_DEATH_BOOGEYMAN = new ConfigFileEntry<>(
             "time_death_boogeyman", -7200, "integer", "season.time", "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_KILL = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_KILL = new ConfigFileEntry<>(
             "time_kill", 1800, "integer", "season.time", "Time Kill", "The time you gain for killing someone, in seconds."
     );
-    public static final ConfigEntry<Integer> TIME_KILL_BOOGEYMAN = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> TIME_KILL_BOOGEYMAN = new ConfigFileEntry<>(
             "time_kill_boogeyman", 3600, "integer", "season.time", "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds."
     );
-    public static final ConfigEntry<Boolean> TICK_OFFLINE_PLAYERS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> TICK_OFFLINE_PLAYERS = new ConfigFileEntry<>(
             "tick_offline_players", false, "boolean", "season", "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
     );
 
-    public static final ConfigEntry<Object> GROUP_TIME = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
             "group_time", null, "text", "{season.time}", "Time Rewards / Punishments", ""
     );
 
@@ -90,8 +90,8 @@ public class LimitedLifeConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
-        List<ConfigEntry<?>> defaultEntries = super.getDefaultConfigEntries();
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
+        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
         defaultEntries.remove(DEFAULT_LIVES);
         defaultEntries.remove(GIVELIFE_COMMAND_ENABLED);
         defaultEntries.remove(GIVELIFE_LIVES_MAX);
@@ -99,7 +99,7 @@ public class LimitedLifeConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 BOOGEYMAN_AMOUNT
                 ,TICK_OFFLINE_PLAYERS

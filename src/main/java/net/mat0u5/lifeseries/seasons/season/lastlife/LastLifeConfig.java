@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.lastlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 
 import java.util.ArrayList;
@@ -56,16 +56,16 @@ public class LastLifeConfig extends ConfigManager {
     );
 
 
-    public static final ConfigEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "boogeyman_chance_multiplier", 1.0, "double", "season", "Boogeyman Change Multiplier", "Increases or decreases the average amount of Boogeymen for each session. (If the multiplier is set to the default of 1, sessions will have two Boogeymen on average.)"
     );
-    public static final ConfigEntry<Integer> BOOGEYMAN_MAX_AMOUNT = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> BOOGEYMAN_MAX_AMOUNT = new ConfigFileEntry<>(
             "boogeyman_max_amount", 999, "integer", "season", "Boogeyman Max Amount", "The maximum amount of Boogeymen a session can have."
     );
-    public static final ConfigEntry<Integer> RANDOM_LIVES_MIN = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> RANDOM_LIVES_MIN = new ConfigFileEntry<>(
             "random_lives_min", 2, "integer", "season", "Random Lives Min", "The minumum lives you can get from the random roll."
     );
-    public static final ConfigEntry<Integer> RANDOM_LIVES_MAX = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> RANDOM_LIVES_MAX = new ConfigFileEntry<>(
             "random_lives_max", 6, "integer", "season", "Random Lives Max", "The maximum lives you can get from the random roll."
     );
 
@@ -75,14 +75,14 @@ public class LastLifeConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
-        List<ConfigEntry<?>> defaultEntries = super.getDefaultConfigEntries();
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
+        List<ConfigFileEntry<?>> defaultEntries = super.getDefaultConfigEntries();
         defaultEntries.remove(DEFAULT_LIVES);
         return defaultEntries;
     }
 
     @Override
-    protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 BOOGEYMAN_CHANCE_MULTIPLIER
                 ,BOOGEYMAN_MAX_AMOUNT

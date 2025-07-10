@@ -231,8 +231,7 @@ public class NetworkHandlerServer {
         ServerPlayNetworking.send(player, triviaQuestionPacket);
     }
 
-    public static void sendConfig(ServerPlayerEntity player, String configType, String id, int index, String name, String description, List<String> args) {
-        ConfigPayload configPacket = new ConfigPayload(configType, id, index, name, description, args);
+    public static void sendConfig(ServerPlayerEntity player, ConfigPayload configPacket) {
         ServerPlayNetworking.send(player, configPacket);
     }
 

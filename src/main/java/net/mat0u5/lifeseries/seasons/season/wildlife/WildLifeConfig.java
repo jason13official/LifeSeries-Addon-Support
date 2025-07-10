@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 
@@ -67,93 +67,93 @@ public class WildLifeConfig extends ConfigManager {
     );
     */
 
-    public static final ConfigEntry<Double> WILDCARD_SIZESHIFTING_MIN_SIZE = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_MIN_SIZE = new ConfigFileEntry<>(
             "wildcard_sizeshifting_min_size", 0.25, "double", "season.sizeshifting", "Min Size", "Smallest size you can achieve during Size Shifting."
     );
-    public static final ConfigEntry<Double> WILDCARD_SIZESHIFTING_MAX_SIZE = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_MAX_SIZE = new ConfigFileEntry<>(
             "wildcard_sizeshifting_max_size", 3.0, "double", "season.sizeshifting", "Max Size", "Biggest size you can achieve during Size Shifting."
     );
-    public static final ConfigEntry<Double> WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_sizeshifting_size_change_multiplier", 1.0, "double", "season.sizeshifting", "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
-    public static final ConfigEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
             "wildcard_hunger_randomize_interval", 36000, "integer", "season", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
     );
-    public static final ConfigEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "double", "season.snails", "Speed Multiplier", "Snail movement speed multiplier."
     );
-    public static final ConfigEntry<Boolean> WILDCARD_SNAILS_DROWN_PLAYERS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> WILDCARD_SNAILS_DROWN_PLAYERS = new ConfigFileEntry<>(
             "wildcard_snails_drown_players", true, "boolean", "season.snails", "Drown Players", "Controls whether snails can drown players when the snails are underwater."
     );
 
 
-    public static final ConfigEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MIN_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_min_speed", 0.05, "double", "season.timedilation", "Min World Speed Multiplier", "Controls the minimum speed the WORLD can move."
     );
-    public static final ConfigEntry<Double> WILDCARD_TIMEDILATION_MAX_SPEED = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_MAX_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_max_speed", 5.0, "double", "season.timedilation", "Max World Speed Multiplier", "Controls the maximum speed the WORLD can move."
     );
-    public static final ConfigEntry<Double> WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED = new ConfigFileEntry<>(
             "wildcard_timedilation_player_max_speed", 2.0, "double", "season.timedilation", "Max Player Speed Multiplier", "Controls the maximum speed the PLAYERS themselves can move (not the world)."
     );
-    public static final ConfigEntry<Boolean> WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> WILDCARD_TRIVIA_BOTS_CAN_ENTER_BOATS = new ConfigFileEntry<>(
             "wildcard_trivia_bots_can_enter_boats", true, "boolean", "season.trivia", "Trivia Bots Can Enter Boats", "Controls whether trivia bots can enter boats."
     );
-    public static final ConfigEntry<Integer> WILDCARD_TRIVIA_BOTS_PER_PLAYER = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_BOTS_PER_PLAYER = new ConfigFileEntry<>(
             "wildcard_trivia_bots_per_player", 5, "integer", "season.trivia", "Trivia Bots per Player", "The amount of trivia bots that will spawn for each player over the session."
     );
-    public static final ConfigEntry<Integer> WILDCARD_TRIVIA_SECONDS_EASY = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_EASY = new ConfigFileEntry<>(
             "wildcard_trivia_seconds_easy", 180, "integer", "season.trivia", "Easy Timer", "Easy question timer length, in seconds."
     );
-    public static final ConfigEntry<Integer> WILDCARD_TRIVIA_SECONDS_NORMAL = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_NORMAL = new ConfigFileEntry<>(
             "wildcard_trivia_seconds_normal", 240, "integer", "season.trivia", "Normal Timer", "Normal question timer length, in seconds."
     );
-    public static final ConfigEntry<Integer> WILDCARD_TRIVIA_SECONDS_HARD = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_HARD = new ConfigFileEntry<>(
             "wildcard_trivia_seconds_hard", 300, "integer", "season.trivia", "Hard Timer", "Hard question timer length, in seconds."
     );
 
 
-    public static final ConfigEntry<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = new ConfigFileEntry<>(
             "wildcard_mobswap_start_spawn_delay", 7200, "integer", "season.mobswap", "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
     );
-    public static final ConfigEntry<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = new ConfigFileEntry<>(
             "wildcard_mobswap_end_spawn_delay", 2400, "integer", "season.mobswap", "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
     );
-    public static final ConfigEntry<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = new ConfigFileEntry<>(
             "wildcard_mobswap_spawn_mobs", 250, "integer", "season.mobswap", "Number of Mobs", "The number of mobs that spawn each cycle."
     );
-    public static final ConfigEntry<Double> WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER = new ConfigEntry<>(
+    public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_mobswap_boss_chance_multiplier", 1.0, "double", "season.mobswap", "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
     );
-    public static final ConfigEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigEntry<>(
+    public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "integer", "season.superpowers", "Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
     );
-    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS = new ConfigFileEntry<>(
             "wildcard_superpowers_zombies_lose_items", true, "boolean", "season.superpowers", "Necromancy: Zombies Lose Items", "Controls whether zombies keep their items when they get respawned."
     );
-    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
             "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "boolean", "season.superpowers", "Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."
     );
-    public static final ConfigEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigEntry<>(
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
             "wildcard_superpowers_superspeed_step", false, "boolean", "season.superpowers", "Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
     );
 
-    public static final ConfigEntry<Object> GROUP_SIZESHIFTING = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_SIZESHIFTING = new ConfigFileEntry<>(
             "group_sizeshifting", null, "text", "{season.sizeshifting}", "Size Shifting", ""
     );
-    public static final ConfigEntry<Object> GROUP_SNAILS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_SNAILS = new ConfigFileEntry<>(
             "group_snails", null, "text", "{season.snails}", "Snails", ""
     );
-    public static final ConfigEntry<Object> GROUP_TIMEDILATION = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_TIMEDILATION = new ConfigFileEntry<>(
             "group_timedilation", null, "text", "{season.timedilation}", "Time Dilation", ""
     );
-    public static final ConfigEntry<Object> GROUP_TRIVIA = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_TRIVIA = new ConfigFileEntry<>(
             "group_trivia", null, "text", "{season.trivia}", "Trivia", ""
     );
-    public static final ConfigEntry<Object> GROUP_MOBSWAP = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_MOBSWAP = new ConfigFileEntry<>(
             "group_mobswap", null, "text", "{season.mobswap}", "Mob Swap", ""
     );
-    public static final ConfigEntry<Object> GROUP_SUPERPOWERS = new ConfigEntry<>(
+    public static final ConfigFileEntry<Object> GROUP_SUPERPOWERS = new ConfigFileEntry<>(
             "group_superpowers", null, "text", "{season.superpowers}", "Superpowers", ""
     );
 
@@ -162,7 +162,7 @@ public class WildLifeConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 GROUP_SIZESHIFTING //Group
                 ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL

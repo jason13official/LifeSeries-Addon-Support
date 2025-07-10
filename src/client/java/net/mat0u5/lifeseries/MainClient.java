@@ -4,6 +4,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.config.MainConfig;
 import net.mat0u5.lifeseries.events.ClientEvents;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -51,6 +54,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static long limitedLifeTimeLastUpdated = 0;
     public static long limitedLifeLives = 0;
 
+    public static ClientConfig clientConfig;
+
     @Override
     public void onInitializeClient() {
         FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
@@ -63,6 +68,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         ClientRenderer.onInitialize();
         ClientRegistries.registerModStuff();
         Main.setClientHelper(this);
+
+        clientConfig = new ClientConfig();
     }
 
     public static boolean isClientPlayer(UUID uuid) {

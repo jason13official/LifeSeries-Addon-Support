@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
@@ -16,6 +17,8 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static net.mat0u5.lifeseries.MainClient.clientConfig;
 
 public class ConfigScreen extends Screen {
     private static final int HEADER_HEIGHT_SMALL = 30;
@@ -145,13 +148,19 @@ public class ConfigScreen extends Screen {
     }
 
     private void save() {
-        List<ConfigEntry> allSurfaceEntries = new ArrayList<>();
+        List<ConfigEntry> allSurfaceEntriesClient = new ArrayList<>();
+        List<ConfigEntry> allSurfaceEntriesServer = new ArrayList<>();
         for (Map.Entry<String, List<ConfigEntry>> category : this.categories.entrySet()) {
-            if (category.getKey().equals("Client")) continue;
-            allSurfaceEntries.addAll(category.getValue());
+            if (category.getKey().equals("Client")) {
+                allSurfaceEntriesClient.addAll(category.getValue());
+            }
+            else {
+                allSurfaceEntriesServer.addAll(category.getValue());
+            }
         }
 
-        for (ConfigEntry entry : getAllEntries(allSurfaceEntries)) {
+        for (ConfigEntry entry : getAllEntries(allSurfaceEntriesServer)) {
+            // Server
             if (!entry.modified()) continue;
             if (entry instanceof GroupConfigEntry) continue;
             NetworkHandlerClient.sendConfigUpdate(
@@ -159,6 +168,14 @@ public class ConfigScreen extends Screen {
                     entry.getFieldName(),
                     List.of(entry.getValueAsString())
             );
+        }
+        for (ConfigEntry entry : getAllEntries(allSurfaceEntriesClient)) {
+            // Client
+            if (!entry.modified()) continue;
+            if (entry instanceof GroupConfigEntry) continue;
+            String id = entry.getFieldName();
+            String valueStr = entry.getValueAsString();
+            clientConfig.setProperty(id, valueStr);
         }
 
         this.client.setScreen(this.parent);

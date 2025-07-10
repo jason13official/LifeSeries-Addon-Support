@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
-import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.minecraft.util.math.BlockPos;
 
@@ -12,7 +12,7 @@ public class SecretLifeLocationConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         return List.of();
     }
     @Override

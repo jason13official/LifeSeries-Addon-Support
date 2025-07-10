@@ -6,7 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
-import net.mat0u5.lifeseries.config.ClientConfig;
+import net.mat0u5.lifeseries.config.ClientConfigGuiManager;
 import net.mat0u5.lifeseries.gui.other.ChooseWildcardScreen;
 import net.mat0u5.lifeseries.gui.other.SnailTextureInfoScreen;
 import net.mat0u5.lifeseries.gui.seasons.ChooseSeasonScreen;
@@ -89,7 +89,7 @@ public class NetworkHandlerClient {
     }
 
     public static void handleConfigPacket(ConfigPayload payload) {
-        ClientConfigNetwork.handleConfigPacket(payload);
+        ClientConfigNetwork.handleConfigPacket(payload, false);
     }
 
     public static void handleImagePacket(String name, ImagePayload payload) {
@@ -126,7 +126,7 @@ public class NetworkHandlerClient {
         }
         if (name.equalsIgnoreCase("open_config")) {
             ClientConfigNetwork.load();
-            ClientTaskScheduler.scheduleTask(20, ClientConfig::openConfig);
+            ClientTaskScheduler.scheduleTask(20, ClientConfigGuiManager::openConfig);
         }
         if (name.equalsIgnoreCase("select_season")) {
             MinecraftClient.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));

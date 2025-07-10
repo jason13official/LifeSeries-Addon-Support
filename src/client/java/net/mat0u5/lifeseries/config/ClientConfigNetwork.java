@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.config.entries.*;
+import net.mat0u5.lifeseries.gui.config.ConfigScreen;
+import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 
@@ -8,38 +10,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static net.mat0u5.lifeseries.MainClient.clientConfig;
+
 public class ClientConfigNetwork {
 
     public static Map<Integer, ConfigObject> configObjects = new TreeMap<>();
     public static Map<Integer, ConfigObject> groupConfigObjects = new TreeMap<>();
+    public static Map<Integer, ConfigObject> client_configObjects = new TreeMap<>();
+    public static Map<Integer, ConfigObject> client_groupConfigObjects = new TreeMap<>();
 
     public static void load() {
         configObjects.clear();
         groupConfigObjects.clear();
         NetworkHandlerClient.sendStringPacket("request_config", "");
-    }
 
-    public static void save() {
-        for (ConfigObject object : configObjects.values()) {
-            if (!object.modified) continue;
-            NetworkHandlerClient.sendConfigUpdate(
-                    object.configType,
-                    object.id,
-                    object.getArgs()
-            );
+        int index = 0;
+        for (ConfigFileEntry<?> entry : clientConfig.getAllConfigEntries()) {
+            handleConfigPacket(clientConfig.getConfigPayload(entry, index), true);
+            index++;
         }
     }
 
-    public static void handleConfigPacket(ConfigPayload payload) {
+    public static void handleConfigPacket(ConfigPayload payload, boolean client) {
         int index = payload.index();
         ConfigObject configObject = getConfigEntry(payload);
         if (configObject == null) return;
         String argGroupInfo = payload.args().get(2);
         if (argGroupInfo.startsWith("{")) {
-            groupConfigObjects.put(index, configObject);
+            if (!client) {
+                groupConfigObjects.put(index, configObject);
+            }
+            else {
+                client_groupConfigObjects.put(index, configObject);
+            }
         }
         else {
-            configObjects.put(index, configObject);
+            if (!client) {
+                configObjects.put(index, configObject);
+            }
+            else {
+                client_configObjects.put(index, configObject);
+            }
         }
     }
 

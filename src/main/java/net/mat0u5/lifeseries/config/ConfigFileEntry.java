@@ -2,7 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 
-public class ConfigEntry<T> {
+public class ConfigFileEntry<T> {
     public final String key;
     public T defaultValue;
     public final String type;
@@ -10,7 +10,7 @@ public class ConfigEntry<T> {
     public final String description;
     public final String groupInfo;
 
-    public ConfigEntry(String key, T defaultValue, String type, String groupInfo, String displayName, String description) {
+    public ConfigFileEntry(String key, T defaultValue, String type, String groupInfo, String displayName, String description) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.type = type;

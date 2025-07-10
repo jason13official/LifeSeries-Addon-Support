@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeConfig;
@@ -33,7 +34,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         instantiateProperties();
     }
 
-    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         return new ArrayList<>(List.of(
                 GROUP_GLOBAL // Group
                 ,GROUP_SEASON // Group
@@ -82,19 +83,19 @@ public abstract class ConfigManager extends DefaultConfigValues {
         ));
     }
 
-    protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of());
     }
 
-    protected List<ConfigEntry<?>> getAllConfigEntries() {
-        List<ConfigEntry<?>> allEntries = new ArrayList<>();
+    protected List<ConfigFileEntry<?>> getAllConfigEntries() {
+        List<ConfigFileEntry<?>> allEntries = new ArrayList<>();
         allEntries.addAll(getDefaultConfigEntries());
         allEntries.addAll(getSeasonSpecificConfigEntries());
         return allEntries;
     }
 
     protected void instantiateProperties() {
-        for (ConfigEntry<?> entry : getAllConfigEntries()) {
+        for (ConfigFileEntry<?> entry : getAllConfigEntries()) {
             if (entry.defaultValue instanceof Integer integerValue) {
                 getOrCreateInt(entry.key, integerValue);
             } else if (entry.defaultValue instanceof Boolean booleanValue) {
@@ -109,18 +110,17 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
     public void sendConfigTo(ServerPlayerEntity player) {
         int index = 0;
-        for (ConfigEntry<?> entry : getDefaultConfigEntries()) {
-            sendConfigEntry(player, entry, index);
-            index++;
-        }
-        index = 100;
-        for (ConfigEntry<?> entry : getSeasonSpecificConfigEntries()) {
+        for (ConfigFileEntry<?> entry : getAllConfigEntries()) {
             sendConfigEntry(player, entry, index);
             index++;
         }
     }
 
-    public void sendConfigEntry(ServerPlayerEntity player, ConfigEntry<?> entry, int index) {
+    public void sendConfigEntry(ServerPlayerEntity player, ConfigFileEntry<?> entry, int index) {
+        NetworkHandlerServer.sendConfig(player, getConfigPayload(entry, index));
+    }
+
+    public ConfigPayload getConfigPayload(ConfigFileEntry<?> entry, int index) {
         String value = "";
         if (!entry.type.equalsIgnoreCase("text")) {
             value = getPropertyAsString(entry.key, entry.defaultValue);
@@ -129,16 +129,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         if (entry.defaultValue != null) {
             defaultValue = entry.defaultValue.toString();
         }
-
-        NetworkHandlerServer.sendConfig(
-                player,
-                entry.type,
-                entry.key,
-                index,
-                entry.displayName,
-                entry.description,
-                List.of(value, defaultValue, entry.groupInfo)
-        );
+        return new ConfigPayload(entry.type, entry.key, index, entry.displayName, entry.description, List.of(value, defaultValue, entry.groupInfo));
     }
 
     private String getPropertyAsString(String key, Object defaultValue) {

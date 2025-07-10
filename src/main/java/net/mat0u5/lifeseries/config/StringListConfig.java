@@ -10,7 +10,7 @@ public class StringListConfig extends ConfigManager {
     }
 
     @Override
-    protected List<ConfigEntry<?>> getDefaultConfigEntries() {
+    protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         return List.of();
     }
     @Override

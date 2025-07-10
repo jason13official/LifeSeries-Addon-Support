@@ -1,6 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.unassigned;
 
-import net.mat0u5.lifeseries.config.ConfigEntry;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -29,7 +29,7 @@ public class UnassignedSeason extends Season {
             public void instantiateProperties() {}
 
             @Override
-            protected List<ConfigEntry<?>> getDefaultConfigEntries() { return new ArrayList<>(List.of()); }
+            protected List<ConfigFileEntry<?>> getDefaultConfigEntries() { return new ArrayList<>(List.of()); }
         };
     }
 
