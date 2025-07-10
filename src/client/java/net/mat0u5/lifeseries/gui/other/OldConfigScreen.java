@@ -24,8 +24,8 @@ public class OldConfigScreen {
 
 
         for (int i = 0; i < 100; i++) {
-            if (ClientsideConfig.config.containsKey(i)) {
-                ConfigObject configObject = ClientsideConfig.config.get(i);
+            if (ClientsideConfig.configObjects.containsKey(i)) {
+                ConfigObject configObject = ClientsideConfig.configObjects.get(i);
                 handleConfigObject(generalCategory, entryBuilder, configObject);
             }
             else {
@@ -34,8 +34,8 @@ public class OldConfigScreen {
         }
         boolean anyInSeasonSpecificCategory = false;
         for (int i = 100; i < 200; i++) {
-            if (ClientsideConfig.config.containsKey(i)) {
-                ConfigObject configObject = ClientsideConfig.config.get(i);
+            if (ClientsideConfig.configObjects.containsKey(i)) {
+                ConfigObject configObject = ClientsideConfig.configObjects.get(i);
                 handleConfigObject(seasonSpecificCategory, entryBuilder, configObject);
                 anyInSeasonSpecificCategory = true;
             }

@@ -3,21 +3,23 @@ package net.mat0u5.lifeseries.config.entries;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ClientsideConfig {
 
-    public static Map<Integer, ConfigObject> config = new HashMap<>();
+    public static Map<Integer, ConfigObject> configObjects = new TreeMap<>();
+    public static Map<Integer, ConfigObject> groupConfigObjects = new TreeMap<>();
 
     public static void load() {
-        config.clear();
+        configObjects.clear();
+        groupConfigObjects.clear();
         NetworkHandlerClient.sendStringPacket("request_config", "");
     }
 
     public static void save() {
-        for (ConfigObject object : config.values()) {
+        for (ConfigObject object : configObjects.values()) {
             if (!object.modified) continue;
             NetworkHandlerClient.sendConfigUpdate(
                     object.configType,
@@ -28,53 +30,56 @@ public class ClientsideConfig {
     }
 
     public static void handleConfigPacket(ConfigPayload payload) {
-        String configType = payload.configType();
         int index = payload.index();
+        ConfigObject configObject = getConfigEntry(payload);
+        if (configObject == null) return;
+        String argGroupInfo = payload.args().get(2);
+        if (argGroupInfo.startsWith("{")) {
+            groupConfigObjects.put(index, configObject);
+        }
+        else {
+            configObjects.put(index, configObject);
+        }
+    }
+
+    public static ConfigObject getConfigEntry(ConfigPayload payload) {
+        String configType = payload.configType();
         String id = payload.id();
         String name = payload.name();
         String description = payload.description();
         List<String> args = payload.args();
+        if (args.size() < 3) return null;
+        String argValue = args.get(0);
+        String argDefaultValue = args.get(1);
+        String argGroupInfo = args.get(2);
 
-        if (configType.equalsIgnoreCase("text") && args.size() >= 2) {
-            boolean clickable = !args.get(1).equalsIgnoreCase("false");
-            TextObject resultObject = new TextObject(payload, args.getFirst(), clickable);
-            config.put(index, resultObject);
-            return;
+        if (configType.equalsIgnoreCase("text")) {
+            boolean clickable = !argDefaultValue.equalsIgnoreCase("false");
+            return new TextObject(payload, name, clickable);
         }
-        if (configType.equalsIgnoreCase("string") && args.size() >= 2) {
-            StringObject resultObject = new StringObject(payload, args.getFirst(), args.get(1));
-            config.put(index, resultObject);
-            return;
+        if (configType.equalsIgnoreCase("string")) {
+            return new StringObject(payload, argValue, argDefaultValue);
         }
-        if (configType.equalsIgnoreCase("boolean") && args.size() >= 2) {
-            boolean value = args.getFirst().equalsIgnoreCase("true");
-            boolean defaultValue = args.get(1).equalsIgnoreCase("true");
-            BooleanObject resultObject = new BooleanObject(payload, value, defaultValue);
-            config.put(index, resultObject);
-            return;
+        if (configType.equalsIgnoreCase("boolean")) {
+            boolean value = argValue.equalsIgnoreCase("true");
+            boolean defaultValue = argDefaultValue.equalsIgnoreCase("true");
+            return new BooleanObject(payload, value, defaultValue);
         }
-        if (configType.equalsIgnoreCase("double") && args.size() >= 2) {
+        if (configType.equalsIgnoreCase("double")) {
             try {
-                double value = Double.parseDouble(args.getFirst());
-                double defaultValue = Double.parseDouble(args.get(1));
-                DoubleObject resultObject = new DoubleObject(payload, value, defaultValue);
-                config.put(index, resultObject);
-                return;
+                double value = Double.parseDouble(argValue);
+                double defaultValue = Double.parseDouble(argDefaultValue);
+                return new DoubleObject(payload, value, defaultValue);
             }catch(Exception e){}
         }
-        if (configType.equalsIgnoreCase("integer") && args.size() >= 2) {
+        if (configType.equalsIgnoreCase("integer")) {
             try {
-                int value = Integer.parseInt(args.getFirst());
-                int defaultValue = Integer.parseInt(args.get(1));
-                IntegerObject resultObject = new IntegerObject(payload, value, defaultValue);
-                config.put(index, resultObject);
-                return;
+                int value = Integer.parseInt(argValue);
+                int defaultValue = Integer.parseInt(argDefaultValue);
+                return new IntegerObject(payload, value, defaultValue);
             }catch(Exception e){}
         }
 
-        /*
-        ConfigObject resultObject = new ConfigObject(payload);
-        config.put(index, resultObject);
-        */
+        return null;
     }
 }

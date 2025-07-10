@@ -116,8 +116,8 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (isExpanded) {
             double childY = mainEntry.getPreferredHeight();
             for (ConfigEntry child : childEntries) {
-                int childHeight = child.getPreferredHeight();
-                if (currentY >= childY && currentY < childY + childHeight + ConfigListWidget.ENTRY_GAP) {
+                int childHeight = child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;
+                if (currentY >= childY && currentY < childY + childHeight) {
                     child.setFocused(true);
                     if (child.mouseClicked(mouseX, mouseY, button)) return true;
                 }

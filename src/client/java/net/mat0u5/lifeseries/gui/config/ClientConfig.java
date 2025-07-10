@@ -1,86 +1,150 @@
 package net.mat0u5.lifeseries.gui.config;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.simple.*;
+import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ClientConfig {
     public static void openConfig() {
-
         ConfigScreen.Builder builder = new ConfigScreen.Builder(MinecraftClient.getInstance().currentScreen, Text.of("Life Series Config"));
-
         ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
-        //TODO sub-categories for general and season specific
-        List<ConfigEntry> generalEntries = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            if (ClientsideConfig.config.containsKey(i)) {
-                ConfigObject configObject = ClientsideConfig.config.get(i);
-                ConfigEntry entry = handleConfigObject(configObject);
-                if (entry != null) {
-                    generalEntries.add(entry);
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        List<ConfigEntry> seasonSpecificEntries = new ArrayList<>();
-        for (int i = 100; i < 200; i++) {
-            if (ClientsideConfig.config.containsKey(i)) {
-                ConfigObject configObject = ClientsideConfig.config.get(i);
-                ConfigEntry entry = handleConfigObject(configObject);
-                if (entry != null) {
-                    seasonSpecificEntries.add(entry);
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        TextConfigEntry generalGroup = new TextConfigEntry("group_general", Text.of("General Settings"), true);
-        categoryGeneral.addEntry(new GroupConfigEntry<>(generalGroup, generalEntries, false, false));
-        if (!seasonSpecificEntries.isEmpty()) {
-            TextConfigEntry seasonSpecificGroup = new TextConfigEntry("group_season_specific", Text.of("Season Specific Settings"), true);
-            categoryGeneral.addEntry(new GroupConfigEntry<>(seasonSpecificGroup, seasonSpecificEntries, false, false));
-        }
-
-
+        addServerConfig(categoryGeneral);
 
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
-
-        GroupConfigEntry<BooleanConfigEntry> groupEntry2 = new GroupConfigEntry<>(
-                new BooleanConfigEntry("textEntry2", Text.of("Da group2"),false,false),
-                List.of(
-                        new BooleanConfigEntry("booleanEntry1", Text.of("Boolean Entry1"), true, false),
-                        new StringConfigEntry("stringEntry1", Text.of("String Entry1"), "default", "default"),
-                        new IntegerConfigEntry("integerEntry1", Text.of("Integer Entry1"), 42, 0),
-                        new DoubleConfigEntry("doubleEntry1", Text.of("Double Entry1"), 3.14, 0.0)
-                ), true, true
-        );
-        GroupConfigEntry<TextConfigEntry> groupEntry = new GroupConfigEntry<>(
-                new TextConfigEntry("textEntry", Text.of("Da group")),
-                List.of(
-                        new BooleanConfigEntry("booleanEntry", Text.of("Boolean Entry"), true, false),
-                        new StringConfigEntry("stringEntry", Text.of("String Entry"), "default", "default"),
-                        new IntegerConfigEntry("integerEntry", Text.of("Integer Entry"), 42, 0),
-                        groupEntry2,
-                        new DoubleConfigEntry("doubleEntry", Text.of("Double Entry"), 3.14, 0.0)
-                ), true, true
-        );
-
-        categoryClient.addEntry(new StringConfigEntry("username", Text.of("Username"), "player", "player"));
-        categoryClient.addEntry(groupEntry);
-        categoryClient.addEntry(new BooleanConfigEntry("enabled", Text.of("Enabled"), true, true));
+        addClientConfig(categoryClient);
 
         MinecraftClient.getInstance().setScreen(builder.build());
+    }
+
+    public static void addServerConfig(ConfigScreen.Builder.CategoryBuilder category) {
+        Map<String, ConfigEntry> groupEntries = new HashMap<>();
+        Map<String, String> groupModifiers = new HashMap<>();
+        Map<String, List<ConfigEntry>> groupChildren = new HashMap<>();
+
+        for (Map.Entry<Integer, ConfigObject> entry : ClientsideConfig.groupConfigObjects.entrySet()) {
+            ConfigObject configObject = entry.getValue();
+            String groupInfo = configObject.getGroupInfo();
+
+            if (groupInfo.startsWith("{") && groupInfo.contains("}")) {
+                String groupPath = groupInfo.substring(1);
+                String[] split = groupPath.split("}");
+                groupPath = split[0];
+                ConfigEntry configEntry = handleConfigObject(configObject);
+                if (configEntry != null) {
+                    groupEntries.put(groupPath, configEntry);
+                    if (split.length >= 2) {
+                        groupModifiers.put(groupPath, split[1]);
+                    }
+                    groupChildren.put(groupPath, new ArrayList<>());
+                }
+            }
+        }
+
+        for (Map.Entry<Integer, ConfigObject> entry : ClientsideConfig.configObjects.entrySet()) {
+            ConfigObject configObject = entry.getValue();
+            String groupInfo = configObject.getGroupInfo();
+            ConfigEntry configEntry = handleConfigObject(configObject);
+
+            if (configEntry != null) {
+                if (groupInfo == null || groupInfo.isEmpty()) {
+                    category.addEntry(configEntry);
+                } else {
+                    if (groupChildren.containsKey(groupInfo)) {
+                        groupChildren.get(groupInfo).add(configEntry);
+                    } else {
+                        category.addEntry(configEntry);
+                    }
+                }
+            }
+        }
+
+        List<String> sortedGroupPaths = new ArrayList<>(groupEntries.keySet());
+        sortedGroupPaths.sort(String::compareTo);
+
+        Set<String> processedGroups = new HashSet<>();
+
+        for (String groupPath : sortedGroupPaths) {
+            if (processedGroups.contains(groupPath)) {
+                continue;
+            }
+
+            ConfigEntry groupEntry = createGroupHierarchy(groupPath, groupEntries, groupModifiers, groupChildren, processedGroups);
+            if (groupEntry != null) {
+                category.addEntry(groupEntry);
+            }
+        }
+    }
+
+    public static void addClientConfig(ConfigScreen.Builder.CategoryBuilder category) {
+        category.addEntry(new TextConfigEntry("empty", Text.of("Hmmm so empty, huh?"), false));
+    }
+
+    private static ConfigEntry createGroupHierarchy(String groupPath,
+                                                    Map<String, ConfigEntry> groupEntries,
+                                                    Map<String, String> groupModifiers,
+                                                    Map<String, List<ConfigEntry>> groupChildren,
+                                                    Set<String> processedGroups) {
+
+        ConfigEntry mainEntry = groupEntries.get(groupPath);
+        List<ConfigEntry> children = new ArrayList<>(groupChildren.get(groupPath));
+
+        String groupPrefix = groupPath + ".";
+        for (String otherPath : groupEntries.keySet()) {
+            if (otherPath.startsWith(groupPrefix) && !processedGroups.contains(otherPath)) {
+                String remainder = otherPath.substring(groupPrefix.length());
+                if (!remainder.contains(".")) {
+                    ConfigEntry subGroup = createGroupHierarchy(otherPath, groupEntries, groupModifiers, groupChildren, processedGroups);
+                    if (subGroup != null) {
+                        children.add(subGroup);
+                    }
+                    processedGroups.add(otherPath);
+                }
+            }
+        }
+
+        processedGroups.add(groupPath);
+
+        if (mainEntry instanceof IEntryGroupHeader) {
+            if (!children.isEmpty()) {
+                boolean showSidebar = true;
+                boolean openByDefault = true;
+
+                if (groupModifiers.containsKey(groupPath)) {
+                    String modifier = groupModifiers.get(groupPath);
+                    if (modifier.contains("no_sidebar")) {
+                        showSidebar = false;
+                    }
+                    if (modifier.contains("closed")) {
+                        openByDefault = false;
+                    }
+                }
+
+                if (mainEntry instanceof TextConfigEntry textConfigEntry) {
+                    return new GroupConfigEntry<>(textConfigEntry, children, showSidebar, openByDefault);
+                }
+                if (mainEntry instanceof BooleanConfigEntry booleanConfigEntry) {
+                    return new GroupConfigEntry<>(booleanConfigEntry, children, showSidebar, openByDefault);
+                }
+
+            } else {
+                return mainEntry;
+            }
+        } else {
+            if (!children.isEmpty()) {
+                Main.LOGGER.error("Warning: Group entry for '" + groupPath + "' does not implement IEntryGroupHeader but has children");
+                return null;
+            } else {
+                return mainEntry;
+            }
+        }
+        return null;
     }
 
     public static ConfigEntry handleConfigObject(ConfigObject object) {

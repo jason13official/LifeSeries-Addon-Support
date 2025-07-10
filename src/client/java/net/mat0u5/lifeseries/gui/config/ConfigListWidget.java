@@ -40,6 +40,21 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
 
     @Override
     protected void renderList(DrawContext context, int mouseX, int mouseY, float delta) {
+
+        //? if <= 1.21.2 {
+        int maxScroll = getMaxScroll();
+        //?} else {
+        /*int maxScroll = getMaxScrollY();
+         *///?}
+
+        if (getScrolledAmount() > maxScroll) {
+            //?if <= 1.21.2 {
+            setScrollAmount(maxScroll);
+            //?} else {
+            /*setScrollY(maxScroll);
+            *///?}
+        }
+
         int listLeft = getX();
         int listTop = getY();
         int listRight = listLeft + width;
@@ -97,12 +112,6 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
                 pos++;
             }
         }
-
-        //? if <= 1.21.2 {
-        int maxScroll = getMaxScroll();
-        //?} else {
-        /*int maxScroll = getMaxScrollY();
-        *///?}
 
         if (maxScroll > 0) {
             int scrollbarX = listRight - SCROLLBAR_OFFSET_X;

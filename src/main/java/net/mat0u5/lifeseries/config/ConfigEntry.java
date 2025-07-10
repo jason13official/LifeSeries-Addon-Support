@@ -8,13 +8,15 @@ public class ConfigEntry<T> {
     public final String type;
     public final String displayName;
     public final String description;
+    public final String groupInfo;
 
-    public ConfigEntry(String key, T defaultValue, String type, String displayName, String description) {
+    public ConfigEntry(String key, T defaultValue, String type, String groupInfo, String displayName, String description) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.type = type;
         this.displayName = displayName;
         this.description = description;
+        this.groupInfo = groupInfo;
     }
 
     public T get(ConfigManager config) {

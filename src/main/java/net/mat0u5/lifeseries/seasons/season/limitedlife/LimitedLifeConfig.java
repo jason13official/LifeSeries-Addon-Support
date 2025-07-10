@@ -54,31 +54,35 @@ public class LimitedLifeConfig extends ConfigManager {
     );
 
     public static final ConfigEntry<Integer> BOOGEYMAN_AMOUNT = new ConfigEntry<>(
-            "boogeyman_amount", 1, "integer", "Boogeyman Amount", "The exact amount of bogeymen for each session."
+            "boogeyman_amount", 1, "integer", "season", "Boogeyman Amount", "The exact amount of bogeymen for each session."
     );
     public static final ConfigEntry<Integer> TIME_DEFAULT = new ConfigEntry<>(
-            "time_default", 86400, "integer", "Time Default", "The time with which players start, in seconds."
+            "time_default", 86400, "integer", "season.time", "Time Default", "The time with which players start, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_YELLOW = new ConfigEntry<>(
-            "time_yellow", 57600, "integer", "Time Yellow", "The Green-Yellow time border, in seconds."
+            "time_yellow", 57600, "integer", "season.time", "Time Yellow", "The Green-Yellow time border, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_RED = new ConfigEntry<>(
-            "time_red", 28800, "integer", "Time Red", "The Yellow-Red time border, in seconds."
+            "time_red", 28800, "integer", "season.time", "Time Red", "The Yellow-Red time border, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_DEATH = new ConfigEntry<>(
-            "time_death", -3600, "integer", "Time Death", "Time time you lose for dying, in seconds."
+            "time_death", -3600, "integer", "season.time", "Time Death", "Time time you lose for dying, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_DEATH_BOOGEYMAN = new ConfigEntry<>(
-            "time_death_boogeyman", -7200, "integer", "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds."
+            "time_death_boogeyman", -7200, "integer", "season.time", "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_KILL = new ConfigEntry<>(
-            "time_kill", 1800, "integer", "Time Kill", "The time you gain for killing someone, in seconds."
+            "time_kill", 1800, "integer", "season.time", "Time Kill", "The time you gain for killing someone, in seconds."
     );
     public static final ConfigEntry<Integer> TIME_KILL_BOOGEYMAN = new ConfigEntry<>(
-            "time_kill_boogeyman", 3600, "integer", "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds."
+            "time_kill_boogeyman", 3600, "integer", "season.time", "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds."
     );
     public static final ConfigEntry<Boolean> TICK_OFFLINE_PLAYERS = new ConfigEntry<>(
-            "tick_offline_players", false, "boolean", "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
+            "tick_offline_players", false, "boolean", "season", "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
+    );
+
+    public static final ConfigEntry<Object> GROUP_TIME = new ConfigEntry<>(
+            "group_time", null, "text", "{season.time}", "Time Rewards / Punishments", ""
     );
 
     public LimitedLifeConfig() {
@@ -97,15 +101,19 @@ public class LimitedLifeConfig extends ConfigManager {
     @Override
     protected List<ConfigEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
-                BOOGEYMAN_AMOUNT,
-                TIME_DEFAULT,
-                TIME_YELLOW,
-                TIME_RED,
-                TIME_DEATH,
-                TIME_DEATH_BOOGEYMAN,
-                TIME_KILL,
-                TIME_KILL_BOOGEYMAN,
-                TICK_OFFLINE_PLAYERS
+                BOOGEYMAN_AMOUNT
+                ,TICK_OFFLINE_PLAYERS
+
+                ,GROUP_TIME //Group
+
+                //Group stuff
+                ,TIME_DEFAULT
+                ,TIME_YELLOW
+                ,TIME_RED
+                ,TIME_DEATH
+                ,TIME_DEATH_BOOGEYMAN
+                ,TIME_KILL
+                ,TIME_KILL_BOOGEYMAN
         ));
     }
 

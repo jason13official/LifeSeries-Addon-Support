@@ -24,4 +24,11 @@ public class ConfigObject {
     public List<String> getArgs() {
         return args;
     }
+
+    public String getGroupInfo() {
+        if (args.size() < 3) {
+            return "";
+        }
+        return args.get(2);
+    }
 }

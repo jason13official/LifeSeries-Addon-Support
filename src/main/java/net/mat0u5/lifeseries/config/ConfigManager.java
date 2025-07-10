@@ -35,34 +35,50 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
     protected List<ConfigEntry<?>> getDefaultConfigEntries() {
         return new ArrayList<>(List.of(
-                DEFAULT_LIVES,
-                MAX_PLAYER_HEALTH,
-                BLACKLIST_ITEMS,
-                BLACKLIST_BLOCKS,
-                BLACKLIST_CLAMPED_ENCHANTS,
-                BLACKLIST_BANNED_ENCHANTS,
-                BLACKLIST_BANNED_POTION_EFFECTS,
-                CREATIVE_IGNORE_BLACKLIST,
-                CUSTOM_ENCHANTER_ALGORITHM,
-                PLAYERS_DROP_ITEMS_ON_FINAL_DEATH,
-                FINAL_DEATH_TITLE_SHOW,
-                FINAL_DEATH_TITLE_SUBTITLE,
-                FINAL_DEATH_MESSAGE,
-                MUTE_DEAD_PLAYERS,
-                AUTO_SET_WORLDBORDER,
-                KEEP_INVENTORY,
-                SPAWN_EGG_DROP_CHANCE,
-                SPAWN_EGG_DROP_ONLY_NATURAL,
-                SPAWN_EGG_ALLOW_ON_SPAWNER,
-                SPAWNER_RECIPE,
-                GIVELIFE_COMMAND_ENABLED,
-                GIVELIFE_LIVES_MAX,
-                TAB_LIST_SHOW_DEAD_PLAYERS,
-                TAB_LIST_SHOW_LIVES
+                GROUP_GLOBAL // Group
+                ,GROUP_SEASON // Group
 
+                ,DEFAULT_LIVES
+                ,MAX_PLAYER_HEALTH
+                ,KEEP_INVENTORY
+
+                ,CUSTOM_ENCHANTER_ALGORITHM
+                ,MUTE_DEAD_PLAYERS
+                ,AUTO_SET_WORLDBORDER
                 //? if >= 1.21.6 {
                 /*,LOCATOR_BAR
-                *///?}
+                 *///?}
+
+
+                ,GROUP_BLACKLIST // Group
+                ,GIVELIFE_COMMAND_ENABLED // Group
+                ,GROUP_FINAL_DEATH // Group
+                ,GROUP_TABLIST // Group
+                ,GROUP_SPAWN_EGG // Group
+
+
+                //Group stuff
+                ,BLACKLIST_ITEMS
+                ,BLACKLIST_BLOCKS
+                ,BLACKLIST_CLAMPED_ENCHANTS
+                ,BLACKLIST_BANNED_ENCHANTS
+                ,BLACKLIST_BANNED_POTION_EFFECTS
+                ,CREATIVE_IGNORE_BLACKLIST
+
+                ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
+                ,FINAL_DEATH_TITLE_SHOW
+                ,FINAL_DEATH_TITLE_SUBTITLE
+                ,FINAL_DEATH_MESSAGE
+
+                ,GIVELIFE_LIVES_MAX
+
+                ,TAB_LIST_SHOW_DEAD_PLAYERS
+                ,TAB_LIST_SHOW_LIVES
+
+                ,SPAWN_EGG_DROP_CHANCE
+                ,SPAWN_EGG_DROP_ONLY_NATURAL
+                ,SPAWN_EGG_ALLOW_ON_SPAWNER
+                ,SPAWNER_RECIPE
         ));
     }
 
@@ -94,30 +110,35 @@ public abstract class ConfigManager extends DefaultConfigValues {
     public void sendConfigTo(ServerPlayerEntity player) {
         int index = 0;
         for (ConfigEntry<?> entry : getDefaultConfigEntries()) {
-            String value = getPropertyAsString(entry.key, entry.defaultValue);
-            index += NetworkHandlerServer.sendConfig(
-                    player,
-                    entry.type,
-                    entry.key,
-                    index,
-                    entry.displayName,
-                    entry.description,
-                    List.of(value, entry.defaultValue.toString())
-            );
+            sendConfigEntry(player, entry, index);
+            index++;
         }
         index = 100;
         for (ConfigEntry<?> entry : getSeasonSpecificConfigEntries()) {
-            String value = getPropertyAsString(entry.key, entry.defaultValue);
-            index += NetworkHandlerServer.sendConfig(
-                    player,
-                    entry.type,
-                    entry.key,
-                    index,
-                    entry.displayName,
-                    entry.description,
-                    List.of(value, entry.defaultValue.toString())
-            );
+            sendConfigEntry(player, entry, index);
+            index++;
         }
+    }
+
+    public void sendConfigEntry(ServerPlayerEntity player, ConfigEntry<?> entry, int index) {
+        String value = "";
+        if (!entry.type.equalsIgnoreCase("text")) {
+            value = getPropertyAsString(entry.key, entry.defaultValue);
+        }
+        String defaultValue = "";
+        if (entry.defaultValue != null) {
+            defaultValue = entry.defaultValue.toString();
+        }
+
+        NetworkHandlerServer.sendConfig(
+                player,
+                entry.type,
+                entry.key,
+                index,
+                entry.displayName,
+                entry.description,
+                List.of(value, defaultValue, entry.groupInfo)
+        );
     }
 
     private String getPropertyAsString(String key, Object defaultValue) {
