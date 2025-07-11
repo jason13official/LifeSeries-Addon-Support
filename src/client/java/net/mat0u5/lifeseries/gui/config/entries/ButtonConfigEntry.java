@@ -7,8 +7,8 @@ import net.minecraft.text.Text;
 public abstract class ButtonConfigEntry extends ConfigEntry {
     protected final ButtonWidget button;
 
-    public ButtonConfigEntry(String fieldName, Text displayName, int buttonWidth, int buttonHeight) {
-        super(fieldName, displayName);
+    public ButtonConfigEntry(String fieldName, String displayName, String description, int buttonWidth, int buttonHeight) {
+        super(fieldName, displayName, description);
         button = createButton(buttonWidth, buttonHeight);
     }
 

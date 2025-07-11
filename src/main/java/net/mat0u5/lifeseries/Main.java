@@ -44,7 +44,7 @@ public class Main implements ModInitializer {
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	private static ConfigManager config;
 	public static IClientHelper clientHelper;
 

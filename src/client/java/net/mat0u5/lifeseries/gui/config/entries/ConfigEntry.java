@@ -1,12 +1,16 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
+import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.Objects;
 
@@ -21,10 +25,16 @@ public abstract class ConfigEntry {
     protected static final int RESET_BUTTON_WIDTH = 50;
     private static final int RESET_BUTTON_HEIGHT = 16;
 
+    protected static final int ERROR_LABEL_OFFSET_X = - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X - 2;
+    protected static final int ERROR_LABEL_OFFSET_Y = 8;
+
+    public static final int MAX_DESCRIPTION_WIDTH = 250;
+
     protected TextRenderer textRenderer;
     protected ConfigScreen screen;
     protected final String fieldName;
-    protected final Text displayName;
+    protected final String displayName;
+    protected final String description;
     protected boolean hasError = false;
     protected String errorMessage = "";
 
@@ -33,9 +43,10 @@ public abstract class ConfigEntry {
     private boolean isHovered = false;
     private boolean isFocused = false;
 
-    public ConfigEntry(String fieldName, Text displayName) {
+    public ConfigEntry(String fieldName, String displayName, String description) {
         this.fieldName = fieldName;
         this.displayName = displayName;
+        this.description = description;
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
         initializeResetButton();
     }
@@ -68,14 +79,31 @@ public abstract class ConfigEntry {
         }
 
         int textColor = hasError() ? TextColors.PASTEL_RED : TextColors.WHITE;
+        int labelX = x + LABEL_OFFSET_X;
+        int labelY = y + LABEL_OFFSET_Y;
+        context.drawTextWithShadow(textRenderer, getDisplayName(), labelX, labelY, textColor);
 
-        context.drawTextWithShadow(textRenderer, getDisplayName(), x + LABEL_OFFSET_X, y + LABEL_OFFSET_Y, textColor);
-
+        int resetButtonX = x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X;
         if (hasResetButton()) {
-            resetButton.setX(x + width - RESET_BUTTON_WIDTH + RESET_BUTTON_OFFSET_X);
+            resetButton.setX(resetButtonX);
             resetButton.setY(y + RESET_BUTTON_OFFSET_Y);
             resetButton.active = canReset();
             resetButton.render(context, mouseX, mouseY, tickDelta);
+        }
+
+        if (hasError()) {
+            RenderUtils.drawTextRight(context, textRenderer, TextColors.PASTEL_RED, Text.of("⚠"), x + width + ERROR_LABEL_OFFSET_X, y + ERROR_LABEL_OFFSET_Y);
+            if (isHovered) {
+                Text errorText = Text.literal("§cERROR:\n").append(getErrorMessage());
+                context.drawTooltip(textRenderer, textRenderer.wrapLines(errorText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
+            }
+        }
+        else if (description != null && !description.isEmpty()) {
+            if (mouseX >= labelX&& mouseX <= labelX + textRenderer.getWidth(getDisplayName()) &&
+                mouseY >= labelY && mouseY <= labelY + textRenderer.fontHeight) {
+                Text descriptionText = getDisplayName().formatted(Formatting.UNDERLINE).append("§r\n"+description);
+                context.drawTooltip(textRenderer, textRenderer.wrapLines(descriptionText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
+            }
         }
 
 
@@ -154,8 +182,8 @@ public abstract class ConfigEntry {
         return fieldName;
     }
 
-    public Text getDisplayName() {
-        return displayName;
+    public MutableText getDisplayName() {
+        return Text.literal(displayName);
     }
 
     public boolean hasError() {

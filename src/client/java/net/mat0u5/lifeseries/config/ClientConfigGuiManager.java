@@ -146,19 +146,19 @@ public class ClientConfigGuiManager {
 
     public static ConfigEntry handleConfigObject(ConfigObject object) {
         if (object instanceof BooleanObject booleanObject) {
-            return new BooleanConfigEntry(booleanObject.id, Text.of(booleanObject.name), booleanObject.booleanValue, booleanObject.defaultValue);
+            return new BooleanConfigEntry(booleanObject.id, booleanObject.name, booleanObject.description, booleanObject.booleanValue, booleanObject.defaultValue);
         }
         else if (object instanceof StringObject stringObject) {
-            return new StringConfigEntry(stringObject.id, Text.of(stringObject.name), stringObject.stringValue, stringObject.defaultValue);
+            return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {
-            return new IntegerConfigEntry(intObject.id, Text.of(intObject.name), intObject.integerValue, intObject.defaultValue);
+            return new IntegerConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
         }
         else if (object instanceof DoubleObject doubleObject) {
-            return new DoubleConfigEntry(doubleObject.id, Text.of(doubleObject.name), doubleObject.doubleValue, doubleObject.defaultValue);
+            return new DoubleConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
         }
         else if (object instanceof TextObject textObject) {
-            return new TextConfigEntry(textObject.id, Text.of(textObject.name), textObject.clickable);
+            return new TextConfigEntry(textObject.id, textObject.name, textObject.description, textObject.clickable);
         }
         return null;
     }

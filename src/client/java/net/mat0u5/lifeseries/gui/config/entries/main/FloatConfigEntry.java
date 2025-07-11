@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
-import net.minecraft.text.Text;
 
 public class FloatConfigEntry extends NumberConfigEntry<Float> {
     private static final String VALUE_TYPE = "float";
 
-    public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue) {
-        super(fieldName, displayName, value, defaultValue);
+    public FloatConfigEntry(String fieldName, String displayName, String description, float value, float defaultValue) {
+        super(fieldName, displayName, description, value, defaultValue);
     }
 
-    public FloatConfigEntry(String fieldName, Text displayName, float value, float defaultValue, Float minValue, Float maxValue) {
-        super(fieldName, displayName, value, defaultValue, minValue, maxValue);
+    public FloatConfigEntry(String fieldName, String displayName, String description, float value, float defaultValue, Float minValue, Float maxValue) {
+        super(fieldName, displayName, description, value, defaultValue, minValue, maxValue);
     }
 
     @Override

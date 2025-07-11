@@ -28,7 +28,7 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     private int y;
 
     public GroupConfigEntry(T mainEntry, List<ConfigEntry> childEntries, boolean showSidebar, boolean openByDefault) {
-        super("", Text.empty());
+        super("", "","");
         this.mainEntry = mainEntry;
         this.childEntries = new ArrayList<>(childEntries);
         this.showSidebar = showSidebar;
@@ -191,16 +191,17 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public boolean hasError() {
-        boolean hasError = mainEntry != null && mainEntry.hasError();
+        if (mainEntry != null && mainEntry.hasError()) {
+            return true;
+        }
 
         for (ConfigEntry child : childEntries) {
             if (child.hasError()) {
-                hasError = true;
-                break;
+                return true;
             }
         }
 
-        return hasError;
+        return false;
     }
 
     @Override

@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
-import net.minecraft.text.Text;
 
 public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
     private static final String VALUE_TYPE = "integer";
 
-    public IntegerConfigEntry(String fieldName, Text displayName, int value, int defaultValue) {
-        super(fieldName, displayName, value, defaultValue);
+    public IntegerConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue) {
+        super(fieldName, displayName, description, value, defaultValue);
     }
 
-    public IntegerConfigEntry(String fieldName, Text displayName, int value, int defaultValue, Integer minValue, Integer maxValue) {
-        super(fieldName, displayName, value, defaultValue, minValue, maxValue);
+    public IntegerConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue, Integer minValue, Integer maxValue) {
+        super(fieldName, displayName, description, value, defaultValue, minValue, maxValue);
     }
 
     @Override

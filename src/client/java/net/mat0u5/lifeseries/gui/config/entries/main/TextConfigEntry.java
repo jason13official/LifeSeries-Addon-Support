@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.EmptyConfigEntry;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.minecraft.text.Text;
 
 public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHeader {
     private static final String VALUE_TYPE = "text";
@@ -10,12 +9,12 @@ public class TextConfigEntry extends EmptyConfigEntry implements IEntryGroupHead
     private final boolean clickable;
     public boolean clicked;
 
-    public TextConfigEntry(String fieldName, Text displayName) {
-        this(fieldName, displayName, true);
+    public TextConfigEntry(String fieldName, String displayName, String description) {
+        this(fieldName, displayName, description, true);
     }
 
-    public TextConfigEntry(String fieldName, Text displayName, boolean clickable) {
-        super(fieldName, displayName);
+    public TextConfigEntry(String fieldName, String displayName, String description, boolean clickable) {
+        super(fieldName, displayName, description);
         this.clickable = clickable;
     }
 

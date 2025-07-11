@@ -1,17 +1,16 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
-import net.minecraft.text.Text;
 
 public class DoubleConfigEntry extends NumberConfigEntry<Double> {
     private static final String VALUE_TYPE = "double";
 
-    public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue) {
-        super(fieldName, displayName, value, defaultValue);
+    public DoubleConfigEntry(String fieldName, String displayName, String description, double value, double defaultValue) {
+        super(fieldName, displayName, description, value, defaultValue);
     }
 
-    public DoubleConfigEntry(String fieldName, Text displayName, double value, double defaultValue, Double minValue, Double maxValue) {
-        super(fieldName, displayName, value, defaultValue, minValue, maxValue);
+    public DoubleConfigEntry(String fieldName, String displayName, String description, double value, double defaultValue, Double minValue, Double maxValue) {
+        super(fieldName, displayName, description, value, defaultValue, minValue, maxValue);
     }
 
     @Override

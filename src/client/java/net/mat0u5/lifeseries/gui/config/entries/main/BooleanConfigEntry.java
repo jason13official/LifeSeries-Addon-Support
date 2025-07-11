@@ -16,8 +16,8 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     private boolean value;
     private boolean startingValue;
 
-    public BooleanConfigEntry(String fieldName, Text displayName, boolean value, boolean defaultValue) {
-        super(fieldName, displayName, BUTTON_WIDTH, BUTTON_HEIGHT);
+    public BooleanConfigEntry(String fieldName, String displayName, String description, boolean value, boolean defaultValue) {
+        super(fieldName, displayName, description, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.defaultValue = defaultValue;
         this.value = value;
         this.startingValue = value;

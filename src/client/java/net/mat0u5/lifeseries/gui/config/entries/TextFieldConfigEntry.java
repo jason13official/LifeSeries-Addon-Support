@@ -13,16 +13,16 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     private static final int TEXT_FIELD_OFFSET_Y = 1;
     private int maxTextFieldLength = 32;
 
-    public TextFieldConfigEntry(String fieldName, Text displayName) {
-        this(fieldName, displayName, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
+    public TextFieldConfigEntry(String fieldName, String displayName, String description) {
+        this(fieldName, displayName, description, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
     }
 
-    public TextFieldConfigEntry(String fieldName, Text displayName, int textFieldWidth) {
-        this(fieldName, displayName, textFieldWidth, DEFAULT_TEXT_FIELD_HEIGHT);
+    public TextFieldConfigEntry(String fieldName, String displayName, String description, int textFieldWidth) {
+        this(fieldName, displayName, description, textFieldWidth, DEFAULT_TEXT_FIELD_HEIGHT);
     }
 
-    public TextFieldConfigEntry(String fieldName, Text displayName, int textFieldWidth, int textFieldHeight) {
-        super(fieldName, displayName);
+    public TextFieldConfigEntry(String fieldName, String displayName, String description, int textFieldWidth, int textFieldHeight) {
+        super(fieldName, displayName, description);
         textField = new TextFieldWidget(textRenderer, 0, 0, textFieldWidth, textFieldHeight, Text.empty());
         textField.setChangedListener(this::onChanged);
     }

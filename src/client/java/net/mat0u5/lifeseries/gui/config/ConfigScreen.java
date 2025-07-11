@@ -273,6 +273,7 @@ public class ConfigScreen extends Screen {
 
     public void setFocusedEntry(ConfigEntry entry) {
         if (entry instanceof GroupConfigEntry) return;
+        if (focusedEntry == entry) return;
 
         if (focusedEntry != null) {
             focusedEntry.setFocused(false);

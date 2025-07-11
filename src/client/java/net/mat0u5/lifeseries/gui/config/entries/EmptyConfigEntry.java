@@ -1,11 +1,10 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
 
 public abstract class EmptyConfigEntry extends ConfigEntry {
-    public EmptyConfigEntry(String fieldName, Text displayName) {
-        super(fieldName, displayName);
+    public EmptyConfigEntry(String fieldName, String displayName, String description) {
+        super(fieldName, displayName, description);
     }
 
     @Override
