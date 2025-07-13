@@ -31,13 +31,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
     @Override
     protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
-
-        if (shouldShowPopup()) {
-            int popupWidth = getActualPopupWidth();
-            int popupX = textField.getX()+textField.getWidth()/2-popupWidth/2;
-            int popupY = Math.max(0, textField.getY() - getActualPopupHeight()) + 1;
-            renderPopup(context, popupX, popupY, mouseX, mouseY, tickDelta);
-        }
+        renderPopup(context, mouseX, mouseY, tickDelta);
     }
 
     @Override
@@ -102,19 +96,19 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
                 maxWidth = width;
             }
         }
-        return maxWidth+4;
+        return maxWidth+2;
     }
 
     @Override
     public int getPopupHeight() {
-        return (getTextRenderer().fontHeight-1) * getHeartPopupText().size()+4;
+        return (getTextRenderer().fontHeight-1) * getHeartPopupText().size()+2;
     }
 
     @Override
     public void renderContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
         TextRenderer textRenderer = getTextRenderer();
-        int currentX = x+2;
-        int currentY = y+2;
+        int currentX = x+1;
+        int currentY = y+1;
         for (MutableText text : getHeartPopupText()) {
             context.drawText(textRenderer, text, currentX, currentY, TextColors.WHITE, false);
             currentY += getTextRenderer().fontHeight-1;

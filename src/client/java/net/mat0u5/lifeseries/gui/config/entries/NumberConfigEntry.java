@@ -4,7 +4,9 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.DrawContext;
 
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry {
-    protected static final int RANGE_LABEL_OFFSET_X = -15;
+    protected static final int RANGE_LABEL_OFFSET_X = -12;
+    protected static final int RANGE_LABEL_OFFSET_Y = 6;
+    private static final int TEXT_FIELD_WIDTH = 64;
 
     protected final T defaultValue;
     protected final T minValue;
@@ -17,7 +19,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     }
 
     public NumberConfigEntry(String fieldName, String displayName, String description, T value, T defaultValue, T minValue, T maxValue) {
-        super(fieldName, displayName, description);
+        super(fieldName, displayName, description, TEXT_FIELD_WIDTH);
         this.defaultValue = defaultValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -56,8 +58,8 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
             int entryWidth = getEntryContentWidth(width);
 
             context.drawTextWithShadow(textRenderer, rangeText,
-                    x + entryWidth - rangeWidth - textField.getWidth()  + RANGE_LABEL_OFFSET_X,
-                    getTextFieldPosY(y, height), TextColors.LIGHT_GRAY);
+                    x + entryWidth - rangeWidth - textField.getWidth() + RANGE_LABEL_OFFSET_X,
+                    getTextFieldPosY(y, height)  + RANGE_LABEL_OFFSET_Y, TextColors.LIGHT_GRAY);
         }
     }
 

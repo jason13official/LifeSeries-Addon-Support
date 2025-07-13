@@ -3,12 +3,13 @@ package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public interface ITextPopup extends IPopup {
     TextRenderer getTextRenderer();
     Text getPopupText();
     default int getPopupWidth() {
-        return getTextRenderer().getWidth(getPopupText());
+        return getTextRenderer().getWidth(getPopupText())+1;
     }
 
     default int getPopupHeight() {
@@ -19,6 +20,6 @@ public interface ITextPopup extends IPopup {
         TextRenderer textRenderer = getTextRenderer();
         Text popupText = getPopupText();
         if (popupText == null) return;
-        context.drawTooltip(textRenderer, popupText, x, y);
+        context.drawText(textRenderer, popupText, x+1, y+1, Formatting.GRAY.getColorIndex(), false);
     }
 }

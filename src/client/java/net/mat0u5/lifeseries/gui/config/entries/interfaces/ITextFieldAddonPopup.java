@@ -23,4 +23,13 @@ public interface ITextFieldAddonPopup extends ITextPopup {
             context.fill(x, textFieldY, x+width, textFieldY+1, TextColors.DARK_GRAY);
         }
     }
+
+    default void renderPopup(DrawContext context, int mouseX, int mouseY, float tickDelta) {
+        if (!shouldShowPopup()) return;
+        TextFieldWidget textField = getTextField();
+        int popupWidth = getActualPopupWidth();
+        int popupX = textField.getX()+textField.getWidth()/2-popupWidth/2;
+        int popupY = Math.max(0, textField.getY() - getActualPopupHeight()) + 1;
+        renderPopup(context, popupX, popupY, mouseX, mouseY, tickDelta);
+    }
 }
