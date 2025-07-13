@@ -1,0 +1,127 @@
+package net.mat0u5.lifeseries.gui.config.entries.extra;
+
+import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
+import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextPopup;
+import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
+import net.mat0u5.lifeseries.utils.TextColors;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldAddonPopup {
+    private static final String VALUE_TYPE = "hearts";
+    private static final String HEART_SYMBOL = "♥";
+    private static final String HEART_ROW = "♥♥♥♥♥♥♥♥♥♥";
+    private static final String HALF_HEART_SYMBOL = "♡";
+
+    public HeartsConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue) {
+        super(fieldName, displayName, description, value, defaultValue);
+    }
+
+    public HeartsConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue, Integer minValue, Integer maxValue) {
+        super(fieldName, displayName, description, value, defaultValue, minValue, maxValue);
+    }
+
+    @Override
+    protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        super.renderEntry(context, x, y, width, height, mouseX, mouseY, hovered, tickDelta);
+
+        if (shouldShowPopup()) {
+            int popupWidth = getActualPopupWidth();
+            int popupX = textField.getX()+textField.getWidth()/2-popupWidth/2;
+            int popupY = Math.max(0, textField.getY() - getActualPopupHeight()) + 1;
+            renderPopup(context, popupX, popupY, mouseX, mouseY, tickDelta);
+        }
+    }
+
+    @Override
+    public Text getPopupText() {
+        return Text.of("");
+    }
+
+    public List<MutableText> getHeartPopupText() {
+        if (value == null) return List.of();
+
+        int hearts = value / 2;
+        boolean hasHalfHeart = (value % 2) == 1;
+
+
+        if (hearts == 0 && !hasHalfHeart) {
+            return List.of(Text.literal("No hearts").formatted(Formatting.GRAY));
+        }
+
+        List<MutableText> heartsList = new ArrayList<>();
+
+        StringBuilder topRow = new StringBuilder();
+        topRow.repeat(HEART_SYMBOL, (hearts % 10));
+        if (hasHalfHeart) {
+            topRow.append(HALF_HEART_SYMBOL);
+        }
+        if (!topRow.isEmpty()) {
+            heartsList.add(Text.literal(topRow.toString()).formatted(Formatting.RED));
+        }
+
+        while (hearts >= 10) {
+            hearts -= 10;
+            heartsList.add(Text.literal(HEART_ROW).formatted(Formatting.RED));
+        }
+
+        heartsList.set(heartsList.size()-1, heartsList.getLast().append(Text.literal(String.format(" (%d HP)", value)).formatted(Formatting.GRAY)));
+
+        return heartsList;
+    }
+
+    @Override
+    public boolean shouldShowPopup() {
+        return (isFocused() || isHovered) && textField != null;
+    }
+
+    @Override
+    public TextRenderer getTextRenderer() {
+        return textRenderer;
+    }
+
+    @Override
+    public TextFieldWidget getTextField() {
+        return textField;
+    }
+
+    @Override
+    public int getPopupWidth() {
+        int maxWidth = 0;
+        for (MutableText text : getHeartPopupText()) {
+            int width = getTextRenderer().getWidth(text);
+            if (width > maxWidth) {
+                maxWidth = width;
+            }
+        }
+        return maxWidth+4;
+    }
+
+    @Override
+    public int getPopupHeight() {
+        return (getTextRenderer().fontHeight-1) * getHeartPopupText().size()+4;
+    }
+
+    @Override
+    public void renderContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, float tickDelta) {
+        TextRenderer textRenderer = getTextRenderer();
+        int currentX = x+2;
+        int currentY = y+2;
+        for (MutableText text : getHeartPopupText()) {
+            context.drawText(textRenderer, text, currentX, currentY, TextColors.WHITE, false);
+            currentY += getTextRenderer().fontHeight-1;
+        }
+    }
+
+    @Override
+    public String getValueType() {
+        return VALUE_TYPE;
+    }
+}

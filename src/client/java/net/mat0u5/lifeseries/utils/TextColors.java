@@ -4,7 +4,9 @@ public class TextColors {
     public static int DEFAULT = rgb(60, 60, 60);
     public static int DEFAULT_LIGHTER = rgb(94, 94, 94);
     public static int DEBUG = rgb(255, 0, 242);
-    public static int WHITE = rgb(255, 255, 255);
+    public static int PURE_WHITE = rgb(255, 255, 255);
+    public static int WHITE = rgb(224, 224, 224);
+    public static int WHITE_BORDER = rgb(208, 208, 208);
     public static int BLACK = rgb(0, 0, 0);
 
     public static int ORANGE = rgb(214, 150, 26);
@@ -18,12 +20,15 @@ public class TextColors {
     public static int PASTEL_RED = rgb(237, 91, 100);
     public static int PASTEL_WHITE = rgb(204, 204, 204);
 
-    public static int WHITE_A32 = argb(32, 255, 255, 255);
-    public static int WHITE_A64 = argb(64, 255, 255, 255);
-    public static int WHITE_A128 = argb(128, 255, 255, 255);
+    public static int WHITE_A32 = argb(32, 224, 224, 224);
+    public static int WHITE_A64 = argb(64, 224, 224, 224);
+    public static int WHITE_A128 = argb(128, 224, 224, 224);
     public static int BLACK_A32 = argb(32, 0, 0, 0);
     public static int BLACK_A64 = argb(64, 0, 0, 0);
-    public static int GRAY = rgb(170, 170, 170);
+    public static int LIGHT_GRAY = rgb(170, 170, 170);
+    public static int GRAY = rgb(128, 128, 128);
+    public static int DARK_GRAY = rgb(64, 64, 64);
+    public static int LIGHT_BLACK = rgb(32, 32, 32);
 
     public static int rgb(int red, int green, int blue) {
         return argb(255, red, green, blue);

@@ -40,7 +40,7 @@ public abstract class ConfigEntry {
 
     protected ButtonWidget resetButton;
     public float highlightAlpha = 0.0f;
-    private boolean isHovered = false;
+    protected boolean isHovered = false;
     private boolean isFocused = false;
 
     public ConfigEntry(String fieldName, String displayName, String description) {
@@ -95,14 +95,22 @@ public abstract class ConfigEntry {
             RenderUtils.drawTextRight(context, textRenderer, TextColors.PASTEL_RED, Text.of("⚠"), x + width + ERROR_LABEL_OFFSET_X, y + ERROR_LABEL_OFFSET_Y);
             if (isHovered) {
                 Text errorText = Text.literal("§cERROR:\n").append(getErrorMessage());
+                //? if <= 1.21.5 {
                 context.drawTooltip(textRenderer, textRenderer.wrapLines(errorText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
+                /*context.drawTooltip(textRenderer, textRenderer.wrapLines(errorText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                *///?}
             }
         }
         else if (description != null && !description.isEmpty()) {
             if (mouseX >= labelX&& mouseX <= labelX + textRenderer.getWidth(getDisplayName()) &&
                 mouseY >= labelY && mouseY <= labelY + textRenderer.fontHeight) {
                 Text descriptionText = getDisplayName().formatted(Formatting.UNDERLINE).append("§r\n"+description);
+                //? if <= 1.21.5 {
                 context.drawTooltip(textRenderer, textRenderer.wrapLines(descriptionText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
+                 //?} else {
+                /*context.drawTooltip(textRenderer, textRenderer.wrapLines(descriptionText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY, false);
+                *///?}
             }
         }
 

@@ -151,11 +151,11 @@ public class ConfigScreen extends Screen {
         List<ConfigEntry> allSurfaceEntriesClient = new ArrayList<>();
         List<ConfigEntry> allSurfaceEntriesServer = new ArrayList<>();
         for (Map.Entry<String, List<ConfigEntry>> category : this.categories.entrySet()) {
-            if (category.getKey().equals("Client")) {
-                allSurfaceEntriesClient.addAll(category.getValue());
-            }
-            else {
+            if (category.getKey().equals("Server")) {
                 allSurfaceEntriesServer.addAll(category.getValue());
+            }
+            else if (category.getKey().equals("Client")) {
+                allSurfaceEntriesClient.addAll(category.getValue());
             }
         }
 

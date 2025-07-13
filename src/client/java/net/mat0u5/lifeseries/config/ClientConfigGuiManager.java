@@ -5,8 +5,11 @@ import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -20,6 +23,10 @@ public class ClientConfigGuiManager {
 
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
         addConfig(categoryClient, ClientConfigNetwork.client_groupConfigObjects, ClientConfigNetwork.client_configObjects);
+
+        if (VersionControl.isDevVersion()) {
+            addTestingCategory(builder);
+        }
 
         MinecraftClient.getInstance().setScreen(builder.build());
     }
@@ -83,12 +90,7 @@ public class ClientConfigGuiManager {
         }
     }
 
-    private static ConfigEntry createGroupHierarchy(String groupPath,
-                                                    Map<String, ConfigEntry> groupEntries,
-                                                    Map<String, String> groupModifiers,
-                                                    Map<String, List<ConfigEntry>> groupChildren,
-                                                    Set<String> processedGroups) {
-
+    private static ConfigEntry createGroupHierarchy(String groupPath, Map<String, ConfigEntry> groupEntries, Map<String, String> groupModifiers, Map<String, List<ConfigEntry>> groupChildren, Set<String> processedGroups) {
         ConfigEntry mainEntry = groupEntries.get(groupPath);
         List<ConfigEntry> children = new ArrayList<>(groupChildren.get(groupPath));
 
@@ -161,5 +163,13 @@ public class ClientConfigGuiManager {
             return new TextConfigEntry(textObject.id, textObject.name, textObject.description, textObject.clickable);
         }
         return null;
+    }
+
+    public static void addTestingCategory(ConfigScreen.Builder builder) {
+        ConfigScreen.Builder.CategoryBuilder category = builder.addCategory("Testing");
+        //category.addEntry(new EnhancedStringConfigEntry("id","EnhancedString","description","This mod is a one-to-one recreation of Grian's Life Series in minecraft Fabric",""));
+        category.addEntry(new PercentageConfigEntry("id2","Percentage","description2",0.5,0.5));
+        category.addEntry(new HeartsConfigEntry("id3", "Hearts","description3", 20, 20));
+        //category.addEntry();
     }
 }

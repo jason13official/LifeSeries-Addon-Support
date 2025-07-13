@@ -75,13 +75,11 @@ public class TextUtils {
     }
 
     public static String getColorCode(TextColor color) {
-        // Convert TextColor to Formatting if it's a built-in color
         for (Formatting formatting : Formatting.values()) {
             if (formatting.getColorValue() == color.getRgb()) {
                 return "§" + formatting.getCode();
             }
         }
-        // If it's a custom RGB color, return nothing (Minecraft doesn't support direct RGB in legacy formatting)
         return "";
     }
     public static String removeFormattingCodes(String input) {

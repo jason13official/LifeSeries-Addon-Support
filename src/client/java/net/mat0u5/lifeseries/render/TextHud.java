@@ -35,7 +35,6 @@ public class TextHud {
     }
     public static int _renderTestText(MinecraftClient client, DrawContext context, int y) {
         try {
-
             Text timerText = Text.literal("Test: " + ClientConfig.TEST.get(clientConfig));
 
             int screenWidth = client.getWindow().getScaledWidth();

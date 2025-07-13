@@ -48,7 +48,7 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
          *///?}
 
         if (getScrolledAmount() > maxScroll) {
-            //?if <= 1.21.2 {
+            //? if <= 1.21.2 {
             setScrollAmount(maxScroll);
             //?} else {
             /*setScrollY(maxScroll);

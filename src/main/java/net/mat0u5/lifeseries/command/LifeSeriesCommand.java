@@ -141,8 +141,16 @@ public class LifeSeriesCommand {
 
     public static int config(ServerCommandSource source) {
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The Life Series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
+        if (source.getPlayer() == null) {
+            return -1;
+        }
 
-        if (source.getPlayer() != null) {
+        if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
+            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the config GUI."));
+            source.sendError(Text.of("§cEither install the mod on the client on modify the config folder (see above)."));
+            return -1;
+        }
+        else {
             OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
             NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
         }
