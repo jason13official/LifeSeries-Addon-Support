@@ -67,6 +67,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
             heartsList.add(Text.literal(topRow.toString()).formatted(Formatting.RED));
         }
 
+        if (hearts >= 500) hearts = 500;
         while (hearts >= 10) {
             hearts -= 10;
             heartsList.add(Text.literal(HEART_ROW).formatted(Formatting.RED));

@@ -25,10 +25,10 @@ public interface IPopup {
         if (!shouldShowPopup()) return;
         //? if <= 1.21.5 {
         context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 100);
         //?} else {
         /*context.getMatrices().pushMatrix();
         *///?}
-        context.getMatrices().translate(0, 0, 100);
         int width = getActualPopupWidth();
         int height = getActualPopupHeight();
         renderBackground(context, x, y, width, height, mouseX, mouseY, tickDelta);

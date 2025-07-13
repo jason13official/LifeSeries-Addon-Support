@@ -167,6 +167,7 @@ public class ClientConfigGuiManager {
 
     public static void addTestingCategory(ConfigScreen.Builder builder) {
         ConfigScreen.Builder.CategoryBuilder category = builder.addCategory("Testing");
+        category.addEntry(new TextConfigEntry("","Test",""));
         //category.addEntry(new EnhancedStringConfigEntry("id","EnhancedString","description","This mod is a one-to-one recreation of Grian's Life Series in minecraft Fabric",""));
         category.addEntry(new PercentageConfigEntry("id2","Percentage","description2",0.5,0.5));
         category.addEntry(new HeartsConfigEntry("id3", "Hearts","description3", 20, 20));
