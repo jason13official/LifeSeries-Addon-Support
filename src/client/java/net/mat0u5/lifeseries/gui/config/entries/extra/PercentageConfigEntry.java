@@ -43,7 +43,7 @@ public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFie
 
     @Override
     public boolean shouldShowPopup() {
-        return (isHovered || isFocused()) && value != null;
+        return (isFocused() || (isHovered && screen.getFocusedEntry() == this)) && value != null;
     }
 
     @Override

@@ -73,7 +73,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
 
     @Override
     public boolean shouldShowPopup() {
-        return (isFocused() || isHovered) && textField != null;
+        return (isFocused() || (isHovered && screen.getFocusedEntry() == this)) && textField != null;
     }
 
     @Override
