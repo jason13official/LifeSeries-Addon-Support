@@ -20,10 +20,10 @@ public class ClientConfigGuiManager {
     public static void openConfig() {
         ConfigScreen.Builder builder = new ConfigScreen.Builder(MinecraftClient.getInstance().currentScreen, Text.of("Life Series Config"));
         ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
-        addConfig(categoryGeneral, ClientConfigNetwork.groupConfigObjects, ClientConfigNetwork.configObjects);
+        addConfig(categoryGeneral, ClientConfigNetwork.configObjects);
 
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
-        addConfig(categoryClient, ClientConfigNetwork.client_groupConfigObjects, ClientConfigNetwork.client_configObjects);
+        addConfig(categoryClient, ClientConfigNetwork.clientConfigObjects);
 
         if (VersionControl.isDevVersion()) {
             addTestingCategory(builder);
@@ -32,118 +32,97 @@ public class ClientConfigGuiManager {
         MinecraftClient.getInstance().setScreen(builder.build());
     }
 
-    public static void addConfig(ConfigScreen.Builder.CategoryBuilder category, Map<Integer, ConfigObject> groupConfigObjects, Map<Integer, ConfigObject> configObjects) {
-        Map<String, ConfigEntry> groupEntries = new HashMap<>();
+    public static void addConfig(ConfigScreen.Builder.CategoryBuilder category, Map<Integer, ConfigObject> allConfigObjects) {
+        Map<String, GroupConfigEntry<?>> groupEntries = new HashMap<>();
         Map<String, String> groupModifiers = new HashMap<>();
-        Map<String, List<ConfigEntry>> groupChildren = new HashMap<>();
 
-        for (Map.Entry<Integer, ConfigObject> entry : groupConfigObjects.entrySet()) {
+        for (Map.Entry<Integer, ConfigObject> entry : allConfigObjects.entrySet()) {
             ConfigObject configObject = entry.getValue();
             String groupInfo = configObject.getGroupInfo();
+            ConfigEntry configEntry = handleConfigObject(configObject);
+            if (configEntry == null) {
+                continue;
+            }
 
             if (groupInfo.startsWith("{") && groupInfo.contains("}")) {
                 String groupPath = groupInfo.substring(1);
                 String[] split = groupPath.split("}");
                 groupPath = split[0];
-                ConfigEntry configEntry = handleConfigObject(configObject);
-                if (configEntry != null) {
-                    groupEntries.put(groupPath, configEntry);
-                    if (split.length >= 2) {
-                        groupModifiers.put(groupPath, split[1]);
-                    }
-                    groupChildren.put(groupPath, new ArrayList<>());
+
+                if (split.length >= 2) {
+                    groupModifiers.put(groupPath, split[1]);
+                }
+
+                GroupConfigEntry<?> groupEntry = createGroupEntry(configEntry, groupModifiers.get(groupPath));
+                if (groupEntry != null) {
+                    groupEntries.put(groupPath, groupEntry);
+
+                    addToParentOrCategory(groupPath, groupEntry, groupEntries, category);
                 }
             }
-        }
-
-        for (Map.Entry<Integer, ConfigObject> entry : configObjects.entrySet()) {
-            ConfigObject configObject = entry.getValue();
-            String groupInfo = configObject.getGroupInfo();
-            ConfigEntry configEntry = handleConfigObject(configObject);
-
-            if (configEntry != null) {
-                if (groupInfo == null || groupInfo.isEmpty()) {
+            else {
+                if (groupInfo.isEmpty()) {
                     category.addEntry(configEntry);
-                } else {
-                    if (groupChildren.containsKey(groupInfo)) {
-                        groupChildren.get(groupInfo).add(configEntry);
-                    } else {
-                        category.addEntry(configEntry);
-                    }
                 }
-            }
-        }
-
-        List<String> sortedGroupPaths = new ArrayList<>(groupEntries.keySet());
-        sortedGroupPaths.sort(String::compareTo);
-
-        Set<String> processedGroups = new HashSet<>();
-
-        for (String groupPath : sortedGroupPaths) {
-            if (processedGroups.contains(groupPath)) {
-                continue;
-            }
-
-            ConfigEntry groupEntry = createGroupHierarchy(groupPath, groupEntries, groupModifiers, groupChildren, processedGroups);
-            if (groupEntry != null) {
-                category.addEntry(groupEntry);
+                else {
+                    addToGroup(groupInfo, configEntry, groupEntries, category);
+                }
             }
         }
     }
 
-    private static ConfigEntry createGroupHierarchy(String groupPath, Map<String, ConfigEntry> groupEntries, Map<String, String> groupModifiers, Map<String, List<ConfigEntry>> groupChildren, Set<String> processedGroups) {
-        ConfigEntry mainEntry = groupEntries.get(groupPath);
-        List<ConfigEntry> children = new ArrayList<>(groupChildren.get(groupPath));
+    private static void addToParentOrCategory(String groupPath, GroupConfigEntry<?> groupEntry, Map<String, GroupConfigEntry<?>> groupEntries, ConfigScreen.Builder.CategoryBuilder category) {
+        int lastDotIndex = groupPath.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            String parentPath = groupPath.substring(0, lastDotIndex);
+            GroupConfigEntry<?> parentGroup = groupEntries.get(parentPath);
+            if (parentGroup != null) {
+                parentGroup.addChildEntry(groupEntry);
+            }
+            else {
+                category.addEntry(groupEntry);
+            }
+        }
+        else {
+            category.addEntry(groupEntry);
+        }
+    }
 
-        String groupPrefix = groupPath + ".";
-        for (String otherPath : groupEntries.keySet()) {
-            if (otherPath.startsWith(groupPrefix) && !processedGroups.contains(otherPath)) {
-                String remainder = otherPath.substring(groupPrefix.length());
-                if (!remainder.contains(".")) {
-                    ConfigEntry subGroup = createGroupHierarchy(otherPath, groupEntries, groupModifiers, groupChildren, processedGroups);
-                    if (subGroup != null) {
-                        children.add(subGroup);
-                    }
-                    processedGroups.add(otherPath);
-                }
+    private static void addToGroup(String groupInfo, ConfigEntry configEntry, Map<String, GroupConfigEntry<?>> groupEntries, ConfigScreen.Builder.CategoryBuilder category) {
+        GroupConfigEntry<?> targetGroup = groupEntries.get(groupInfo);
+        if (targetGroup != null) {
+            targetGroup.addChildEntry(configEntry);
+        }
+        else {
+            category.addEntry(configEntry);
+        }
+    }
+
+    private static GroupConfigEntry<?> createGroupEntry(ConfigEntry configEntry, String modifier) {
+        if (!(configEntry instanceof IEntryGroupHeader)) {
+            Main.LOGGER.error("Warning: Group entry does not implement IEntryGroupHeader");
+            return null;
+        }
+
+        boolean showSidebar = true;
+        boolean openByDefault = true;
+
+        if (modifier != null) {
+            if (modifier.contains("no_sidebar")) {
+                showSidebar = false;
+            }
+            if (modifier.contains("closed")) {
+                openByDefault = false;
             }
         }
 
-        processedGroups.add(groupPath);
-
-        if (mainEntry instanceof IEntryGroupHeader) {
-            if (!children.isEmpty()) {
-                boolean showSidebar = true;
-                boolean openByDefault = true;
-
-                if (groupModifiers.containsKey(groupPath)) {
-                    String modifier = groupModifiers.get(groupPath);
-                    if (modifier.contains("no_sidebar")) {
-                        showSidebar = false;
-                    }
-                    if (modifier.contains("closed")) {
-                        openByDefault = false;
-                    }
-                }
-
-                if (mainEntry instanceof TextConfigEntry textConfigEntry) {
-                    return new GroupConfigEntry<>(textConfigEntry, children, showSidebar, openByDefault);
-                }
-                if (mainEntry instanceof BooleanConfigEntry booleanConfigEntry) {
-                    return new GroupConfigEntry<>(booleanConfigEntry, children, showSidebar, openByDefault);
-                }
-
-            } else {
-                return mainEntry;
-            }
-        } else {
-            if (!children.isEmpty()) {
-                Main.LOGGER.error("Warning: Group entry for '" + groupPath + "' does not implement IEntryGroupHeader but has children");
-                return null;
-            } else {
-                return mainEntry;
-            }
+        if (configEntry instanceof TextConfigEntry textConfigEntry) {
+            return new GroupConfigEntry<>(textConfigEntry, new ArrayList<>(), showSidebar, openByDefault);
         }
+        if (configEntry instanceof BooleanConfigEntry booleanConfigEntry) {
+            return new GroupConfigEntry<>(booleanConfigEntry, new ArrayList<>(), showSidebar, openByDefault);
+        }
+
         return null;
     }
 

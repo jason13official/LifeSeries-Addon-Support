@@ -1,11 +1,6 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.config.entries.*;
-import net.mat0u5.lifeseries.gui.config.ConfigScreen;
-import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
-import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -19,13 +14,11 @@ import static net.mat0u5.lifeseries.MainClient.clientConfig;
 public class ClientConfigNetwork {
 
     public static Map<Integer, ConfigObject> configObjects = new TreeMap<>();
-    public static Map<Integer, ConfigObject> groupConfigObjects = new TreeMap<>();
-    public static Map<Integer, ConfigObject> client_configObjects = new TreeMap<>();
-    public static Map<Integer, ConfigObject> client_groupConfigObjects = new TreeMap<>();
+    public static Map<Integer, ConfigObject> clientConfigObjects = new TreeMap<>();
 
     public static void load() {
         configObjects.clear();
-        groupConfigObjects.clear();
+        clientConfigObjects.clear();
         NetworkHandlerClient.sendStringPacket("request_config", "");
 
         int index = 0;
@@ -39,22 +32,11 @@ public class ClientConfigNetwork {
         int index = payload.index();
         ConfigObject configObject = getConfigEntry(payload);
         if (configObject == null) return;
-        String argGroupInfo = payload.args().get(2);
-        if (argGroupInfo.startsWith("{")) {
-            if (!client) {
-                groupConfigObjects.put(index, configObject);
-            }
-            else {
-                client_groupConfigObjects.put(index, configObject);
-            }
+        if (!client) {
+            configObjects.put(index, configObject);
         }
         else {
-            if (!client) {
-                configObjects.put(index, configObject);
-            }
-            else {
-                client_configObjects.put(index, configObject);
-            }
+            clientConfigObjects.put(index, configObject);
         }
     }
 

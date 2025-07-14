@@ -31,7 +31,7 @@ public enum ConfigTypes {
         return this == TEXT;
     }
     public boolean parentBoolean() {
-        return this == DOUBLE;
+        return this == BOOLEAN;
     }
     public boolean parentInteger() {
         return this == INTEGER || this == HEARTS;
