@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
+import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
@@ -73,7 +75,18 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
 
     @Override
     public boolean shouldShowPopup() {
-        return (isFocused() || (isHovered && screen.getFocusedEntry() == this)) && textField != null;
+        if (textField == null) return false;
+        if (hasError()) return false;
+
+        if (isFocused()) return true;
+
+        if (isHovered) {
+            ConfigEntry entry = screen.getFocusedEntry();
+            if (!(entry instanceof IPopup popup)) return true;
+            return !popup.shouldShowPopup();
+
+        }
+        return false;
     }
 
     @Override

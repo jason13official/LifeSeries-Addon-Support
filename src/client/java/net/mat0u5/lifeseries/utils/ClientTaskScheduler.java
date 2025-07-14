@@ -1,5 +1,7 @@
 package net.mat0u5.lifeseries.utils;
 
+import net.mat0u5.lifeseries.Main;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +28,9 @@ public class ClientTaskScheduler {
                     try {
                         //Inner try-catch to prevent errors from preventing the task from being removed
                         task.goal.run();
-                    }catch (Exception ignored) {}
+                    }catch (Exception e) {
+                        Main.LOGGER.error(e.getMessage());
+                    }
                     iterator.remove();
                 }
             }

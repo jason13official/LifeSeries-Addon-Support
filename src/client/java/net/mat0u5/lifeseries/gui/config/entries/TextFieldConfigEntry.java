@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected final TextFieldWidget textField;
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 100;
-    private static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
+    protected static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
     private static final int TEXT_FIELD_OFFSET_X = -5;
     private static final int TEXT_FIELD_OFFSET_Y = 1;
     private int maxTextFieldLength = 32;

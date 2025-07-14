@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 
+import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -43,7 +45,18 @@ public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFie
 
     @Override
     public boolean shouldShowPopup() {
-        return (isFocused() || (isHovered && screen.getFocusedEntry() == this)) && value != null;
+        if (textField == null) return false;
+        if (hasError()) return false;
+
+        if (isFocused()) return true;
+
+        if (isHovered) {
+            ConfigEntry entry = screen.getFocusedEntry();
+            if (!(entry instanceof IPopup popup)) return true;
+            return !popup.shouldShowPopup();
+
+        }
+        return false;
     }
 
     @Override

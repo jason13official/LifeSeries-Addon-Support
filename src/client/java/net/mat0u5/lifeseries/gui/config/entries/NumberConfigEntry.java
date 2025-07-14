@@ -31,6 +31,9 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     @Override
     protected void initializeTextField() {
         setText(value.toString());
+        if (textField.getWidth()-6 < textRenderer.getWidth(value.toString())) {
+            textField.setCursorToStart(false);
+        }
     }
 
     @Override

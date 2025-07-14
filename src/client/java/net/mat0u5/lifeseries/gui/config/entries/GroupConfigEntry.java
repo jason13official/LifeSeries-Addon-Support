@@ -60,7 +60,6 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-
         int maxHeight = getMaxHeight();
         if (hasExpandingChild()) {
             currentHeight = maxHeight;
