@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.*;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
@@ -154,9 +155,15 @@ public class ClientConfigGuiManager {
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {
+            if (intObject.configType == ConfigTypes.HEARTS) {
+                return new HeartsConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
+            }
             return new IntegerConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
         }
         else if (object instanceof DoubleObject doubleObject) {
+            if (doubleObject.configType == ConfigTypes.PERCENTAGE) {
+                return new PercentageConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
+            }
             return new DoubleConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
         }
         else if (object instanceof TextObject textObject) {

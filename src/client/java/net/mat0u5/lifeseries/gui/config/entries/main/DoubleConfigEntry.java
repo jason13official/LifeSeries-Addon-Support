@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 public class DoubleConfigEntry extends NumberConfigEntry<Double> {
-    private static final String VALUE_TYPE = "double";
 
     public DoubleConfigEntry(String fieldName, String displayName, String description, double value, double defaultValue) {
         super(fieldName, displayName, description, value, defaultValue);
@@ -35,7 +35,7 @@ public class DoubleConfigEntry extends NumberConfigEntry<Double> {
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.DOUBLE;
     }
 }

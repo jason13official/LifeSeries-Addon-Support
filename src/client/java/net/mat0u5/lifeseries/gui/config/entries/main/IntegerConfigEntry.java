@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.NumberConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
-    private static final String VALUE_TYPE = "integer";
 
     public IntegerConfigEntry(String fieldName, String displayName, String description, int value, int defaultValue) {
         super(fieldName, displayName, description, value, defaultValue);
@@ -35,7 +35,7 @@ public class IntegerConfigEntry extends NumberConfigEntry<Integer> {
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.INTEGER;
     }
 }

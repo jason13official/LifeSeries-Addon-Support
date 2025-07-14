@@ -164,7 +164,7 @@ public class ConfigScreen extends Screen {
             if (!entry.modified()) continue;
             if (entry instanceof GroupConfigEntry) continue;
             NetworkHandlerClient.sendConfigUpdate(
-                    entry.getValueType(),
+                    entry.getValueType().toString(),
                     entry.getFieldName(),
                     List.of(entry.getValueAsString())
             );

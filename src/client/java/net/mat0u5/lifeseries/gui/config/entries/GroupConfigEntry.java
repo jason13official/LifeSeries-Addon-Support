@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.gui.config.ConfigListWidget;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends EmptyConfigEntry {
-    private static final String ENTRY_TYPE = "group";
     private static final int CHILD_INDENT = 20;
     protected static final int EXPAND_TEXT_OFFSET_X = LABEL_OFFSET_X - 10;
     protected static final int EXPAND_TEXT_OFFSET_Y = LABEL_OFFSET_Y;
@@ -185,8 +185,8 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     }
 
     @Override
-    public String getValueType() {
-        return ENTRY_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.GROUP;
     }
 
     @Override

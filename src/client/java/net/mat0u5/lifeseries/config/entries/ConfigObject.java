@@ -1,11 +1,12 @@
 package net.mat0u5.lifeseries.config.entries;
 
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 import java.util.List;
 
 public class ConfigObject {
-    public String configType;
+    public ConfigTypes configType;
     private int index;
     public String id;
     public String name;
@@ -13,7 +14,7 @@ public class ConfigObject {
     private List<String> args;
     public boolean modified = false;
     public ConfigObject(ConfigPayload payload) {
-        configType = payload.configType();
+        configType = ConfigTypes.getFromString(payload.configType());
         index = payload.index();
         id = payload.id();
         name = payload.name();

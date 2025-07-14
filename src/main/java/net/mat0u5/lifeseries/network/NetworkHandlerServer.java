@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TripleJump;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -86,27 +87,27 @@ public class NetworkHandlerServer {
     public static boolean configNeedsReload = false;
     public static void handleConfigPacket(ServerPlayerEntity player, ConfigPayload payload) {
         if (PermissionManager.isAdmin(player)) {
-            String configType = payload.configType();
+            ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
             String id = payload.id();
             List<String> args = payload.args();
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received config update from "+player.getNameForScoreboard()+": {"+configType+", "+id+", "+args+"}");
 
-            if (configType.equalsIgnoreCase("string") && !args.isEmpty()) {
+            if (configType.parentString() && !args.isEmpty()) {
                 seasonConfig.setProperty(id, args.getFirst());
                 updatedConfigThisTick = true;
             }
-            else if (configType.equalsIgnoreCase("boolean") && !args.isEmpty()) {
+            else if (configType.parentBoolean() && !args.isEmpty()) {
                 seasonConfig.setProperty(id, String.valueOf(args.getFirst().equalsIgnoreCase("true")));
                 updatedConfigThisTick = true;
             }
-            else if (configType.equalsIgnoreCase("double") && !args.isEmpty()) {
+            else if (configType.parentDouble() && !args.isEmpty()) {
                 try {
                     double value = Double.parseDouble(args.getFirst());
                     seasonConfig.setProperty(id, String.valueOf(value));
                     updatedConfigThisTick = true;
                 }catch(Exception e){}
             }
-            else if (configType.equalsIgnoreCase("integer") && !args.isEmpty()) {
+            else if (configType.parentInteger() && !args.isEmpty()) {
                 try {
                     int value = Integer.parseInt(args.getFirst());
                     seasonConfig.setProperty(id, String.valueOf(value));

@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
-import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldAddonPopup {
-    private static final String VALUE_TYPE = "hearts";
     private static final String HEART_SYMBOL = "♥";
     private static final String HEART_ROW = "♥♥♥♥♥♥♥♥♥♥";
     private static final String HALF_HEART_SYMBOL = "♡";
@@ -116,7 +115,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.HEARTS;
     }
 }

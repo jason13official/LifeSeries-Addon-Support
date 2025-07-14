@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -175,7 +176,7 @@ public abstract class ConfigEntry {
     public abstract Object getDefaultValue();
     public abstract String getDefaultValueAsString();
     public abstract Object getStartingValue();
-    public abstract String getValueType();
+    public abstract ConfigTypes getValueType();
     public abstract void setValue(Object value);
 
     public boolean modified() {

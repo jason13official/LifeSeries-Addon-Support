@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.TextFieldConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 public class StringConfigEntry extends TextFieldConfigEntry {
-    private static final String VALUE_TYPE = "string";
     private static final int FIELD_WIDTH = 150;
 
     protected final String defaultValue;
@@ -65,7 +65,7 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.STRING;
     }
 }

@@ -3,8 +3,12 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +59,7 @@ public class ClientConfigNetwork {
     }
 
     public static ConfigObject getConfigEntry(ConfigPayload payload) {
-        String configType = payload.configType();
+        ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
         String id = payload.id();
         String name = payload.name();
         String description = payload.description();
@@ -65,26 +69,26 @@ public class ClientConfigNetwork {
         String argDefaultValue = args.get(1);
         String argGroupInfo = args.get(2);
 
-        if (configType.equalsIgnoreCase("text")) {
+        if (configType.parentText()) {
             boolean clickable = !argDefaultValue.equalsIgnoreCase("false");
             return new TextObject(payload, name, clickable);
         }
-        if (configType.equalsIgnoreCase("string")) {
+        if (configType.parentString()) {
             return new StringObject(payload, argValue, argDefaultValue);
         }
-        if (configType.equalsIgnoreCase("boolean")) {
+        if (configType.parentBoolean()) {
             boolean value = argValue.equalsIgnoreCase("true");
             boolean defaultValue = argDefaultValue.equalsIgnoreCase("true");
             return new BooleanObject(payload, value, defaultValue);
         }
-        if (configType.equalsIgnoreCase("double")) {
+        if (configType.parentDouble()) {
             try {
                 double value = Double.parseDouble(argValue);
                 double defaultValue = Double.parseDouble(argDefaultValue);
                 return new DoubleObject(payload, value, defaultValue);
             }catch(Exception e){}
         }
-        if (configType.equalsIgnoreCase("integer")) {
+        if (configType.parentInteger()) {
             try {
                 int value = Integer.parseInt(argValue);
                 int defaultValue = Integer.parseInt(argDefaultValue);

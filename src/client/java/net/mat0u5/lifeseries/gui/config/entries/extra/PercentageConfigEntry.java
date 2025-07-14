@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -10,7 +11,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFieldAddonPopup {
-    private static final String VALUE_TYPE = "percentage";
 
     public PercentageConfigEntry(String fieldName, String displayName, String description, double value, double defaultValue) {
         super(fieldName, displayName, description, value, defaultValue, 0.0, 1.0);
@@ -47,7 +47,7 @@ public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFie
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.PERCENTAGE;
     }
 }

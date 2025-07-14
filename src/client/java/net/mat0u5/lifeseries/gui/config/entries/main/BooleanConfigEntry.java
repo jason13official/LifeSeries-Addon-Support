@@ -1,12 +1,12 @@
 package net.mat0u5.lifeseries.gui.config.entries.main;
 
 import net.mat0u5.lifeseries.gui.config.entries.ButtonConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroupHeader {
-    private static final String VALUE_TYPE = "boolean";
     private static final int BUTTON_WIDTH = 60;
     private static final int BUTTON_HEIGHT = 20;
     private static final String TEXT_TRUE = "§aYes";
@@ -76,8 +76,8 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     }
 
     @Override
-    public String getValueType() {
-        return VALUE_TYPE;
+    public ConfigTypes getValueType() {
+        return ConfigTypes.BOOLEAN;
     }
 
     @Override

@@ -122,14 +122,14 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
     public ConfigPayload getConfigPayload(ConfigFileEntry<?> entry, int index) {
         String value = "";
-        if (!entry.type.equalsIgnoreCase("text")) {
+        if (!entry.type.parentText()) {
             value = getPropertyAsString(entry.key, entry.defaultValue);
         }
         String defaultValue = "";
         if (entry.defaultValue != null) {
             defaultValue = entry.defaultValue.toString();
         }
-        return new ConfigPayload(entry.type, entry.key, index, entry.displayName, entry.description, List.of(value, defaultValue, entry.groupInfo));
+        return new ConfigPayload(entry.type.toString(), entry.key, index, entry.displayName, entry.description, List.of(value, defaultValue, entry.groupInfo));
     }
 
     private String getPropertyAsString(String key, Object defaultValue) {
