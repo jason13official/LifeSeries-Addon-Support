@@ -18,18 +18,22 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     protected static final int EXPAND_TEXT_OFFSET_Y = LABEL_OFFSET_Y;
     private static final int EXPAND_SIDEBAR_THICKNESS = 1;
     private static final int EXPAND_SIDEBAR_OFFSET_X = -9;
+    private static final float ANIMATION_OPEN_SPEED = 0.15f;
+    private static final float ANIMATION_CLOSE_SPEED = 0.4f;
 
     private final T mainEntry;
     private final List<ConfigEntry> childEntries;
     private boolean isExpanded = false;
     private boolean showSidebar;
     private boolean renderBottomBar = false;
+    private int currentHeight;
 
     private int y;
 
     public GroupConfigEntry(T mainEntry, List<ConfigEntry> childEntries, boolean showSidebar, boolean openByDefault) {
         super("", "","");
         this.mainEntry = mainEntry;
+        this.currentHeight = mainEntry.getPreferredHeight();
         this.childEntries = new ArrayList<>(childEntries);
         this.showSidebar = showSidebar;
         if (openByDefault) {
@@ -57,6 +61,20 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
     @Override
     protected void renderEntry(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 
+        int maxHeight = getMaxHeight();
+        if (hasExpandingChild()) {
+            currentHeight = maxHeight;
+        }
+        else if (Math.abs(currentHeight - maxHeight) > 1.5f) {
+            float animationSpeed = (currentHeight < maxHeight) ? ANIMATION_OPEN_SPEED : ANIMATION_CLOSE_SPEED;
+            float change = ((maxHeight - currentHeight) * animationSpeed * tickDelta);
+            if (Math.abs(change) < (animationSpeed*10)) change *= (animationSpeed*10)/Math.abs(change);
+            currentHeight += (int) change;
+        }
+        else {
+            currentHeight = maxHeight;
+        }
+
         int currentY = y;
 
         if (mainEntry != null && screen != null) {
@@ -77,14 +95,16 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
                 int entryHeight = child.getPreferredHeight();
-                boolean entryHovered = mouseX >= x && mouseX < x + width &&
-                        mouseY >= currentY && mouseY < currentY + entryHeight;
-                child.render(context, x + CHILD_INDENT, currentY, width - CHILD_INDENT, entryHeight, mouseX, mouseY, entryHovered, tickDelta);
+                if ((currentY+entryHeight + ConfigListWidget.ENTRY_GAP) - 10 <= y+currentHeight) {
+                    boolean entryHovered = mouseX >= x && mouseX < x + width &&
+                            mouseY >= currentY && mouseY < currentY + entryHeight;
+                    child.render(context, x + CHILD_INDENT, currentY, width - CHILD_INDENT, entryHeight, mouseX, mouseY, entryHovered, tickDelta);
+                }
                 currentY += entryHeight + ConfigListWidget.ENTRY_GAP;
             }
         }
 
-        renderExpandIcon(context, x, y, isExpanded, currentY, width);
+        renderExpandIcon(context, x, y, isExpanded, y+currentHeight+1, width);
     }
 
     private void renderExpandIcon(DrawContext context, int x, int y, boolean expanded, int endY, int width) {
@@ -102,6 +122,21 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         return mainEntry.shouldExpand();
     }
 
+    private boolean hasExpandingChild() {
+        for (ConfigEntry child : childEntries) {
+            if (child instanceof GroupConfigEntry<?> groupChild) {
+                if (groupChild.isAnimating() || groupChild.hasExpandingChild()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isAnimating() {
+        return Math.abs(currentHeight - getMaxHeight()) > 1.5f;
+    }
+
     @Override
     protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
         int currentY = (int) mouseY - this.y;
@@ -117,9 +152,11 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
             double childY = mainEntry.getPreferredHeight();
             for (ConfigEntry child : childEntries) {
                 int childHeight = child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;
-                if (currentY >= childY && currentY < childY + childHeight) {
-                    child.setFocused(true);
-                    if (child.mouseClicked(mouseX, mouseY, button)) return true;
+                if ((childY+childHeight + ConfigListWidget.ENTRY_GAP) - 10 <= currentY+currentHeight) {
+                    if (currentY >= childY && currentY < childY + childHeight) {
+                        child.setFocused(true);
+                        if (child.mouseClicked(mouseX, mouseY, button)) return true;
+                    }
                 }
                 childY += childHeight;
             }
@@ -170,11 +207,14 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
 
     @Override
     public int getPreferredHeight() {
+        return currentHeight;
+    }
+
+    public int getMaxHeight() {
         int height = PREFFERED_HEIGHT;
         if (mainEntry != null) {
             height = mainEntry.getPreferredHeight();
         }
-
         if (isExpanded) {
             for (ConfigEntry child : childEntries) {
                 height += child.getPreferredHeight() + ConfigListWidget.ENTRY_GAP;

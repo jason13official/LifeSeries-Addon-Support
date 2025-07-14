@@ -117,8 +117,9 @@ public class ConfigScreen extends Screen {
     public List<ConfigEntry> getAllEntries(List<ConfigEntry> currentEntries) {
         List<ConfigEntry> allEntries = new ArrayList<>();
         for (ConfigEntry entry : currentEntries) {
-            if (entry instanceof GroupConfigEntry groupEntry) {
+            if (entry instanceof GroupConfigEntry<?> groupEntry) {
                 allEntries.addAll(getAllEntries(groupEntry.getChildEntries()));
+                allEntries.addAll(getAllEntries(List.of(groupEntry.getMainEntry())));
             }
             else {
                 allEntries.add(entry);

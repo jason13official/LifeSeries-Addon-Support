@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWidget.ConfigEntryWidget> {
     public static final int ENTRY_GAP = 2;
-    private static final int MAX_HIGHLIGHTED_ENTRIES = 2;
+    private static final int MAX_HIGHLIGHTED_ENTRIES = 3;
     private static final int SCROLLBAR_OFFSET_X = 6;
     protected ConfigScreen screen;
 
