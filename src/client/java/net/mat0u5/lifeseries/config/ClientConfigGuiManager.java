@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.BlockListConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.ItemListConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
@@ -136,7 +137,7 @@ public class ClientConfigGuiManager {
                 return new ItemListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
             }
             else if (stringObject.configType == ConfigTypes.BLOCK_LIST) {
-                return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+                return new BlockListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
             }
             else if (stringObject.configType == ConfigTypes.EFFECT_LIST) {
                 return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
