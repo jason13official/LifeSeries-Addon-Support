@@ -60,6 +60,6 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
 
     @Override
     public boolean hasCustomErrors() {
-        return false;
+        return true;
     }
 }

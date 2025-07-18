@@ -58,6 +58,6 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
 
     @Override
     public boolean hasCustomErrors() {
-        return false;
+        return true;
     }
 }

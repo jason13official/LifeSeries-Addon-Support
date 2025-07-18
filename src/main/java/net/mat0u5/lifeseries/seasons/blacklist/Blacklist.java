@@ -245,10 +245,10 @@ public class Blacklist {
                 if (enchantment != null) {
                     newList.add(effectsRegistry.getEntry(enchantment));
                 } else {
-                    OtherUtils.throwError("[CONFIG] Invalid potion: " + potionId);
+                    OtherUtils.throwError("[CONFIG] Invalid effect: " + potionId);
                 }
             } catch (Exception e) {
-                OtherUtils.throwError("[CONFIG] Error parsing potion ID: " + potionId);
+                OtherUtils.throwError("[CONFIG] Error parsing effect ID: " + potionId);
             }
         }
 
