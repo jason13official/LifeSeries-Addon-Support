@@ -5,13 +5,15 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
 public abstract class TextFieldConfigEntry extends ConfigEntry {
     protected final TextFieldWidget textField;
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 100;
     protected static final int DEFAULT_TEXT_FIELD_HEIGHT = 18;
     private static final int TEXT_FIELD_OFFSET_X = -5;
     private static final int TEXT_FIELD_OFFSET_Y = 1;
-    private int maxTextFieldLength = 32;
+    private int maxTextFieldLength = 8192;
 
     public TextFieldConfigEntry(String fieldName, String displayName, String description) {
         this(fieldName, displayName, description, DEFAULT_TEXT_FIELD_WIDTH, DEFAULT_TEXT_FIELD_HEIGHT);
@@ -25,6 +27,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
         super(fieldName, displayName, description);
         textField = new TextFieldWidget(textRenderer, 0, 0, textFieldWidth, textFieldHeight, Text.empty());
         textField.setChangedListener(this::onChanged);
+        textField.setMaxLength(maxTextFieldLength);
     }
 
     protected abstract void initializeTextField();
@@ -97,11 +100,27 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
     @Override
     protected void resetToDefault() {
         setText(getDefaultValueAsString());
-        clearError();
+        if (!hasCustomErrors()) {
+            clearError();
+        }
     }
 
     public void setText(String text) {
         onTextChanged(text);
         textField.setText(text);
+    }
+
+    public boolean hasCustomErrors() {
+        return false;
+    }
+
+    @Override
+    public boolean modified() {
+        return !Objects.equals(textField.getText(), getStartingValueAsString());
+    }
+
+    @Override
+    public boolean canReset() {
+        return !Objects.equals(textField.getText(), getDefaultValueAsString());
     }
 }

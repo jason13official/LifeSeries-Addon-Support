@@ -37,7 +37,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
 
     @Override
     public Text getPopupText() {
-        return Text.of("");
+        return Text.empty();
     }
 
     public List<MutableText> getHeartPopupText() {

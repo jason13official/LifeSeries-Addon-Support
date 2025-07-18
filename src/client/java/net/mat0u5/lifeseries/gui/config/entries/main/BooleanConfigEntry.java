@@ -76,6 +76,11 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     }
 
     @Override
+    public String getStartingValueAsString() {
+        return String.valueOf(startingValue);
+    }
+
+    @Override
     public ConfigTypes getValueType() {
         return ConfigTypes.BOOLEAN;
     }

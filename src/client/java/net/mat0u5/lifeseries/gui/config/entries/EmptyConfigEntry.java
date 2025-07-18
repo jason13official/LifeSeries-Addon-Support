@@ -72,6 +72,11 @@ public abstract class EmptyConfigEntry extends ConfigEntry {
     }
 
     @Override
+    public String getStartingValueAsString() {
+        return "";
+    }
+
+    @Override
     public void setValue(Object value) {
     }
 

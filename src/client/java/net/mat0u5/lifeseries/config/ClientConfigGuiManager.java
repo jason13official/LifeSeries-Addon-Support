@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.HeartsConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.ItemListConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.PercentageConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
@@ -131,6 +132,18 @@ public class ClientConfigGuiManager {
             return new BooleanConfigEntry(booleanObject.id, booleanObject.name, booleanObject.description, booleanObject.booleanValue, booleanObject.defaultValue);
         }
         else if (object instanceof StringObject stringObject) {
+            if (stringObject.configType == ConfigTypes.ITEM_LIST) {
+                return new ItemListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
+            else if (stringObject.configType == ConfigTypes.BLOCK_LIST) {
+                return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
+            else if (stringObject.configType == ConfigTypes.EFFECT_LIST) {
+                return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
+            else if (stringObject.configType == ConfigTypes.ENCHANT_LIST) {
+                return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }
         else if (object instanceof IntegerObject intObject) {

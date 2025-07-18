@@ -6,7 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry {
     protected static final int RANGE_LABEL_OFFSET_X = -12;
     protected static final int RANGE_LABEL_OFFSET_Y = 6;
-    private static final int TEXT_FIELD_WIDTH = 64;
+    private static final int TEXT_FIELD_WIDTH = 60;
 
     protected final T defaultValue;
     protected final T minValue;
@@ -105,6 +105,11 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     @Override
     public T getStartingValue() {
         return startingValue;
+    }
+
+    @Override
+    public String getStartingValueAsString() {
+        return String.valueOf(startingValue);
     }
 
     public T getMinValue() {

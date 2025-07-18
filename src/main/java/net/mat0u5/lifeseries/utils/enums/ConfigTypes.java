@@ -11,6 +11,10 @@ public enum ConfigTypes {
 
     HEARTS("hearts"),
     PERCENTAGE("percentage"),
+    ITEM_LIST("itemlist"),
+    BLOCK_LIST("blocklist"),
+    EFFECT_LIST("effectlist"),
+    ENCHANT_LIST("enchantlist"),
 
     GROUP("group");
 
@@ -25,7 +29,7 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST;
     }
     public boolean parentText() {
         return this == TEXT;
@@ -41,13 +45,9 @@ public enum ConfigTypes {
     }
 
     public static ConfigTypes getFromString(String string) {
-        if (string.equalsIgnoreCase(STRING.toString())) return STRING;
-        if (string.equalsIgnoreCase(BOOLEAN.toString())) return BOOLEAN;
-        if (string.equalsIgnoreCase(INTEGER.toString())) return INTEGER;
-        if (string.equalsIgnoreCase(DOUBLE.toString())) return DOUBLE;
-        if (string.equalsIgnoreCase(TEXT.toString())) return TEXT;
-        if (string.equalsIgnoreCase(HEARTS.toString())) return HEARTS;
-        if (string.equalsIgnoreCase(PERCENTAGE.toString())) return PERCENTAGE;
+        for (ConfigTypes type : ConfigTypes.values()) {
+            if (string.equalsIgnoreCase(type.toString())) return type;
+        }
         return NULL;
     }
 }

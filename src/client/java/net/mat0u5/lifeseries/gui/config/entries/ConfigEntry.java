@@ -176,6 +176,7 @@ public abstract class ConfigEntry {
     public abstract Object getDefaultValue();
     public abstract String getDefaultValueAsString();
     public abstract Object getStartingValue();
+    public abstract String getStartingValueAsString();
     public abstract ConfigTypes getValueType();
     public abstract void setValue(Object value);
 

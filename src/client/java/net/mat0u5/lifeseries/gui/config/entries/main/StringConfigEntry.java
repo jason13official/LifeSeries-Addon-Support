@@ -39,7 +39,9 @@ public class StringConfigEntry extends TextFieldConfigEntry {
     protected void onTextChanged(String text) {
         super.onTextChanged(text);
         this.value = text;
-        clearError();
+        if (!hasCustomErrors()) {
+            clearError();
+        }
         markChanged();
         updateFieldDimensions();
     }
@@ -133,6 +135,11 @@ public class StringConfigEntry extends TextFieldConfigEntry {
 
     @Override
     public String getStartingValue() {
+        return startingValue;
+    }
+
+    @Override
+    public String getStartingValueAsString() {
         return startingValue;
     }
 

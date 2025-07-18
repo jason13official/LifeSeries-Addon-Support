@@ -40,13 +40,13 @@ public class DefaultConfigValues {
             "final_death_title_show", true, "global.finaldeath", "Show Death Title on Final Death", "Controls whether the death title (the one covering like half the screen) should show up when a player fully dies."
     );
     public final ConfigFileEntry<String> BLACKLIST_BANNED_ENCHANTS = new ConfigFileEntry<>(
-            "blacklist_banned_enchants", "[]", "global.blacklist", "Blacklisted Enchants", "List of banned enchants."
+            "blacklist_banned_enchants", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist", "Blacklisted Enchants", "List of banned enchants."
     );
     public final ConfigFileEntry<Boolean> MUTE_DEAD_PLAYERS = new ConfigFileEntry<>(
             "mute_dead_players", false, "global", "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not."
     );
     public final ConfigFileEntry<String> BLACKLIST_BANNED_POTION_EFFECTS = new ConfigFileEntry<>(
-            "blacklist_banned_potion_effects", "[strength, instant_health, instant_damage]", "global.blacklist", "Banned Potion Effects", "List of banned potion effects."
+            "blacklist_banned_potion_effects", "[strength, instant_health, instant_damage]", ConfigTypes.EFFECT_LIST, "global.blacklist", "Banned Potion Effects", "List of banned potion effects."
     );
     public final ConfigFileEntry<Boolean> SPAWNER_RECIPE = new ConfigFileEntry<>(
             "spawner_recipe", false, "global.spawnegg", "Spawner Recipe", "Controls whether the spawner crafting recipe is enabled."
@@ -64,13 +64,13 @@ public class DefaultConfigValues {
             "custom_enchanter_algorithm", false, "global", "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves."
     );
     public final ConfigFileEntry<String> BLACKLIST_ITEMS = new ConfigFileEntry<>(
-            "blacklist_items", "[]", "global.blacklist", "Blacklisted Items", "List of banned items."
+            "blacklist_items", "[]", ConfigTypes.ITEM_LIST, "global.blacklist", "Blacklisted Items", "List of banned items."
     );
     public final ConfigFileEntry<String> BLACKLIST_BLOCKS = new ConfigFileEntry<>(
-            "blacklist_blocks", "[]", "global.blacklist", "Blacklisted Blocks", "List of banned blocks."
+            "blacklist_blocks", "[]", ConfigTypes.BLOCK_LIST, "global.blacklist", "Blacklisted Blocks", "List of banned blocks."
     );
     public final ConfigFileEntry<String> BLACKLIST_CLAMPED_ENCHANTS = new ConfigFileEntry<>(
-            "blacklist_clamped_enchants", "[]", "global.blacklist", "Clamped Enchants", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
+            "blacklist_clamped_enchants", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist", "Clamped Enchants", "List of enchantments clamped to level 1 (any higher levels will be set to lvl1)."
     );
     public final ConfigFileEntry<String> FINAL_DEATH_TITLE_SUBTITLE = new ConfigFileEntry<>(
             "final_death_title_subtitle", "ran out of lives!", "global.finaldeath", "Death Subtitle", "The subtitle that shows when a player dies (requires Show Death Title on Final Death to be set to true)."
