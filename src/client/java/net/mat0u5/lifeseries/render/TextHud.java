@@ -22,7 +22,6 @@ public class TextHud {
         int yPos = client.getWindow().getScaledHeight() - 5 - client.textRenderer.fontHeight;
 
         if (Main.DEBUG) {
-            yPos += _renderTestText(client, context, yPos);
             yPos += _renderSnailDistance(client, context, yPos);
         }
 
@@ -32,19 +31,6 @@ public class TextHud {
         yPos += renderMimicryTimer(client, context, yPos);
         yPos += renderSuperpowerCooldown(client, context, yPos);
         yPos += renderTriviaTimer(client, context, yPos);
-    }
-    public static int _renderTestText(MinecraftClient client, DrawContext context, int y) {
-        try {
-            Text timerText = Text.literal("Test: " + ClientConfig.TEST.get(clientConfig));
-
-            int screenWidth = client.getWindow().getScaledWidth();
-            int x = screenWidth - 5;
-
-            RenderUtils.drawTextRight(context, client.textRenderer, timerText, x, y);
-
-            return -client.textRenderer.fontHeight-5;
-        }catch(Exception e) {}
-        return 0;
     }
 
     public static int _renderSnailDistance(MinecraftClient client, DrawContext context, int y) {

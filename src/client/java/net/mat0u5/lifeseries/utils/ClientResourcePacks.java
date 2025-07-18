@@ -1,33 +1,38 @@
 package net.mat0u5.lifeseries.utils;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProfile;
 
-@Environment(EnvType.CLIENT)
+import static net.mat0u5.lifeseries.MainClient.clientConfig;
+
 public class ClientResourcePacks {
     private static final String SECRET_LIFE_RESOURCEPACK = "lifeseries:secretlife";
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
     public static final String SNAILS_RESOURCEPACK = "file/" + SnailSkinsClient.PACK_NAME;
 
     public static void checkClientPacks() {
-        if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE) {
-            enableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
+        handleClientResourcepack(SECRET_LIFE_RESOURCEPACK, MainClient.clientCurrentSeason == Seasons.SECRET_LIFE);
+        handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
+    }
+
+    public static void handleClientResourcepack(String id, boolean action) {
+        if (action) {
+            enableClientResourcePack(id);
         }
         else {
-            disableClientResourcePack(SECRET_LIFE_RESOURCEPACK);
+            disableClientResourcePack(id);
         }
     }
 
-    // Enable a resource pack
     public static void enableClientResourcePack(String id) {
         enableClientResourcePack(id, false);
     }
+
     public static void enableClientResourcePack(String id, boolean forceReload) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getResourcePackManager() != null) {
@@ -48,7 +53,6 @@ public class ClientResourcePacks {
         }
     }
 
-    // Disable a resource pack
     public static void disableClientResourcePack(String id) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getResourcePackManager() != null) {

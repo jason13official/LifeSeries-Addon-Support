@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.config.entries.*;
+import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 
 import java.util.List;
@@ -79,5 +81,16 @@ public class ClientConfigNetwork {
         }
 
         return null;
+    }
+
+    public static void onConfigSave(ConfigEntry entry) {
+        String id = entry.getFieldName();
+        String valueStr = entry.getValueAsString();
+        clientConfig.setProperty(id, valueStr);
+
+        // Actions
+        if (id.equals(ClientConfig.MINIMAL_ARMOR.key)) {
+            ClientResourcePacks.checkClientPacks();
+        }
     }
 }

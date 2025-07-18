@@ -174,9 +174,7 @@ public class ConfigScreen extends Screen {
             // Client
             if (!entry.modified()) continue;
             if (entry instanceof GroupConfigEntry) continue;
-            String id = entry.getFieldName();
-            String valueStr = entry.getValueAsString();
-            clientConfig.setProperty(id, valueStr);
+            ClientConfigNetwork.onConfigSave(entry);
         }
 
         this.client.setScreen(this.parent);

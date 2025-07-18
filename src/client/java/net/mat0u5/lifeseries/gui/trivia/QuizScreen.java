@@ -28,9 +28,15 @@ import net.minecraft.client.render.DiffuseLighting;
 //? if >= 1.21.6 {
 /*import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.util.Identifier;
 *///?}
 
 public class QuizScreen extends DefaultScreen {
+    //? if >= 1.21.6 {
+    /*private static final Identifier TEXTURE_TRIVIABOT = Identifier.of("lifeseries","textures/gui/triviabot.png");
+    *///?}
+
     private static final int[] ANSWER_COLORS = {
             TextColors.PASTEL_BLUE, TextColors.PASTEL_ORANGE, TextColors.PASTEL_LIME, TextColors.PASTEL_YELLOW, TextColors.PASTEL_RED
     };
@@ -194,7 +200,8 @@ public class QuizScreen extends DefaultScreen {
         //? if <= 1.21.5 {
         drawEntity(context, startX, startY, mouseX, mouseY, centerX, centerY - 50, 40);
         //?} else {
-        /*RenderUtils.drawTextLeftWrapLines(context, client.textRenderer, TextColors.DEFAULT_LIGHTER, Text.of("Bot display temporarily disabled\nin 1.21.6+ because mojang broke it :<"), centerX-28, centerY-46, 60, 5);
+        /*//context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_TRIVIABOT, centerX-28, centerY-46, 0, 0, 587, 734, 587, 734);
+        RenderUtils.drawTextureScaled(context, TEXTURE_TRIVIABOT, centerX-32, centerY-40, 0, 0, 510, 638, 510, 638, 0.125f, 0.125f);
         *///?}
     }
 
