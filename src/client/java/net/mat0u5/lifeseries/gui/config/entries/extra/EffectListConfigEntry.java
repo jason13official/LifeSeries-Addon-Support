@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -14,8 +15,6 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static net.mat0u5.lifeseries.Main.server;
 
 //? if <= 1.21.5
 import net.minecraft.client.texture.StatusEffectSpriteManager;
@@ -39,6 +38,7 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
 
     @Override
     protected void reloadEntries(List<String> items) {
+        if (MinecraftClient.getInstance().world == null) return;
         if (entries != null) {
             entries.clear();
         }
@@ -46,9 +46,9 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
         List<RegistryEntry<StatusEffect>> newList = new ArrayList<>();
         boolean errors = false;
 
-        Registry<StatusEffect> effectsRegistry = server.getRegistryManager()
-                //? if <=1.21 {
-                .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
+        Registry<StatusEffect> effectsRegistry = MinecraftClient.getInstance().world.getRegistryManager()
+        //? if <=1.21 {
+        .get(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));
         //?} else
         /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
 
@@ -104,5 +104,10 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
     @Override
     public boolean hasCustomErrors() {
         return true;
+    }
+
+    @Override
+    public ConfigTypes getValueType() {
+        return ConfigTypes.EFFECT_LIST;
     }
 }

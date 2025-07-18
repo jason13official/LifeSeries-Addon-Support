@@ -206,7 +206,6 @@ public class ConfigScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        //this.renderBackground(context, mouseX, mouseY, delta);
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, HEADER_TITLE_Y, TextColors.WHITE);
 
@@ -215,8 +214,7 @@ public class ConfigScreen extends Screen {
         }
 
         if (this.hasErrors()) {
-            //TODO
-            context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, 20, TextColors.LIGHT_RED);
+            context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, HEADER_TITLE_Y, TextColors.LIGHT_RED);
         }
 
     }

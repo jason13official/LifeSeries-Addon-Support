@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -59,5 +60,10 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
     @Override
     public boolean hasCustomErrors() {
         return true;
+    }
+
+    @Override
+    public ConfigTypes getValueType() {
+        return ConfigTypes.ITEM_LIST;
     }
 }

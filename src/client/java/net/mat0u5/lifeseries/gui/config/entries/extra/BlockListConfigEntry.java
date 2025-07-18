@@ -1,10 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -61,5 +60,10 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
     @Override
     public boolean hasCustomErrors() {
         return true;
+    }
+
+    @Override
+    public ConfigTypes getValueType() {
+        return ConfigTypes.BLOCK_LIST;
     }
 }
