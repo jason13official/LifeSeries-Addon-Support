@@ -45,6 +45,7 @@ dependencies {
 
  implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
  if (project.voicechat_mod_version != "null") modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}"
+ if (project.carpet_mod_version != "null") modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
 }
 loom {
  runConfigs.all {
