@@ -13,10 +13,10 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 
 public class Task {
     public String rawTask;
-    public TaskType type;
+    public TaskTypes type;
     public static boolean anyGreenPlayers = true;
     public static boolean anyYellowPlayers = true;
-    public Task(String task, TaskType type) {
+    public Task(String task, TaskTypes type) {
         this.rawTask = task;
         this.type = type;
     }
@@ -79,14 +79,14 @@ public class Task {
     }
 
     public int getDifficulty() {
-        if (type == TaskType.EASY) return 1;
-        if (type == TaskType.HARD) return 2;
-        if (type == TaskType.RED) return 3;
+        if (type == TaskTypes.EASY) return 1;
+        if (type == TaskTypes.HARD) return 2;
+        if (type == TaskTypes.RED) return 3;
         return 0;
     }
 
     public boolean killPermitted() {
-        if (type != TaskType.RED) return false;
+        if (type != TaskTypes.RED) return false;
         if (rawTask.contains("${kill_not_permitted}")) return false;
         return true;
     }

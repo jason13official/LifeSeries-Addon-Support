@@ -56,6 +56,10 @@ public class MainClient implements ClientModInitializer, IClientHelper {
 
     public static ClientConfig clientConfig;
 
+    //Config
+    public static boolean COLORBLIND_SUPPORT = false;
+    public static boolean SESSION_TIMER = false;
+
     @Override
     public void onInitializeClient() {
         FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
@@ -70,6 +74,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         Main.setClientHelper(this);
 
         clientConfig = new ClientConfig();
+        reloadConfig();
     }
 
     public static boolean isClientPlayer(UUID uuid) {
@@ -99,5 +104,15 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     @Override
     public List<Wildcards> getActiveWildcards() {
         return clientActiveWildcards;
+    }
+
+    public static void reloadConfig() {
+        COLORBLIND_SUPPORT = ClientConfig.COLORBLIND_SUPPORT.get(clientConfig);
+        if (clientCurrentSeason == Seasons.LIMITED_LIFE) {
+            SESSION_TIMER = ClientConfig.SESSION_TIMER_LIMITEDLIFE.get(clientConfig);
+        }
+        else {
+            SESSION_TIMER = ClientConfig.SESSION_TIMER.get(clientConfig);
+        }
     }
 }

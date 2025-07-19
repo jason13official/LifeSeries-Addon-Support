@@ -43,9 +43,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,MAX_PLAYER_HEALTH
                 ,KEEP_INVENTORY
 
-                ,CUSTOM_ENCHANTER_ALGORITHM
-                ,MUTE_DEAD_PLAYERS
-                ,AUTO_SET_WORLDBORDER
+                ,WORLDBORDER_SIZE
                 //? if >= 1.21.6 {
                 /*,LOCATOR_BAR
                  *///?}
@@ -55,6 +53,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN // Group
                 ,GIVELIFE_COMMAND_ENABLED // Group
                 ,GROUP_FINAL_DEATH // Group
+                ,CUSTOM_ENCHANTER_ALGORITHM
+                ,MUTE_DEAD_PLAYERS
                 ,GROUP_TABLIST // Group
                 ,GROUP_SPAWN_EGG // Group
 

@@ -5,7 +5,9 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.features.Trivia;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -107,13 +109,14 @@ public class TextHud {
     }
 
     public static int renderSessionTimer(MinecraftClient client, DrawContext context, int y) {
+        if (!MainClient.SESSION_TIMER) return 0;
         if (System.currentTimeMillis()-MainClient.sessionTimeLastUpdated > 15000) return 0;
-        if (MainClient.sessionTime == 0) return 0;
+        if (MainClient.sessionTime == SessionTimerStates.OFF.getValue()) return 0;
 
         MutableText timerText = Text.literal("");
-        if (MainClient.sessionTime == -3) timerText = timerText.append(Text.of("§7Session has ended"));
-        else if (MainClient.sessionTime == -2) timerText = timerText.append(Text.of("§7Session has been paused"));
-        else if (MainClient.sessionTime == -1) timerText = timerText.append(Text.of("§7Session has not started"));
+        if (MainClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Text.of("§7Session has ended"));
+        else if (MainClient.sessionTime == SessionTimerStates.PAUSED.getValue()) timerText = timerText.append(Text.of("§7Session has been paused"));
+        else if (MainClient.sessionTime == SessionTimerStates.NOT_STARTED.getValue()) timerText = timerText.append(Text.of("§7Session has not started"));
         else {
             long remainingTime = roundTime(MainClient.sessionTime) - System.currentTimeMillis();
             if (remainingTime < 0) timerText = timerText.append(Text.of("§7Session has ended"));
@@ -129,6 +132,7 @@ public class TextHud {
     }
 
     public static int renderLimitedLifeTimer(MinecraftClient client, DrawContext context, int y) {
+        if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
         if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
 
         MutableText timerText = Text.literal("");

@@ -343,10 +343,12 @@ public class NetworkHandlerServer {
     }
 
     public static boolean wasHandshakeSuccessful(ServerPlayerEntity player) {
+        if (player == null) return false;
         return wasHandshakeSuccessful(player.getUuid());
     }
 
     public static boolean wasHandshakeSuccessful(UUID uuid) {
+        if (uuid == null) return false;
         return NetworkHandlerServer.handshakeSuccessful.contains(uuid);
     }
 }

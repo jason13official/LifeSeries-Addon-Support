@@ -17,8 +17,10 @@ import java.util.*;
 public class ClientConfigGuiManager {
     public static void openConfig() {
         ConfigScreen.Builder builder = new ConfigScreen.Builder(MinecraftClient.getInstance().currentScreen, Text.of("Life Series Config"));
-        ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
-        addConfig(categoryGeneral, ClientConfigNetwork.configObjects);
+        if (!ClientConfigNetwork.configObjects.isEmpty()) {
+            ConfigScreen.Builder.CategoryBuilder categoryGeneral = builder.addCategory("Server");
+            addConfig(categoryGeneral, ClientConfigNetwork.configObjects);
+        }
 
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
         addConfig(categoryClient, ClientConfigNetwork.clientConfigObjects);
@@ -31,6 +33,7 @@ public class ClientConfigGuiManager {
     }
 
     public static void addConfig(ConfigScreen.Builder.CategoryBuilder category, Map<Integer, ConfigObject> allConfigObjects) {
+        if (allConfigObjects.isEmpty()) return;
         Map<String, GroupConfigEntry<?>> groupEntries = new HashMap<>();
         Map<String, String> groupModifiers = new HashMap<>();
 

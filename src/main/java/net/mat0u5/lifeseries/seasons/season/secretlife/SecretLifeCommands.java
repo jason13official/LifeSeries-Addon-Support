@@ -190,10 +190,10 @@ public class SecretLifeCommands {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        TaskType taskType = TaskType.EASY;
+        TaskTypes taskType = TaskTypes.EASY;
 
-        if (type.equalsIgnoreCase("hard")) taskType = TaskType.HARD;
-        if (type.equalsIgnoreCase("red")) taskType = TaskType.RED;
+        if (type.equalsIgnoreCase("hard")) taskType = TaskTypes.HARD;
+        if (type.equalsIgnoreCase("red")) taskType = TaskTypes.RED;
 
         TaskManager.preAssignedTasks.put(target.getUuid(), new Task(task, taskType));
 

@@ -76,6 +76,7 @@ public class WildLifeCommands {
                     )
                 )
                 .then(literal("choose")
+                    .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> chooseWildcard(
                         context.getSource())
                     )

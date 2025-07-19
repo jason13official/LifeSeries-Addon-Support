@@ -27,8 +27,8 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> CREATIVE_IGNORE_BLACKLIST = new ConfigFileEntry<>(
             "creative_ignore_blacklist", true, "global.blacklist", "Creative Ignore Blacklist", "Controls whether players in creative mode are able to bypass the blacklists."
     );
-    public final ConfigFileEntry<Boolean> AUTO_SET_WORLDBORDER = new ConfigFileEntry<>(
-            "auto_set_worldborder", true, "global", "Auto Set Worldborder", "Decides whether the world border should be shrunk when the server starts."
+    public final ConfigFileEntry<Integer> WORLDBORDER_SIZE = new ConfigFileEntry<>(
+            "worldborder_size", 500, "global", "Worldborder Size", "Sets the worldborder size."
     );
     public final ConfigFileEntry<Boolean> KEEP_INVENTORY = new ConfigFileEntry<>(
             "keep_inventory", true, "global", "Keep Inventory", "Decides whether players drop their items when they die."

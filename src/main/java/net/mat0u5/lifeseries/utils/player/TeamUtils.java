@@ -15,6 +15,10 @@ import static net.mat0u5.lifeseries.Main.server;
 public class TeamUtils {
 
     public static void createTeam(String teamName, Formatting color) {
+        createTeam(teamName, teamName, color);
+    }
+
+    public static void createTeam(String teamName, String displayName, Formatting color) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
         if (scoreboard.getTeam(teamName) != null) {
@@ -22,7 +26,7 @@ public class TeamUtils {
             return;
         }
         Team team = scoreboard.addTeam(teamName);
-        team.setDisplayName(Text.literal(teamName).formatted(color));
+        team.setDisplayName(Text.literal(displayName).formatted(color));
         team.setColor(color);
     }
 

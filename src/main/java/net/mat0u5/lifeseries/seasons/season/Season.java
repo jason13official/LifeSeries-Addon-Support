@@ -85,10 +85,8 @@ public abstract class Season extends Session {
 
     public void updateStuff() {
         if (server == null) return;
-        if (server.getOverworld().getWorldBorder().getSize() > 1000000 && seasonConfig.AUTO_SET_WORLDBORDER.get(seasonConfig)) {
-            OtherUtils.executeCommand("worldborder set 500");
-        }
 
+        OtherUtils.executeCommand("worldborder set " + seasonConfig.WORLDBORDER_SIZE.get(seasonConfig));
         server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
         server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(!NO_HEALING, server);
         //? if >= 1.21.6 {
@@ -144,7 +142,7 @@ public abstract class Season extends Session {
         TeamUtils.createTeam("Red", Formatting.RED);
         TeamUtils.createTeam("Yellow", Formatting.YELLOW);
         TeamUtils.createTeam("Green", Formatting.GREEN);
-        TeamUtils.createTeam("DarkGreen", Formatting.DARK_GREEN);
+        TeamUtils.createTeam("DarkGreen", "Dark Green", Formatting.DARK_GREEN);
     }
 
     public Formatting getColorForLives(Integer lives) {

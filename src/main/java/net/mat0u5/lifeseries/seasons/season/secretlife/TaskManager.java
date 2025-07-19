@@ -90,7 +90,7 @@ public class TaskManager {
         locationsConfig.deleteLocations();
     }
 
-    public static Task getRandomTask(TaskType type) {
+    public static Task getRandomTask(TaskTypes type) {
         String selectedTask = "";
 
         if (easyTasks.isEmpty()) {
@@ -104,28 +104,28 @@ public class TaskManager {
             SecretLifeUsedTasks.deleteAllTasks(usedTasksConfig, hardTasks);
         }
 
-        if (type == TaskType.EASY && !easyTasks.isEmpty()) {
+        if (type == TaskTypes.EASY && !easyTasks.isEmpty()) {
             selectedTask = easyTasks.get(rnd.nextInt(easyTasks.size()));
             easyTasks.remove(selectedTask);
         }
-        else if (type == TaskType.HARD && !hardTasks.isEmpty()) {
+        else if (type == TaskTypes.HARD && !hardTasks.isEmpty()) {
             selectedTask = hardTasks.get(rnd.nextInt(hardTasks.size()));
             hardTasks.remove(selectedTask);
         }
-        else if (type == TaskType.RED && !redTasks.isEmpty()) {
+        else if (type == TaskTypes.RED && !redTasks.isEmpty()) {
             selectedTask = redTasks.get(rnd.nextInt(redTasks.size()));
         }
-        if (type != TaskType.RED && !selectedTask.isEmpty()) {
+        if (type != TaskTypes.RED && !selectedTask.isEmpty()) {
             SecretLifeUsedTasks.addUsedTask(usedTasksConfig, selectedTask);
         }
         return new Task(selectedTask, type);
     }
 
-    public static List<Task> getAllTasks(TaskType type) {
+    public static List<Task> getAllTasks(TaskTypes type) {
         List<Task> result = new ArrayList<>();
         List<String> tasks = easyTasks;
-        if (type == TaskType.HARD) tasks = hardTasks;
-        else if (type == TaskType.RED) tasks = redTasks;
+        if (type == TaskTypes.HARD) tasks = hardTasks;
+        else if (type == TaskTypes.RED) tasks = redTasks;
         for (String taskStr : tasks) {
             Task task = new Task(taskStr, type);
             result.add(task);
@@ -157,7 +157,7 @@ public class TaskManager {
         return book;
     }
 
-    public static void assignRandomTaskToPlayer(ServerPlayerEntity player, TaskType type) {
+    public static void assignRandomTaskToPlayer(ServerPlayerEntity player, TaskTypes type) {
         removePlayersTaskBook(player);
         if (!currentSeason.isAlive(player)) return;
         Task task;
@@ -174,19 +174,19 @@ public class TaskManager {
         }
     }
 
-    public static void assignRandomTasks(List<ServerPlayerEntity> allowedPlayers, TaskType type) {
+    public static void assignRandomTasks(List<ServerPlayerEntity> allowedPlayers, TaskTypes type) {
         for (ServerPlayerEntity player : allowedPlayers) {
             if (!currentSeason.isAlive(player)) continue;
-            TaskType thisType = type;
+            TaskTypes thisType = type;
             if (thisType == null) {
-                thisType = TaskType.EASY;
-                if (currentSeason.isOnLastLife(player, false)) thisType = TaskType.RED;
+                thisType = TaskTypes.EASY;
+                if (currentSeason.isOnLastLife(player, false)) thisType = TaskTypes.RED;
             }
             assignRandomTaskToPlayer(player, thisType);
         }
     }
 
-    public static void chooseTasks(List<ServerPlayerEntity> allowedPlayers, TaskType type) {
+    public static void chooseTasks(List<ServerPlayerEntity> allowedPlayers, TaskTypes type) {
         secretKeeperBeingUsed = true;
         for (ServerPlayerEntity player : allowedPlayers) {
             if (!tasksChosenFor.contains(player.getUuid())) {
@@ -254,15 +254,15 @@ public class TaskManager {
         return ItemStackUtils.getCustomComponentBoolean(item, "KillPermitted");
     }
 
-    public static TaskType getPlayersTaskType(ServerPlayerEntity player) {
+    public static TaskTypes getPlayersTaskType(ServerPlayerEntity player) {
         ItemStack item = getPlayersTaskBook(player);
         if (item == null) return null;
         if (!ItemStackUtils.hasCustomComponentEntry(item,"SecretTask")) return null;
         if (!ItemStackUtils.hasCustomComponentEntry(item,"TaskDifficulty")) return null;
         int difficulty = ItemStackUtils.getCustomComponentInt(item, "TaskDifficulty");
-        if (difficulty == 1) return TaskType.EASY;
-        if (difficulty == 2) return TaskType.HARD;
-        if (difficulty == 3) return TaskType.RED;
+        if (difficulty == 1) return TaskTypes.EASY;
+        if (difficulty == 2) return TaskTypes.HARD;
+        if (difficulty == 3) return TaskTypes.RED;
         return null;
     }
 
@@ -327,7 +327,7 @@ public class TaskManager {
         return true;
     }
 
-    public static boolean hasTaskBookCheck(ServerPlayerEntity player, TaskType type) {
+    public static boolean hasTaskBookCheck(ServerPlayerEntity player, TaskTypes type) {
         if (type != null) return true;
         player.sendMessage(Text.of("§cYou do not have a secret task book in your inventory."));
         return false;
@@ -338,7 +338,7 @@ public class TaskManager {
         if (!hasSessionStarted(player)) return;
         if (isBeingUsed(player)) return;
         SecretLife season = (SecretLife) currentSeason;
-        TaskType type = getPlayersTaskType(player);
+        TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
         SessionTranscript.successTask(player);
         removePlayersTaskBook(player);
@@ -351,22 +351,22 @@ public class TaskManager {
         TaskScheduler.scheduleTask(60, () -> {
             server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvents.BLOCK_TRIAL_SPAWNER_EJECT_ITEM, SoundCategory.PLAYERS, 1.0F, 1.0F);
             AnimationUtils.spawnFireworkBall(server.getOverworld(), centerPos, 40, 0.3, new Vector3f(0, 1, 0));
-            if (type == TaskType.EASY) {
+            if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_SUCCESS);
                 addHealthThenItems(player, EASY_SUCCESS);
             }
-            if (type == TaskType.HARD) {
+            if (type == TaskTypes.HARD) {
                 showHeartTitle(player, HARD_SUCCESS);
                 addHealthThenItems(player, HARD_SUCCESS);
             }
-            if (type == TaskType.RED) {
+            if (type == TaskTypes.RED) {
                 showHeartTitle(player, RED_SUCCESS);
                 addHealthThenItems(player, RED_SUCCESS);
             }
         });
         if (season.isOnLastLife(player, false)) {
             TaskScheduler.scheduleTask(120, () -> {
-                chooseTasks(List.of(player), TaskType.RED);
+                chooseTasks(List.of(player), TaskTypes.RED);
             });
         }
     }
@@ -375,19 +375,19 @@ public class TaskManager {
         if (!hasSessionStarted(player)) return;
         if (isBeingUsed(player)) return;
         SecretLife season = (SecretLife) currentSeason;
-        TaskType type = getPlayersTaskType(player);
+        TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
-        if (type == TaskType.RED) {
+        if (type == TaskTypes.RED) {
             failTask(player);
             return;
         }
-        if (type == TaskType.EASY) {
+        if (type == TaskTypes.EASY) {
             removePlayersTaskBook(player);
             SessionTranscript.rerollTask(player);
             secretKeeperBeingUsed = true;
-            TaskType newType = TaskType.HARD;
+            TaskTypes newType = TaskTypes.HARD;
             if (season.isOnLastLife(player, false)) {
-                chooseTasks(List.of(player), TaskType.RED);
+                chooseTasks(List.of(player), TaskTypes.RED);
                 return;
             }
 
@@ -413,7 +413,7 @@ public class TaskManager {
             });
             return;
         }
-        if (type == TaskType.HARD) {
+        if (type == TaskTypes.HARD) {
             if (!season.isOnLastLife(player, true)) {
                 player.sendMessage(Text.of("§cYou cannot re-roll a Hard task."));
             }
@@ -428,7 +428,7 @@ public class TaskManager {
         if (!hasSessionStarted(player)) return;
         if (isBeingUsed(player)) return;
         SecretLife season = (SecretLife) currentSeason;
-        TaskType type = getPlayersTaskType(player);
+        TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
         SessionTranscript.failTask(player);
         removePlayersTaskBook(player);
@@ -441,15 +441,15 @@ public class TaskManager {
         TaskScheduler.scheduleTask(60, () -> {
             server.getOverworld().playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvents.BLOCK_TRIAL_SPAWNER_SPAWN_MOB, SoundCategory.PLAYERS, 1.0F, 1.0F);
             AnimationUtils.spawnFireworkBall(server.getOverworld(), centerPos, 40, 0.3, new Vector3f(1, 0, 0));
-            if (type == TaskType.EASY) {
+            if (type == TaskTypes.EASY) {
                 showHeartTitle(player, EASY_FAIL);
                 season.removePlayerHealth(player, -EASY_FAIL);
             }
-            if (type == TaskType.HARD) {
+            if (type == TaskTypes.HARD) {
                 showHeartTitle(player, HARD_FAIL);
                 season.removePlayerHealth(player, -HARD_FAIL);
             }
-            if (type == TaskType.RED) {
+            if (type == TaskTypes.RED) {
                 showHeartTitle(player, RED_FAIL);
                 season.removePlayerHealth(player, -RED_FAIL);
             }
@@ -458,7 +458,7 @@ public class TaskManager {
             }
         });
         if (season.isOnLastLife(player, false)) {
-            TaskScheduler.scheduleTask(120, () -> chooseTasks(List.of(player), TaskType.RED));
+            TaskScheduler.scheduleTask(120, () -> chooseTasks(List.of(player), TaskTypes.RED));
         }
     }
 

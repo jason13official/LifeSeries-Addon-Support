@@ -5,16 +5,16 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
-import net.minecraft.scoreboard.ReadableScoreboardScore;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
-import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.scoreboard.*;
 import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = PlayerListHud.class, priority = 1)
 public class PlayerListHudMixin {
@@ -51,4 +51,14 @@ public class PlayerListHudMixin {
         return scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.LIST);
     }
 
+
+    @Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
+    private void getName(PlayerListEntry entry, CallbackInfoReturnable<Text> cir) {
+        if (!MainClient.COLORBLIND_SUPPORT) return;
+        Text original = cir.getReturnValue();
+        if (entry == null) return;
+        Team team = entry.getScoreboardTeam();
+        if (team == null) return;
+        cir.setReturnValue(Text.literal("["+team.getDisplayName().getString() + "] ").formatted(team.getColor()).append(original));
+    }
 }

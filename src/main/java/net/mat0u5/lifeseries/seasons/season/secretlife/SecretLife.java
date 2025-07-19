@@ -94,9 +94,9 @@ public class SecretLife extends Season {
                 player.getInventory().insertStack(book);
             }
         }
-        TaskType type = TaskManager.getPlayersTaskType(player);
+        TaskTypes type = TaskManager.getPlayersTaskType(player);
         if (isOnLastLife(player, false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
-            TaskManager.chooseTasks(List.of(player), TaskType.RED);
+            TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
 

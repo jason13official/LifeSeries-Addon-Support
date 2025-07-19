@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
@@ -176,6 +177,7 @@ public class ConfigScreen extends Screen {
             if (entry instanceof GroupConfigEntry) continue;
             ClientConfigNetwork.onConfigSave(entry);
         }
+        MainClient.reloadConfig();
 
         this.client.setScreen(this.parent);
     }

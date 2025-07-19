@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.network;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.features.Trivia;
@@ -103,10 +104,13 @@ public class NetworkHandlerClient {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current season to {}", value);
             MainClient.clientCurrentSeason = Seasons.getSeasonFromStringName(value);
             ClientResourcePacks.checkClientPacks();
+            MainClient.reloadConfig();
         }
+
         if (name.equalsIgnoreCase("sessionStatus")) {
             MainClient.clientSessionStatus = SessionStatus.getSessionName(SessionStatus.getStringName(currentSession.status));
         }
+
         if (name.equalsIgnoreCase("activeWildcards")) {
             List<Wildcards> newList = new ArrayList<>();
             for (String wildcardStr : value.split("__")) {
@@ -115,19 +119,25 @@ public class NetworkHandlerClient {
             if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_CLIENT] Updated current wildcards to {}", newList);
             MainClient.clientActiveWildcards = newList;
         }
+
         if (name.equalsIgnoreCase("jump") && MinecraftClient.getInstance().player != null) {
             MinecraftClient.getInstance().player.jump();
         }
+
         if (name.equalsIgnoreCase("reset_trivia")) {
             Trivia.resetTrivia();
         }
+
         if (name.equalsIgnoreCase("select_wildcards")) {
             MinecraftClient.getInstance().setScreen(new ChooseWildcardScreen());
         }
+
         if (name.equalsIgnoreCase("open_config")) {
             ClientConfigNetwork.load();
             ClientTaskScheduler.scheduleTask(20, ClientConfigGuiManager::openConfig);
         }
+
+
         if (name.equalsIgnoreCase("select_season")) {
             MinecraftClient.getInstance().setScreen(new ChooseSeasonScreen(!value.isEmpty()));
         }
@@ -135,18 +145,21 @@ public class NetworkHandlerClient {
             Seasons season = Seasons.getSeasonFromStringName(value);
             if (season != Seasons.UNASSIGNED) MinecraftClient.getInstance().setScreen(new SeasonInfoScreen(season));
         }
+
         if (name.equalsIgnoreCase("trivia_bot_part")) {
             try {
                 UUID uuid = UUID.fromString(value);
                 MainClient.triviaBotPartUUIDs.add(uuid);
             }catch(Exception e) {}
         }
+
         if (name.equalsIgnoreCase("snail_part")) {
             try {
                 UUID uuid = UUID.fromString(value);
                 MainClient.snailPartUUIDs.add(uuid);
             }catch(Exception e) {}
         }
+
         if (name.equalsIgnoreCase("snail_pos")) {
             try {
                 String[] split = value.split("_");
@@ -155,12 +168,14 @@ public class NetworkHandlerClient {
                 MainClient.snailPosTime = System.currentTimeMillis();
             }catch(Exception e) {}
         }
+
         if (name.equalsIgnoreCase("trivia_snail_part")) {
             try {
                 UUID uuid = UUID.fromString(value);
                 MainClient.triviaSnailPartUUIDs.add(uuid);
             }catch(Exception e) {}
         }
+
         if (name.equalsIgnoreCase("trivia_snail_pos")) {
             try {
                 String[] split = value.split("_");
@@ -169,11 +184,22 @@ public class NetworkHandlerClient {
                 MainClient.triviaSnailPosTime = System.currentTimeMillis();
             }catch(Exception e) {}
         }
+
         if (name.equalsIgnoreCase("snail_textures_info")) {
             MinecraftClient.getInstance().setScreen(new SnailTextureInfoScreen());
         }
+
         if (name.equalsIgnoreCase("prevent_gliding")) {
             MainClient.preventGliding = value.equalsIgnoreCase("true");
+        }
+
+        if (name.equalsIgnoreCase("toggle_timer")) {
+            String key = ClientConfig.SESSION_TIMER.key;
+            if (MainClient.clientCurrentSeason == Seasons.LIMITED_LIFE) {
+                key = ClientConfig.SESSION_TIMER_LIMITEDLIFE.key;
+            }
+            MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
+            MainClient.reloadConfig();
         }
     }
 

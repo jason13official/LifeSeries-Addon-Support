@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -125,6 +126,9 @@ public class SessionCommand {
         final ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
+        if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
+            NetworkHandlerServer.sendStringPacket(self, "toggle_timer", "");
+        }
 
         boolean isInDisplayTimer = currentSession.isInDisplayTimer(self);
         if (isInDisplayTimer) currentSession.removeFromDisplayTimer(self);

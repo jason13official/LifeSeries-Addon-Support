@@ -49,7 +49,7 @@ public class LifeSeriesCommand {
                     .executes(context -> getVersion(context.getSource()))
                 )
                 .then(literal("config")
-                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                        .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                         .executes(context -> config(context.getSource()))
                 )
                 .then(literal("reload")
@@ -57,7 +57,7 @@ public class LifeSeriesCommand {
                     .executes(context -> reload(context.getSource()))
                 )
                 .then(literal("chooseSeries")
-                        .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                        .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
                         .executes(context -> chooseSeason(context.getSource()))
                 )
                 .then(literal("setSeries")
@@ -140,20 +140,21 @@ public class LifeSeriesCommand {
     }
 
     public static int config(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The Life Series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
         if (source.getPlayer() == null) {
             return -1;
         }
-
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
             source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the config GUI."));
             source.sendError(Text.of("§cEither install the mod on the client on modify the config folder (see above)."));
             return -1;
         }
-        else {
-            OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
-            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
+
+        if (isAdmin(source.getPlayer())) {
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The Life Series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
         }
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
         return 1;
     }
 

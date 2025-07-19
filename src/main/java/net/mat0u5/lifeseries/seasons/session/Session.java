@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -140,13 +141,11 @@ public class Session {
 
     public void addToDisplayTimer(ServerPlayerEntity player) {
         displayTimer.add(player.getUuid());
-        NetworkHandlerServer.sendLongPacket(player, "session_timer", 0);
     }
 
     public void removeFromDisplayTimer(ServerPlayerEntity player) {
         if (!displayTimer.contains(player.getUuid())) return;
         displayTimer.remove(player.getUuid());
-        NetworkHandlerServer.sendLongPacket(player, "session_timer", 0);
     }
 
     public void tick(MinecraftServer server) {
@@ -288,16 +287,16 @@ public class Session {
                     player.sendMessage(Text.literal(message).formatted(Formatting.GRAY), true);
                 }
             }
-            else if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                long timestamp = 0;
-                if (statusNotStarted()) timestamp = -1;
-                else if (statusPaused()) timestamp = -2;
-                else if (statusFinished()) timestamp = -3;
+            if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+                long timestamp = SessionTimerStates.OFF.getValue();
+                if (statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
+                else if (statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
+                else if (statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
                 else if (sessionLength != null) {
                     long remainingMillis = (sessionLength - (int) passedTime) * 50;
                     timestamp = System.currentTimeMillis() + remainingMillis;
                 }
-                if (timestamp != 0) {
+                if (timestamp != SessionTimerStates.OFF.getValue()) {
                     NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
                 }
             }

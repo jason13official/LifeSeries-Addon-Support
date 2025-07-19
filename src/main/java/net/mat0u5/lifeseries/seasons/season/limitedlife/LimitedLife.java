@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -75,18 +76,16 @@ public class LimitedLife extends Season {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
 
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
-                if (displayTimer.contains(player.getUuid())) {
-                    long timestamp = 0;
-                    if (statusNotStarted()) timestamp = -1;
-                    else if (statusPaused()) timestamp = -2;
-                    else if (statusFinished()) timestamp = -3;
-                    else if (sessionLength != null) {
-                        long remainingMillis = (sessionLength - (int) passedTime) * 50;
-                        timestamp = System.currentTimeMillis() + remainingMillis;
-                    }
-                    if (timestamp != 0) {
-                        NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
-                    }
+                long timestamp = SessionTimerStates.OFF.getValue();
+                if (statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
+                else if (statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
+                else if (statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
+                else if (sessionLength != null) {
+                    long remainingMillis = (sessionLength - (int) passedTime) * 50;
+                    timestamp = System.currentTimeMillis() + remainingMillis;
+                }
+                if (timestamp != SessionTimerStates.OFF.getValue()) {
+                    NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
                 }
 
                 if (hasAssignedLives(player) && getPlayerLives(player) != null) {

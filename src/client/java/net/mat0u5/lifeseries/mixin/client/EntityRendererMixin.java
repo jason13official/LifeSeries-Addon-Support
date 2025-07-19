@@ -6,8 +6,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
@@ -30,21 +32,36 @@ public class EntityRendererMixin<T extends Entity> {
     public Text render(Text text) {
     *///?}
         if (text != null) {
+            if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+                return text;
+            }
             if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
                 String name = MainClient.playerDisguiseNames.get(text.getString());
-                if (MinecraftClient.getInstance().getNetworkHandler() == null) {
-                    return text;
-                }
                 for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
                     if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
                         if (entry.getDisplayName() != null) {
-                            return entry.getDisplayName();
+                            return applyColorblind(entry.getDisplayName(), entry.getScoreboardTeam());
                         }
-                        return Text.literal(name);
+                        return applyColorblind(Text.literal(name), entry.getScoreboardTeam());
+                    }
+                }
+            }
+            else {
+                for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+                    if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
+                        return applyColorblind(text, entry.getScoreboardTeam());
                     }
                 }
             }
         }
         return text;
+    }
+
+    @Unique
+    public Text applyColorblind(Text original, Team team) {
+        if (!MainClient.COLORBLIND_SUPPORT) return original;
+        if (original == null) return original;
+        if (team == null) return original;
+        return Text.literal("["+team.getDisplayName().getString() + "] ").formatted(team.getColor()).append(original);
     }
 }
