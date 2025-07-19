@@ -121,7 +121,7 @@ public class BoogeymanManager {
             resetBoogeymen();
             double chanceMultiplier = 1;
             if (seasonConfig instanceof LastLifeConfig config) {
-                chanceMultiplier = config.BOOGEYMAN_CHANCE_MULTIPLIER.get(config);
+                chanceMultiplier = config.BOOGEYMAN_MIN_AMOUNT.get(config);
             }
             chooseBoogeymen(currentSeason.getAlivePlayers(), 100 * chanceMultiplier);
         });

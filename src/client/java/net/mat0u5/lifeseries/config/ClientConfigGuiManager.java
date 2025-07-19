@@ -127,6 +127,9 @@ public class ClientConfigGuiManager {
 
     public static ConfigEntry handleConfigObject(ConfigObject object) {
         if (object instanceof BooleanObject booleanObject) {
+            if (booleanObject.configType == ConfigTypes.BOOGEYMAN) {
+                return new BoogeymanConfigEntry(booleanObject.id, booleanObject.name, booleanObject.description, booleanObject.booleanValue, booleanObject.defaultValue);
+            }
             return new BooleanConfigEntry(booleanObject.id, booleanObject.name, booleanObject.description, booleanObject.booleanValue, booleanObject.defaultValue);
         }
         else if (object instanceof StringObject stringObject) {

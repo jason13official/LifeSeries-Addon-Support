@@ -13,7 +13,7 @@ public class BooleanConfigEntry extends ButtonConfigEntry implements IEntryGroup
     private static final String TEXT_FALSE = "§cNo";
 
     private final boolean defaultValue;
-    private boolean value;
+    protected boolean value;
     private boolean startingValue;
 
     public BooleanConfigEntry(String fieldName, String displayName, String description, boolean value, boolean defaultValue) {

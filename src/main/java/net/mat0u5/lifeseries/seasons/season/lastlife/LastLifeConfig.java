@@ -56,12 +56,6 @@ public class LastLifeConfig extends ConfigManager {
     );
 
 
-    public static final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
-            "boogeyman_chance_multiplier", 1.0, "season", "Boogeyman Change Multiplier", "Increases or decreases the average amount of Boogeymen for each session. (If the multiplier is set to the default of 1, sessions will have two Boogeymen on average.)"
-    );
-    public static final ConfigFileEntry<Integer> BOOGEYMAN_MAX_AMOUNT = new ConfigFileEntry<>(
-            "boogeyman_max_amount", 999, "season", "Boogeyman Max Amount", "The maximum amount of Boogeymen a session can have."
-    );
     public static final ConfigFileEntry<Integer> RANDOM_LIVES_MIN = new ConfigFileEntry<>(
             "random_lives_min", 2, "season", "Random Lives Min", "The minumum lives you can get from the random roll."
     );
@@ -84,9 +78,7 @@ public class LastLifeConfig extends ConfigManager {
     @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
-                BOOGEYMAN_CHANCE_MULTIPLIER
-                ,BOOGEYMAN_MAX_AMOUNT
-                ,RANDOM_LIVES_MIN
+                RANDOM_LIVES_MIN
                 ,RANDOM_LIVES_MAX
         ));
     }
@@ -98,6 +90,7 @@ public class LastLifeConfig extends ConfigManager {
         BLACKLIST_BLOCKS.defaultValue = "["+String.join(", ", BLACKLISTED_BLOCKS)+"]";
         BLACKLIST_CLAMPED_ENCHANTS.defaultValue = "["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]";
         GIVELIFE_COMMAND_ENABLED.defaultValue = true;
+        BOOGEYMAN.defaultValue = true;
         super.instantiateProperties();
     }
 }

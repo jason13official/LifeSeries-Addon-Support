@@ -1,9 +1,9 @@
 package net.mat0u5.lifeseries.gui.config.entries.interfaces;
 
+import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public interface ITextPopup extends IPopup {
     TextRenderer getTextRenderer();
@@ -20,6 +20,6 @@ public interface ITextPopup extends IPopup {
         TextRenderer textRenderer = getTextRenderer();
         Text popupText = getPopupText();
         if (popupText == null) return;
-        context.drawText(textRenderer, popupText, x+1, y+1, Formatting.GRAY.getColorIndex(), false);
+        context.drawText(textRenderer, popupText, x+1, y+1, TextColors.LIGHT_GRAY, false);
     }
 }

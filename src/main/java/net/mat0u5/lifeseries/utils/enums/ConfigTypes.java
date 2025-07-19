@@ -15,6 +15,7 @@ public enum ConfigTypes {
     BLOCK_LIST("blocklist"),
     EFFECT_LIST("effectlist"),
     ENCHANT_LIST("enchantlist"),
+    BOOGEYMAN("boogeyman"),
 
     GROUP("group");
 
@@ -35,7 +36,7 @@ public enum ConfigTypes {
         return this == TEXT;
     }
     public boolean parentBoolean() {
-        return this == BOOLEAN;
+        return this == BOOLEAN || this == BOOGEYMAN;
     }
     public boolean parentInteger() {
         return this == INTEGER || this == HEARTS;

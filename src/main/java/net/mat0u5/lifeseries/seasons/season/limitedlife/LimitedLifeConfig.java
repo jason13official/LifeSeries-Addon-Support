@@ -54,9 +54,6 @@ public class LimitedLifeConfig extends ConfigManager {
             "quick_charge"
     );
 
-    public static final ConfigFileEntry<Integer> BOOGEYMAN_AMOUNT = new ConfigFileEntry<>(
-            "boogeyman_amount", 1, "season", "Boogeyman Amount", "The exact amount of bogeymen for each session."
-    );
     public static final ConfigFileEntry<Integer> TIME_DEFAULT = new ConfigFileEntry<>(
             "time_default", 86400, "season.time", "Time Default", "The time with which players start, in seconds."
     );
@@ -102,8 +99,7 @@ public class LimitedLifeConfig extends ConfigManager {
     @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
-                BOOGEYMAN_AMOUNT
-                ,TICK_OFFLINE_PLAYERS
+                TICK_OFFLINE_PLAYERS
 
                 ,GROUP_TIME //Group
 
@@ -126,6 +122,8 @@ public class LimitedLifeConfig extends ConfigManager {
         BLACKLIST_CLAMPED_ENCHANTS.defaultValue = "["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]";
         FINAL_DEATH_TITLE_SUBTITLE.defaultValue = "ran out of time!";
         FINAL_DEATH_MESSAGE.defaultValue = "${player} ran out of time.";
+        BOOGEYMAN.defaultValue = true;
+        BOOGEYMAN_MAX_AMOUNT.defaultValue = 1;
         super.instantiateProperties();
     }
 }

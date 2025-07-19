@@ -43,6 +43,7 @@ public abstract class ConfigEntry {
     public float highlightAlpha = 0.0f;
     protected boolean isHovered = false;
     private boolean isFocused = false;
+    protected GroupConfigEntry<?> parentGroup;
 
     public ConfigEntry(String fieldName, String displayName, String description) {
         this.fieldName = fieldName;

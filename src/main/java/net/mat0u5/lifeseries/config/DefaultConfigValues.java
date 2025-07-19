@@ -90,11 +90,24 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_LIVES = new ConfigFileEntry<>(
             "tab_list_show_lives", false, "global.tablist", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
     );
-
     public final ConfigFileEntry<Boolean> LOCATOR_BAR = new ConfigFileEntry<>(
             "locator_bar", false, "global", "Locator Bar", "Enables the player Locator Bar."
     );
-
+    public final ConfigFileEntry<Boolean> BOOGEYMAN = new ConfigFileEntry<>(
+            "boogeyman", false, ConfigTypes.BOOGEYMAN, "{global.boogeyman}", "Boogeyman Enabled", "Enables the boogeyman."
+    );
+    public final ConfigFileEntry<Integer> BOOGEYMAN_MIN_AMOUNT = new ConfigFileEntry<>(
+            "boogeyman_min_amount", 1, "global.boogeyman", "Minimum Boogeyman Amount", "The minimum amount of Boogeymen a session can have."
+    );
+    public final ConfigFileEntry<Integer> BOOGEYMAN_MAX_AMOUNT = new ConfigFileEntry<>(
+            "boogeyman_max_amount", 99, "global.boogeyman", "Maximum Boogeyman Amount", "The maximum amount of Boogeymen a session can have."
+    );
+    public final ConfigFileEntry<String> BOOGEYMAN_IGNORE = new ConfigFileEntry<>(
+            "boogeyman_ignore", "[]", "global.boogeyman", "Boogeyman Ignore List", "A list of players that cannot become the boogeyman."
+    );
+    public final ConfigFileEntry<String> BOOGEYMAN_FORCE = new ConfigFileEntry<>(
+            "boogeyman_force", "[]", "global.boogeyman", "Boogeyman Force List", "A list of players that are forced to become the boogeyman."
+    );
 
 
     /*

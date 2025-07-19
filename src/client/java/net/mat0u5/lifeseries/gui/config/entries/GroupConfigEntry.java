@@ -39,6 +39,9 @@ public class GroupConfigEntry<T extends ConfigEntry & IEntryGroupHeader> extends
         if (openByDefault) {
             mainEntry.expand();
         }
+
+        this.mainEntry.parentGroup = this;
+        this.childEntries.forEach(entry -> entry.parentGroup = this);
     }
 
     @Override

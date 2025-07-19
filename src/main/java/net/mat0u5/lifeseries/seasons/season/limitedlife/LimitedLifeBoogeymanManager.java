@@ -25,7 +25,7 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
     public void boogeymenChooseRandom(List<ServerPlayerEntity> allowedPlayers, double currentChance) {
         int chooseAmount = 1;
         if (seasonConfig instanceof LimitedLifeConfig config) {
-            chooseAmount = config.BOOGEYMAN_AMOUNT.get(config);
+            chooseAmount = config.BOOGEYMAN_MIN_AMOUNT.get(config);
         }
         List<ServerPlayerEntity> nonRedPlayers = currentSeason.getNonRedPlayers();
         Collections.shuffle(nonRedPlayers);

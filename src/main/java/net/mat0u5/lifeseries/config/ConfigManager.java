@@ -52,6 +52,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
 
                 ,GROUP_BLACKLIST // Group
+                ,BOOGEYMAN // Group
                 ,GIVELIFE_COMMAND_ENABLED // Group
                 ,GROUP_FINAL_DEATH // Group
                 ,GROUP_TABLIST // Group
@@ -65,6 +66,11 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BLACKLIST_BANNED_ENCHANTS
                 ,BLACKLIST_BANNED_POTION_EFFECTS
                 ,CREATIVE_IGNORE_BLACKLIST
+
+                ,BOOGEYMAN_MIN_AMOUNT
+                ,BOOGEYMAN_MAX_AMOUNT
+                ,BOOGEYMAN_IGNORE
+                ,BOOGEYMAN_FORCE
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW
