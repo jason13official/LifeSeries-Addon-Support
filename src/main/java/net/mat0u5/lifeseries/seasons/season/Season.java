@@ -413,11 +413,7 @@ public abstract class Season extends Session {
     public boolean sessionStart() {
         if (super.sessionStart()) {
             boogeymanManagerNew.resetBoogeymen();
-            activeActions.addAll(List.of(
-                    boogeymanManagerNew.actionBoogeymanWarn1,
-                    boogeymanManagerNew.actionBoogeymanWarn2,
-                    boogeymanManagerNew.actionBoogeymanChoose
-            ));
+            activeActions.addAll(boogeymanManagerNew.getSessionActions());
             return true;
         }
         return false;

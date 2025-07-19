@@ -13,7 +13,6 @@ public class WildLifeConfig extends ConfigManager {
     public static final List<String> BLACKLISTED_ITEMS = List.of(
             "lectern",
             "bookshelf",
-            "enchanting_table",
             "mace",
             "end_crystal",
             "leather_helmet",

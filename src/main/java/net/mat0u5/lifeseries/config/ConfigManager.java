@@ -73,6 +73,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN_IGNORE
                 ,BOOGEYMAN_FORCE
                 ,BOOGEYMAN_MESSAGE
+                ,BOOGEYMAN_CHOOSE_MINUTE
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW

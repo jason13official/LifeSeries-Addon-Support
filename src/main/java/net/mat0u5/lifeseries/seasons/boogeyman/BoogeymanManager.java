@@ -24,42 +24,57 @@ public class BoogeymanManager {
     public double BOOGEYMAN_CHANCE_MULTIPLIER = 0.5;
     public int BOOGEYMAN_AMOUNT_MIN = 1;
     public int BOOGEYMAN_AMOUNT_MAX = 99;
+    public int BOOGEYMAN_CHOOSE_MINUTE = 10;
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
     public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
 
-    public SessionAction actionBoogeymanWarn1 = new SessionAction(OtherUtils.minutesToTicks(5)) {
-        @Override
-        public void trigger() {
-            if (!BOOGEYMAN_ENABLED) return;
-            if (boogeymanChosen) return;
-            OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 5 minutes.").formatted(Formatting.RED));
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
-        }
-    };
-    public SessionAction actionBoogeymanWarn2 = new SessionAction(OtherUtils.minutesToTicks(9)) {
-        @Override
-        public void trigger() {
-            if (!BOOGEYMAN_ENABLED) return;
-            if (boogeymanChosen) return;
-            OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 1 minute.").formatted(Formatting.RED));
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
-        }
-    };
-    public SessionAction actionBoogeymanChoose = new SessionAction(
-            OtherUtils.minutesToTicks(10),"§7Choose Boogeymen §f[00:10:00]", "Choose Boogeymen"
-    ) {
-        @Override
-        public void trigger() {
-            if (!BOOGEYMAN_ENABLED) return;
-            if (boogeymanChosen) return;
-            prepareToChooseBoogeymen();
-        }
-    };
     public List<Boogeyman> boogeymen = new ArrayList<>();
     public List<UUID> rolledPlayers = new ArrayList<>();
     public boolean boogeymanChosen = false;
 
+    public List<SessionAction> getSessionActions() {
+        List<SessionAction> actions = new ArrayList<>();
+        if (BOOGEYMAN_CHOOSE_MINUTE >= 5) {
+            actions.add(
+                new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-5)) {
+                    @Override
+                    public void trigger() {
+                        if (!BOOGEYMAN_ENABLED) return;
+                        if (boogeymanChosen) return;
+                        OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 5 minutes.").formatted(Formatting.RED));
+                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
+                    }
+                }
+            );
+        }
+        if (BOOGEYMAN_CHOOSE_MINUTE >= 1) {
+            actions.add(
+                new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-1)) {
+                    @Override
+                    public void trigger() {
+                        if (!BOOGEYMAN_ENABLED) return;
+                        if (boogeymanChosen) return;
+                        OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 1 minute.").formatted(Formatting.RED));
+                        PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
+                    }
+                }
+            );
+        }
+        actions.add(
+                new SessionAction(
+                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),"§7Choose Boogeymen §f["+OtherUtils.formatTime(BOOGEYMAN_CHOOSE_MINUTE*20*60)+"]", "Choose Boogeymen"
+                ) {
+                    @Override
+                    public void trigger() {
+                        if (!BOOGEYMAN_ENABLED) return;
+                        if (boogeymanChosen) return;
+                        prepareToChooseBoogeymen();
+                    }
+                }
+        );
+        return actions;
+    }
 
     public boolean isBoogeyman(ServerPlayerEntity player) {
         if (player == null) return false;
@@ -282,5 +297,6 @@ public class BoogeymanManager {
         for (String name : seasonConfig.BOOGEYMAN_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
             if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase());
         }
+        BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get(seasonConfig);
     }
 }
