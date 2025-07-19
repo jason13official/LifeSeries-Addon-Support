@@ -3,8 +3,10 @@ package net.mat0u5.lifeseries.seasons.season.limitedlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
+import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -21,7 +23,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
 import java.util.Collection;
-import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
@@ -40,8 +41,6 @@ public class LimitedLife extends Season {
     private int KILL_BOOGEYMAN = 3600;
     public static boolean TICK_OFFLINE_PLAYERS = false;
 
-    public LimitedLifeBoogeymanManager boogeymanManager = new LimitedLifeBoogeymanManager();
-
     @Override
     public Seasons getSeason() {
         return Seasons.LIMITED_LIFE;
@@ -50,6 +49,11 @@ public class LimitedLife extends Season {
     @Override
     public ConfigManager getConfig() {
         return new LimitedLifeConfig();
+    }
+
+    @Override
+    public BoogeymanManager createBoogeymanManager() {
+        return new LimitedLifeBoogeymanManager();
     }
 
     @Override
@@ -224,15 +228,15 @@ public class LimitedLife extends Season {
 
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        super.onClaimKill(killer, victim);
-        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+        SessionTranscript.claimKill(killer, victim);
+        Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
         if (boogeyman == null || boogeyman.cured || isOnLastLife(victim, true)) {
             addToPlayerLives(killer, KILL_NORMAL);
             PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
             return;
         }
 
-        boogeymanManager.cure(killer);
+        boogeymanManagerNew.cure(killer);
 
         //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
         boolean wasAlive = false;
@@ -262,7 +266,7 @@ public class LimitedLife extends Season {
 
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+        Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
         if (boogeyman == null || boogeyman.cured || isOnLastLife(victim, true)) {
             boolean wasAllowedToAttack = isAllowedToAttack(killer, victim);
             String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
@@ -286,7 +290,7 @@ public class LimitedLife extends Season {
             return;
         }
 
-        boogeymanManager.cure(killer);
+        boogeymanManagerNew.cure(killer);
 
         //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
         String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN);
@@ -311,8 +315,8 @@ public class LimitedLife extends Season {
         if (attacker.getPrimeAdversary() == victim && isOnLastLife(victim, false)) return true;
         if (isOnSpecificLives(attacker, 2, false) && isOnSpecificLives(victim, 3, false)) return true;
         if (attacker.getPrimeAdversary() == victim && (isOnSpecificLives(victim, 2, false) && isOnSpecificLives(attacker, 3, false))) return true;
-        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
+        Boogeyman boogeymanAttacker = boogeymanManagerNew.getBoogeyman(attacker);
+        Boogeyman boogeymanVictim = boogeymanManagerNew.getBoogeyman(victim);
         if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
         return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
@@ -320,7 +324,6 @@ public class LimitedLife extends Season {
     @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
-        boogeymanManager.onPlayerJoin(player);
         if (!hasAssignedLives(player)) {
             setPlayerLives(player, DEFAULT_TIME);
         }
@@ -349,31 +352,5 @@ public class LimitedLife extends Season {
         KILL_NORMAL = config.TIME_KILL.get(config);
         KILL_BOOGEYMAN = config.TIME_KILL_BOOGEYMAN.get(config);
         TICK_OFFLINE_PLAYERS = config.TICK_OFFLINE_PLAYERS.get(config);
-    }
-
-    @Override
-    public boolean sessionStart() {
-        if (super.sessionStart()) {
-            boogeymanManager.resetBoogeymen();
-            activeActions.addAll(List.of(
-                    boogeymanManager.actionBoogeymanWarn1,
-                    boogeymanManager.actionBoogeymanWarn2,
-                    boogeymanManager.actionBoogeymanChoose
-            ));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void sessionEnd() {
-        super.sessionEnd();
-        boogeymanManager.sessionEnd();
-    }
-
-    @Override
-    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
-        super.playerLostAllLives(player, livesBefore);
-        boogeymanManager.playerLostAllLives(player);
     }
 }

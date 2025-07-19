@@ -5,6 +5,8 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
+import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.Session;
@@ -64,11 +66,17 @@ public abstract class Season extends Session {
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
     public boolean TAB_LIST_SHOW_LIVES = false;
 
+    public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
+
     public abstract Seasons getSeason();
     public abstract ConfigManager getConfig();
 
     public Blacklist createBlacklist() {
         return new Blacklist();
+    }
+
+    public BoogeymanManager createBoogeymanManager() {
+        return new BoogeymanManager();
     }
 
     public void initialize() {
@@ -104,6 +112,8 @@ public abstract class Season extends Session {
         GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get(seasonConfig);
         TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get(seasonConfig);
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seasonConfig);
+
+        boogeymanManagerNew.onReload();
         createTeams();
         createScoreboards();
         updateStuff();
@@ -313,6 +323,7 @@ public abstract class Season extends Session {
             showDeathTitle(player);
         }
         SessionTranscript.onPlayerLostAllLives(player);
+        boogeymanManagerNew.playerLostAllLives(player);
     }
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
@@ -347,7 +358,11 @@ public abstract class Season extends Session {
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
         if (isOnLastLife(attacker, false)) return true;
-        return attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false));
+        if (attacker.getPrimeAdversary() == victim && isOnLastLife(victim, false)) return true;
+        Boogeyman boogeymanAttacker = boogeymanManagerNew.getBoogeyman(attacker);
+        Boogeyman boogeymanVictim = boogeymanManagerNew.getBoogeyman(victim);
+        if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
+        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
 
     public List<ServerPlayerEntity> getNonRedPlayers() {
@@ -387,6 +402,27 @@ public abstract class Season extends Session {
         }
         return false;
     }
+
+    @Override
+    public void sessionEnd() {
+        super.sessionEnd();
+        boogeymanManagerNew.sessionEnd();
+    }
+
+    @Override
+    public boolean sessionStart() {
+        if (super.sessionStart()) {
+            boogeymanManagerNew.resetBoogeymen();
+            activeActions.addAll(List.of(
+                    boogeymanManagerNew.actionBoogeymanWarn1,
+                    boogeymanManagerNew.actionBoogeymanWarn2,
+                    boogeymanManagerNew.actionBoogeymanChoose
+            ));
+            return true;
+        }
+        return false;
+    }
+
     /*
         Events
      */
@@ -440,6 +476,10 @@ public abstract class Season extends Session {
 
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         SessionTranscript.claimKill(killer, victim);
+        Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
+        if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
+            boogeymanManagerNew.cure(killer);
+        }
     }
 
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
@@ -452,6 +492,16 @@ public abstract class Season extends Session {
     }
 
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+        if (isAllowedToAttack(killer, victim)) {
+            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
+                boogeymanManagerNew.cure(killer);
+            }
+        }
+        else {
+            OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
+                    "§7, who is not §cred name!"));
+        }
     }
 
     public void onMobDeath(LivingEntity entity, DamageSource damageSource) {
@@ -509,6 +559,7 @@ public abstract class Season extends Session {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
+        boogeymanManagerNew.onPlayerJoin(player);
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -87,7 +88,12 @@ public class WildLife extends Season {
         if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
 
         if (isOnSpecificLives(attacker, 2, false) && isOnAtLeastLives(victim, 3, false)) return true;
-        return attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 3, false);
+        if (attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 3, false)) return true;
+
+        Boogeyman boogeymanAttacker = boogeymanManagerNew.getBoogeyman(attacker);
+        Boogeyman boogeymanVictim = boogeymanManagerNew.getBoogeyman(victim);
+        if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
+        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
 
     @Override
@@ -116,10 +122,17 @@ public class WildLife extends Season {
                 gaveLife = true;
             }
         }
-        if (isAllowedToAttack) return;
-        OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                +killer.getNameForScoreboard() + "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §2dark green name§7)"));
-        if (gaveLife) OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove a life from the killer (using §f/lives remove <player>§7) if this was indeed an unjustified kill."));
+        if (isAllowedToAttack) {
+            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
+                boogeymanManagerNew.cure(killer);
+            }
+        }
+        else {
+            OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
+                    +killer.getNameForScoreboard() + "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §2dark green name§7)"));
+            if (gaveLife) OtherUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove a life from the killer (using §f/lives remove <player>§7) if this was indeed an unjustified kill."));
+        }
     }
 
 

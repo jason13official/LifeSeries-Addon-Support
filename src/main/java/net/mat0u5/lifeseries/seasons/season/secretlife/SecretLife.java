@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -31,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class SecretLife extends Season {
@@ -290,20 +290,20 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         if (isAllowedToAttack(killer, victim)) {
-            if (currentSeason.isOnLastLife(killer, false)) {
+            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
+                boogeymanManagerNew.cure(killer);
+            }
+            if (isOnLastLife(killer, false)) {
                 addPlayerHealth(killer, 20);
                 PlayerUtils.sendTitle(killer, Text.literal("+10 Hearts").formatted(Formatting.RED), 0, 40, 20);
             }
             return;
         }
-        OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
-    }
-
-    @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (currentSeason.isOnLastLife(attacker, false)) return true;
-        return attacker.getPrimeAdversary() == victim && (currentSeason.isOnLastLife(victim, false));
+        else {
+            OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
+                    +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
+        }
     }
 
     @Override

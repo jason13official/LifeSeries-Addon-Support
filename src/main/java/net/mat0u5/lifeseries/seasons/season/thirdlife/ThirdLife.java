@@ -47,12 +47,4 @@ public class ThirdLife extends Season {
             player.sendMessage(Text.of("§7Third Life non-admin commands: §r"+COMMANDS_TEXT));
         }
     }
-
-    @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        if (isAllowedToAttack(killer, victim)) return;
-        OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                +killer.getNameForScoreboard() + "§7, who is not §cred name§f."));
-    }
-
 }

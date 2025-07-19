@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.gui.config.entries.extra.*;
 import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
-import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -24,7 +23,7 @@ public class ClientConfigGuiManager {
         ConfigScreen.Builder.CategoryBuilder categoryClient = builder.addCategory("Client");
         addConfig(categoryClient, ClientConfigNetwork.clientConfigObjects);
 
-        if (VersionControl.isDevVersion()) {
+        if (Main.DEBUG) {
             addTestingCategory(builder);
         }
 

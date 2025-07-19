@@ -69,8 +69,10 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 ,BOOGEYMAN_MIN_AMOUNT
                 ,BOOGEYMAN_MAX_AMOUNT
+                ,BOOGEYMAN_CHANCE_MULTIPLIER
                 ,BOOGEYMAN_IGNORE
                 ,BOOGEYMAN_FORCE
+                ,BOOGEYMAN_MESSAGE
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW

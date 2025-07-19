@@ -3,9 +3,6 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
-import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -25,12 +22,12 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class BoogeymanCommand {
 
     public static boolean isAllowed() {
-        return currentSeason.getSeason() == Seasons.LAST_LIFE || currentSeason.getSeason() == Seasons.LIMITED_LIFE;
+        return getBM().BOOGEYMAN_ENABLED;
     }
 
     public static boolean checkBanned(ServerCommandSource source) {
         if (isAllowed()) return false;
-        source.sendError(Text.of("This command is only available when playing Last Life or Limited Life."));
+        source.sendError(Text.of("This command is only available when the boogeyman has been enabled in the Life Series config."));
         return true;
     }
 
@@ -87,9 +84,7 @@ public class BoogeymanCommand {
     }
 
     public static BoogeymanManager getBM() {
-        if (currentSeason.getSeason() == Seasons.LAST_LIFE) return ((LastLife) currentSeason).boogeymanManager;
-        if (currentSeason.getSeason() == Seasons.LIMITED_LIFE) return ((LimitedLife) currentSeason).boogeymanManager;
-        return null;
+        return currentSeason.boogeymanManagerNew;
     }
 
     public static int failBoogey(ServerCommandSource source, ServerPlayerEntity target) {

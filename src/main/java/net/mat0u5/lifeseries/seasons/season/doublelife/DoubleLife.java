@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
+import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -107,15 +108,11 @@ public class DoubleLife extends Season {
         }
         return false;
     }
-
     @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        if (isAllowedToAttack(killer, victim)) return;
+    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
         ServerPlayerEntity soulmate = getSoulmate(victim);
-        if (soulmate != null && soulmate == killer) return;
-
-        OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
+        if (soulmate != null && soulmate == attacker) return true;
+        return super.isAllowedToAttack(attacker, victim);
     }
 
     @Override

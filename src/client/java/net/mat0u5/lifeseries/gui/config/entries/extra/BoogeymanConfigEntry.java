@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.BooleanConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
@@ -16,6 +17,7 @@ import java.util.List;
 public class BoogeymanConfigEntry extends BooleanConfigEntry {
     private static final int DESCRIPTION_OFFSET_X = LABEL_OFFSET_X + 10;
     private static final int DESCRIPTION_OFFSET_Y = PREFFERED_HEIGHT + 6;
+    private Double boogeymanMultiplier = null;
     private Integer boogeymanMin = null;
     private Integer boogeymanMax = null;
     private String[] boogeymanIgnore = null;
@@ -34,7 +36,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
 
         updateBoogeyDescription();
 
-        if (boogeymanMin == null || boogeymanMax == null || boogeymanIgnore == null || boogeymanForce == null) {
+        if (boogeymanMin == null || boogeymanMax == null || boogeymanIgnore == null || boogeymanForce == null || boogeymanMultiplier == null) {
             return;
         }
 
@@ -58,7 +60,7 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         for (int i = 0; i < 5; i++) {
             int boogeyNum = i + offset;
             if (boogeyNum > boogeymanMin) {
-                currentChance /= 2;
+                currentChance *= boogeymanMultiplier;
             }
             if (boogeyNum > boogeymanMax) {
                 currentChance = 0;
@@ -92,6 +94,9 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
                 if (stringConfigEntry.getFieldName().equalsIgnoreCase("boogeyman_force")) {
                     boogeymanForceRaw = stringConfigEntry.getValue();
                 }
+            }
+            if (entry instanceof DoubleConfigEntry doubleConfigEntry) {
+                boogeymanMultiplier = doubleConfigEntry.getValue();
             }
         }
         if (boogeymanIgnoreRaw == null || boogeymanForceRaw == null) {
