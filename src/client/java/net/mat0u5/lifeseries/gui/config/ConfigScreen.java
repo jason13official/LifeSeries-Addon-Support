@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.ClientConfigNetwork;
 import net.mat0u5.lifeseries.gui.config.entries.GroupConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.main.TextConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.font.TextRenderer;
@@ -13,23 +14,27 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static net.mat0u5.lifeseries.MainClient.clientConfig;
-
 public class ConfigScreen extends Screen {
-    private static final int HEADER_HEIGHT_SMALL = 30;
-    private static final int HEADER_HEIGHT_LARGE = 50;
+    private static int HEADER_HEIGHT_SMALL = 55;
+    private static int HEADER_HEIGHT_LARGE = 75;
     private static final int HEADER_TITLE_Y = 10;
     private static final int HEADER_CATEGORY_GAP = 5;
     private static final int HEADER_CATEGORY_Y = 24;
     private static final int HEADER_CATEGORY_MIN_WIDTH = 130;
     private static final int HEADER_CATEGORY_HEIGHT = 20;
     private static final int HEADER_CATEGORY_NAME_OFFSET_Y = 6;
+
+    private static final int SEARCH_BAR_WIDTH = 550;
+    private static final int SEARCH_BAR_HEIGHT = 20;
+    private static final int SEARCH_BAR_Y_OFFSET = -6;
 
     private static final int FOOTER_HEIGHT = 30;
     private static final int FOOTER_BUTTON_GAP = 4;
@@ -44,8 +49,10 @@ public class ConfigScreen extends Screen {
     public ConfigListWidget listWidget;
     private ButtonWidget saveButton;
     private ButtonWidget cancelButton;
+    private TextFieldWidget searchField;
     private int selectedCategory = 0;
     private boolean hasChanges = false;
+    private String currentSearchQuery = "";
 
     public ConfigScreen(Screen parent, Text title, Map<String, List<ConfigEntry>> categories) {
         super(title);
@@ -68,7 +75,19 @@ public class ConfigScreen extends Screen {
     protected void init() {
         super.init();
 
-        int listTop = this.categoryNames.size() > 1 ? HEADER_HEIGHT_LARGE : HEADER_HEIGHT_SMALL;
+        int headerHeight = this.categoryNames.size() > 1 ? HEADER_HEIGHT_LARGE : HEADER_HEIGHT_SMALL;
+        int searchBarY = headerHeight - SEARCH_BAR_HEIGHT + SEARCH_BAR_Y_OFFSET;
+        int listTop = headerHeight;
+
+        int searchBarWidth = Math.min(SEARCH_BAR_WIDTH, this.width - 40);
+        this.searchField = new TextFieldWidget(this.textRenderer,
+                (this.width-searchBarWidth)/2, searchBarY,
+                searchBarWidth, SEARCH_BAR_HEIGHT,
+                Text.of("§7Search config..."));
+        this.searchField.setPlaceholder(Text.of("§7Search config..."));
+        this.searchField.setText(this.currentSearchQuery);
+        this.searchField.setChangedListener(this::onSearchChanged);
+        this.addSelectableChild(this.searchField);
 
         this.listWidget = new ConfigListWidget(this.client, this.width, this.height - listTop - FOOTER_HEIGHT, listTop, ConfigEntry.PREFFERED_HEIGHT);
         listWidget.setScreen(this);
@@ -91,14 +110,68 @@ public class ConfigScreen extends Screen {
         this.updateButtonStates();
     }
 
+    private void onSearchChanged(String query) {
+        this.currentSearchQuery = query;
+        this.refreshList();
+    }
+
+    private boolean matchesSearch(ConfigEntry entry, String query) {
+        if (entry instanceof TextConfigEntry) {
+            return false;
+        }
+
+        if (query.isEmpty()) {
+            return true;
+        }
+
+        String lowerQuery = query.toLowerCase();
+
+        if (entry.getDisplayName().getString().toLowerCase().contains(lowerQuery)) {
+            return true;
+        }
+
+        if (entry.getFieldName().toLowerCase().contains(lowerQuery)) {
+            return true;
+        }
+
+        String description = entry.getDescription();
+        if (description != null && !description.isEmpty() && description.toLowerCase().contains(lowerQuery)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<ConfigEntry> getFilteredEntries(List<ConfigEntry> entries, String searchQuery) {
+        if (searchQuery.isEmpty()) {
+            return entries;
+        }
+
+        List<ConfigEntry> filteredEntries = new ArrayList<>();
+        for (ConfigEntry entry : entries) {
+            if (matchesSearch(entry, searchQuery)) {
+                filteredEntries.add(entry);
+            }
+        }
+        return filteredEntries;
+    }
+
     private void refreshList() {
         this.listWidget.clearAllEntries();
         if (this.selectedCategory < this.categoryNames.size()) {
             String categoryName = this.categoryNames.get(this.selectedCategory);
             List<ConfigEntry> entries = this.categories.get(categoryName);
             if (entries != null) {
-                for (ConfigEntry entry : entries) {
-                    this.listWidget.addEntry(entry);
+                String searchQuery = this.currentSearchQuery.trim();
+                if (searchQuery.isEmpty()) {
+                    for (ConfigEntry entry : entries) {
+                        this.listWidget.addEntry(entry);
+                    }
+                }
+                else {
+                    for (ConfigEntry entry : getFilteredEntries(getAllEntries(entries), searchQuery)) {
+                        this.listWidget.addEntry(entry);
+                    }
                 }
             }
         }
@@ -115,6 +188,7 @@ public class ConfigScreen extends Screen {
         }
         return getAllEntries(allSurfaceEntries);
     }
+
     public List<ConfigEntry> getAllEntries(List<ConfigEntry> currentEntries) {
         List<ConfigEntry> allEntries = new ArrayList<>();
         for (ConfigEntry entry : currentEntries) {
@@ -213,10 +287,11 @@ public class ConfigScreen extends Screen {
             this.renderCategoryTabs(context, mouseX, mouseY);
         }
 
+        this.searchField.render(context, mouseX, mouseY, delta);
+
         if (this.hasErrors()) {
             context.drawTextWithShadow(this.textRenderer, Text.of("Errors"), 10, HEADER_TITLE_Y, TextColors.LIGHT_RED);
         }
-
     }
 
     private void renderCategoryTabs(DrawContext context, int mouseX, int mouseY) {
@@ -242,6 +317,14 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.searchField.mouseClicked(mouseX, mouseY, button)) {
+            focusSearch();
+            return true;
+        }
+        else {
+            this.searchField.setFocused(false);
+        }
+
         if (this.categoryNames.size() > 1 && button == 0) {
             int tabWidth = Math.min(HEADER_CATEGORY_MIN_WIDTH, this.width / this.categoryNames.size());
             int startX = (this.width - ((tabWidth+HEADER_CATEGORY_GAP) * this.categoryNames.size())) / 2;
@@ -262,6 +345,37 @@ public class ConfigScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.searchField.isFocused() && this.searchField.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        }
+
+        // Ctrl+F to focus search
+        if (keyCode == GLFW.GLFW_KEY_F && (modifiers & GLFW.GLFW_MOD_CONTROL) != 0) {
+            focusSearch();
+            return true;
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        if (this.searchField.isFocused() && this.searchField.charTyped(chr, modifiers)) {
+            return true;
+        }
+        return super.charTyped(chr, modifiers);
+    }
+
+    public void focusSearch() {
+        if (focusedEntry != null) {
+            focusedEntry.setFocused(false);
+            focusedEntry = null;
+        }
+        searchField.setFocused(true);
+    }
+
     public TextRenderer getTextRenderer() {
         return this.textRenderer;
     }
@@ -273,6 +387,7 @@ public class ConfigScreen extends Screen {
     public void setFocusedEntry(ConfigEntry entry) {
         if (entry instanceof GroupConfigEntry) return;
         if (focusedEntry == entry) return;
+        searchField.setFocused(false);
 
         if (focusedEntry != null) {
             focusedEntry.setFocused(false);

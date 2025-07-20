@@ -84,6 +84,7 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
         if (isHovered) {
             ConfigEntry entry = screen.getFocusedEntry();
             if (!(entry instanceof IPopup popup)) return true;
+            if (popup == this) return true;
             return !popup.shouldShowPopup();
 
         }

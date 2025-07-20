@@ -59,12 +59,12 @@ public class GivelifeCommand {
             return -1;
         }
         Integer currentLives = currentSeason.getPlayerLives(self);
-        if (currentLives <= 1) {
+        if (currentLives == null || currentLives <= 1) {
             source.sendError(Text.of("You cannot give away your last life."));
             return -1;
         }
         Integer targetLives = currentSeason.getPlayerLives(target);
-        if (targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
+        if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
             source.sendError(Text.of("That player cannot receive any more lives."));
             return -1;
         }

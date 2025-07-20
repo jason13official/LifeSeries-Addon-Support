@@ -53,6 +53,7 @@ public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFie
         if (isHovered) {
             ConfigEntry entry = screen.getFocusedEntry();
             if (!(entry instanceof IPopup popup)) return true;
+            if (popup == this) return true;
             return !popup.shouldShowPopup();
 
         }

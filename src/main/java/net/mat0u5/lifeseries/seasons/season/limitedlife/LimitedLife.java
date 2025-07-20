@@ -91,7 +91,8 @@ public class LimitedLife extends Season {
                 if (hasAssignedLives(player) && getPlayerLives(player) != null) {
                     long playerLives;
                     if (isAlive(player)) {
-                        playerLives = getPlayerLives(player);
+                        Integer playerLivesInt = getPlayerLives(player);
+                        playerLives = playerLivesInt == null ? -1 : playerLivesInt;
                     }
                     else {
                         playerLives = -1;
@@ -187,6 +188,7 @@ public class LimitedLife extends Season {
     public Boolean isOnLastLife(ServerPlayerEntity player) {
         if (!isAlive(player)) return null;
         Integer lives = currentSeason.getPlayerLives(player);
+        if (lives == null) return null;
         return lives < RED_TIME;
     }
 
@@ -194,6 +196,7 @@ public class LimitedLife extends Season {
     public Boolean isOnSpecificLives(ServerPlayerEntity player, int check) {
         if (!isAlive(player)) return null;
         Integer lives = currentSeason.getPlayerLives(player);
+        if (lives == null) return null;
         if (check == 1) return 0 < lives && lives < RED_TIME;
         if (check == 2) return RED_TIME <= lives && lives < YELLOW_TIME;
         if (check == 3) return lives >= YELLOW_TIME;

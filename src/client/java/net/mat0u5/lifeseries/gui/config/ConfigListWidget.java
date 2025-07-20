@@ -198,6 +198,11 @@ public class ConfigListWidget extends AlwaysSelectedEntryListWidget<ConfigListWi
         return getY() + 4 - (int)getScrolledAmount();
     }
 
+    @Override
+    public int getEntryCount() {
+        return this.children().size();
+    }
+
     public static class ConfigEntryWidget extends AlwaysSelectedEntryListWidget.Entry<ConfigEntryWidget> {
         private final ConfigEntry configEntry;
 

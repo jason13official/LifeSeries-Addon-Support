@@ -79,6 +79,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,FINAL_DEATH_TITLE_SHOW
                 ,FINAL_DEATH_TITLE_SUBTITLE
                 ,FINAL_DEATH_MESSAGE
+                ,FINAL_DEATH_LIGHTNING
+                ,FINAL_DEATH_SOUND
 
                 ,GIVELIFE_LIVES_MAX
 

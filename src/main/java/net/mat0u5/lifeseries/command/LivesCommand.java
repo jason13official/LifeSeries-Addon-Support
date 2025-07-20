@@ -126,8 +126,8 @@ public class LivesCommand {
         }
 
         Integer playerLives = currentSeason.getPlayerLives(self);
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeason.getFormattedLives(playerLives)).append(Text.of((playerLives==1?" life.":" lives."))));
-        if (playerLives <= 0) {
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeason.getFormattedLives(playerLives)).append(Text.of(((playerLives != null && playerLives==1)?" life.":" lives."))));
+        if (playerLives == null || playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
 

@@ -33,10 +33,12 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -65,6 +67,8 @@ public abstract class Season extends Session {
     public int GIVELIFE_MAX_LIVES = 99;
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
     public boolean TAB_LIST_SHOW_LIVES = false;
+    public boolean FINAL_DEATH_LIGHTNING = true;
+    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
 
     public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
 
@@ -110,6 +114,8 @@ public abstract class Season extends Session {
         GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get(seasonConfig);
         TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get(seasonConfig);
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seasonConfig);
+        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
+        FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
 
         boogeymanManagerNew.onReload();
         createTeams();
@@ -158,8 +164,10 @@ public abstract class Season extends Session {
         return getFormattedLives(getPlayerLives(player));
     }
 
-    public Text getFormattedLives(Integer lives) {
-        if (lives == null) return Text.empty();
+    public Text getFormattedLives(@Nullable Integer lives) {
+        if (lives == null) {
+            lives = 0;
+        }
         Formatting color = getColorForLives(lives);
         return Text.literal(String.valueOf(lives)).formatted(color);
     }
@@ -196,6 +204,7 @@ public abstract class Season extends Session {
         Events.updatePlayerListsNextTick = true;
     }
 
+    @Nullable
     public Integer getPlayerLives(ServerPlayerEntity player) {
         return ScoreboardUtils.getScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives");
     }
@@ -207,6 +216,7 @@ public abstract class Season extends Session {
 
     public boolean isAlive(ServerPlayerEntity player) {
         Integer lives = getPlayerLives(player);
+        if (lives == null) return false;
         if (!hasAssignedLives(player)) return false;
         return lives > 0;
     }
@@ -271,6 +281,7 @@ public abstract class Season extends Session {
     public Boolean isOnLastLife(ServerPlayerEntity player) {
         if (!isAlive(player)) return null;
         Integer lives = currentSeason.getPlayerLives(player);
+        if (lives == null) return null;
         return lives == 1;
     }
 
@@ -284,6 +295,7 @@ public abstract class Season extends Session {
     public Boolean isOnSpecificLives(ServerPlayerEntity player, int check) {
         if (!isAlive(player)) return null;
         Integer lives = currentSeason.getPlayerLives(player);
+        if (lives == null) return null;
         return lives == check;
     }
 
@@ -297,6 +309,7 @@ public abstract class Season extends Session {
     public Boolean isOnAtLeastLives(ServerPlayerEntity player, int check) {
         if (!isAlive(player)) return null;
         Integer lives = currentSeason.getPlayerLives(player);
+        if (lives == null) return null;
         return lives >= check;
     }
 
@@ -315,9 +328,13 @@ public abstract class Season extends Session {
         info.put(pos, List.of(player.getYaw(),player.getPitch()));
         respawnPositions.put(player.getUuid(), info);
         dropItemsOnLastDeath(player);
-        if (livesBefore > 0) {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
-            WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
+        if (livesBefore != null && livesBefore > 0) {
+            if (FINAL_DEATH_SOUND != null) {
+                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
+            }
+            if (FINAL_DEATH_LIGHTNING) {
+                WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
+            }
             showDeathTitle(player);
         }
         SessionTranscript.onPlayerLostAllLives(player);

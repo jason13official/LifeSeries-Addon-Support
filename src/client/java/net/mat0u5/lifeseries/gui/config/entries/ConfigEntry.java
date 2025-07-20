@@ -197,6 +197,10 @@ public abstract class ConfigEntry {
         return Text.literal(displayName);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public boolean hasError() {
         return hasError;
     }

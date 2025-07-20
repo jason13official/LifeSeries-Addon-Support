@@ -130,7 +130,7 @@ public class LimitedLifeCommands {
 
         Integer playerLives = currentSeason.getPlayerLives(self);
         OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeason.getFormattedLives(playerLives)).append(Text.of(" left.")));
-        if (playerLives <= 0) {
+        if (playerLives == null || playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
 
