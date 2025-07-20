@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -205,6 +206,9 @@ public class LivesCommand {
             String pt4 = amount >= 0 ? " to " : " from ";
             Text finalText = Text.of(pt1+pt2+pt3+pt4).copy().append(target.getStyledDisplayName()).append(".");
             OtherUtils.sendCommandFeedback(source, finalText);
+        }
+        if (currentSeason instanceof DoubleLife doubleLife) {
+            doubleLife.syncSoulboundLives(target);
         }
         return 1;
     }

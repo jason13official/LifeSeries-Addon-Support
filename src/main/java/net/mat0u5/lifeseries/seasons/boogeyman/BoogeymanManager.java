@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -262,6 +263,9 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
         OtherUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
         currentSeason.setPlayerLives(player, 1);
+        if (currentSeason instanceof DoubleLife doubleLife) {
+            doubleLife.syncSoulboundLives(player);
+        }
     }
 
     public void playerLostAllLives(ServerPlayerEntity player) {

@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -23,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.border.WorldBorder;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -83,8 +83,7 @@ public class DoubleLife extends Season {
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 
-        ServerPlayerEntity soulmate = getSoulmate(player);
-        syncPlayers(player, soulmate);
+        syncPlayer(player);
     }
 
     @Override
@@ -118,9 +117,7 @@ public class DoubleLife extends Season {
     @Override
     public void onPlayerRespawn(ServerPlayerEntity player) {
         super.onPlayerRespawn(player);
-        ServerPlayerEntity soulmate = getSoulmate(player);
-        if (soulmate == null) return;
-        syncPlayers(player, soulmate);
+        syncPlayer(player);
     }
 
     public void loadSoulmates() {
@@ -159,6 +156,7 @@ public class DoubleLife extends Season {
         return PlayerUtils.getPlayer(soulmateUUID) != null;
     }
 
+    @Nullable
     public ServerPlayerEntity getSoulmate(ServerPlayerEntity player) {
         if (server == null) return null;
         if (!isSoulmateOnline(player)) return null;
@@ -344,7 +342,13 @@ public class DoubleLife extends Season {
 
     }
 
+    public void syncPlayer(ServerPlayerEntity player) {
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        syncPlayers(player, soulmate);
+    }
+
     public void syncPlayers(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+        if (player == null || soulmate == null) return;
         if (player.isDead() || soulmate.isDead()) return;
         if (player.getHealth() != soulmate.getHealth()) {
             float sharedHealth = Math.min(player.getHealth(), soulmate.getHealth());
@@ -363,6 +367,16 @@ public class DoubleLife extends Season {
                 setPlayerLives(soulmate, minLives);
             }
         }
+    }
+
+    public void syncSoulboundLives(ServerPlayerEntity player) {
+        if (player == null) return;
+        Integer lives = getPlayerLives(player);
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        if (lives == null) return;
+        if (soulmate == null) return;
+        if (player.isDead() || soulmate.isDead()) return;
+        setPlayerLives(soulmate, lives);
     }
 
     public void canFoodHeal(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
