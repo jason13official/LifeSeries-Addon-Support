@@ -17,12 +17,12 @@ import net.minecraft.client.sound.SoundSystem;
 public class SoundManagerMixin {
     //? if <= 1.21.5 {
     @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"))
-    private void getAdjustedPitch(SoundInstance sound, CallbackInfo ci) {
+    private void play(SoundInstance sound, CallbackInfo ci) {
         ClientSounds.onSoundPlay(sound);
     }
     //?} else {
     /*@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)Lnet/minecraft/client/sound/SoundSystem$PlayResult;", at = @At("HEAD"))
-    private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<SoundSystem.PlayResult> cir) {
+    private void play(SoundInstance sound, CallbackInfoReturnable<SoundSystem.PlayResult> cir) {
         ClientSounds.onSoundPlay(sound);
     }
     *///?}
