@@ -127,6 +127,9 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_superspeed_step", false, "season.superpowers", "Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
     );
 
+    public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
+            "group_general", null, ConfigTypes.TEXT, "{season.general}", "General", ""
+    );
     public static final ConfigFileEntry<Object> GROUP_SIZESHIFTING = new ConfigFileEntry<>(
             "group_sizeshifting", null, ConfigTypes.TEXT, "{season.sizeshifting}", "Size Shifting", ""
     );
@@ -145,8 +148,12 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Object> GROUP_SUPERPOWERS = new ConfigFileEntry<>(
             "group_superpowers", null, ConfigTypes.TEXT, "{season.superpowers}", "Superpowers", ""
     );
+
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
-            "activate_wildcard_minute", 2.5, "season", "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
+            "activate_wildcard_minute", 2.5, "season.general", "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
+    );
+    public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
+            "killing_dark_greens_gains_lives", true, "season.general", "Killing Dark Greens Gains Lives", "Controls whether killing dark green players (4+ lives) gives the killer a life."
     );
 
     public WildLifeConfig() {
@@ -156,7 +163,7 @@ public class WildLifeConfig extends ConfigManager {
     @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
-                ACTIVATE_WILDCARD_MINUTE
+                GROUP_GENERAL //Group
                 ,GROUP_SIZESHIFTING //Group
                 ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
                 ,GROUP_SNAILS //Group
@@ -166,6 +173,9 @@ public class WildLifeConfig extends ConfigManager {
                 ,GROUP_SUPERPOWERS //Group
 
                 //Group stuff
+                ,KILLING_DARK_GREENS_GAINS_LIVES
+                ,ACTIVATE_WILDCARD_MINUTE
+
                 ,WILDCARD_SIZESHIFTING_MIN_SIZE
                 ,WILDCARD_SIZESHIFTING_MAX_SIZE
                 ,WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER

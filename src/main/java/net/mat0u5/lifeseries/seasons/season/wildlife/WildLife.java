@@ -47,6 +47,7 @@ import static net.mat0u5.lifeseries.Main.seasonConfig;
 public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
+    public static boolean KILLING_DARK_GREENS_GAINS_LIVES = true;
 
     @Override
     public Seasons getSeason() {
@@ -113,12 +114,14 @@ public class WildLife extends Season {
                         addPlayerLife(killer);
                         Necromancy.removeRessurectedPlayer(killer);
                         AttributeUtils.resetAttributesOnPlayerJoin(killer);
+                        gaveLife = true;
                     }
-                    gaveLife = true;
                 }
             }
             else {
-                addPlayerLife(killer);
+                if (KILLING_DARK_GREENS_GAINS_LIVES) {
+                    addPlayerLife(killer);
+                }
                 gaveLife = true;
             }
         }
@@ -139,7 +142,7 @@ public class WildLife extends Season {
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         super.onClaimKill(killer, victim);
-        if (isOnAtLeastLives(victim, 4, false)) {
+        if (isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             addPlayerLife(killer);
         }
     }
@@ -214,6 +217,7 @@ public class WildLife extends Season {
         WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
         Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
         WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
+        KILLING_DARK_GREENS_GAINS_LIVES = WildLifeConfig.KILLING_DARK_GREENS_GAINS_LIVES.get(config);
 
         Snails.loadConfig();
         Snails.loadSnailNames();
