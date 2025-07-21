@@ -142,21 +142,23 @@ public abstract class Season extends Session {
             }
         }
 
-        TeamUtils.createTeam("Dead", Formatting.DARK_GRAY);
-        TeamUtils.createTeam("Unassigned", Formatting.GRAY);
+        TeamUtils.createTeam("lives_null", Formatting.GRAY);
 
-        TeamUtils.createTeam("Red", Formatting.RED);
-        TeamUtils.createTeam("Yellow", Formatting.YELLOW);
-        TeamUtils.createTeam("Green", Formatting.GREEN);
-        TeamUtils.createTeam("DarkGreen", "Dark Green", Formatting.DARK_GREEN);
+        TeamUtils.createTeam("lives_0", "Dead", Formatting.DARK_GRAY);
+        TeamUtils.createTeam("lives_1", "Red", Formatting.RED);
+        TeamUtils.createTeam("lives_2", "Yellow", Formatting.YELLOW);
+        TeamUtils.createTeam("lives_3", "Green", Formatting.GREEN);
+        TeamUtils.createTeam("lives_4", "Dark Green", Formatting.DARK_GREEN);
     }
 
     public Formatting getColorForLives(Integer lives) {
-        if (lives == null) return Formatting.GRAY;
-        if (lives == 1) return Formatting.RED;
-        if (lives == 2) return Formatting.YELLOW;
-        if (lives == 3) return Formatting.GREEN;
-        if (lives >= 4) return Formatting.DARK_GREEN;
+        Team team = TeamUtils.getTeam(getTeamForLives(lives));
+        if (team != null) {
+            Formatting color = team.getColor();
+            if (color != null) {
+                return color;
+            }
+        }
         return Formatting.DARK_GRAY;
     }
 
@@ -194,14 +196,50 @@ public abstract class Season extends Session {
 
     public void reloadPlayerTeamActual(ServerPlayerEntity player) {
         Integer lives = getPlayerLives(player);
-        if (lives == null) TeamUtils.addEntityToTeam("Unassigned",player);
-        else if (lives <= 0) TeamUtils.addEntityToTeam("Dead",player);
-        else if (lives == 1) TeamUtils.addEntityToTeam("Red",player);
-        else if (lives == 2) TeamUtils.addEntityToTeam("Yellow",player);
-        else if (lives == 3) TeamUtils.addEntityToTeam("Green",player);
-        else if (lives >= 4) TeamUtils.addEntityToTeam("DarkGreen",player);
+        String team = getTeamForLives(lives);
+
+        TeamUtils.addEntityToTeam(team,player);
+
         if (currentSeason.getSeason() == Seasons.WILD_LIFE) WildLife.changedPlayerTeam(player);
         Events.updatePlayerListsNextTick = true;
+    }
+
+    public String getTeamForLives(Integer lives) {
+        String prefix = "lives_";
+        String nullTeam = prefix+"null";
+        if (lives == null) {
+            return nullTeam;
+        }
+        List<Integer> livesTeams = new ArrayList<>();
+        Collection<Team> allTeams = TeamUtils.getAllTeams();
+        if (allTeams != null) {
+            for (Team team : allTeams) {
+                String name = team.getName();
+                if (name.startsWith(prefix)) {
+                    try {
+                        int index = Integer.parseInt(name.replaceAll(prefix,""));
+                        if (index == lives) {
+                            return name;
+                        }
+                        livesTeams.add(index);
+                    }catch(Exception ignored) {}
+                }
+            }
+        }
+        if (!livesTeams.isEmpty()) {
+            Collections.sort(livesTeams);
+
+            if (lives <= livesTeams.getFirst()) {
+                return prefix + livesTeams.getFirst();
+            }
+            Collections.reverse(livesTeams);
+            for (int i : livesTeams) {
+                if (lives >= i) {
+                    return prefix + i;
+                }
+            }
+        }
+        return nullTeam;
     }
 
     @Nullable

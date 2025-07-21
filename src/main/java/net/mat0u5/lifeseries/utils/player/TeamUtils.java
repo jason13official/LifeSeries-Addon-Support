@@ -71,6 +71,12 @@ public class TeamUtils {
         return true;
     }
 
+    public static Team getTeam(String teamName) {
+        if (server == null) return null;
+        Scoreboard scoreboard = server.getScoreboard();
+        return scoreboard.getTeam(teamName);
+    }
+
     public static Team getPlayerTeam(ServerPlayerEntity player) {
         if (server == null) return null;
         Scoreboard scoreboard = server.getScoreboard();
