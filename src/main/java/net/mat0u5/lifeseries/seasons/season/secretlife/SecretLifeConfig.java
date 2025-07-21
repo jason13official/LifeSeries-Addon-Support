@@ -70,6 +70,9 @@ public class SecretLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Integer> TASK_HEALTH_RED_FAIL = new ConfigFileEntry<>(
             "task_health_red_fail", -5, "season.health", "Task Health Red Fail", "The health you lose for failing a red task."
     );
+    public static final ConfigFileEntry<Double> ASSIGN_TASKS_MINUTE = new ConfigFileEntry<>(
+            "assign_tasks_minute", 1.0, "season", "Assign Tasks Time", "The number of minutes (in the session) after which the tasks get assigned."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_HEALTH = new ConfigFileEntry<>(
             "group_health", null, ConfigTypes.TEXT, "{season.health}", "Health Rewards / Punishments", ""
@@ -83,6 +86,7 @@ public class SecretLifeConfig extends ConfigManager {
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 PLAYERS_DROP_TASK_ON_DEATH
+                ,ASSIGN_TASKS_MINUTE
 
                 ,GROUP_HEALTH //Group
 

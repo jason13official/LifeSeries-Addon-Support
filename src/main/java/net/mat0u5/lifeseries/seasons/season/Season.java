@@ -570,7 +570,6 @@ public abstract class Season extends Session {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
-        boogeymanManagerNew.onPlayerJoin(player);
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
@@ -579,6 +578,7 @@ public abstract class Season extends Session {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
             player.sendMessage(Text.of("After that, use §b'/session start'§f to start the session."));
         }
+        boogeymanManagerNew.onPlayerFinishJoining(player);
     }
 
 

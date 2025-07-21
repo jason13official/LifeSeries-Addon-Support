@@ -25,7 +25,7 @@ public class BoogeymanManager {
     public double BOOGEYMAN_CHANCE_MULTIPLIER = 0.5;
     public int BOOGEYMAN_AMOUNT_MIN = 1;
     public int BOOGEYMAN_AMOUNT_MAX = 99;
-    public int BOOGEYMAN_CHOOSE_MINUTE = 10;
+    public double BOOGEYMAN_CHOOSE_MINUTE = 10;
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
     public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
@@ -35,6 +35,7 @@ public class BoogeymanManager {
     public boolean boogeymanChosen = false;
 
     public List<SessionAction> getSessionActions() {
+        if (!BOOGEYMAN_ENABLED) return new ArrayList<>();
         List<SessionAction> actions = new ArrayList<>();
         if (BOOGEYMAN_CHOOSE_MINUTE >= 5) {
             actions.add(
@@ -64,7 +65,7 @@ public class BoogeymanManager {
         }
         actions.add(
                 new SessionAction(
-                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),"§7Choose Boogeymen §f["+OtherUtils.formatTime(BOOGEYMAN_CHOOSE_MINUTE*20*60)+"]", "Choose Boogeymen"
+                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),"§7Choose Boogeymen §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))+"]", "Choose Boogeymen"
                 ) {
                     @Override
                     public void trigger() {
@@ -275,13 +276,13 @@ public class BoogeymanManager {
         boogeyman.died = true;
     }
 
-    public void onPlayerJoin(ServerPlayerEntity player) {
+    public void onPlayerFinishJoining(ServerPlayerEntity player) {
         if (!BOOGEYMAN_ENABLED) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUuid())) return;
         if (!currentSeason.isAlive(player)) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
-        TaskScheduler.scheduleTask(200, () -> {
+        TaskScheduler.scheduleTask(40, () -> {
             player.sendMessage(Text.of("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));
             chooseBoogeymen(List.of(player), true);
         });

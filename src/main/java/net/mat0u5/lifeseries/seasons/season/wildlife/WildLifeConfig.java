@@ -145,6 +145,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Object> GROUP_SUPERPOWERS = new ConfigFileEntry<>(
             "group_superpowers", null, ConfigTypes.TEXT, "{season.superpowers}", "Superpowers", ""
     );
+    public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
+            "activate_wildcard_minute", 2.5, "season", "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
+    );
 
     public WildLifeConfig() {
         super("./config/"+ Main.MOD_ID,"wildlife.properties");
@@ -153,7 +156,8 @@ public class WildLifeConfig extends ConfigManager {
     @Override
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
-                GROUP_SIZESHIFTING //Group
+                ACTIVATE_WILDCARD_MINUTE
+                ,GROUP_SIZESHIFTING //Group
                 ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
                 ,GROUP_SNAILS //Group
                 ,GROUP_TIMEDILATION //Group

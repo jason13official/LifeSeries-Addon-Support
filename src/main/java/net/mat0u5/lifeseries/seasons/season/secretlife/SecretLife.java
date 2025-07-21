@@ -76,12 +76,13 @@ public class SecretLife extends Season {
         if (!(seasonConfig instanceof SecretLifeConfig config)) return;
 
         MAX_HEALTH = config.MAX_PLAYER_HEALTH.get(config);
-        TaskManager.EASY_SUCCESS = config.TASK_HEALTH_EASY_PASS.get(config);
-        TaskManager.EASY_FAIL = config.TASK_HEALTH_EASY_FAIL.get(config);
-        TaskManager.HARD_SUCCESS = config.TASK_HEALTH_HARD_PASS.get(config);
-        TaskManager.HARD_FAIL = config.TASK_HEALTH_HARD_FAIL.get(config);
-        TaskManager.RED_SUCCESS = config.TASK_HEALTH_RED_PASS.get(config);
-        TaskManager.RED_FAIL = config.TASK_HEALTH_RED_FAIL.get(config);
+        TaskManager.EASY_SUCCESS = SecretLifeConfig.TASK_HEALTH_EASY_PASS.get(config);
+        TaskManager.EASY_FAIL = SecretLifeConfig.TASK_HEALTH_EASY_FAIL.get(config);
+        TaskManager.HARD_SUCCESS = SecretLifeConfig.TASK_HEALTH_HARD_PASS.get(config);
+        TaskManager.HARD_FAIL = SecretLifeConfig.TASK_HEALTH_HARD_FAIL.get(config);
+        TaskManager.RED_SUCCESS = SecretLifeConfig.TASK_HEALTH_RED_PASS.get(config);
+        TaskManager.RED_FAIL = SecretLifeConfig.TASK_HEALTH_RED_FAIL.get(config);
+        TaskManager.ASSIGN_TASKS_MINUTE = SecretLifeConfig.ASSIGN_TASKS_MINUTE.get(config);
     }
 
     @Override
@@ -258,7 +259,7 @@ public class SecretLife extends Season {
         if (TaskManager.checkSecretLifePositions()) {
             if (super.sessionStart()) {
                 activeActions.addAll(
-                        List.of(TaskManager.actionChooseTasks, taskWarningAction, taskWarningAction2)
+                        List.of(TaskManager.getActionChooseTasks(), taskWarningAction, taskWarningAction2)
                 );
                 SecretLifeCommands.playersGiven.clear();
                 TaskManager.tasksChosen = false;
@@ -283,7 +284,7 @@ public class SecretLife extends Season {
         if (!playersWithTaskBooks.isEmpty()) {
             boolean isOne = playersWithTaskBooks.size() == 1;
             String playerNames = String.join(", ", playersWithTaskBooks);
-            OtherUtils.broadcastMessageToAdmins(Text.of("§4"+playerNames+"§c still " + (isOne?"has":"have") + " not submitted / failed any tasks this session."));
+            OtherUtils.broadcastMessageToAdmins(Text.of("§4"+playerNames+"§c still " + (isOne?"has":"have") + " not submitted / failed a task this session."));
         }
     }
 

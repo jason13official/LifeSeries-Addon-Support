@@ -161,7 +161,7 @@ public class WildLife extends Season {
         if (super.sessionStart()) {
             WildcardManager.onSessionStart();
             activeActions.addAll(
-                    List.of(WildcardManager.wildcardNotice, WildcardManager.startWildcards)
+                    WildcardManager.getActions()
             );
             return true;
         }
@@ -213,6 +213,7 @@ public class WildLife extends Season {
         TriviaBot.HARD_TIME = WildLifeConfig.WILDCARD_TRIVIA_SECONDS_HARD.get(config);
         WindCharge.MAX_MACE_DAMAGE = WildLifeConfig.WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE.get(config);
         Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
+        WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
 
         Snails.loadConfig();
         Snails.loadSnailNames();

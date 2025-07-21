@@ -41,6 +41,7 @@ public class TaskManager {
     public static int HARD_FAIL = -20;
     public static int RED_SUCCESS = 10;
     public static int RED_FAIL = -5;
+    public static double ASSIGN_TASKS_MINUTE = 1;
 
     public static BlockPos successButtonPos;
     public static BlockPos rerollButtonPos;
@@ -55,19 +56,22 @@ public class TaskManager {
     public static SecretLifeLocationConfig locationsConfig;
     public static Map<UUID, Task> preAssignedTasks = new HashMap<>();
 
-    public static SessionAction actionChooseTasks = new SessionAction(
-            OtherUtils.minutesToTicks(1),"§7Assign Tasks §f[00:01:00]", "Assign Tasks"
-    ) {
-        @Override
-        public void trigger() {
-            chooseTasks(currentSeason.getAlivePlayers(), null);
-            tasksChosen = true;
-        }
-    };
     public static List<String> easyTasks;
     public static List<String> hardTasks;
     public static List<String> redTasks;
     public static final Random rnd = new Random();
+
+    public static SessionAction getActionChooseTasks() {
+        return new SessionAction(
+                OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE),"§7Assign Tasks §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE))+"]", "Assign Tasks"
+        ) {
+            @Override
+            public void trigger() {
+                chooseTasks(currentSeason.getAlivePlayers(), null);
+                tasksChosen = true;
+            }
+        };
+    }
 
     public static void initialize() {
         usedTasksConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_secretlife_used_tasks.properties");

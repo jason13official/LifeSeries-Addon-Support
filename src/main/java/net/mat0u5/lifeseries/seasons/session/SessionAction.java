@@ -45,5 +45,10 @@ public abstract class SessionAction {
             return false;
         }
     }
+
+    public int getTriggerTime() {
+        return triggerAtTicks;
+    }
+
     public abstract void trigger();
 }

@@ -151,6 +151,10 @@ public class OtherUtils {
     public static int minutesToTicks(int mins) {
         return mins*60*20;
     }
+    public static int minutesToTicks(double mins) {
+        double ticks = mins*60*20;
+        return (int) ticks;
+    }
 
     public static int secondsToTicks(int secs) {
         return secs*20;

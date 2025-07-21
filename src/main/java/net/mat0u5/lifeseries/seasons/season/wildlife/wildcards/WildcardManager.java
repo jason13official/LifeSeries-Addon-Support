@@ -30,22 +30,34 @@ import static net.mat0u5.lifeseries.Main.server;
 public class WildcardManager {
     public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
     public static final Random rnd = new Random();
-    public static final SessionAction wildcardNotice = new SessionAction(OtherUtils.secondsToTicks(30)) {
-        @Override
-        public void trigger() {
-            if (activeWildcards.isEmpty()) {
-                OtherUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
-            }
+    public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
+
+    public static List<SessionAction> getActions() {
+        List<SessionAction> result = new ArrayList<>();
+        if (ACTIVATE_WILDCARD_MINUTE >= 2) {
+            result.add(
+                    new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE-2)) {
+                        @Override
+                        public void trigger() {
+                            if (activeWildcards.isEmpty()) {
+                                OtherUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
+                            }
+                        }
+                    }
+            );
         }
-    };
-    public static final SessionAction startWildcards = new SessionAction(OtherUtils.secondsToTicks(150),"§7Activate Wildcard §f[00:02:30]", "Activate Wildcard") {
-        @Override
-        public void trigger() {
-            if (activeWildcards.isEmpty()) {
-                activateWildcards();
+        result.add(
+            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),"§7Activate Wildcard §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))+"]", "Activate Wildcard") {
+                @Override
+                public void trigger() {
+                    if (activeWildcards.isEmpty()) {
+                        activateWildcards();
+                    }
+                }
             }
-        }
-    };
+        );
+        return result;
+    }
 
     public static Wildcards chosenWildcard = null;
 

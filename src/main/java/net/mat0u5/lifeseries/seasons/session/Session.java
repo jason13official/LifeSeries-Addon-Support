@@ -305,12 +305,20 @@ public class Session {
 
     public void showActionInfo() {
         if (activeActions.isEmpty()) return;
-        OtherUtils.broadcastMessageToAdmins(Text.of("§7Queued session actions:"));
-        for (SessionAction action : activeActions) {
+        List<SessionAction> actions = new ArrayList<>(activeActions);
+        actions.sort(Comparator.comparingInt(SessionAction::getTriggerTime));
+        List<Text> messages = new ArrayList<>();
+        for (SessionAction action : actions) {
             String actionMessage = action.sessionMessage;
             if (actionMessage == null) continue;
             if (actionMessage.isEmpty()) continue;
-            OtherUtils.broadcastMessageToAdmins(Text.of("§7- "+actionMessage));
+            if (messages.isEmpty()) {
+                messages.add(Text.of("§7Queued session actions:"));
+            }
+            messages.add(Text.of("§7- "+actionMessage));
+        }
+        for (Text text : messages) {
+            OtherUtils.broadcastMessageToAdmins(text);
         }
     }
 

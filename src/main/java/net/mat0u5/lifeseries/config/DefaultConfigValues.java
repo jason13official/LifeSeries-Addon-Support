@@ -120,8 +120,8 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Double> BOOGEYMAN_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "boogeyman_chance_multiplier", 0.5, ConfigTypes.PERCENTAGE, "global.boogeyman", "Boogeyman Chance Multiplier", "Controls how likely it is to get one extra boogeyman."
     );
-    public final ConfigFileEntry<Integer> BOOGEYMAN_CHOOSE_MINUTE = new ConfigFileEntry<>(
-            "boogeyman_choose_minute", 10, "global.boogeyman", "Boogeyman Choose Time", "The number of minutes (in the session) after which the boogeyman gets picked."
+    public final ConfigFileEntry<Double> BOOGEYMAN_CHOOSE_MINUTE = new ConfigFileEntry<>(
+            "boogeyman_choose_minute", 10.0, "global.boogeyman", "Boogeyman Choose Time", "The number of minutes (in the session) after which the boogeyman gets picked."
     );
 
 
