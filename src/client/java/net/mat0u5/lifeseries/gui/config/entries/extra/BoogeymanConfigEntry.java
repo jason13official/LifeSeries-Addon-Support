@@ -96,7 +96,9 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
                 }
             }
             if (entry instanceof DoubleConfigEntry doubleConfigEntry) {
-                boogeymanMultiplier = doubleConfigEntry.getValue();
+                if (doubleConfigEntry.getFieldName().equalsIgnoreCase("boogeyman_chance_multiplier")) {
+                    boogeymanMultiplier = doubleConfigEntry.getValue();
+                }
             }
         }
         if (boogeymanIgnoreRaw == null || boogeymanForceRaw == null) {

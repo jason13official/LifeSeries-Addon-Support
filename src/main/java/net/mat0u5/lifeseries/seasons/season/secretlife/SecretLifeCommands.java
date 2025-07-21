@@ -195,6 +195,8 @@ public class SecretLifeCommands {
         if (type.equalsIgnoreCase("hard")) taskType = TaskTypes.HARD;
         if (type.equalsIgnoreCase("red")) taskType = TaskTypes.RED;
 
+        task = task.replaceAll("\\\\n","\n");
+
         TaskManager.preAssignedTasks.put(target.getUuid(), new Task(task, taskType));
 
         if (TaskManager.removePlayersTaskBook(target)) {
