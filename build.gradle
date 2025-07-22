@@ -91,8 +91,10 @@ publishMods {
 
  modLoaders.add("fabric")
 
+ def isDevBuild = providers.environmentVariable("DEV_BUILD").equals("true")
+
  modrinth {
-  projectId = "aLasQi8P"
+  projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"
   accessToken = providers.environmentVariable("MODRINTH_TOKEN")
   minecraftVersionRange {
    start = project.property('min_version')
@@ -103,21 +105,24 @@ publishMods {
   optional("simple-voice-chat")
  }
 
- curseforge {
-  projectId = "1151647"
-  accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-  minecraftVersionRange {
-   start = project.property('min_version')
-   end = project.property('max_version')
+ if (!isDevBuild) {
+  curseforge {
+   projectId = "1151647"
+   accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+   minecraftVersionRange {
+    start = project.property('min_version')
+    end = project.property('max_version')
+   }
+
+   clientRequired = true
+   serverRequired = true
+
+   requires("fabric-api")
+   optional("simple-voice-chat")
   }
-
-  clientRequired = true
-  serverRequired = true
-
-  requires("fabric-api")
-  optional("simple-voice-chat")
  }
 }
+
 
 // configure the maven publication
 publishing {
