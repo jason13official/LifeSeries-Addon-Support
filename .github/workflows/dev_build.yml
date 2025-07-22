@@ -73,6 +73,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Commit message newline
+        run: |
+          COMMIT_MESSAGE_RAW="${{ github.event.inputs.changelog }}"
+          COMMIT_MESSAGE_NEWLINE=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/\'$'\n''/g')
+          echo "COMMIT_MESSAGE_NEWLINE<<EOF" >> $GITHUB_ENV
+          echo "$COMMIT_MESSAGE_NEWLINE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create GitHub Release with JARs
         uses: softprops/action-gh-release@v2
         with:
@@ -82,7 +90,7 @@ jobs:
           body: |
             Changelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):
             ```
-            ${{ github.event.inputs.changelog }}
+            ${{ env.COMMIT_MESSAGE_NEWLINE }}
             ```
             [Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})
           draft: false
