@@ -32,6 +32,11 @@ on:
           - STABLE
           - BETA
           - ALPHA
+      ping:
+        description: 'Ping'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   release:
@@ -57,13 +62,28 @@ jobs:
       - name: build
         run: ./gradlew build
 
+
+      - name: Commit message newline
+        run: |
+          COMMIT_MESSAGE_RAW="${{ github.event.inputs.changelog }}"
+          COMMIT_MESSAGE_NEWLINE=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/\'$'\n''/g')
+          echo "COMMIT_MESSAGE_NEWLINE<<EOF" >> $GITHUB_ENV
+          echo "$COMMIT_MESSAGE_NEWLINE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Commit message line break
+        run: |
+          COMMIT_MESSAGE_RAW="${{ github.event.inputs.changelog }}"
+          COMMIT_MESSAGE_BR=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/<br>/g')
+          echo "COMMIT_MESSAGE_BR=$COMMIT_MESSAGE_BR" >> $GITHUB_ENV
+
       - name: Publish to Modrinth and Curseforge
         if: ${{ inputs.publish }}
         run: ./gradlew publishMods
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          CHANGELOG: ${{ github.event.inputs.changelog }}
+          CHANGELOG: ${{ env.COMMIT_MESSAGE_BR }}
           VERSION_TYPE: ${{ github.event.inputs.version_type }}
 
       - name: capture build artifacts
@@ -98,15 +118,24 @@ jobs:
           tag_name: ${{ steps.version.outputs.version }}
           name: Version Control v.${{ steps.version.outputs.version }}
           body: |
-            ${{ github.event.inputs.changelog }}
+            ${{ env.COMMIT_MESSAGE_NEWLINE }}
           draft: false
           prerelease: false
           files: |
             ${{ steps.filtered_jars.outputs.jar_files }}
+
+      - name: Get Title
+        id: discord_title
+        run: |
+          if [ "${{ github.event.inputs.ping }}" = "false" ]; then
+            echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
+          else
+            echo "MESSAGE_TITLE=<@&1346438113169510421>" >> $GITHUB_ENV
+          fi
 
       - name: Discord Message
         uses: satak/webrequest-action@master
         with:
           url: ${{ secrets.DISCORD_WEBHOOK_ANNOUNCEMENTS }}
           method: POST
-          payload: '{ "content": "<@&1346438113169510421>\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 5315202 }] }'
+          payload: '{ "content": "${{ env.MESSAGE_TITLE }}\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 5315202 }] }'

@@ -13,10 +13,10 @@ on:
         required: true
         default: 'https://github.com/Mat0u5/LifeSeries/commit/'
         type: string
-      skip_ping:
-        description: 'Skip Ping'
+      ping:
+        description: 'Ping'
         required: true
-        default: false
+        default: true
         type: boolean
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
       - name: Get Title
         id: discord_title
         run: |
-          if [ "${{ github.event.inputs.skip_ping }}" = "true" ]; then
+          if [ "${{ github.event.inputs.ping }}" = "false" ]; then
             echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
           else
             echo "MESSAGE_TITLE=<@&1346436504427171961>" >> $GITHUB_ENV

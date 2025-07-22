@@ -18,6 +18,11 @@ on:
         required: true
         default: 'https://github.com/Mat0u5/LifeSeries'
         type: string
+      ping:
+        description: 'Ping'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   build:
@@ -85,9 +90,18 @@ jobs:
           files: |
             ${{ steps.filtered_jars.outputs.jar_files }}
 
+      - name: Get Title
+        id: discord_title
+        run: |
+          if [ "${{ github.event.inputs.ping }}" = "false" ]; then
+            echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
+          else
+            echo "MESSAGE_TITLE=<@&1346434430683844658>" >> $GITHUB_ENV
+          fi
+
       - name: Discord Message
         uses: satak/webrequest-action@master
         with:
           url: ${{ secrets.DISCORD_WEBHOOK_DEVBUILDS }}
           method: POST
-          payload: '{ "content": "<@&1346434430683844658>\n## [Developer version `${{ github.event.inputs.version_name }}` is out!](https://github.com/Mat0u5/LifeSeries/releases/tag/${{ github.event.inputs.version_name }})", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 11683473 }] }'
+          payload: '{ "content": "${{ env.MESSAGE_TITLE }}\n## [Developer version `${{ github.event.inputs.version_name }}` is out!](https://github.com/Mat0u5/LifeSeries/releases/tag/${{ github.event.inputs.version_name }})", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 11683473 }] }'
