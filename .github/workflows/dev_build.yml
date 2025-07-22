@@ -1,32 +1,23 @@
-name: publish
+name: dev_build
 
 on:
   workflow_dispatch:
     inputs:
-      publish:
-        description: 'Publish to platforms'
-        required: true
-        default: true
-        type: boolean
       version_name:
         description: 'Version Name'
         required: true
-        default: 'version'
+        default: 'dev-version'
+        type: string
+      full_changelog:
+        description: 'Full Changelog Link'
+        required: true
+        default: 'https://github.com/Mat0u5/LifeSeries'
         type: string
       changelog:
-        description: 'Changelog'
+        description: 'Shortened Changelog'
         required: true
         default: 'No changelog provided'
         type: string
-      version_type:
-        description: 'Version type'
-        required: true
-        default: 'STABLE'
-        type: choice
-        options:
-          - STABLE
-          - BETA
-          - ALPHA
 
 jobs:
   release:
@@ -51,15 +42,6 @@ jobs:
 
       - name: build
         run: ./gradlew build
-
-      - name: Publish to Modrinth and Curseforge
-        if: ${{ inputs.publish }}
-        run: ./gradlew publishMods
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          CHANGELOG: ${{ github.event.inputs.changelog }}
-          VERSION_TYPE: ${{ github.event.inputs.version_type }}
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
@@ -91,17 +73,21 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.version.outputs.version }}
-          name: Version Control v.${{ steps.version.outputs.version }}
+          name: Dev build:${{ steps.version.outputs.version }}
           body: |
+            Changelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):
+            ```
             ${{ github.event.inputs.changelog }}
+            ```
+            [Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})
           draft: false
-          prerelease: false
+          prerelease: true
           files: |
             ${{ steps.filtered_jars.outputs.jar_files }}
 
       - name: Discord Message
         uses: satak/webrequest-action@master
         with:
-          url: ${{ secrets.DISCORD_WEBHOOK_ANNOUNCEMENTS }}
+          url: ${{ secrets.DISCORD_WEBHOOK_DEVBUILDS }}
           method: POST
-          payload: '{ "content": "<@&1312808018483613726>\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/${{ github.event.inputs.version_name }}.md)", "color": 5315202 }] }'
+          payload: '{ "content": "<@&1312808018483613726>\n## [Developer version `${{ github.event.inputs.version_name }}` is out!](https://github.com/Mat0u5/LifeSeries/releases/tag/${{ github.event.inputs.version_name }})", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 5315202 }] }'
