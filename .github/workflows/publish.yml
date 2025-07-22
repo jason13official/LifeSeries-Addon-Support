@@ -1,0 +1,107 @@
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish to platforms'
+        required: true
+        default: true
+        type: boolean
+      version_name:
+        description: 'Version Name'
+        required: true
+        default: 'version'
+        type: string
+      changelog:
+        description: 'Changelog'
+        required: true
+        default: 'No changelog provided'
+        type: string
+      version_type:
+        description: 'Version type'
+        required: true
+        default: 'STABLE'
+        type: choice
+        options:
+          - STABLE
+          - BETA
+          - ALPHA
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+
+      - name: setup jdk 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'microsoft'
+
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: build
+        run: ./gradlew build
+
+      - name: Publish to Modrinth and Curseforge
+        run: ./gradlew publishMods
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CHANGELOG: ${{ github.event.inputs.changelog }}
+          VERSION_TYPE: ${{ github.event.inputs.version_type }}
+
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Built JARs
+          path: |
+            ./versions/**/build/libs/*.jar
+
+      - name: Filter non-source JAR files
+        id: filtered_jars
+        run: |
+          jars=$(find ./versions/**/build/libs/ -type f -name "*.jar" ! -name "*-sources.jar")
+          echo "jar_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$jars" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+
+      - name: Generate Version Tag
+        id: version
+        run: |
+          # Generate a version based on current date and commit hash
+          VERSION="$(echo ${{ github.event.inputs.version_name }})"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release with JARs
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Version Control v.${{ steps.version.outputs.version }}
+          body: |
+            ${{ github.event.inputs.changelog }}
+          draft: false
+          prerelease: true
+          files: |
+            ${{ steps.filtered_jars.outputs.jar_files }}
+
+      - name: Discord Message
+        uses: satak/webrequest-action@master
+        with:
+          url: ${{ secrets.DISCORD_WEBHOOK }}
+          method: POST
+          payload: '{ "content": "<@&1312808018483613726>\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/${{ github.event.inputs.version_name }}.md)", "color": 5315202 }] }'

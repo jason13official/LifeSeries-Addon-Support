@@ -1,6 +1,7 @@
 plugins {
  id 'fabric-loom' version "${loom_version}"
  id 'maven-publish'
+ id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 version = "${project.mod_version}+${stonecutter.current.project}"
 group = project.maven_group
@@ -79,6 +80,42 @@ java {
 jar {
  from("LICENSE") {
   rename { "${it}_${project.base.archivesName.get()}"}
+ }
+}
+
+publishMods {
+ file = remapJar.archiveFile
+ changelog = providers.environmentVariable("CHANGELOG")
+ type = providers.environmentVariable("VERSION_TYPE")
+ displayName = "Life Series ${project.property('mod_version')} for Fabric ${project.property('min_version')}${project.property('min_version') == project.property('max_version') ? '' : '-' + project.property('max_version')}"
+
+ modLoaders.add("fabric")
+
+ modrinth {
+  projectId = "aLasQi8P"
+  accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+  minecraftVersionRange {
+   start = project.property('min_version')
+   end = project.property('max_version')
+  }
+
+  requires("fabric-api")
+  optional("simple-voice-chat")
+ }
+
+ curseforge {
+  projectId = "1151647"
+  accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+  minecraftVersionRange {
+   start = project.property('min_version')
+   end = project.property('max_version')
+  }
+
+  clientRequired = true
+  serverRequired = true
+
+  requires("fabric-api")
+  optional("simple-voice-chat")
  }
 }
 
