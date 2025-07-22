@@ -29,14 +29,16 @@ jobs:
           COMMIT_MESSAGE=$(echo -n "${{ github.event.inputs.commit_message }}" | sed 's/%0A/\\n/g' | jq -s -Rr @json)
           COMMIT_MESSAGE=${COMMIT_MESSAGE:1:-1}
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+          
       - name: Get Title
         id: discord_title
         run: |
-          if echo ${{ github.event.inputs.skip_ping }}; then
+          if [ "${{ github.event.inputs.skip_ping }}" = "true" ]; then
             echo "MESSAGE_TITLE=*Ping Skipped.*" >> $GITHUB_ENV
           else
             echo "MESSAGE_TITLE=<@&1312808018483613726>" >> $GITHUB_ENV
           fi
+
       - name: Discord Message
         uses: satak/webrequest-action@master
         with:
