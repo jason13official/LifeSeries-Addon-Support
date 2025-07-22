@@ -18,6 +18,11 @@ on:
         required: true
         default: 'No changelog provided'
         type: string
+      full_changelog:
+        description: 'Full Changelog Link'
+        required: true
+        default: 'https://github.com/Mat0u5/LifeSeries'
+        type: string
       version_type:
         description: 'Version type'
         required: true
@@ -104,4 +109,4 @@ jobs:
         with:
           url: ${{ secrets.DISCORD_WEBHOOK_ANNOUNCEMENTS }}
           method: POST
-          payload: '{ "content": "<@&1312808018483613726>\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](https://github.com/Mat0u5/LifeSeries/blob/main/docs/changelogs/${{ github.event.inputs.version_name }}.md)", "color": 5315202 }] }'
+          payload: '{ "content": "<@&1346438113169510421>\n## [Version `${{ github.event.inputs.version_name }}` is out!](https://modrinth.com/mod/life-series/versions)", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog:\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 5315202 }] }'

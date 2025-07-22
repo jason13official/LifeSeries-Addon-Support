@@ -8,15 +8,15 @@ on:
         required: true
         default: 'dev-version'
         type: string
-      full_changelog:
-        description: 'Full Changelog Link'
-        required: true
-        default: 'https://github.com/Mat0u5/LifeSeries'
-        type: string
       changelog:
         description: 'Shortened Changelog'
         required: true
         default: 'No changelog provided'
+        type: string
+      full_changelog:
+        description: 'Full Changelog Link'
+        required: true
+        default: 'https://github.com/Mat0u5/LifeSeries'
         type: string
 
 jobs:
@@ -73,7 +73,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.version.outputs.version }}
-          name: Dev build:${{ steps.version.outputs.version }}
+          name: 'Dev build: ${{ steps.version.outputs.version }}'
           body: |
             Changelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):
             ```
@@ -90,4 +90,4 @@ jobs:
         with:
           url: ${{ secrets.DISCORD_WEBHOOK_DEVBUILDS }}
           method: POST
-          payload: '{ "content": "<@&1312808018483613726>\n## [Developer version `${{ github.event.inputs.version_name }}` is out!](https://github.com/Mat0u5/LifeSeries/releases/tag/${{ github.event.inputs.version_name }})", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 5315202 }] }'
+          payload: '{ "content": "<@&1346434430683844658>\n## [Developer version `${{ github.event.inputs.version_name }}` is out!](https://github.com/Mat0u5/LifeSeries/releases/tag/${{ github.event.inputs.version_name }})", "embeds": [{"author": {"name": "Mat0u5","url": "https://github.com/Mat0u5","icon_url": "https://github.com/Mat0u5.png"},"description": "\nChangelog since the latest full release on [Modrinth](https://modrinth.com/mod/life-series):\n```\n${{ github.event.inputs.changelog }}```\n[Click here to open the **full changelog**](${{ github.event.inputs.full_changelog }})", "color": 11683473 }] }'
