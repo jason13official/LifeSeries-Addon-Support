@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.SessionCommand;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -17,6 +18,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,11 +54,11 @@ public class LimitedLifeCommands {
                 )
                 .then(literal("add")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("player", EntityArgumentType.player())
+                        .then(argument("player", EntityArgumentType.players())
                                 .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                                         .executes(context -> lifeManager(
-                                                context.getSource(), EntityArgumentType.getPlayer(context, "player"),
+                                                context.getSource(), EntityArgumentType.getPlayers(context, "player"),
                                                 StringArgumentType.getString(context, "time"), false, false)
                                         )
                                 )
@@ -64,11 +66,11 @@ public class LimitedLifeCommands {
                 )
                 .then(literal("remove")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("player", EntityArgumentType.player())
+                        .then(argument("player", EntityArgumentType.players())
                                 .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("30m", "1h"), builder))
                                         .executes(context -> lifeManager(
-                                                context.getSource(), EntityArgumentType.getPlayer(context, "player"),
+                                                context.getSource(), EntityArgumentType.getPlayers(context, "player"),
                                                 StringArgumentType.getString(context, "time"), false, true)
                                         )
                                 )
@@ -76,11 +78,11 @@ public class LimitedLifeCommands {
                 )
                 .then(literal("set")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("player", EntityArgumentType.player())
+                        .then(argument("player", EntityArgumentType.players())
                                 .then(argument("time", StringArgumentType.greedyString())
                                         .suggests((context, builder) -> CommandSource.suggestMatching(List.of("8h", "16h", "24h"), builder))
                                         .executes(context -> lifeManager(
-                                                context.getSource(), EntityArgumentType.getPlayer(context, "player"),
+                                                context.getSource(), EntityArgumentType.getPlayers(context, "player"),
                                                 StringArgumentType.getString(context, "time"), true, false)
                                         )
                                 )
@@ -101,9 +103,9 @@ public class LimitedLifeCommands {
                 )
                 .then(literal("reset")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
-                        .then(argument("player", EntityArgumentType.player())
+                        .then(argument("player", EntityArgumentType.players())
                                 .executes(context -> resetLives(
-                                        context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                                        context.getSource(), EntityArgumentType.getPlayers(context, "player"))
                                 )
                         )
                 )
@@ -120,16 +122,16 @@ public class LimitedLifeCommands {
     public static int showLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        final ServerPlayerEntity self = source.getPlayer();
+        ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
         if (!currentSeason.hasAssignedLives(self)) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any lives yet."));
+            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any time yet"));
             return 1;
         }
 
         Integer playerLives = currentSeason.getPlayerLives(self);
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("You have ").append(currentSeason.getFormattedLives(playerLives)).append(Text.of(" left.")));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} left", currentSeason.getFormattedLives(playerLives)));
         if (playerLives == null || playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
@@ -141,13 +143,13 @@ public class LimitedLifeCommands {
         if (checkBanned(source)) return -1;
 
         if (!ScoreboardUtils.existsObjective("Lives")) {
-            source.sendError(Text.of("Nobody has been assigned time yet."));
+            source.sendError(Text.of("Nobody has been assigned time yet"));
             return -1;
         }
 
         Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
         if (entries.isEmpty()) {
-            source.sendError(Text.of("Nobody has been assigned time yet."));
+            source.sendError(Text.of("Nobody has been assigned time yet"));
             return -1;
         }
         MutableText text = Text.literal("Assigned Time: \n");
@@ -156,11 +158,7 @@ public class LimitedLifeCommands {
             if (name.startsWith("`")) continue;
             int lives = entry.value();
             Formatting color = currentSeason.getColorForLives(lives);
-
-            MutableText pt1 = Text.literal("").append(Text.literal(name).formatted(color)).append(Text.literal(" has "));
-            Text pt2 = currentSeason.getFormattedLives(lives);
-            Text pt3 = Text.of("\n");
-            text.append(pt1.append(pt2).append(pt3));
+            text.append(TextUtils.format("{} has {} left\n", Text.literal(name).formatted(color), currentSeason.getFormattedLives(lives)));
         }
 
         OtherUtils.sendCommandFeedbackQuiet(source, text);
@@ -172,28 +170,24 @@ public class LimitedLifeCommands {
         if (target == null) return -1;
 
         if (!currentSeason.hasAssignedLives(target)) {
-            source.sendError(Text.of(target.getNameForScoreboard()+" has not been assigned any lives."));
+            source.sendError(TextUtils.formatPlain("{} has not been assigned any time", target));
             return -1;
         }
         Integer lives = currentSeason.getPlayerLives(target);
-        MutableText pt1 = Text.literal("").append(target.getStyledDisplayName()).append(Text.literal(" has "));
-        Text pt2 = currentSeason.getFormattedLives(lives);
-        Text pt3 = Text.of(" left.");
-
-        OtherUtils.sendCommandFeedbackQuiet(source, pt1.append(pt2).append(pt3));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} left", target,currentSeason.getFormattedLives(lives)));
         return 1;
     }
 
     public static int reloadLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Text.of("Reloading lives..."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Reloading times..."));
         currentSeason.reloadAllPlayerTeams();
         return 1;
     }
 
-    public static int lifeManager(ServerCommandSource source, ServerPlayerEntity target, String timeArgument, boolean setNotGive, boolean reverse) {
+    public static int lifeManager(ServerCommandSource source, Collection<ServerPlayerEntity> targets, String timeArgument, boolean setNotGive, boolean reverse) {
         if (checkBanned(source)) return -1;
-        if (target == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
         Integer amount = OtherUtils.parseTimeSecondsFromArgument(timeArgument);
         if (amount == null) {
@@ -203,28 +197,50 @@ public class LimitedLifeCommands {
         if (reverse) amount *= -1;
 
         if (setNotGive) {
-            currentSeason.setPlayerLives(target,amount);
-            Text finalText = Text.literal("Set ").append(target.getStyledDisplayName()).append(Text.of("'s time to ")).append(currentSeason.getFormattedLives(target));
-            OtherUtils.sendCommandFeedback(source, finalText);
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s time to {}", targets.iterator().next(), currentSeason.getFormattedLives(amount)));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set time to {} for {} targets", currentSeason.getFormattedLives(amount), targets.size()));
+            }
+
+            for (ServerPlayerEntity player : targets) {
+                currentSeason.setPlayerLives(player, amount);
+            }
         }
         else {
-            currentSeason.addToPlayerLives(target,amount);
-            String pt1 = amount >= 0 ? "Added" : "Removed";
-            String pt2 = " "+OtherUtils.formatTime(Math.abs(amount)*20);
-            String pt4 = amount >= 0 ? " to " : " from ";
-            Text finalText = Text.of(pt1+pt2+pt4).copy().append(target.getStyledDisplayName()).append(".");
-            OtherUtils.sendCommandFeedback(source, finalText);
+            String addOrRemove = amount >= 0 ? "Added" : "Removed";
+            String time = OtherUtils.formatTime(Math.abs(amount)*20);
+            String toOrFrom = amount >= 0 ? "to" : "from";
+
+            if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("{} {} {} {}", addOrRemove, time, toOrFrom, targets.iterator().next()));
+            }
+            else {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("{} {} {} {} targets", addOrRemove, time, toOrFrom, targets.size()));
+            }
+
+            for (ServerPlayerEntity player : targets) {
+                currentSeason.addToPlayerLives(player,amount);
+            }
         }
 
         return 1;
     }
 
-    public static int resetLives(ServerCommandSource source, ServerPlayerEntity target) {
+    public static int resetLives(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        if (target == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
-        currentSeason.resetPlayerLife(target);
-        OtherUtils.sendCommandFeedback(source, Text.literal("Reset ").append(target.getStyledDisplayName()).append(Text.of("'s lives.")));
+        for (ServerPlayerEntity player : targets) {
+            currentSeason.resetPlayerLife(player);
+        }
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s time", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset time of {} targets", targets.size()));
+        }
         return 1;
     }
 
@@ -232,7 +248,7 @@ public class LimitedLifeCommands {
         if (checkBanned(source)) return -1;
 
         currentSeason.resetAllPlayerLives();
-        OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives."));
+        OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's time"));
         return 1;
     }
 }

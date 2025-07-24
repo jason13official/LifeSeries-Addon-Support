@@ -114,10 +114,10 @@ public class SessionCommand {
         if (checkBanned(source)) return -1;
 
         if (!currentSession.validTime()) {
-            source.sendError(Text.of("The session time has not been set yet."));
+            source.sendError(Text.of("The session time has not been set yet"));
             return -1;
         }
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("The session ends in " + currentSession.getRemainingTime()));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("The session ends in {}",currentSession.getRemainingTime()));
         return 1;
     }
 
@@ -144,18 +144,18 @@ public class SessionCommand {
             return -1;
         }
         if (currentSession.statusStarted()) {
-            source.sendError(Text.of("The session has already started!"));
+            source.sendError(Text.of("The session has already started"));
             return -1;
         }
         if (currentSession.statusPaused()) {
-            OtherUtils.sendCommandFeedback(source, Text.of("Unpausing session..."));
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Unpausing session..."));
             currentSession.sessionPause();
             return 1;
         }
 
         OtherUtils.sendCommandFeedback(source, Text.of("Starting session..."));
         if (!currentSession.sessionStart()) {
-            source.sendError(Text.of("Could not start session."));
+            source.sendError(Text.of("Could not start session"));
             return -1;
         }
 
@@ -166,11 +166,11 @@ public class SessionCommand {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendError(Text.of("The session has not yet started!"));
+            source.sendError(Text.of("The session has not yet started"));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Stopping session..."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Stopping session..."));
         currentSession.sessionEnd();
         return 1;
     }
@@ -179,11 +179,16 @@ public class SessionCommand {
         if (checkBanned(source)) return -1;
 
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) {
-            source.sendError(Text.of("The session has not yet started!"));
+            source.sendError(Text.of("The session has not yet started"));
             return -1;
         }
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Pausing session..."));
+        if (currentSession.statusPaused()) {
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Unpausing session..."));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, Text.of("§7Pausing session..."));
+        }
         currentSession.sessionPause();
 
         return 1;
@@ -197,7 +202,7 @@ public class SessionCommand {
             source.sendError(Text.literal(INVALID_TIME_FORMAT_ERROR));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, Text.of("Skipped "+timeArgument+" in the session length."));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Skipped {} in the session length", OtherUtils.formatTime(totalTicks)));
         currentSession.passedTime+=totalTicks;
         return 1;
     }
@@ -212,7 +217,7 @@ public class SessionCommand {
         }
         currentSession.setSessionLength(totalTicks);
 
-        OtherUtils.sendCommandFeedback(source, Text.of("The session length has been set to "+ OtherUtils.formatTime(totalTicks)));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("The session length has been set to {}", OtherUtils.formatTime(totalTicks)));
         return 1;
     }
 
@@ -226,7 +231,7 @@ public class SessionCommand {
         }
         currentSession.addSessionLength(totalTicks);
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Added "+OtherUtils.formatTime(totalTicks) + " to the session length."));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Added {} to the session length", OtherUtils.formatTime(totalTicks)));
         return 1;
     }
 
@@ -240,7 +245,7 @@ public class SessionCommand {
         }
         currentSession.removeSessionLength(totalTicks);
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Removed "+OtherUtils.formatTime(totalTicks) + " from the session length."));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("Removed {} from the session length", OtherUtils.formatTime(totalTicks)));
         return 1;
     }
 }

@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.*;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -142,7 +143,7 @@ public abstract class Season extends Session {
             }
         }
 
-        TeamUtils.createTeam("lives_null", Formatting.GRAY);
+        TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
 
         TeamUtils.createTeam("lives_0", "Dead", Formatting.DARK_GRAY);
         TeamUtils.createTeam("lives_1", "Red", Formatting.RED);
@@ -296,8 +297,8 @@ public abstract class Season extends Session {
 
     public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
         target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
-        target.sendMessage(Text.literal("You received a life from ").append(playerName));
-        PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), Text.literal("from ").append(playerName), 10, 30, 10);
+        target.sendMessage(TextUtils.format("You received a life from {}", playerName));
+        PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
         SessionTranscript.givelife(playerName, target);

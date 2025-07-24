@@ -100,8 +100,8 @@ public class LifeSeriesCommand {
     public static int chooseSeason(ServerCommandSource source) {
         if (source.getPlayer() == null) return -1;
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the season selection GUI."));
-            source.sendError(Text.of("§7Use the §f'/lifeseries setSeries <season>'§7 command instead."));
+            source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the season selection GUI."));
+            source.sendError(Text.of("Use the '/lifeseries setSeries <season>' command instead."));
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the season selection GUI..."));
@@ -112,7 +112,7 @@ public class LifeSeriesCommand {
     public static int setSeason(ServerCommandSource source, String setTo, boolean confirmed) {
         if (!ALLOWED_SEASON_NAMES.contains(setTo)) {
             source.sendError(Text.of("That is not a valid season!"));
-            source.sendError(Text.literal("You must choose one of the following: ").append(Text.literal(String.join(", ", ALLOWED_SEASON_NAMES)).formatted(Formatting.GRAY)));
+            source.sendError(TextUtils.formatPlain("You must choose one of the following: {}", ALLOWED_SEASON_NAMES));
             return -1;
         }
         if (confirmed) {
@@ -123,10 +123,8 @@ public class LifeSeriesCommand {
                 setSeasonFinal(source, setTo);
             }
             else {
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)"));
-                OtherUtils.sendCommandFeedbackQuiet(source, Text.literal("If you are sure, use '")
-                        .append(Text.literal("/lifeseries chooseSeries").formatted(Formatting.GRAY))
-                        .append(Text.literal(" confirm").formatted(Formatting.GREEN)).append(Text.of("'")));
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7WARNING: you have already selected a season, changing it might cause some saved data to be lost (lives, ...)"));
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7If you are sure, use '§f/lifeseries setSeries <season> confirm§7'"));
             }
         }
         return 1;
@@ -134,8 +132,8 @@ public class LifeSeriesCommand {
 
     public static void setSeasonFinal(ServerCommandSource source, String setTo) {
         if (Main.changeSeasonTo(setTo)) {
-            OtherUtils.sendCommandFeedback(source, Text.literal("Changing the season to " + setTo + "..."));
-            OtherUtils.broadcastMessage(Text.literal("Successfully changed the season to " + setTo + ".").formatted(Formatting.GREEN));
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Changing the season to {}§7...", setTo));
+            OtherUtils.broadcastMessage(TextUtils.format("Successfully changed the season to {}",setTo).formatted(Formatting.GREEN));
         }
     }
 
@@ -144,13 +142,13 @@ public class LifeSeriesCommand {
             return -1;
         }
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            source.sendError(Text.of("§cYou must have the Life Series mod installed §nclient-side§c to open the config GUI."));
-            source.sendError(Text.of("§cEither install the mod on the client on modify the config folder (see above)."));
+            source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the config GUI."));
+            source.sendError(Text.of("Either install the mod on the client on modify the config folder (see above)."));
             return -1;
         }
 
         if (isAdmin(source.getPlayer())) {
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7 The Life Series config folder is located server-side at §a" + new File("./config/lifeseries").getAbsolutePath()));
+            OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("§7The Life Series config folder is located server-side at §8{}", new File("./config/lifeseries").getAbsolutePath()));
         }
 
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
@@ -159,7 +157,7 @@ public class LifeSeriesCommand {
     }
 
     public static int getWorlds(ServerCommandSource source) {
-        Text worldSavesText = Text.literal("§7Additionally, if you want to play on the exact same worlds as Grian did, click ").append(
+        Text worldSavesText = Text.literal("§7If you want to play on the exact same world seeds as Grian did, click ").append(
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
@@ -188,7 +186,7 @@ public class LifeSeriesCommand {
     }
 
     public static int getSeason(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current season: "+ Seasons.getStringNameFromSeason(currentSeason.getSeason())));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current season: {}", Seasons.getStringNameFromSeason(currentSeason.getSeason())));
         if (source.getPlayer() != null) {
             NetworkHandlerServer.sendStringPacket(source.getPlayer(), "season_info", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
         }
@@ -196,12 +194,12 @@ public class LifeSeriesCommand {
     }
 
     public static int getVersion(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Mod version: "+ Main.MOD_VERSION));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Mod version: {}",Main.MOD_VERSION));
         return 1;
     }
 
     public static int reload(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedback(source, Text.of("Reloading the Life Series!"));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Reloading the Life Series..."));
         OtherUtils.reloadServer();
         return 1;
     }
@@ -210,7 +208,7 @@ public class LifeSeriesCommand {
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7The Life Series was originally created by §fGrian§7" +
                 ", and this mod, created by §fMat0u5§7, aims to recreate every single season one-to-one."));
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7This mod uses sounds created by §fOli (TheOrionSound)§7, and uses recreated snail model (first created by §fDanny§7), and a recreated trivia bot model (first created by §fHoffen§7)."));
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7This mod bundles other mods to improve the experience, such as §fPolymer§7, §fBlockbench Import Library§7, §fCardinal Components API§7, and supports client-side configuration with §fCloth Config§7."));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7This mod bundles other mods to improve the experience, such as §fPolymer§7 and §fBlockbench Import Library."));
         return 1;
     }
 
@@ -218,8 +216,10 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        WildcardManager.showCryptTitle("A wildcard is active!");
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command"));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test {}", player));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}Test5 {}", player, 5));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test6 {}{} in the {}", player, 5, false));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test8 {} {} in the {} for the {}.", player, 5, false, source));
 
         return 1;
     }

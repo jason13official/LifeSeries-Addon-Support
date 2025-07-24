@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -95,10 +96,10 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a boogeyman!"));
+            source.sendError(Text.of("That player is not a Boogeyman"));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, Text.of("Failing boogeyman for " + target.getName().getString() + "..."));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
         bm.playerFailBoogeyman(target);
 
         return 1;
@@ -112,12 +113,12 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a boogeyman!"));
+            source.sendError(Text.of("That player is not a Boogeyman"));
             return -1;
         }
         bm.cure(target);
 
-        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now cured.")));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now cured", target));
 
         return 1;
     }
@@ -131,12 +132,12 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is already a boogeyman!"));
+            source.sendError(Text.of("That player is already a Boogeyman"));
             return -1;
         }
         bm.addBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is now a boogeyman.")));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now a Boogeyman", target));
         return 1;
     }
 
@@ -149,12 +150,12 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         if (!bm.isBoogeyman(target)) {
-            source.sendError(Text.of("That player is not a boogeyman!"));
+            source.sendError(Text.of("That player is not a Boogeyman"));
             return -1;
         }
         bm.removeBoogeymanManually(target);
 
-        OtherUtils.sendCommandFeedback(source, Text.literal("").append(target.getStyledDisplayName()).append(Text.of(" is no longer a boogeyman.")));
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is no longer a Boogeyman", target));
         return 1;
     }
 
@@ -168,7 +169,7 @@ public class BoogeymanCommand {
             boogeymen.add(boogeyman.name);
         }
 
-        OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Current boogeymen: ["+String.join(", ",boogeymen)+"]"));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current Boogeymen: {}",boogeymen));
         return 1;
     }
 
@@ -178,7 +179,7 @@ public class BoogeymanCommand {
         if (bm == null) return -1;
 
         bm.resetBoogeymen();
-        OtherUtils.sendCommandFeedback(source, Text.of("All boogeymen have been cleared"));
+        OtherUtils.sendCommandFeedback(source, Text.of("All Boogeymen have been cleared"));
         return 1;
     }
 
@@ -187,7 +188,7 @@ public class BoogeymanCommand {
         BoogeymanManager bm = getBM();
         if (bm == null) return -1;
 
-        OtherUtils.sendCommandFeedback(source, Text.of("Choosing random boogeymen..."));
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Choosing random Boogeymen..."));
 
         bm.resetBoogeymen();
         bm.prepareToChooseBoogeymen();

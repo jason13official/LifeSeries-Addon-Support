@@ -84,16 +84,14 @@ public class ClaimKillCommand {
         Set<UUID> recentDeaths = currentSession.playerNaturalDeathLog.keySet();
         UUID victimUUID = victim.getUuid();
         if (!recentDeaths.contains(victimUUID)) {
-            source.sendError(Text.of(victim.getNameForScoreboard() + " did not die in the last 2 minutes. Or they might have been killed by a player directly."));
+            source.sendError(TextUtils.formatPlain("{} did not die in the last 2 minutes. Or they might have been killed by a player directly.", victim));
             return -1;
         }
         if (player == victim) {
             source.sendError(Text.of("You cannot claim credit for your own death :P"));
             return -1;
         }
-        Text textAll = Text.literal("").append(player.getStyledDisplayName()).append("§7 claims credit for ")
-                .append(victim.getStyledDisplayName())
-                .append(Text.of("§7's death. Only an admin can validate this claim."));
+        Text textAll = TextUtils.format("{}§7 claims credit for {}§7's death. Only an admin can validate this claim.", player, victim);
         OtherUtils.broadcastMessage(textAll);
         Text adminText = Text.literal("§7Click ").append(
                 Text.literal("here")
@@ -112,7 +110,7 @@ public class ClaimKillCommand {
         if (killer == null) return -1;
         if (victim == null) return -1;
 
-        Text message = Text.literal("").append(killer.getStyledDisplayName()).append(Text.of("§7's kill claim on ")).append(victim.getStyledDisplayName()).append(Text.of("§7 was accepted."));
+        Text message = TextUtils.format("{}§7's kill claim on {}§7 was accepted.", killer, victim);
         OtherUtils.broadcastMessage(message);
         currentSeason.onClaimKill(killer, victim);
         currentSession.playerNaturalDeathLog.remove(victim.getUuid());

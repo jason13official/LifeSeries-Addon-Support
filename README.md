@@ -166,8 +166,7 @@ This command **always** available
 - `/health remove <player> [amount]` - Removes `[amount]` health from `<player>`. If `[amount]` is not specified, it defaults to 1.
 - `/health set <player> <amount>` - Sets `<player>`'s health to `<amount>`.
 - `/health get <player>` - Shows you how much health `<player>` has.
-- `/health reset <player>` - Resets `<player>`'s health to 60 (default on Secret Life).
-- `/health resetAll` - Resets the health of all online players to 60 (default on Secret Life).
+- `/health reset <player>` - Resets `<player>`'s health to the default.
 </details>
 
 <details open>

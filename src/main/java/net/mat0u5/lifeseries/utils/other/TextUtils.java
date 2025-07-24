@@ -1,13 +1,17 @@
 package net.mat0u5.lifeseries.utils.other;
 
+import net.mat0u5.lifeseries.Main;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 //? if >= 1.21.4
 /*import java.net.URI;*/
 
@@ -117,4 +121,109 @@ public class TextUtils {
         /*return new HoverEvent.ShowText(text);
         *///?}
     }
+
+    public static MutableText formatPlain(String template, Object... args) {
+        return Text.literal(format(template, args).getString());
+    }
+
+    public static MutableText format(String template, Object... args) {
+        MutableText result = Text.empty();
+
+        int argIndex = 0;
+        int lastIndex = 0;
+        int placeholderIndex = template.indexOf("{}");
+
+        if (placeholderIndex == -1) {
+            Main.LOGGER.error("String ("+template+") formatting does not contain {}.");
+        }
+        if (args.length <= 0) {
+            Main.LOGGER.error("String ("+template+") formatting does have arguments.");
+        }
+        if (("_"+template+"_").split("\\{\\}").length-1 != args.length) {
+            Main.LOGGER.error("String ("+template+") formatting has incorrect number of arguments.");
+        }
+
+        while (placeholderIndex != -1 && argIndex < args.length) {
+            if (placeholderIndex > lastIndex) {
+                String textBefore = template.substring(lastIndex, placeholderIndex);
+                result.append(Text.literal(textBefore));
+            }
+
+            Object arg = args[argIndex];
+            result.append(getTextForArgument(arg));
+
+            argIndex++;
+            lastIndex = placeholderIndex + 2;
+            placeholderIndex = template.indexOf("{}", lastIndex);
+        }
+
+        if (lastIndex < template.length()) {
+            String remainingText = template.substring(lastIndex);
+            result.append(Text.literal(remainingText));
+        }
+
+        return result;
+    }
+
+    private static Text getTextForArgument(Object arg) {
+        if (arg == null) {
+            return Text.empty();
+        }
+        if (arg instanceof Text text) {
+            return text;
+        }
+        if (arg instanceof ServerPlayerEntity player) {
+            return player.getDisplayName();
+        }
+        if (arg instanceof List<?> list) {
+            return Text.of(
+                    list.stream()
+                    .map(Objects::toString)
+                    .collect(Collectors.joining(", "))
+            );
+        }
+        return Text.of(arg.toString());
+    }
+
+    public static String pluralize(String text, Integer amount) {
+        return pluralize(text, text+"s", amount);
+    }
+
+    public static String pluralize(String textSingular, String textPlural, Integer amount) {
+        if (amount == null || Math.abs(amount) == 1) {
+            return textSingular;
+        }
+        return textPlural;
+    }
+
+/*
+    List<ServerPlayerEntity> affected = new ArrayList<>();
+
+
+    if (affected.isEmpty()) {
+        source.sendError(Text.of("No target was found"));
+        return -1;
+    }
+    if (affected.size() == 1) {
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate was reset", affected.getFirst()));
+        return 1;
+    }
+    OtherUtils.sendCommandFeedback(source, TextUtils.format("Soulmate was reset for {} targets.", affected.size()));
+
+
+    source.sendError(TextUtils.format(""));
+    OtherUtils.sendCommandFeedback(source, TextUtils.format(""));
+
+
+    if (targets.size() == 1) {
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("", targets.iterator().next()));
+    }
+    else {
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("", targets.size()));
+    }
+
+    if (targets == null || targets.isEmpty()) return -1;
+    for (ServerPlayerEntity player : targets) {
+    }
+ */
 }

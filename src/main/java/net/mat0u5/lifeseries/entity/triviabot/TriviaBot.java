@@ -682,7 +682,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
     public void blessPlayer() {
         ServerPlayerEntity player = getBoundPlayer();
         if (player == null) return;
-        player.sendMessage(Text.of(""));
+        player.sendMessage(Text.empty());
         for (int i = 0; i < 3; i++) {
             RegistryEntry<StatusEffect> effect = blessEffects.get(player.getRandom().nextInt(blessEffects.size()));
             int amplifier;
@@ -704,7 +704,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             MutableText effectName = Text.translatable(effect.value().getTranslationKey()).formatted(Formatting.GRAY);
             player.sendMessage(Text.literal(" §a§l+ ").append(effectName).append(Text.of(" §6"+romanNumeral)));
         }
-        player.sendMessage(Text.of(""));
+        player.sendMessage(Text.empty());
     }
 
     public void spawnItemForPlayer() {

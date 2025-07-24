@@ -113,7 +113,7 @@ public class TextHud {
         if (System.currentTimeMillis()-MainClient.sessionTimeLastUpdated > 15000) return 0;
         if (MainClient.sessionTime == SessionTimerStates.OFF.getValue()) return 0;
 
-        MutableText timerText = Text.literal("");
+        MutableText timerText = Text.empty();
         if (MainClient.sessionTime == SessionTimerStates.ENDED.getValue()) timerText = timerText.append(Text.of("§7Session has ended"));
         else if (MainClient.sessionTime == SessionTimerStates.PAUSED.getValue()) timerText = timerText.append(Text.of("§7Session has been paused"));
         else if (MainClient.sessionTime == SessionTimerStates.NOT_STARTED.getValue()) timerText = timerText.append(Text.of("§7Session has not started"));
@@ -135,7 +135,7 @@ public class TextHud {
         if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) return 0;
         if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
 
-        MutableText timerText = Text.literal("");
+        MutableText timerText = Text.empty();
         if (MainClient.limitedLifeLives == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
         else {
             long remainingTime = roundTime(MainClient.limitedLifeLives*1000);

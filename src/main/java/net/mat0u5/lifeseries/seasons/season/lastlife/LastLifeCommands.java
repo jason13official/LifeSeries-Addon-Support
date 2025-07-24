@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.lastlife;
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -52,7 +53,13 @@ public class LastLifeCommands {
 
     public static int assignRandomLives(ServerCommandSource source, Collection<ServerPlayerEntity> players) {
         if (checkBanned(source)) return -1;
-        OtherUtils.sendCommandFeedback(source, Text.of("Assigning random lives to " + players.size() + " target"+(Math.abs(players.size())!=1?"s":"")+"..."));
+        if (players == null || players.isEmpty()) return -1;
+
+        if (players.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7...", players.iterator().next()));
+            return 1;
+        }
+        OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7 targets...", players.size()));
         ((LastLife) currentSeason).livesManager.assignRandomLives(players);
         return 1;
     }

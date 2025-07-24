@@ -142,7 +142,7 @@ public class FakePlayer extends ServerPlayerEntity {
                 }
             }
             if (!triggered) {
-                networkHandler.onDisconnected(new DisconnectionInfo(Text.of("")));
+                networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
             }
         }
         //

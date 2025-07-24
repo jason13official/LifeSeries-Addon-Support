@@ -98,7 +98,7 @@ public class AstralProjection extends ToggleableSuperpower {
         Vec3d toBackPos = startedPos;
         if (clone != null) {
             toBackPos = clone.getPos();
-            clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.of("")));
+            clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
             NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), "", "");
         }
 

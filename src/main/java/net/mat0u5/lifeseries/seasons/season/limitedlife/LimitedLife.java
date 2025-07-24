@@ -102,7 +102,7 @@ public class LimitedLife extends Season {
                 }
             }
             else {
-                MutableText fullMessage = Text.literal("");
+                MutableText fullMessage = Text.empty();
                 if (displayTimer.contains(player.getUuid())) {
                     fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
                 }
@@ -258,7 +258,7 @@ public class LimitedLife extends Season {
         else if (wasAlive && SHOW_DEATH_TITLE) {
             PlayerUtils.sendTitleWithSubtitle(killer,
                     Text.literal(msgKiller).formatted(Formatting.GREEN),
-                    Text.literal("").append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
+                    Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
                     20, 80, 20);
         }
         else {
@@ -282,7 +282,7 @@ public class LimitedLife extends Season {
             else {
                 PlayerUtils.sendTitleWithSubtitle(killer,
                         Text.literal(msgKiller).formatted(Formatting.GREEN),
-                        Text.literal("").append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
+                        Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
                         20, 80, 20);
             }
             if (wasAllowedToAttack) return;
@@ -306,7 +306,7 @@ public class LimitedLife extends Season {
         }
         else {
             PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured, "+msgKiller),
-                    Text.literal("").append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!"))
+                    Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!"))
                     , 20, 80, 20);
         }
     }

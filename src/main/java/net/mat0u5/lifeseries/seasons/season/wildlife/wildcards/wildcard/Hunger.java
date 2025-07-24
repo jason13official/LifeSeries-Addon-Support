@@ -165,7 +165,7 @@ public class Hunger extends Wildcard {
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), Text.of(""), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
+            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), Text.empty(), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
             TaskScheduler.scheduleTask(40, WildcardManager::showDots);
             TaskScheduler.scheduleTask(140, () -> {
                 for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
