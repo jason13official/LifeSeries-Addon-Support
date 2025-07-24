@@ -160,11 +160,11 @@ public class LimitedLife extends Season {
     @Override
     public void reloadPlayerTeamActual(ServerPlayerEntity player) {
         Integer lives = getPlayerLives(player);
-        if (lives == null) TeamUtils.addEntityToTeam("Unassigned",player);
-        else if (lives <= 0) TeamUtils.addEntityToTeam("Dead",player);
-        else if (lives > YELLOW_TIME) TeamUtils.addEntityToTeam("Green",player);
-        else if (lives > RED_TIME) TeamUtils.addEntityToTeam("Yellow",player);
-        else if (lives > 0) TeamUtils.addEntityToTeam("Red",player);
+        if (lives == null) TeamUtils.addEntityToTeam("lives_null",player);
+        else if (lives <= 0) TeamUtils.addEntityToTeam("lives_0",player);
+        else if (lives > YELLOW_TIME) TeamUtils.addEntityToTeam("lives_3",player);
+        else if (lives > RED_TIME) TeamUtils.addEntityToTeam("lives_2",player);
+        else if (lives > 0) TeamUtils.addEntityToTeam("lives_1",player);
     }
 
     @Override
