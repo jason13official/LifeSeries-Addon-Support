@@ -26,7 +26,6 @@ public class EnchantListConfigEntry extends StringConfigEntry {
     protected void reloadEntriesRaw(String text) {
         String raw = text;
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return;
         List<String> items = new ArrayList<>(Arrays.asList(raw.split(",")));
         reloadEntries(items);
     }
@@ -45,6 +44,7 @@ public class EnchantListConfigEntry extends StringConfigEntry {
 
 
         for (String enchantmentId : items) {
+            if (enchantmentId.isEmpty()) break;
             if (!enchantmentId.startsWith("minecraft:")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {

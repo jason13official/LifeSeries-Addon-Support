@@ -133,8 +133,10 @@ public class WildLifeCommands {
                         )
                     )
                 )
-                .then(literal("resetAll")
-                    .executes(context -> resetSuperpowers(context.getSource()))
+                .then(literal("reset")
+                        .then(argument("player", EntityArgumentType.players())
+                                .executes(context -> resetSuperpowers(context.getSource(), EntityArgumentType.getPlayers(context, "player")))
+                        )
                 )
                 .then(literal("setRandom")
                     .executes(context -> setRandomSuperpowers(context.getSource()))
@@ -270,10 +272,20 @@ public class WildLifeCommands {
         return 1;
     }
 
-    public static int resetSuperpowers(ServerCommandSource source) {
+    public static int resetSuperpowers(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        SuperpowersWildcard.resetAllSuperpowers();
-        OtherUtils.sendCommandFeedback(source, Text.of("Deactivated everyone's superpowers"));
+        if (targets == null || targets.isEmpty()) return -1;
+
+        for (ServerPlayerEntity player : targets) {
+            SuperpowersWildcard.resetSuperpower(player);
+        }
+
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Deactivated {}'s superpower", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Deactivated the superpower of {} targets", targets.size()));
+        }
         return 1;
     }
 

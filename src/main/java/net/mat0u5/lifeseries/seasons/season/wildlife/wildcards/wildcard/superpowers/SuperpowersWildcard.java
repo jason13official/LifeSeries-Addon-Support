@@ -40,6 +40,15 @@ public class SuperpowersWildcard extends Wildcard {
         playerSuperpowers.values().forEach(Superpower::tick);
     }
 
+    public static void resetSuperpower(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        if (!playerSuperpowers.containsKey(uuid)) {
+            return;
+        }
+        playerSuperpowers.get(uuid).turnOff();
+        playerSuperpowers.remove(uuid);
+    }
+
     public static void resetAllSuperpowers() {
         playerSuperpowers.values().forEach(Superpower::turnOff);
         playerSuperpowers.clear();

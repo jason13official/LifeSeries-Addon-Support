@@ -195,35 +195,4 @@ public class TextUtils {
         }
         return textPlural;
     }
-
-/*
-    List<ServerPlayerEntity> affected = new ArrayList<>();
-
-
-    if (affected.isEmpty()) {
-        source.sendError(Text.of("No target was found"));
-        return -1;
-    }
-    if (affected.size() == 1) {
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{}'s soulmate was reset", affected.getFirst()));
-        return 1;
-    }
-    OtherUtils.sendCommandFeedback(source, TextUtils.format("Soulmate was reset for {} targets.", affected.size()));
-
-
-    source.sendError(TextUtils.format(""));
-    OtherUtils.sendCommandFeedback(source, TextUtils.format(""));
-
-
-    if (targets.size() == 1) {
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("", targets.iterator().next()));
-    }
-    else {
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("", targets.size()));
-    }
-
-    if (targets == null || targets.isEmpty()) return -1;
-    for (ServerPlayerEntity player : targets) {
-    }
- */
 }

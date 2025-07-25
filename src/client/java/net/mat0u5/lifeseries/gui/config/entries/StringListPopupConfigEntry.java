@@ -50,7 +50,6 @@ public abstract class StringListPopupConfigEntry<T> extends StringConfigEntry im
         }
         String raw = text;
         raw = raw.replaceAll("\\[","").replaceAll("]","").replaceAll(" ", "");
-        if (raw.isEmpty()) return;
         List<String> items = new ArrayList<>(Arrays.asList(raw.split(",")));
         reloadEntries(items);
         lastEntryStr = text;
