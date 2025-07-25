@@ -91,7 +91,7 @@ publishMods {
 
  modLoaders.add("fabric")
 
- def isDevBuild = providers.environmentVariable("DEV_BUILD")?.asBoolean() == true
+ def isDevBuild = providers.environmentVariable("DEV_BUILD").getOrElse("true") == "true"
 
  modrinth {
   projectId = isDevBuild ? "RLDqKhd4" : "aLasQi8P"

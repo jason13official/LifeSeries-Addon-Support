@@ -76,9 +76,22 @@ jobs:
           COMMIT_MESSAGE_BR=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/<br>/g')
           echo "COMMIT_MESSAGE_BR=$COMMIT_MESSAGE_BR" >> $GITHUB_ENV
 
-      - name: Publish to Modrinth and Curseforge
+      - name: Publish to Modrinth and Curseforge (Sequential)
         if: ${{ inputs.publish }}
-        run: ./gradlew publishMods
+        run: |
+          # Define version order explicitly to match your delay preferences
+          VERSIONS=("1.21" "1.21.2" "1.21.4" "1.21.5" "1.21.6")
+
+          for version in "${VERSIONS[@]}"; do
+            if [ -d "./versions/$version" ]; then
+              echo "Publishing version $version..."
+              (cd "./versions/$version" && ../../gradlew publishMods)
+              echo "✅ Successfully published $version"
+              sleep 10
+            else
+              echo "⚠️  Version directory $version not found, skipping"
+            fi
+          done
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
