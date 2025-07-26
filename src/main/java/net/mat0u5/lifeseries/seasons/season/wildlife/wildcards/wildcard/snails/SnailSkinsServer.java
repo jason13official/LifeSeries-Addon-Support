@@ -25,21 +25,17 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 public class SnailSkinsServer {
     public static void sendImageToClient(ServerPlayerEntity player, String name, int index, int maxIndex, Path imagePath) {
         try {
-            // Read the image file
             BufferedImage image = ImageIO.read(Files.newInputStream(imagePath));
 
-            // Check if the image is 32x32
             if (image.getWidth() != 32 || image.getHeight() != 32) {
                 Main.LOGGER.error("Image must be 32x32 pixels");
                 return;
             }
 
-            // Convert the image to byte array
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "PNG", baos);
             byte[] imageBytes = baos.toByteArray();
 
-            // Create ImagePayload using your packet format
             ImagePayload payload = new ImagePayload(name, index, maxIndex, imageBytes);
 
             NetworkHandlerServer.sendImagePacket(player, payload);
