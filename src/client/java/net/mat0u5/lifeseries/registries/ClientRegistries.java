@@ -10,14 +10,10 @@ import net.mat0u5.lifeseries.events.ClientKeybinds;
 public class ClientRegistries {
     public static void registerModStuff() {
         registerCommands();
-        registerEvents();
+        ClientEvents.registerClientEvents();
         ClientKeybinds.registerKeybinds();
     }
     private static void registerCommands() {
         ClientCommandRegistrationCallback.EVENT.register(ClientCommands::register);
-    }
-    private static void registerEvents() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
-        ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
     }
 }

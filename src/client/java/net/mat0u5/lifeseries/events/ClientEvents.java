@@ -1,17 +1,24 @@
 package net.mat0u5.lifeseries.events;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.features.SnailSkinsClient;
 import net.mat0u5.lifeseries.gui.other.UpdateInfoScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
@@ -26,16 +33,31 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClientEvents {
     public static long onGroundFor = 0;
-
     private static boolean hasShownUpdateScreen = false;
+
+    public static void registerClientEvents() {
+        ClientPlayConnectionEvents.JOIN.register(ClientEvents::onClientJoin);
+        ClientPlayConnectionEvents.DISCONNECT.register(ClientEvents::onClientDisconnect);
+        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEvents::onClientStart);
+        ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenOpen);
+    }
+
+    public static void onClientJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+
+    }
+
+    public static void onClientDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
+        Main.LOGGER.info("Client disconnected from server, clearing some client data.");
+        MainClient.resetClientData();
+    }
+
     public static void onScreenOpen(MinecraftClient client, Screen screen, int scaledWidth, int scaledHeight) {
         if (UpdateChecker.updateAvailable) {
             if (screen instanceof TitleScreen && !hasShownUpdateScreen) {

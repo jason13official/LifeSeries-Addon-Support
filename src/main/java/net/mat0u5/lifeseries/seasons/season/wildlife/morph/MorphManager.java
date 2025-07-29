@@ -28,6 +28,10 @@ public class MorphManager {
         syncFromPlayer(player);
     }
 
+    public static void resetMorphs() {
+        morphComponents.clear();
+    }
+
     @Nullable
     public static MorphComponent getComponent(PlayerEntity player) {
         return morphComponents.get(player.getUuid());

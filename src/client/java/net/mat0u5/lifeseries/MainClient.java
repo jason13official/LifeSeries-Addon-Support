@@ -13,10 +13,12 @@ import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.registries.ClientRegistries;
 import net.mat0u5.lifeseries.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -114,5 +116,40 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         else {
             SESSION_TIMER = ClientConfig.SESSION_TIMER.get(clientConfig);
         }
+    }
+
+    public static void resetClientData() {
+        clientCurrentSeason = Seasons.UNASSIGNED;
+        clientSessionStatus = SessionStatus.NOT_STARTED;
+        clientActiveWildcards = new ArrayList<>();
+        TIME_DILATION_TIMESTAMP = 0;
+        SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
+        MIMICRY_COOLDOWN_TIMESTAMP = 0;
+        CURSE_SLIDING = 0;
+
+
+        playerDisguiseNames = new HashMap<>();
+        playerDisguiseUUIDs = new HashMap<>();
+        invisiblePlayers = new HashMap<>();
+        triviaBotPartUUIDs = new ArrayList<>();
+
+        snailPartUUIDs = new ArrayList<>();
+        snailPos = null;
+        snailPosTime = 0;
+        triviaSnailPartUUIDs = new ArrayList<>();
+        triviaSnailPos = null;
+        triviaSnailPosTime = 0;
+        snailAir = 300;
+        snailAirTimestamp = 0;
+        preventGliding = false;
+        mutedForTicks = 0;
+        sessionTime = 0;
+        sessionTimeLastUpdated = 0;
+
+        limitedLifeTimerColor = "";
+        limitedLifeTimeLastUpdated = 0;
+        limitedLifeLives = 0;
+
+        MorphManager.resetMorphs();
     }
 }
