@@ -283,6 +283,7 @@ public class DoubleLife extends Season {
     @Override
     public void onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount, CallbackInfo ci) {
         if (source.getType().msgId().equalsIgnoreCase("soulmate")) return;
+        if (amount == 0) return;
         if (player == null) return;
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;

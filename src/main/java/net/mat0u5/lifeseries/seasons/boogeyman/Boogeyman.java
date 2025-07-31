@@ -9,6 +9,7 @@ public class Boogeyman {
     public UUID uuid;
     public String name;
     public boolean cured = false;
+    public boolean failed = false;
     public boolean died = false;
 
     public Boogeyman(ServerPlayerEntity player) {
