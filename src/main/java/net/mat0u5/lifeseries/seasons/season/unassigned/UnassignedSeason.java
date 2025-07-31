@@ -5,9 +5,9 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -51,9 +51,9 @@ public class UnassignedSeason extends Season {
 
     public void broadcastNotice() {
         if (currentSeason.getSeason() != Seasons.UNASSIGNED) return;
-        OtherUtils.broadcastMessage(Text.literal("[LifeSeries] You must select a season with ").formatted(Formatting.RED)
+        PlayerUtils.broadcastMessage(Text.literal("[LifeSeries] You must select a season with ").formatted(Formatting.RED)
                 .append(Text.literal("'/lifeseries setSeries <series>'").formatted(Formatting.GRAY)), 120);
-        OtherUtils.broadcastMessage(Text.literal("You must have §noperator permissions§r to use most commands in this mod.").formatted(Formatting.RED), 120);
+        PlayerUtils.broadcastMessage(Text.literal("You must have §noperator permissions§r to use most commands in this mod.").formatted(Formatting.RED), 120);
         Text text = Text.literal("§7Click ").append(
                 Text.literal("here")
                         .styled(style -> style
@@ -61,6 +61,6 @@ public class UnassignedSeason extends Season {
                                 .withClickEvent(TextUtils.openURLClickEvent("https://discord.gg/QWJxfb4zQZ"))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)"));
-        OtherUtils.broadcastMessage(text, 120);
+        PlayerUtils.broadcastMessage(text, 120);
     }
 }

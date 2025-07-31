@@ -240,7 +240,7 @@ public class DoubleLife extends Season {
         }
         WorldBorder border = server.getOverworld().getWorldBorder();
         OtherUtils.executeCommand("spreadplayers " + border.getCenterX() + " " + border.getCenterZ() + " 0 " + (border.getSize()/2) + " false @a[tag=randomTeleport]");
-        OtherUtils.broadcastMessageToAdmins(Text.of("Randomly distributed players."));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("Randomly distributed players."));
 
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             player.removeCommandTag("randomTeleport");
@@ -253,7 +253,7 @@ public class DoubleLife extends Season {
         if (playersToRoll.size()%2 != 0) {
             ServerPlayerEntity remove = playersToRoll.getFirst();
             playersToRoll.remove(remove);
-            OtherUtils.broadcastMessageToAdmins(Text.literal(" [DoubleLife] ").append(remove.getStyledDisplayName()).append(" was not paired with anyone, as there is an odd number of non-assigned players online."));
+            PlayerUtils.broadcastMessageToAdmins(Text.literal(" [DoubleLife] ").append(remove.getStyledDisplayName()).append(" was not paired with anyone, as there is an odd number of non-assigned players online."));
         }
         while(!playersToRoll.isEmpty()) {
             ServerPlayerEntity player1 = playersToRoll.get(0);

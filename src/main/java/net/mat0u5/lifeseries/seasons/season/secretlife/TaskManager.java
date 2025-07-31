@@ -503,28 +503,28 @@ public class TaskManager {
     public static void positionFound(BlockPos pos, boolean fromButton) {
         if (pos == null) return;
         if (alreadyHasPos(pos)) {
-            OtherUtils.broadcastMessage(Text.literal("§c[SecretLife setup] This location is already being used."), 20);
+            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup] This location is already being used."), 20);
             return;
         }
         if (successButtonPos == null && fromButton) {
             successButtonPos = pos;
-            OtherUtils.broadcastMessage(Text.literal("§a[SecretLife setup 1/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 1/4] Location set.\n"));
         }
         else if (rerollButtonPos == null && fromButton) {
             rerollButtonPos = pos;
-            OtherUtils.broadcastMessage(Text.literal("§a[SecretLife setup 2/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 2/4] Location set.\n"));
         }
         else if (failButtonPos == null && fromButton) {
             failButtonPos = pos;
-            OtherUtils.broadcastMessage(Text.literal("§a[SecretLife setup 3/4] Location set.\n"));
+            PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife setup 3/4] Location set.\n"));
         }
         if (itemSpawnerPos == null && !fromButton) {
             if (successButtonPos != null && rerollButtonPos != null && failButtonPos != null) {
                 itemSpawnerPos = pos;
-                OtherUtils.broadcastMessage(Text.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/secretlife changeLocations'\n"));
+                PlayerUtils.broadcastMessage(Text.literal("§a[SecretLife] All locations have been set. If you wish to change them in the future, use §2'/secretlife changeLocations'\n"));
 
-                OtherUtils.broadcastMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
-                OtherUtils.broadcastMessage(Text.of("After that, use §b'/session start'§f to start the session."));
+                PlayerUtils.broadcastMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
+                PlayerUtils.broadcastMessage(Text.of("After that, use §b'/session start'§f to start the session."));
             }
         }
         locationsConfig.saveLocations();
@@ -534,22 +534,22 @@ public class TaskManager {
     public static boolean searchingForLocations = false;
     public static boolean checkSecretLifePositions() {
         if (successButtonPos == null) {
-            OtherUtils.broadcastMessage(Text.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 1/4] Location for the secret keeper task §6§lSUCCESS BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (rerollButtonPos == null) {
-            OtherUtils.broadcastMessage(Text.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 2/4] Location for the secret keeper task §6§lRE-ROLL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (failButtonPos == null) {
-            OtherUtils.broadcastMessage(Text.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
+            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 3/4] Location for the secret keeper task §6§lFAIL BUTTON§r§c was not found. §nThe next button you click will be set as the location."));
             searchingForLocations = true;
             return false;
         }
         if (itemSpawnerPos == null) {
-            OtherUtils.broadcastMessage(Text.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
+            PlayerUtils.broadcastMessage(Text.literal("§c[SecretLife setup 4/4] Location for the secret keeper task §6§lITEM SPAWN BLOCK§r§c was not found. §nPlease place a bedrock block at the desired spot to mark it."));
             searchingForLocations = true;
             return false;
         }

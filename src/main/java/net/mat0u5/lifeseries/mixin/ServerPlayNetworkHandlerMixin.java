@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.message.SignedMessage;
@@ -45,7 +44,7 @@ public class ServerPlayNetworkHandlerMixin {
             Text formattedContentText = Text.literal(formattedContent).setStyle(originalText.getStyle());
             Text finalMessage = Text.empty().append("<").append(playerNameWithFormatting).append(">").append(formattedContentText);
 
-            OtherUtils.broadcastMessage(finalMessage);
+            PlayerUtils.broadcastMessage(finalMessage);
             ci.cancel();
         }
     }

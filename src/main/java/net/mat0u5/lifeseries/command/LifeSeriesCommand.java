@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -133,7 +134,7 @@ public class LifeSeriesCommand {
     public static void setSeasonFinal(ServerCommandSource source, String setTo) {
         if (Main.changeSeasonTo(setTo)) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Changing the season to {}§7...", setTo));
-            OtherUtils.broadcastMessage(TextUtils.format("Successfully changed the season to {}",setTo).formatted(Formatting.GREEN));
+            PlayerUtils.broadcastMessage(TextUtils.format("Successfully changed the season to {}",setTo).formatted(Formatting.GREEN));
         }
     }
 

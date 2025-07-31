@@ -42,13 +42,13 @@ public class Session {
     SessionAction endWarning1 = new SessionAction(OtherUtils.minutesToTicks(-5)) {
         @Override
         public void trigger() {
-            OtherUtils.broadcastMessage(Text.literal("Session ends in 5 minutes!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Text.literal("Session ends in 5 minutes!").formatted(Formatting.GOLD));
         }
     };
     SessionAction endWarning2 = new SessionAction(OtherUtils.minutesToTicks(-30)) {
         @Override
         public void trigger() {
-            OtherUtils.broadcastMessage(Text.literal("Session ends in 30 minutes!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Text.literal("Session ends in 30 minutes!").formatted(Formatting.GOLD));
         }
     };
     SessionAction actionInfoAction = new SessionAction(OtherUtils.secondsToTicks(7)) {
@@ -65,8 +65,8 @@ public class Session {
         MutableText sessionStartedText = Text.literal("Session started!").formatted(Formatting.GOLD);
         Text firstLine = sessionStartedText.append(Text.literal(" ["+OtherUtils.formatTime(sessionLength)+"]").formatted(Formatting.GRAY));
         MutableText infoText2 = Text.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
-        OtherUtils.broadcastMessage(firstLine);
-        OtherUtils.broadcastMessage(infoText2);
+        PlayerUtils.broadcastMessage(firstLine);
+        PlayerUtils.broadcastMessage(infoText2);
         activeActions.clear();
         activeActions.add(endWarning1);
         activeActions.add(endWarning2);
@@ -80,7 +80,7 @@ public class Session {
         SessionTranscript.sessionEnd();
         if (status != SessionStatus.FINISHED && status != SessionStatus.NOT_STARTED) {
             SessionTranscript.sendTranscriptToAdmins();
-            OtherUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
         }
         status = SessionStatus.FINISHED;
         passedTime = 0;
@@ -88,11 +88,11 @@ public class Session {
 
     public void sessionPause() {
         if (statusPaused()) {
-            OtherUtils.broadcastMessage(Text.literal("Session unpaused!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Text.literal("Session unpaused!").formatted(Formatting.GOLD));
             status = SessionStatus.STARTED;
         }
         else {
-            OtherUtils.broadcastMessage(Text.literal("Session paused!").formatted(Formatting.GOLD));
+            PlayerUtils.broadcastMessage(Text.literal("Session paused!").formatted(Formatting.GOLD));
             status = SessionStatus.PAUSED;
         }
     }
@@ -318,7 +318,7 @@ public class Session {
             messages.add(Text.of("§7- "+actionMessage));
         }
         for (Text text : messages) {
-            OtherUtils.broadcastMessageToAdmins(text);
+            PlayerUtils.broadcastMessageToAdmins(text);
         }
     }
 

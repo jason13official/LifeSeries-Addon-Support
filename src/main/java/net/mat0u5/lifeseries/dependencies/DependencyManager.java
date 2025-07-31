@@ -1,8 +1,8 @@
 package net.mat0u5.lifeseries.dependencies;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -34,7 +34,7 @@ public class DependencyManager {
 
     public static boolean checkWildLifeDependencies() {
         if (!polymerLoaded()) {
-            OtherUtils.broadcastMessage(
+            PlayerUtils.broadcastMessage(
                     Text.literal("§cYou must install the ").append(
                             Text.literal("Polymer mod")
                                     .styled(style -> style
@@ -46,7 +46,7 @@ public class DependencyManager {
             );
         }
         if (!blockbenchImportLibraryLoaded()) {
-            OtherUtils.broadcastMessage(
+            PlayerUtils.broadcastMessage(
                     Text.literal("§cYou must install the ").append(
                             Text.literal("Blockbench Import Library mod")
                                     .styled(style -> style

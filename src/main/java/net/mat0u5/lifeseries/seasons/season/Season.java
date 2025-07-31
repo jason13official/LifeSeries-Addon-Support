@@ -297,6 +297,9 @@ public abstract class Season extends Session {
 
     public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
         target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
+        if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
+            PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
+        }
         target.sendMessage(TextUtils.format("You received a life from {}", playerName));
         PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
         AnimationUtils.createSpiral(target, 175);
@@ -403,10 +406,10 @@ public abstract class Season extends Session {
         if (message.contains("${player}")) {
             String before = message.split("\\$\\{player}")[0];
             String after = message.split("\\$\\{player}")[1];
-            OtherUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
+            PlayerUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
         }
         else {
-            OtherUtils.broadcastMessage(Text.literal(message));
+            PlayerUtils.broadcastMessage(Text.literal(message));
         }
     }
 
@@ -549,7 +552,7 @@ public abstract class Season extends Session {
             }
         }
         else {
-            OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
+            PlayerUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
                     "§7, who is not §cred name!"));
         }
     }

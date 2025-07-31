@@ -44,7 +44,7 @@ public class BoogeymanManager {
                     public void trigger() {
                         if (!BOOGEYMAN_ENABLED) return;
                         if (boogeymanChosen) return;
-                        OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 5 minutes.").formatted(Formatting.RED));
+                        PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 5 minutes.").formatted(Formatting.RED));
                         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
                     }
                 }
@@ -57,7 +57,7 @@ public class BoogeymanManager {
                     public void trigger() {
                         if (!BOOGEYMAN_ENABLED) return;
                         if (boogeymanChosen) return;
-                        OtherUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 1 minute.").formatted(Formatting.RED));
+                        PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is being chosen in 1 minute.").formatted(Formatting.RED));
                         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
                     }
                 }
@@ -148,7 +148,7 @@ public class BoogeymanManager {
 
     public void prepareToChooseBoogeymen() {
         if (!BOOGEYMAN_ENABLED) return;
-        OtherUtils.broadcastMessage(Text.literal("The Boogeyman is about to be chosen.").formatted(Formatting.RED));
+        PlayerUtils.broadcastMessage(Text.literal("The Boogeyman is about to be chosen.").formatted(Formatting.RED));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
             resetBoogeymen();
@@ -248,7 +248,7 @@ public class BoogeymanManager {
             if (!boogeyman.cured) {
                 ServerPlayerEntity player = PlayerUtils.getPlayer(boogeyman.uuid);
                 if (player == null) {
-                    OtherUtils.broadcastMessageToAdmins(Text.of("§c[BoogeymanManager] The Boogeyman ("+boogeyman.name+") has failed to kill a person, and is offline at session end. " +
+                    PlayerUtils.broadcastMessageToAdmins(Text.of("§c[BoogeymanManager] The Boogeyman ("+boogeyman.name+") has failed to kill a person, and is offline at session end. " +
                             "That means their lives have *not* been lowered. You must do this manually once they are online again."));
                     continue;
                 }
@@ -265,7 +265,7 @@ public class BoogeymanManager {
         if (currentSeason.isOnLastLife(player, true)) return;
         PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
         PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
-        OtherUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
+        PlayerUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
         currentSeason.setPlayerLives(player, 1);
         boogeyman.failed = true;
         boogeyman.cured = false;

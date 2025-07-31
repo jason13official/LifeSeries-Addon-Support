@@ -40,7 +40,7 @@ public class WildcardManager {
                         @Override
                         public void trigger() {
                             if (activeWildcards.isEmpty()) {
-                                OtherUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
+                                PlayerUtils.broadcastMessage(Text.literal("A Wildcard will be activated in 2 minutes!").formatted(Formatting.GRAY));
                             }
                         }
                     }
@@ -67,8 +67,8 @@ public class WildcardManager {
     }
 
     public static void chosenWildcard(Wildcards wildcard) {
-        OtherUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " wildcard has been selected for this session."));
-        OtherUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " wildcard has been selected for this session."));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
         WildcardManager.chosenWildcard = wildcard;
     }
 
@@ -126,7 +126,7 @@ public class WildcardManager {
     }
 
     public static void fadedWildcard() {
-        OtherUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
+        PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
     }
 

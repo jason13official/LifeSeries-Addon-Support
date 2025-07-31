@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.utils.player;
 
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -32,6 +33,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.server;
 
 public class PlayerUtils {
+    private static HashMap<Text, Integer> broadcastCooldown = new HashMap<>();
 
     public static void sendTitleWithSubtitle(ServerPlayerEntity player, Text title, Text subtitle, int fadeIn, int stay, int fadeOut) {
         if (server == null) return;
@@ -290,5 +292,54 @@ public class PlayerUtils {
         //?} else {
         /*return player.getWorld();
         *///?}
+    }
+
+    public static void onTick() {
+        if (broadcastCooldown.isEmpty()) return;
+        HashMap<Text, Integer> newCooldowns = new HashMap<>();
+        for (Map.Entry<Text, Integer> entry : broadcastCooldown.entrySet()) {
+            Text key = entry.getKey();
+            Integer value = entry.getValue();
+            value--;
+            if (value > 0) {
+                newCooldowns.put(key, value);
+            }
+        }
+        broadcastCooldown = newCooldowns;
+    }
+
+    public static void broadcastMessage(Text message) {
+        broadcastMessage(message, 1);
+    }
+
+    public static void broadcastMessageToAdmins(Text message) {
+        broadcastMessageToAdmins(message, 1);
+    }
+
+    public static void broadcastMessageExcept(Text message, ServerPlayerEntity exceptPlayer) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            if (player == exceptPlayer) continue;
+            player.sendMessage(message, false);
+        }
+    }
+
+    public static void broadcastMessage(Text message, int cooldownTicks) {
+        if (broadcastCooldown.containsKey(message)) return;
+        broadcastCooldown.put(message, cooldownTicks);
+
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            player.sendMessage(message, false);
+        }
+    }
+
+    public static void broadcastMessageToAdmins(Text message, int cooldownTicks) {
+        if (broadcastCooldown.containsKey(message)) return;
+        broadcastCooldown.put(message, cooldownTicks);
+
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            if (!PermissionManager.isAdmin(player)) continue;
+            player.sendMessage(message, false);
+        }
+        Main.LOGGER.info(message.getString());
     }
 }

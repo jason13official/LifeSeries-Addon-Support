@@ -5,7 +5,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.sound.SoundEvents;
@@ -176,7 +175,7 @@ public class Callback extends Wildcard {
         for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
             if (wildcard.getType() == Wildcards.CALLBACK) continue;
             wildcard.deactivate();
-            OtherUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
+            PlayerUtils.broadcastMessage(Text.of("§7A Wildcard has faded..."));
         }
         WildcardManager.activeWildcards.clear();
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);

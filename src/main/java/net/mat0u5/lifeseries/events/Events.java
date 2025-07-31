@@ -164,7 +164,7 @@ public class Events {
             if (Main.currentSession != null) {
                 Main.currentSession.tick(server);
             }
-            OtherUtils.onTick();
+            PlayerUtils.onTick();
             if (NetworkHandlerServer.updatedConfigThisTick) {
                 NetworkHandlerServer.onUpdatedConfig();
             }

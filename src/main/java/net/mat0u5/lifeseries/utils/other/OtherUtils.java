@@ -2,13 +2,11 @@ package net.mat0u5.lifeseries.utils.other;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -22,15 +20,6 @@ import static net.mat0u5.lifeseries.Main.server;
 
 public class OtherUtils {
     private static final Random rnd = new Random();
-    private static HashMap<Text, Integer> cooldown = new HashMap<>();
-
-    public static void broadcastMessage(Text message) {
-        broadcastMessage(message, 1);
-    }
-
-    public static void broadcastMessageToAdmins(Text message) {
-        broadcastMessageToAdmins(message, 1);
-    }
 
     public static void log(String string) {
         Text message = Text.of(string);
@@ -58,40 +47,6 @@ public class OtherUtils {
             char c = str.charAt(i);
             Main.LOGGER.info("Character at %d: '%c' (Unicode: U+%04X)%n", i, c, (int)c);
         }
-    }
-
-    public static void broadcastMessage(Text message, int cooldownTicks) {
-        if (cooldown.containsKey(message)) return;
-        cooldown.put(message, cooldownTicks);
-
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            player.sendMessage(message, false);
-        }
-    }
-
-    public static void broadcastMessageToAdmins(Text message, int cooldownTicks) {
-        if (cooldown.containsKey(message)) return;
-        cooldown.put(message, cooldownTicks);
-
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (!PermissionManager.isAdmin(player)) continue;
-            player.sendMessage(message, false);
-        }
-        Main.LOGGER.info(message.getString());
-    }
-
-    public static void onTick() {
-        if (cooldown.isEmpty()) return;
-        HashMap<Text, Integer> newCooldowns = new HashMap<>();
-        for (Map.Entry<Text, Integer> entry : cooldown.entrySet()) {
-            Text key = entry.getKey();
-            Integer value = entry.getValue();
-            value--;
-            if (value > 0) {
-                newCooldowns.put(key, value);
-            }
-        }
-        cooldown = newCooldowns;
     }
 
     public static String formatTime(int totalTicks) {
@@ -203,7 +158,7 @@ public class OtherUtils {
     }
 
     public static void throwError(String error) {
-        broadcastMessageToAdmins(Text.of("§c"+error));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("§c"+error));
         Main.LOGGER.error(error);
     }
 

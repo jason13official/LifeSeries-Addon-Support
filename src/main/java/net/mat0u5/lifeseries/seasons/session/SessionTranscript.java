@@ -160,7 +160,7 @@ public class SessionTranscript {
 
     public static void sendTranscriptToAdmins() {
         Text sessionTranscript = getTranscriptMessage();
-        OtherUtils.broadcastMessageToAdmins(sessionTranscript);
+        PlayerUtils.broadcastMessageToAdmins(sessionTranscript);
     }
 
     public static Text getTranscriptMessage() {

@@ -42,13 +42,13 @@ public class SecretLife extends Season {
     SessionAction taskWarningAction = new SessionAction(OtherUtils.minutesToTicks(-5)+1) {
         @Override
         public void trigger() {
-            OtherUtils.broadcastMessage(Text.literal("Go submit / fail your secret tasks if you haven't!").formatted(Formatting.GRAY));
+            PlayerUtils.broadcastMessage(Text.literal("Go submit / fail your secret tasks if you haven't!").formatted(Formatting.GRAY));
         }
     };
     SessionAction taskWarningAction2 = new SessionAction(OtherUtils.minutesToTicks(-30)+1) {
         @Override
         public void trigger() {
-            OtherUtils.broadcastMessage(Text.literal("You better start finishing your secret tasks if you haven't already!").formatted(Formatting.GRAY));
+            PlayerUtils.broadcastMessage(Text.literal("You better start finishing your secret tasks if you haven't already!").formatted(Formatting.GRAY));
         }
     };
 
@@ -284,7 +284,7 @@ public class SecretLife extends Season {
         if (!playersWithTaskBooks.isEmpty()) {
             boolean isOne = playersWithTaskBooks.size() == 1;
             String playerNames = String.join(", ", playersWithTaskBooks);
-            OtherUtils.broadcastMessageToAdmins(Text.of("§4"+playerNames+"§c still " + (isOne?"has":"have") + " not submitted / failed a task this session."));
+            PlayerUtils.broadcastMessageToAdmins(Text.of("§4"+playerNames+"§c still " + (isOne?"has":"have") + " not submitted / failed a task this session."));
         }
     }
 
@@ -302,7 +302,7 @@ public class SecretLife extends Season {
             return;
         }
         else {
-            OtherUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
+            PlayerUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
                     +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
         }
     }

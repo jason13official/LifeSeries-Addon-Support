@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -92,7 +91,7 @@ public class ClaimKillCommand {
             return -1;
         }
         Text textAll = TextUtils.format("{}§7 claims credit for {}§7's death. Only an admin can validate this claim.", player, victim);
-        OtherUtils.broadcastMessage(textAll);
+        PlayerUtils.broadcastMessage(textAll);
         Text adminText = Text.literal("§7Click ").append(
                 Text.literal("here")
                         .styled(style -> style
@@ -100,7 +99,7 @@ public class ClaimKillCommand {
                                 .withClickEvent(TextUtils.runCommandClickEvent("/claimkill validate " + player.getNameForScoreboard() + " "+victim.getNameForScoreboard()))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept the claim if you think it's valid."));
-        OtherUtils.broadcastMessageToAdmins(adminText, 120);
+        PlayerUtils.broadcastMessageToAdmins(adminText, 120);
 
         return 1;
     }
@@ -111,7 +110,7 @@ public class ClaimKillCommand {
         if (victim == null) return -1;
 
         Text message = TextUtils.format("{}§7's kill claim on {}§7 was accepted.", killer, victim);
-        OtherUtils.broadcastMessage(message);
+        PlayerUtils.broadcastMessage(message);
         currentSeason.onClaimKill(killer, victim);
         currentSession.playerNaturalDeathLog.remove(victim.getUuid());
 

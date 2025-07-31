@@ -85,10 +85,13 @@ public class DefaultConfigValues {
             "final_death_sound", "minecraft:entity.lightning_bolt.thunder", "global.finaldeath", "Final Death Sound", "The sound that gets played to all players when anyone fully dies."
     );
     public final ConfigFileEntry<Boolean> GIVELIFE_COMMAND_ENABLED = new ConfigFileEntry<>(
-            "givelife_command_enabled", false, "{global.givelife}", "Enable givelife command", "Controls whether the '/givelife' command is available."
+            "givelife_command_enabled", false, "{global.givelife}", "Enable Givelife Command", "Controls whether the '/givelife' command is available."
     );
     public final ConfigFileEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigFileEntry<>(
-            "givelife_lives_max", 99, "global.givelife", "/givelife Lives Max", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
+            "givelife_lives_max", 99, "global.givelife", "Max Givelife Lives", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
+    );
+    public final ConfigFileEntry<Boolean> GIVELIFE_BROADCAST = new ConfigFileEntry<>(
+            "givelife_broadcast", false, "global.givelife", "Broadcast Givelife", "Broadcasts the message when a player gives a life to another player using /givelife"
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = new ConfigFileEntry<>(
             "tab_list_show_dead_players", true, "global.tablist", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."

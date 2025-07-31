@@ -20,7 +20,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -122,9 +121,9 @@ public class NetworkHandlerServer {
     }
 
     public static void onUpdatedConfig() {
-        OtherUtils.broadcastMessageToAdmins(Text.of("§7Config has been successfully updated."));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("§7Config has been successfully updated."));
         if (configNeedsReload) {
-            OtherUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
+            PlayerUtils.broadcastMessageToAdmins(Text.of("Run §7'/lifeseries reload'§r to apply all the changes."));
         }
         updatedConfigThisTick = false;
         configNeedsReload = false;
@@ -164,7 +163,7 @@ public class NetworkHandlerServer {
                 Seasons newSeason = Seasons.getSeasonFromStringName(value);
                 if (newSeason == Seasons.UNASSIGNED) return;
                 if (Main.changeSeasonTo(Seasons.getStringNameFromSeason(newSeason))) {
-                    OtherUtils.broadcastMessage(Text.literal("Successfully changed the season to " + value + ".").formatted(Formatting.GREEN));
+                    PlayerUtils.broadcastMessage(Text.literal("Successfully changed the season to " + value + ".").formatted(Formatting.GREEN));
                 }
             }
         }

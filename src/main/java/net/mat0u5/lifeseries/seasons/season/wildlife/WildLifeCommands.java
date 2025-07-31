@@ -15,6 +15,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -165,7 +166,7 @@ public class WildLifeCommands {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.broadcastMessageToAdmins(TextUtils.format("{}§7 requests their snail name to be §f{}§7", player, name));
+        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("{}§7 requests their snail name to be §f{}§7", player, name));
         Text adminText = Text.literal("§7Click ").append(
                 Text.literal("here")
                         .styled(style -> style
@@ -173,7 +174,7 @@ public class WildLifeCommands {
                                 .withClickEvent(TextUtils.runCommandClickEvent("/snail names set " + player.getNameForScoreboard() + " "+name))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept."));
-        OtherUtils.broadcastMessageToAdmins(adminText);
+        PlayerUtils.broadcastMessageToAdmins(adminText);
         return 1;
     }
 

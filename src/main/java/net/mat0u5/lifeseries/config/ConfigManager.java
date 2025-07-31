@@ -83,6 +83,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,FINAL_DEATH_SOUND
 
                 ,GIVELIFE_LIVES_MAX
+                ,GIVELIFE_BROADCAST
 
                 ,TAB_LIST_SHOW_DEAD_PLAYERS
                 ,TAB_LIST_SHOW_LIVES

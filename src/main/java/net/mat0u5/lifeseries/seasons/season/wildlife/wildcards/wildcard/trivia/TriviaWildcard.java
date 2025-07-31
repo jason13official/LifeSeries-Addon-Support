@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -82,9 +81,9 @@ public class TriviaWildcard extends Wildcard {
         TriviaBot.cursedHeartPlayers.clear();
         TriviaBot.cursedMoonJumpPlayers.clear();
         if (!currentSession.statusStarted()) {
-            OtherUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
+            PlayerUtils.broadcastMessageToAdmins(Text.of("§7You must start a session for trivia bots to spawn!"));
         }
-        OtherUtils.broadcastMessageToAdmins(Text.of("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
+        PlayerUtils.broadcastMessageToAdmins(Text.of("§7You can modify the trivia questions in the config files (./config/lifeseries/wildlife/*-trivia)"));
         super.activate();
     }
 

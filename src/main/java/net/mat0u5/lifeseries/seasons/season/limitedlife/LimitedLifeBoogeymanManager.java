@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.limitedlife;
 
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
@@ -27,6 +26,6 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
 
         PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
         PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
-        OtherUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.literal("§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to ").append(setTo)));
+        PlayerUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.literal("§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to ").append(setTo)));
     }
 }
