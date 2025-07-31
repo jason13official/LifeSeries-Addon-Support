@@ -287,7 +287,7 @@ public class NetworkHandlerClient {
 
     public static void sendHandshake() {
         String clientVersionStr = Main.MOD_VERSION;
-        String clientCompatibilityStr = VersionControl.clientCmpatibilityMin();
+        String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
 
         int clientVersion = VersionControl.getModVersionInt(clientVersionStr);
         int clientCompatibility = VersionControl.getModVersionInt(clientCompatibilityStr);

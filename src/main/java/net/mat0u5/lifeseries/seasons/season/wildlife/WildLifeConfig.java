@@ -66,7 +66,7 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_sizeshifting_size_change_multiplier", 1.0, "season.sizeshifting", "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_hunger_randomize_interval", 36000, "season", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
+            "wildcard_hunger_randomize_interval", 36000, ConfigTypes.SECONDS, "season", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
     );
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "season.snails", "Speed Multiplier", "Snail movement speed multiplier."
@@ -92,21 +92,21 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_trivia_bots_per_player", 5, "season.trivia", "Trivia Bots per Player", "The amount of trivia bots that will spawn for each player over the session."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_EASY = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_easy", 180, "season.trivia", "Easy Timer", "Easy question timer length, in seconds."
+            "wildcard_trivia_seconds_easy", 180, ConfigTypes.SECONDS, "season.trivia", "Easy Timer", "Easy question timer length, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_NORMAL = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_normal", 240, "season.trivia", "Normal Timer", "Normal question timer length, in seconds."
+            "wildcard_trivia_seconds_normal", 240, ConfigTypes.SECONDS, "season.trivia", "Normal Timer", "Normal question timer length, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_TRIVIA_SECONDS_HARD = new ConfigFileEntry<>(
-            "wildcard_trivia_seconds_hard", 300, "season.trivia", "Hard Timer", "Hard question timer length, in seconds."
+            "wildcard_trivia_seconds_hard", 300, ConfigTypes.SECONDS, "season.trivia", "Hard Timer", "Hard question timer length, in seconds."
     );
 
 
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_start_spawn_delay", 7200, "season.mobswap", "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
+            "wildcard_mobswap_start_spawn_delay", 7200, ConfigTypes.SECONDS, "season.mobswap", "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_end_spawn_delay", 2400, "season.mobswap", "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
+            "wildcard_mobswap_end_spawn_delay", 2400, ConfigTypes.SECONDS, "season.mobswap", "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = new ConfigFileEntry<>(
             "wildcard_mobswap_spawn_mobs", 250, "season.mobswap", "Number of Mobs", "The number of mobs that spawn each cycle."
@@ -150,7 +150,7 @@ public class WildLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
-            "activate_wildcard_minute", 2.5, "season.general", "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
+            "activate_wildcard_minute", 2.5, ConfigTypes.MINUTES, "season.general", "Activate Wildcard Time", "The number of minutes (in the session) after which the wildcard is activated."
     );
     public static final ConfigFileEntry<Boolean> KILLING_DARK_GREENS_GAINS_LIVES = new ConfigFileEntry<>(
             "killing_dark_greens_gains_lives", true, "season.general", "Killing Dark Greens Gains Lives", "Controls whether killing dark green players (4+ lives) gives the killer a life."

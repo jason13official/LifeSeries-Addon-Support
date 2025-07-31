@@ -6,6 +6,8 @@ import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.gui.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.extra.*;
+import net.mat0u5.lifeseries.gui.config.entries.extra.time.MinutesConfigEntry;
+import net.mat0u5.lifeseries.gui.config.entries.extra.time.SecondsConfigEntry;
 import net.mat0u5.lifeseries.gui.config.entries.main.*;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
@@ -153,11 +155,17 @@ public class ClientConfigGuiManager {
             if (intObject.configType == ConfigTypes.HEARTS) {
                 return new HeartsConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
             }
+            if (intObject.configType == ConfigTypes.SECONDS) {
+                return new SecondsConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
+            }
             return new IntegerConfigEntry(intObject.id, intObject.name, intObject.description, intObject.integerValue, intObject.defaultValue);
         }
         else if (object instanceof DoubleObject doubleObject) {
             if (doubleObject.configType == ConfigTypes.PERCENTAGE) {
                 return new PercentageConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
+            }
+            if (doubleObject.configType == ConfigTypes.MINUTES) {
+                return new MinutesConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
             }
             return new DoubleConfigEntry(doubleObject.id, doubleObject.name, doubleObject.description, doubleObject.doubleValue, doubleObject.defaultValue);
         }

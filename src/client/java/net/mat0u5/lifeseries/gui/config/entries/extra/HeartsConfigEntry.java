@@ -43,8 +43,10 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
     public List<MutableText> getHeartPopupText() {
         if (value == null) return List.of();
 
-        int hearts = value / 2;
-        boolean hasHalfHeart = (value % 2) == 1;
+        int absValue = Math.abs(value);
+
+        int hearts = absValue / 2;
+        boolean hasHalfHeart = (absValue % 2) == 1;
 
 
         if (hearts == 0 && !hasHalfHeart) {
@@ -68,7 +70,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
             heartsList.add(Text.literal(HEART_ROW).formatted(Formatting.RED));
         }
 
-        heartsList.set(heartsList.size()-1, heartsList.getLast().append(Text.literal(String.format(" (%d HP)", value)).formatted(Formatting.GRAY)));
+        heartsList.set(heartsList.size()-1, heartsList.getLast().append(Text.literal(" ("+value+" HP)").formatted(Formatting.GRAY)));
 
         return heartsList;
     }

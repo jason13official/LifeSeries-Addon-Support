@@ -46,16 +46,17 @@ public class VersionControl {
         *   1.3.5.8     -   1.3.5.16
         *   1.3.5.17    -   1.3.5.23
         *   1.3.5.24    -   1.3.5.29
-        *   1.3.6       -   *
+        *   1.3.6       -   1.3.6.7     (clientCompatibility stayed)
+        *   1.3.6.8     -   *
      */
 
-    public static String clientCmpatibilityMin() {
-        //This is the version that the SERVER needs to have for the current client.
+    public static String clientCompatibilityMin() {
+        // This is the version that the SERVER needs to have for the current client.
         return "1.3.6";
     }
 
     public static String serverCompatibilityMin() {
-        //This is the version that the CLIENT needs to have for the current server.
-        return "1.3.6";
+        // This is the version that the CLIENT needs to have for the current server.
+        return "dev-1.3.6.8";
     }
 }

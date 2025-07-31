@@ -16,6 +16,8 @@ public enum ConfigTypes {
     EFFECT_LIST("effectlist"),
     ENCHANT_LIST("enchantlist"),
     BOOGEYMAN("boogeyman"),
+    SECONDS("seconds"),
+    MINUTES("minutes"),
 
     GROUP("group");
 
@@ -39,10 +41,10 @@ public enum ConfigTypes {
         return this == BOOLEAN || this == BOOGEYMAN;
     }
     public boolean parentInteger() {
-        return this == INTEGER || this == HEARTS;
+        return this == INTEGER || this == HEARTS || this == SECONDS;
     }
     public boolean parentDouble() {
-        return this == DOUBLE || this == PERCENTAGE;
+        return this == DOUBLE || this == PERCENTAGE || this == MINUTES;
     }
 
     public static ConfigTypes getFromString(String string) {
