@@ -78,6 +78,9 @@ public class LimitedLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> TICK_OFFLINE_PLAYERS = new ConfigFileEntry<>(
             "tick_offline_players", false, "season", "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
     );
+    public static final ConfigFileEntry<Boolean> BROADCAST_COLOR_CHANGES = new ConfigFileEntry<>(
+            "broadcast_color_changes", false, "season", "Broadcast Color Changes", "Sends a message in chat to all players when someone changes color."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
             "group_time", null, ConfigTypes.TEXT, "{season.time}", "Time Rewards / Punishments", ""
@@ -93,6 +96,7 @@ public class LimitedLifeConfig extends ConfigManager {
         defaultEntries.remove(DEFAULT_LIVES);
         defaultEntries.remove(GIVELIFE_COMMAND_ENABLED);
         defaultEntries.remove(GIVELIFE_LIVES_MAX);
+        defaultEntries.remove(GIVELIFE_BROADCAST);
         return defaultEntries;
     }
 
@@ -100,6 +104,7 @@ public class LimitedLifeConfig extends ConfigManager {
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 TICK_OFFLINE_PLAYERS
+                ,BROADCAST_COLOR_CHANGES
 
                 ,GROUP_TIME //Group
 

@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
@@ -41,6 +42,7 @@ public class LimitedLife extends Season {
     private int KILL_NORMAL = 1800;
     private int KILL_BOOGEYMAN = 3600;
     public static boolean TICK_OFFLINE_PLAYERS = false;
+    public static boolean BROADCAST_COLOR_CHANGES = false;
 
     @Override
     public Seasons getSeason() {
@@ -170,7 +172,10 @@ public class LimitedLife extends Season {
     @Override
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
         Integer livesBefore = getPlayerLives(player);
-        Formatting colorBefore = player.getScoreboardTeam().getColor();
+        Formatting colorBefore = null;
+        if (player.getScoreboardTeam() != null) {
+            colorBefore = player.getScoreboardTeam().getColor();
+        }
         ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
         if (lives <= 0) {
             playerLostAllLives(player, livesBefore);
@@ -179,6 +184,10 @@ public class LimitedLife extends Season {
         if (colorBefore != colorNow) {
             if (player.isSpectator() && lives > 0) {
                 player.changeGameMode(GameMode.SURVIVAL);
+            }
+            if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
+                Text livesText = Text.literal(colorNow.getName().replaceAll("_", " ").toLowerCase() +  " name").formatted(colorNow);
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is now a {}§7.", player, livesText));
             }
             reloadPlayerTeam(player);
         }
@@ -346,13 +355,14 @@ public class LimitedLife extends Season {
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof LimitedLifeConfig config)) return;
-        DEFAULT_TIME = config.TIME_DEFAULT.get(config);
-        YELLOW_TIME = config.TIME_YELLOW.get(config);
-        RED_TIME = config.TIME_RED.get(config);
-        DEATH_NORMAL = config.TIME_DEATH.get(config);
-        DEATH_BOOGEYMAN = config.TIME_DEATH_BOOGEYMAN.get(config);
-        KILL_NORMAL = config.TIME_KILL.get(config);
-        KILL_BOOGEYMAN = config.TIME_KILL_BOOGEYMAN.get(config);
-        TICK_OFFLINE_PLAYERS = config.TICK_OFFLINE_PLAYERS.get(config);
+        DEFAULT_TIME = LimitedLifeConfig.TIME_DEFAULT.get(config);
+        YELLOW_TIME = LimitedLifeConfig.TIME_YELLOW.get(config);
+        RED_TIME = LimitedLifeConfig.TIME_RED.get(config);
+        DEATH_NORMAL = LimitedLifeConfig.TIME_DEATH.get(config);
+        DEATH_BOOGEYMAN = LimitedLifeConfig.TIME_DEATH_BOOGEYMAN.get(config);
+        KILL_NORMAL = LimitedLifeConfig.TIME_KILL.get(config);
+        KILL_BOOGEYMAN = LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get(config);
+        TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get(config);
+        BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get(config);
     }
 }

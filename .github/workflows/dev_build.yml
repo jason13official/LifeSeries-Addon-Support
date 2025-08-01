@@ -87,7 +87,7 @@ jobs:
               echo "Publishing version $version..."
               (cd "./versions/$version" && ../../gradlew publishMods)
               echo "✅ Successfully published $version"
-              sleep 10
+              sleep 5
             else
               echo "⚠️  Version directory $version not found, skipping"
             fi

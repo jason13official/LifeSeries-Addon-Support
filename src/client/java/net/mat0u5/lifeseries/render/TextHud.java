@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.render;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
-import net.mat0u5.lifeseries.config.ClientConfig;
 import net.mat0u5.lifeseries.events.ClientKeybinds;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -14,13 +13,10 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import static net.mat0u5.lifeseries.MainClient.clientConfig;
-
 public class TextHud {
-    private static long renderTicks = 0;
     public static void renderText(DrawContext context) {
-        renderTicks++;
         MinecraftClient client = MinecraftClient.getInstance();
+        if (client.options.hudHidden) return;
         int yPos = client.getWindow().getScaledHeight() - 5 - client.textRenderer.fontHeight;
 
         if (Main.DEBUG) {
@@ -44,7 +40,7 @@ public class TextHud {
             float distance = (float) client.player.getPos().distanceTo(MainClient.snailPos.toCenterPos());
 
             Text timerText = Text.literal(String.valueOf(Math.round(distance)));
-            if (distance < 20) timerText = Text.literal("§c"+String.valueOf(Math.round(distance)));
+            if (distance < 20) timerText = Text.literal("§c"+Math.round(distance));
 
             int screenWidth = client.getWindow().getScaledWidth();
             int x = screenWidth - 5;

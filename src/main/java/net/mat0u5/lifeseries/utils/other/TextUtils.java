@@ -101,7 +101,7 @@ public class TextUtils {
     public static ClickEvent runCommandClickEvent(String command) {
         //? if <= 1.21.4 {
         return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-         //?} else {
+        //?} else {
         /*return new ClickEvent.RunCommand(command);
         *///?}
     }
@@ -109,7 +109,7 @@ public class TextUtils {
     public static ClickEvent copyClipboardClickEvent(String copy) {
         //? if <= 1.21.4 {
         return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copy);
-         //?} else {
+        //?} else {
         /*return new ClickEvent.CopyToClipboard(copy);
         *///?}
     }
@@ -117,7 +117,7 @@ public class TextUtils {
     public static HoverEvent showTextHoverEvent(Text text) {
         //? if <= 1.21.4 {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
-         //?} else {
+        //?} else {
         /*return new HoverEvent.ShowText(text);
         *///?}
     }

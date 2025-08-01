@@ -21,3 +21,8 @@ Lots of configs from Limited Life, Secret Life, Wild Life are now these types.
 
 Added a Click to expand/collapse text to text config entries which are group headers.<br>
 Added the 'givelife_broadcast' global config, which controls whether the "Player1 received a life from Player2" message shows up in chat. Default value is false.
+
+----------
+
+The timers and cooldowns in the mod no longer show up when you press F1.<br>
+Added the 'broadcast_color_changes' Limited Life config, which sends a message in chat to all players when someone changes color. Default value is false.
