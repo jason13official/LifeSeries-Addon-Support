@@ -26,3 +26,7 @@ Added the 'givelife_broadcast' global config, which controls whether the "Player
 
 The timers and cooldowns in the mod no longer show up when you press F1.<br>
 Added the 'broadcast_color_changes' Limited Life config, which sends a message in chat to all players when someone changes color. Default value is false.
+
+----------
+
+Added the Real Life season cuz why not. It's identical to Third Life, just has a separate config and you can select it in the april fools seasons menu.

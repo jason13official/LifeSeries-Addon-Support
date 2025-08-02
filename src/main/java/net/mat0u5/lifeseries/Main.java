@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLife;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.6.10";
+	public static final String MOD_VERSION = "dev-1.3.6.11";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -129,6 +130,9 @@ public class Main implements ModInitializer {
 		}
 		if (season.equalsIgnoreCase("simplelife")) {
 			currentSeason = new SimpleLife();
+		}
+		if (season.equalsIgnoreCase("reallife")) {
+			currentSeason = new RealLife();
 		}
 		currentSession = currentSeason;
 		seasonConfig = currentSeason.getConfig();

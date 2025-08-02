@@ -23,6 +23,7 @@ public class SeasonInfoScreen extends DefaultScreen {
     private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
     private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
     private static final Identifier TEXTURE_SIMPLELIFE = Identifier.of("lifeseries","textures/gui/simplelife.png");
+    private static final Identifier TEXTURE_REALLIFE = Identifier.of("lifeseries","textures/gui/reallife.png");
 
     public static Seasons season;
 
@@ -39,6 +40,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.SECRET_LIFE) return TEXTURE_SECRETLIFE;
         if (season == Seasons.WILD_LIFE) return TEXTURE_WILDLIFE;
         if (season == Seasons.SIMPLE_LIFE) return TEXTURE_SIMPLELIFE;
+        if (season == Seasons.REAL_LIFE) return TEXTURE_REALLIFE;
         return null;
     }
 
@@ -77,7 +79,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
         MutableText adminCommandsTextActual = null;
-        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.LAST_LIFE) adminCommandsTextActual = Text.literal(LastLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.DOUBLE_LIFE) adminCommandsTextActual = Text.literal(DoubleLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.LIMITED_LIFE) adminCommandsTextActual = Text.literal(LimitedLife.COMMANDS_ADMIN_TEXT);
@@ -99,7 +101,7 @@ public class SeasonInfoScreen extends DefaultScreen {
 
         MutableText commandsText = Text.literal("§8Available §nnon-admin§8 commands: ");
         MutableText commandsTextActual = null;
-        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
+        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
         if (season == Seasons.LAST_LIFE) commandsTextActual = Text.literal(LastLife.COMMANDS_TEXT);
         if (season == Seasons.DOUBLE_LIFE) commandsTextActual = Text.literal(DoubleLife.COMMANDS_TEXT);
         if (season == Seasons.LIMITED_LIFE) commandsTextActual = Text.literal(LimitedLife.COMMANDS_TEXT);

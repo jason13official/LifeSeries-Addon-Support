@@ -12,7 +12,8 @@ public enum Seasons {
     SECRET_LIFE,
     WILD_LIFE,
 
-    SIMPLE_LIFE;
+    SIMPLE_LIFE,
+    REAL_LIFE;
 
     public static String getFormattedStringNameFromSeason(Seasons season) {
         if (season == THIRD_LIFE) return "Third Life";
@@ -22,6 +23,7 @@ public enum Seasons {
         if (season == SECRET_LIFE) return "Secret Life";
         if (season == WILD_LIFE) return "Wild Life";
         if (season == SIMPLE_LIFE) return "Simple Life";
+        if (season == REAL_LIFE) return "Real Life";
         return "unassigned";
     }
 
@@ -33,6 +35,7 @@ public enum Seasons {
         if (season == SECRET_LIFE) return "secretlife";
         if (season == WILD_LIFE) return "wildlife";
         if (season == SIMPLE_LIFE) return "simplelife";
+        if (season == REAL_LIFE) return "reallife";
         return "unassigned";
     }
 
@@ -44,6 +47,7 @@ public enum Seasons {
         if (name.equalsIgnoreCase("secretlife")) return SECRET_LIFE;
         if (name.equalsIgnoreCase("wildlife")) return WILD_LIFE;
         if (name.equalsIgnoreCase("simplelife")) return SIMPLE_LIFE;
+        if (name.equalsIgnoreCase("reallife")) return REAL_LIFE;
 
         if (name.equalsIgnoreCase("Third Life")) return THIRD_LIFE;
         if (name.equalsIgnoreCase("Last Life")) return LAST_LIFE;
@@ -52,15 +56,16 @@ public enum Seasons {
         if (name.equalsIgnoreCase("Secret Life")) return SECRET_LIFE;
         if (name.equalsIgnoreCase("Wild Life")) return WILD_LIFE;
         if (name.equalsIgnoreCase("Simple Life")) return SIMPLE_LIFE;
+        if (name.equalsIgnoreCase("Real Life")) return REAL_LIFE;
         return UNASSIGNED;
     }
 
     public static List<Seasons> getAllImplemented() {
-        return List.of(THIRD_LIFE,LAST_LIFE,DOUBLE_LIFE,LIMITED_LIFE,SECRET_LIFE,WILD_LIFE,SIMPLE_LIFE);
+        return List.of(THIRD_LIFE,LAST_LIFE,DOUBLE_LIFE,LIMITED_LIFE,SECRET_LIFE,WILD_LIFE,SIMPLE_LIFE,REAL_LIFE);
     }
 
     public static List<String> getImplementedSeasonNames() {
-        return List.of("thirdlife", "lastlife", "doublelife", "limitedlife", "secretlife", "wildlife", "simplelife");
+        return List.of("thirdlife", "lastlife", "doublelife", "limitedlife", "secretlife", "wildlife", "simplelife", "reallife");
     }
 
     public static String getDatapackName(Seasons season) {

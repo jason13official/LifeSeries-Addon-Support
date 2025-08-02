@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
+import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeConfig;
@@ -212,6 +213,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
         new LimitedLifeConfig();
         new SecretLifeConfig();
         new WildLifeConfig();
+
+        new RealLifeConfig();
         new SimpleLifeConfig();
     }
 
