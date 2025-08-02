@@ -106,7 +106,7 @@ public class LifeSeriesCommand {
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the season selection GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_season", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_season", currentSeason.getSeason().getId());
         return 1;
     }
 
@@ -187,9 +187,9 @@ public class LifeSeriesCommand {
     }
 
     public static int getSeason(ServerCommandSource source) {
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current season: {}", Seasons.getStringNameFromSeason(currentSeason.getSeason())));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current season: {}", currentSeason.getSeason().getId()));
         if (source.getPlayer() != null) {
-            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "season_info", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
+            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "season_info", currentSeason.getSeason().getId());
         }
         return 1;
     }

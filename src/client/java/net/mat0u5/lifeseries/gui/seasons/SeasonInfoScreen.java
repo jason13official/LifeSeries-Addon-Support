@@ -68,7 +68,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(1.5f, 1.5f);
         *///?}
-        String seasonName = Seasons.getFormattedStringNameFromSeason(season);
+        String seasonName = season.getName();
         RenderUtils.drawTextCenterScaled(context, this.textRenderer, Text.of("§0"+ seasonName), centerX, startY + 10, 1.5f, 1.5f);
         //? if <= 1.21.5 {
         context.getMatrices().pop();

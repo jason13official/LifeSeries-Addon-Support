@@ -17,7 +17,7 @@ public class OldDatapackManager {
         deletedOldDatapacks = true;
         Path datapackFolder = server.getSavePath(WorldSavePath.DATAPACKS);
         try {
-            for (Seasons season : Seasons.getAllImplemented()) {
+            for (Seasons season : Seasons.getSeasons()) {
                 String datapackName = Seasons.getDatapackName(season);
                 if (datapackName == null) continue;
                 Path datapackPath = datapackFolder.resolve(datapackName);
@@ -32,7 +32,7 @@ public class OldDatapackManager {
     }
 
     public static void disableOldDatapacks() {
-        for (Seasons season : Seasons.getAllImplemented()) {
+        for (Seasons season : Seasons.getSeasons()) {
             String datapackName = Seasons.getDatapackName(season);
             OtherUtils.executeCommand("datapack disable \"file/"+datapackName+"\"");
         }

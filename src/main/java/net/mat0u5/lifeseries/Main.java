@@ -56,7 +56,7 @@ public class Main implements ModInitializer {
 	public static Session currentSession;
 	public static Blacklist blacklist;
 	public static ConfigManager seasonConfig;
-	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getImplementedSeasonNames();
+	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
 
 	@Override
 	public void onInitialize() {
@@ -182,7 +182,7 @@ public class Main implements ModInitializer {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
-			NetworkHandlerServer.sendStringPacket(player, "season_info", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
+			NetworkHandlerServer.sendStringPacket(player, "season_info", currentSeason.getSeason().getId());
 			NetworkHandlerServer.sendLongPacket(player, "session_timer", SessionTimerStates.NOT_STARTED.getValue());
 		}
 		SessionTranscript.resetStats();

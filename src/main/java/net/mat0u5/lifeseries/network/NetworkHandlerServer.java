@@ -162,7 +162,7 @@ public class NetworkHandlerServer {
             if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
                 Seasons newSeason = Seasons.getSeasonFromStringName(value);
                 if (newSeason == Seasons.UNASSIGNED) return;
-                if (Main.changeSeasonTo(Seasons.getStringNameFromSeason(newSeason))) {
+                if (Main.changeSeasonTo(newSeason.getId())) {
                     PlayerUtils.broadcastMessage(Text.literal("Successfully changed the season to " + value + ".").formatted(Formatting.GREEN));
                 }
             }
@@ -304,7 +304,7 @@ public class NetworkHandlerServer {
             }
             sendStringPacket(player, "activeWildcards", String.join("__", activeWildcards));
         }
-        sendStringPacket(player, "currentSeason", Seasons.getStringNameFromSeason(currentSeason.getSeason()));
+        sendStringPacket(player, "currentSeason", currentSeason.getSeason().getId());
     }
 
     public static void sendUpdatePackets() {

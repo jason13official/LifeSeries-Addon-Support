@@ -1,71 +1,58 @@
 package net.mat0u5.lifeseries.seasons.season;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum Seasons {
-    UNASSIGNED,
+    UNASSIGNED("Unassigned", "unassigned"),
 
-    THIRD_LIFE,
-    LAST_LIFE,
-    DOUBLE_LIFE,
-    LIMITED_LIFE,
-    SECRET_LIFE,
-    WILD_LIFE,
+    THIRD_LIFE("Third Life", "thirdlife"),
+    LAST_LIFE("Last Life", "lastlife"),
+    DOUBLE_LIFE("Double Life", "doublelife"),
+    LIMITED_LIFE("Limited Life", "limitedlife"),
+    SECRET_LIFE("Secret Life", "secretlife"),
+    WILD_LIFE("Wild Life", "wildlife"),
 
-    SIMPLE_LIFE,
-    REAL_LIFE;
+    SIMPLE_LIFE("Simple Life", "simplelife"),
+    REAL_LIFE("Real Life", "reallife");
 
-    public static String getFormattedStringNameFromSeason(Seasons season) {
-        if (season == THIRD_LIFE) return "Third Life";
-        if (season == LAST_LIFE) return "Last Life";
-        if (season == DOUBLE_LIFE) return "Double Life";
-        if (season == LIMITED_LIFE) return "Limited Life";
-        if (season == SECRET_LIFE) return "Secret Life";
-        if (season == WILD_LIFE) return "Wild Life";
-        if (season == SIMPLE_LIFE) return "Simple Life";
-        if (season == REAL_LIFE) return "Real Life";
-        return "unassigned";
+    private String name;
+    private String id;
+
+    Seasons(String name, String id) {
+        this.name = name;
+        this.id = id;
     }
 
-    public static String getStringNameFromSeason(Seasons season) {
-        if (season == THIRD_LIFE) return "thirdlife";
-        if (season == LAST_LIFE) return "lastlife";
-        if (season == DOUBLE_LIFE) return "doublelife";
-        if (season == LIMITED_LIFE) return "limitedlife";
-        if (season == SECRET_LIFE) return "secretlife";
-        if (season == WILD_LIFE) return "wildlife";
-        if (season == SIMPLE_LIFE) return "simplelife";
-        if (season == REAL_LIFE) return "reallife";
-        return "unassigned";
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static Seasons getSeasonFromStringName(String name) {
-        if (name.equalsIgnoreCase("thirdlife")) return THIRD_LIFE;
-        if (name.equalsIgnoreCase("lastlife")) return LAST_LIFE;
-        if (name.equalsIgnoreCase("doublelife")) return DOUBLE_LIFE;
-        if (name.equalsIgnoreCase("limitedlife")) return LIMITED_LIFE;
-        if (name.equalsIgnoreCase("secretlife")) return SECRET_LIFE;
-        if (name.equalsIgnoreCase("wildlife")) return WILD_LIFE;
-        if (name.equalsIgnoreCase("simplelife")) return SIMPLE_LIFE;
-        if (name.equalsIgnoreCase("reallife")) return REAL_LIFE;
-
-        if (name.equalsIgnoreCase("Third Life")) return THIRD_LIFE;
-        if (name.equalsIgnoreCase("Last Life")) return LAST_LIFE;
-        if (name.equalsIgnoreCase("Double Life")) return DOUBLE_LIFE;
-        if (name.equalsIgnoreCase("Limited Life")) return LIMITED_LIFE;
-        if (name.equalsIgnoreCase("Secret Life")) return SECRET_LIFE;
-        if (name.equalsIgnoreCase("Wild Life")) return WILD_LIFE;
-        if (name.equalsIgnoreCase("Simple Life")) return SIMPLE_LIFE;
-        if (name.equalsIgnoreCase("Real Life")) return REAL_LIFE;
+        for (Seasons season : Seasons.values()) {
+            if (season.getName().equalsIgnoreCase(name) || season.getId().equalsIgnoreCase(name)) {
+                return season;
+            }
+        }
         return UNASSIGNED;
     }
 
-    public static List<Seasons> getAllImplemented() {
-        return List.of(THIRD_LIFE,LAST_LIFE,DOUBLE_LIFE,LIMITED_LIFE,SECRET_LIFE,WILD_LIFE,SIMPLE_LIFE,REAL_LIFE);
+    public static List<Seasons> getSeasons() {
+        List<Seasons> allSeasons = new ArrayList<>(List.of(Seasons.values()));
+        allSeasons.remove(UNASSIGNED);
+        return allSeasons;
     }
 
-    public static List<String> getImplementedSeasonNames() {
-        return List.of("thirdlife", "lastlife", "doublelife", "limitedlife", "secretlife", "wildlife", "simplelife", "reallife");
+    public static List<String> getSeasonIds() {
+        List<String> seasonNames = new ArrayList<>();
+        for (Seasons season : getSeasons()) {
+            seasonNames.add(season.getId());
+        }
+        return seasonNames;
     }
 
     public static String getDatapackName(Seasons season) {
