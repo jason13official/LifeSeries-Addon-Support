@@ -300,7 +300,7 @@ public class NetworkHandlerServer {
 
             List<String> activeWildcards = new ArrayList<>();
             for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
-                activeWildcards.add(Wildcards.getStringName(wildcard));
+                activeWildcards.add(wildcard.getStringName());
             }
             sendStringPacket(player, "activeWildcards", String.join("__", activeWildcards));
         }

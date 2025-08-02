@@ -293,7 +293,7 @@ public class WildLifeCommands {
     public static int getSuperpower(ServerCommandSource source, ServerPlayerEntity player) {
         if (checkBanned(source)) return -1;
         Superpowers superpower = SuperpowersWildcard.getSuperpower(player);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s superpower is: {}", player,  Superpowers.getString(superpower)));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}'s superpower is: {}", player,  superpower.getString()));
         return 1;
     }
 
@@ -388,7 +388,7 @@ public class WildLifeCommands {
             List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
             for (Wildcards wildcard : inactiveWildcards) {
                 if (wildcard == Wildcards.CALLBACK) continue;
-                Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
+                Wildcard wildcardInstance = wildcard.getInstance();
                 if (wildcardInstance == null) continue;
                 WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
             }
@@ -415,7 +415,7 @@ public class WildLifeCommands {
             source.sendError(Text.of("That Wildcard is already active"));
             return -1;
         }
-        Wildcard actualWildcard = Wildcards.getInstance(wildcard);
+        Wildcard actualWildcard = wildcard.getInstance();
         if (actualWildcard == null) {
             source.sendError(Text.of("That Wildcard has not been implemented yet"));
             return -1;

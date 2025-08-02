@@ -22,7 +22,7 @@ public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
 
     public static void newSuperpower(ServerPlayerEntity player, Superpowers superpower) {
-        addMessageWithTime(player.getNameForScoreboard() + " has been assigned the " + Superpowers.getString(superpower) + " superpower.");
+        addMessageWithTime(player.getNameForScoreboard() + " has been assigned the " + superpower.getString() + " superpower.");
     }
 
     public static void newTriviaBot(ServerPlayerEntity player) {

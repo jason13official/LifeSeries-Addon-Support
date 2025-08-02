@@ -74,7 +74,7 @@ public class WildcardManager {
 
     public static void chooseRandomWildcard() {
         if (chosenWildcard != null) {
-            activeWildcards.put(chosenWildcard, Wildcards.getInstance(chosenWildcard));
+            activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
             return;
         }
         int index = rnd.nextInt(7);

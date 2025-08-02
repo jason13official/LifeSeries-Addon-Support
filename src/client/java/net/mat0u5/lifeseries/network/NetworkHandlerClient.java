@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-
 public class NetworkHandlerClient {
     public static void registerClientReceiver() {
         ClientPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
@@ -108,7 +106,7 @@ public class NetworkHandlerClient {
         }
 
         if (name.equalsIgnoreCase("sessionStatus")) {
-            MainClient.clientSessionStatus = SessionStatus.getSessionName(SessionStatus.getStringName(currentSession.status));
+            MainClient.clientSessionStatus = SessionStatus.getSessionName(value);
         }
 
         if (name.equalsIgnoreCase("activeWildcards")) {

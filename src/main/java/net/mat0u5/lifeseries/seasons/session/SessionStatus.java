@@ -1,25 +1,28 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 public enum SessionStatus {
-    NOT_STARTED,
-    STARTED,
-    PAUSED,
-    FINISHED,
-    UNASSIGNED;
+    NOT_STARTED("Not Started"),
+    STARTED("Started"),
+    PAUSED("Paused"),
+    FINISHED("Finished"),
+    UNASSIGNED("Unassigned");
 
-    public static String getStringName(SessionStatus status) {
-        if (status == NOT_STARTED) return "Not Started";
-        if (status == STARTED) return "Started";
-        if (status == PAUSED) return "Paused";
-        if (status == FINISHED) return "Finished";
-        return "Unassigned";
+    private String name;
+
+    SessionStatus(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static SessionStatus getSessionName(String name) {
-        if (name.equalsIgnoreCase("Not Started")) return NOT_STARTED;
-        if (name.equalsIgnoreCase("Started")) return STARTED;
-        if (name.equalsIgnoreCase("Paused")) return PAUSED;
-        if (name.equalsIgnoreCase("Finished")) return FINISHED;
+        for (SessionStatus status : SessionStatus.values()) {
+            if (status.getName().equalsIgnoreCase(name)) {
+                return status;
+            }
+        }
         return UNASSIGNED;
     }
 }

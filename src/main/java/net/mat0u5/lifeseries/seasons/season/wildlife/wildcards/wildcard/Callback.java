@@ -154,7 +154,7 @@ public class Callback extends Wildcard {
         for (Wildcards wildcard : inactiveWildcards) {
             if (wildcard == Wildcards.CALLBACK) continue;
             if (wildcard == Wildcards.HUNGER) continue;
-            Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
+            Wildcard wildcardInstance = wildcard.getInstance();
             if (wildcardInstance == null) continue;
             WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
         }
@@ -185,7 +185,7 @@ public class Callback extends Wildcard {
     public void activateRandomWildcard() {
         Wildcards wildcard = getRandomInactiveWildcard();
         if (wildcard == null) return;
-        Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
+        Wildcard wildcardInstance = wildcard.getInstance();
         if (wildcardInstance == null) return;
         WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
         WildcardManager.activateWildcards();
@@ -225,7 +225,7 @@ public class Callback extends Wildcard {
 
     public void softActivateWildcard(Wildcards wildcard) {
         if (WildcardManager.isActiveWildcard(wildcard)) return;
-        Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
+        Wildcard wildcardInstance = wildcard.getInstance();
         if (wildcardInstance == null) return;
         WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
         wildcardInstance.activate();

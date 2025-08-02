@@ -93,7 +93,7 @@ public class SuperpowersWildcard extends Wildcard {
                 implemented.remove(Superpowers.NECROMANCY);
                 shouldIncludeNecromancy = false;
             }
-            Superpower instance = Superpowers.getInstance(player, power);
+            Superpower instance = power.getInstance(player);
             if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
             pos++;
         }
@@ -111,7 +111,7 @@ public class SuperpowersWildcard extends Wildcard {
             assignedSuperpowers.remove(player.getUuid());
         }
 
-        Superpower instance = Superpowers.getInstance(player, power);
+        Superpower instance = power.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
 
         PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
@@ -121,7 +121,7 @@ public class SuperpowersWildcard extends Wildcard {
         if (playerSuperpowers.containsKey(player.getUuid())) {
             playerSuperpowers.get(player.getUuid()).turnOff();
         }
-        Superpower instance = Superpowers.getInstance(player, superpower);
+        Superpower instance = superpower.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
         PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
     }

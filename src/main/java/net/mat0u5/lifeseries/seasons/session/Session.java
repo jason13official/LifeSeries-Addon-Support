@@ -160,7 +160,7 @@ public class Session {
                 }
             }
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                NetworkHandlerServer.sendStringPacket(player, "sessionStatus", SessionStatus.getStringName(status));
+                NetworkHandlerServer.sendStringPacket(player, "sessionStatus", status.getName());
             }
             for (RegistryEntry<StatusEffect> effect : blacklist.getBannedEffects()) {
                 for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {

@@ -16,14 +16,15 @@ The mod is *server-side required* and optional (**but very much recommended**) o
 Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want to submit any bugs or give suggestions.
 ## Features
 
-This mod contains every single season of the Life Series, so that's Third Life, Last Life, Double Life, Limited Life, Secret Life, and now even Wild Life!
+This mod contains every single season of the Life Series, so that's Third Life, Last Life, Double Life, Limited Life, Secret Life, and **even Wild Life**!<br>
+It also contains april fools seasons, Real Life and Simple Life.
 
 | Third Life | Last Life | Double Life | Limited Life | Secret Life | **Wild Life** |
-|------------|-----------|-------------|--------------|------------|--------------|
-| Completed  | Completed | Completed   | Completed    | Completed | Completed     |
+|------------|-----------|-------------|--------------|-------------|---------------|
+| Completed  | Completed | Completed   | Completed    | Completed   | Completed     |
 
 ## Wild Life
-This is the *only* full re-creation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
+This is the *only* full recreation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
 To play Wild Life, the mod must be installed on the server **and on the client** - every player needs to have the mod installed in order to play.<br>
 This is because Wild Life contains features which would be impossible to do without client-side modifications.<br>
 **NOTE: Wild Life modifies core mechanics of the minecraft game, and using other complex mods or modded clients (Lunar Client, etc.), might cause some of the features not to work properly!!**<br>

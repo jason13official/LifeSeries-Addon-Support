@@ -42,7 +42,7 @@ public class Mimicry extends Superpower {
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer) && mimicPower != null) {
                     if (mimicPower != Superpowers.NONE && mimicPower != Superpowers.MIMICRY) {
-                        mimic = Superpowers.getInstance(player, mimicPower);
+                        mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, Text.literal("Mimicked superpower of ").append(lookingAtPlayer.getStyledDisplayName()), 65);
                         player.playSoundToPlayer(SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 0.3f, 1);
