@@ -54,14 +54,4 @@ public enum Seasons {
         }
         return seasonNames;
     }
-
-    public static String getDatapackName(Seasons season) {
-        if (season == THIRD_LIFE) return "Third Life Recipe Datapack.zip";
-        if (season == LAST_LIFE) return "Last Life Recipe Datapack.zip";
-        if (season == DOUBLE_LIFE) return "Double Life Recipe Datapack.zip";
-        if (season == LIMITED_LIFE) return "Limited Life Recipe Datapack.zip";
-        if (season == SECRET_LIFE) return "Secret Life Recipe Datapack.zip";
-        if (season == WILD_LIFE) return "Wild Life Recipe Datapack.zip";
-        return null;
-    }
 }

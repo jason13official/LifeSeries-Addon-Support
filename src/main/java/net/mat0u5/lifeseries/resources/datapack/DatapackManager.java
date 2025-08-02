@@ -9,7 +9,6 @@ import static net.mat0u5.lifeseries.Main.server;
 public class DatapackManager {
     public static void onServerStarted(MinecraftServer server) {
         DynamicDatapackManager.onServerStarted(server);
-        OldDatapackManager.disableOldDatapacks();
         TaskScheduler.scheduleTask(50, OtherUtils::reloadServerNoUpdate);
     }
 
@@ -19,7 +18,6 @@ public class DatapackManager {
 
     public static void onReloadEnd() {
         DynamicDatapackManager.enableDatapack();
-        OldDatapackManager.deleteOldDatapacks(server);
     }
 
     public static String getMinecraftVersion() {
