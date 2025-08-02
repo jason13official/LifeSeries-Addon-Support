@@ -1,4 +1,4 @@
-![Banner](images/banner2.png)
+![Banner](images/banner.png)
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Mat0u5/LifeSeries/graphs/commit-activity)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -18,9 +18,9 @@ Join the [Discord](https://discord.gg/QWJxfb4zQZ) or make an issue if you want t
 
 This mod contains every single season of the Life Series, so that's Third Life, Last Life, Double Life, Limited Life, Secret Life, and now even Wild Life!
 
-| Third Life | Last Life | Double Life | Limited Life | Secret Life | | **Wild Life** |
-|------------|-----------|-------------|--------------|-------------|-|---------------|
-| Completed  | Completed | Completed   | Completed    | Completed | | Completed     |
+| Third Life | Last Life | Double Life | Limited Life | Secret Life | **Wild Life** |
+|------------|-----------|-------------|--------------|------------|--------------|
+| Completed  | Completed | Completed   | Completed    | Completed | Completed     |
 
 ## Wild Life
 This is the *only* full re-creation of Wild Life that exists publicly, and it took a lot of work to make, so enjoy!<br>
