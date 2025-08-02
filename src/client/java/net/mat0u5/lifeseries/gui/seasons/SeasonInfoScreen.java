@@ -16,15 +16,6 @@ import net.minecraft.util.Identifier;
 
 public class SeasonInfoScreen extends DefaultScreen {
 
-    private static final Identifier TEXTURE_THIRDLIFE = Identifier.of("lifeseries","textures/gui/thirdlife.png");
-    private static final Identifier TEXTURE_LASTLIFE = Identifier.of("lifeseries","textures/gui/lastlife.png");
-    private static final Identifier TEXTURE_DOUBLELIFE = Identifier.of("lifeseries","textures/gui/doublelife.png");
-    private static final Identifier TEXTURE_LIMITEDLIFE = Identifier.of("lifeseries","textures/gui/limitedlife.png");
-    private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
-    private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
-    private static final Identifier TEXTURE_SIMPLELIFE = Identifier.of("lifeseries","textures/gui/simplelife.png");
-    private static final Identifier TEXTURE_REALLIFE = Identifier.of("lifeseries","textures/gui/reallife.png");
-
     public static Seasons season;
 
     public SeasonInfoScreen(Seasons season) {
@@ -33,15 +24,7 @@ public class SeasonInfoScreen extends DefaultScreen {
     }
 
     public Identifier getSeasonLogo() {
-        if (season == Seasons.THIRD_LIFE) return TEXTURE_THIRDLIFE;
-        if (season == Seasons.LAST_LIFE) return TEXTURE_LASTLIFE;
-        if (season == Seasons.DOUBLE_LIFE) return TEXTURE_DOUBLELIFE;
-        if (season == Seasons.LIMITED_LIFE) return TEXTURE_LIMITEDLIFE;
-        if (season == Seasons.SECRET_LIFE) return TEXTURE_SECRETLIFE;
-        if (season == Seasons.WILD_LIFE) return TEXTURE_WILDLIFE;
-        if (season == Seasons.SIMPLE_LIFE) return TEXTURE_SIMPLELIFE;
-        if (season == Seasons.REAL_LIFE) return TEXTURE_REALLIFE;
-        return null;
+        return Identifier.of("lifeseries","textures/gui/"+season.getId()+".png");
     }
 
     @Override

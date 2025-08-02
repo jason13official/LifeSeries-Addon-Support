@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.seasons;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -77,20 +78,20 @@ public class ChooseSeasonScreen extends DefaultScreen {
             }
             else if (region != 0) {
                 if (hasSelectedBefore && this.client != null) {
-                    if (region == 1) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Third Life"));
-                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Last Life"));
-                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Double Life"));
-                    if (region == 4) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Limited Life"));
-                    if (region == 5) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Secret Life"));
-                    if (region == 6) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Wild Life"));
+                    if (region == 1) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.THIRD_LIFE.getName()));
+                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.LAST_LIFE.getName()));
+                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.DOUBLE_LIFE.getName()));
+                    if (region == 4) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.LIMITED_LIFE.getName()));
+                    if (region == 5) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SECRET_LIFE.getName()));
+                    if (region == 6) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.WILD_LIFE.getName()));
                 }
                 else {
-                    if (region == 1) NetworkHandlerClient.sendStringPacket("set_season", "Third Life");
-                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", "Last Life");
-                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", "Double Life");
-                    if (region == 4) NetworkHandlerClient.sendStringPacket("set_season", "Limited Life");
-                    if (region == 5) NetworkHandlerClient.sendStringPacket("set_season", "Secret Life");
-                    if (region == 6) NetworkHandlerClient.sendStringPacket("set_season", "Wild Life");
+                    if (region == 1) NetworkHandlerClient.sendStringPacket("set_season", Seasons.THIRD_LIFE.getName());
+                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", Seasons.LAST_LIFE.getName());
+                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", Seasons.DOUBLE_LIFE.getName());
+                    if (region == 4) NetworkHandlerClient.sendStringPacket("set_season", Seasons.LIMITED_LIFE.getName());
+                    if (region == 5) NetworkHandlerClient.sendStringPacket("set_season", Seasons.SECRET_LIFE.getName());
+                    if (region == 6) NetworkHandlerClient.sendStringPacket("set_season", Seasons.WILD_LIFE.getName());
                     if (this.client != null) this.client.setScreen(null);
                 }
                 return true;

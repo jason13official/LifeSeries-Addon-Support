@@ -14,16 +14,8 @@ import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLife;
-import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
-import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
-import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
-import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -69,7 +61,7 @@ public class Main implements ModInitializer {
 		}
 
 		config = new MainConfig();
-		String season = config.getOrCreateProperty("currentSeries", "unassigned");
+		String season = config.getOrCreateProperty("currentSeries", Seasons.UNASSIGNED.getId());
 
 		parseSeason(season);
 		ConfigManager.createConfigs();
@@ -100,40 +92,8 @@ public class Main implements ModInitializer {
 		return clientHelper != null && clientHelper.isMainClientPlayer(uuid);
 	}
 
-	public static void parseSeason(String season) {
-		if (!ALLOWED_SEASON_NAMES.contains(season)) {
-			currentSeason = new UnassignedSeason();
-		}
-		if (season.equalsIgnoreCase("thirdlife")) {
-			currentSeason = new ThirdLife();
-		}
-		if (season.equalsIgnoreCase("lastlife")) {
-			currentSeason = new LastLife();
-		}
-		if (season.equalsIgnoreCase("doublelife")) {
-			currentSeason = new DoubleLife();
-		}
-		if (season.equalsIgnoreCase("limitedlife")) {
-			currentSeason = new LimitedLife();
-		}
-		if (season.equalsIgnoreCase("secretlife")) {
-			currentSeason = new SecretLife();
-		}
-		if (season.equalsIgnoreCase("wildlife")) {
-			if (DependencyManager.polymerLoaded() && DependencyManager.wildLifeModsLoaded()) {
-				currentSeason = new WildLife();
-			}
-			else {
-				currentSeason = new UnassignedSeason();
-				changeSeasonTo("unassigned");
-			}
-		}
-		if (season.equalsIgnoreCase("simplelife")) {
-			currentSeason = new SimpleLife();
-		}
-		if (season.equalsIgnoreCase("reallife")) {
-			currentSeason = new RealLife();
-		}
+	public static void parseSeason(String seasonStr) {
+		currentSeason = Seasons.getSeasonFromStringName(seasonStr).getSeasonInstance();
 		currentSession = currentSeason;
 		seasonConfig = currentSeason.getConfig();
 		blacklist = currentSeason.createBlacklist();
@@ -168,7 +128,7 @@ public class Main implements ModInitializer {
 	}
 
 	public static boolean changeSeasonTo(String changeTo) {
-		if (changeTo.equalsIgnoreCase("wildlife")) {
+		if (Seasons.getSeasonFromStringName(changeTo) == Seasons.WILD_LIFE) {
 			if (!DependencyManager.checkWildLifeDependencies()) return false;
 		}
 

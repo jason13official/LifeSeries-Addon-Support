@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.seasons;
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -64,12 +65,12 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
             }
             else if (region != 0) {
                 if (hasSelectedBefore && this.client != null) {
-                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Simple Life"));
-                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, "Real Life"));
+                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SIMPLE_LIFE.getName()));
+                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.REAL_LIFE.getName()));
                 }
                 else {
-                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", "Simple Life");
-                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", "Real Life");
+                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", Seasons.SIMPLE_LIFE.getName());
+                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", Seasons.REAL_LIFE.getName());
                     if (this.client != null) this.client.setScreen(null);
                 }
                 return true;

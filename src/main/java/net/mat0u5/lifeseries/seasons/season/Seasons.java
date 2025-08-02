@@ -1,5 +1,16 @@
 package net.mat0u5.lifeseries.seasons.season;
 
+import net.mat0u5.lifeseries.dependencies.DependencyManager;
+import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLife;
+import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
+import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
+import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
+import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +41,19 @@ public enum Seasons {
 
     public String getId() {
         return id;
+    }
+
+    public Season getSeasonInstance() {
+        if (this == THIRD_LIFE) return new ThirdLife();
+        if (this == LAST_LIFE) return new LastLife();
+        if (this == DOUBLE_LIFE) return new DoubleLife();
+        if (this == LIMITED_LIFE) return new LimitedLife();
+        if (this == SECRET_LIFE) return new SecretLife();
+        if (this == WILD_LIFE && DependencyManager.wildLifeModsLoaded()) return new WildLife();
+
+        if (this == SIMPLE_LIFE) return new SimpleLife();
+        if (this == REAL_LIFE) return new RealLife();
+        return new UnassignedSeason();
     }
 
     public static Seasons getSeasonFromStringName(String name) {
