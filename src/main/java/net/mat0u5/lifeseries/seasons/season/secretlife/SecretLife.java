@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -38,6 +39,7 @@ public class SecretLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /gift, /task, /health, /secretlife";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /gift";
     public static double MAX_HEALTH = 60.0d;
+    public static double MAX_KILL_HEALTH = 1000.0d;
     public ItemSpawner itemSpawner;
     SessionAction taskWarningAction = new SessionAction(OtherUtils.minutesToTicks(-5)+1) {
         @Override
@@ -76,6 +78,7 @@ public class SecretLife extends Season {
         if (!(seasonConfig instanceof SecretLifeConfig config)) return;
 
         MAX_HEALTH = config.MAX_PLAYER_HEALTH.get(config);
+        MAX_KILL_HEALTH = SecretLifeConfig.MAX_PLAYER_KILL_HEALTH.get(config);
         TaskManager.EASY_SUCCESS = SecretLifeConfig.TASK_HEALTH_EASY_PASS.get(config);
         TaskManager.EASY_FAIL = SecretLifeConfig.TASK_HEALTH_EASY_FAIL.get(config);
         TaskManager.HARD_SUCCESS = SecretLifeConfig.TASK_HEALTH_HARD_PASS.get(config);
@@ -296,8 +299,14 @@ public class SecretLife extends Season {
                 boogeymanManagerNew.cure(killer);
             }
             if (isOnLastLife(killer, false)) {
-                addPlayerHealth(killer, 20);
-                PlayerUtils.sendTitle(killer, Text.literal("+10 Hearts").formatted(Formatting.RED), 0, 40, 20);
+                double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
+                if (amountGained <= 0) {
+                    return;
+                }
+                addPlayerHealth(killer, amountGained);
+                double roundedHearts = Math.ceil(amountGained) / 2.0;
+                String text = "+"+roundedHearts+" Heart" + (roundedHearts==1?"":"s");
+                PlayerUtils.sendTitle(killer, Text.literal(text).formatted(Formatting.RED), 0, 40, 20);
             }
             return;
         }

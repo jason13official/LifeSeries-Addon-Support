@@ -30,3 +30,8 @@ Added the 'broadcast_color_changes' Limited Life config, which sends a message i
 ----------
 
 Added the Real Life season cuz why not. It's identical to Third Life, just has a separate config and you can select it in the april fools seasons menu.
+
+----------
+
+The creative mode ignores blacklist config now works even when players in creative open chests or try to pick up items from the ground.<br>
+Added the 'max_player_kill_health' Secret Life config, which controls the maximum health a player can have after killing another player. Default value is 1000 (so basically uncapped).

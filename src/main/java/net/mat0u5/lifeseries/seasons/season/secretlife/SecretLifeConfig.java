@@ -73,6 +73,9 @@ public class SecretLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Double> ASSIGN_TASKS_MINUTE = new ConfigFileEntry<>(
             "assign_tasks_minute", 1.0, ConfigTypes.MINUTES, "season", "Assign Tasks Time", "The number of minutes (in the session) after which the tasks get assigned."
     );
+    public static final ConfigFileEntry<Integer> MAX_PLAYER_KILL_HEALTH = new ConfigFileEntry<>(
+            "max_player_kill_health", 1000, ConfigTypes.HEARTS, "season", "Max Health After Killing", "The maximum health a player can have after killing a player (since killing gives hearts)."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_HEALTH = new ConfigFileEntry<>(
             "group_health", null, ConfigTypes.TEXT, "{season.health}", "Health Rewards / Punishments", ""
@@ -87,6 +90,7 @@ public class SecretLifeConfig extends ConfigManager {
         return new ArrayList<>(List.of(
                 PLAYERS_DROP_TASK_ON_DEATH
                 ,ASSIGN_TASKS_MINUTE
+                ,MAX_PLAYER_KILL_HEALTH
 
                 ,GROUP_HEALTH //Group
 

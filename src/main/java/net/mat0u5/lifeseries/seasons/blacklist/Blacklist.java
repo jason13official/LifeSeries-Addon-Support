@@ -49,6 +49,8 @@ public class Blacklist {
     private List<RegistryKey<Enchantment>> loadedBannedEnchants;
 
     private List<RegistryEntry<StatusEffect>> loadedBannedEffects;
+    
+    public boolean CREATIVE_IGNORE_BLACKLIST = true;
 
     public List<String> loadItemBlacklist() {
         if (seasonConfig == null) return new ArrayList<>();
@@ -258,6 +260,9 @@ public class Blacklist {
 
     public void reloadBlacklist() {
         if (Main.server == null) return;
+
+        CREATIVE_IGNORE_BLACKLIST = seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig);
+        
         loadedListItem = null;
         loadedListBlock = null;
         loadedListEnchants = null;
@@ -271,7 +276,7 @@ public class Blacklist {
     }
 
     public ActionResult onBlockUse(ServerPlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        if (player.isCreative() && seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig)) return ActionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return ActionResult.PASS;
         processItemStack(player, player.getStackInHand(hand));
         BlockPos blockPos = hitResult.getBlockPos();
         BlockState block = world.getBlockState(blockPos);
@@ -284,7 +289,7 @@ public class Blacklist {
     }
 
     public ActionResult onBlockAttack(ServerPlayerEntity player, World world, BlockPos pos) {
-        if (player.isCreative() && seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig)) return ActionResult.PASS;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return ActionResult.PASS;
         if (world.isClient()) return ActionResult.PASS;
         BlockState block = world.getBlockState(pos);
         if (block.isAir()) return ActionResult.PASS;
@@ -296,12 +301,13 @@ public class Blacklist {
     }
 
     public void onCollision(ServerPlayerEntity player, ItemStack stack, CallbackInfo ci) {
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         processItemStack(player, stack);
     }
 
     public void onInventoryUpdated(ServerPlayerEntity player, PlayerInventory inventory) {
         if (Main.server == null) return;
-        if (player.isCreative() && seasonConfig.CREATIVE_IGNORE_BLACKLIST.get(seasonConfig)) return;
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         for (int i = 0; i < inventory.size(); i++) {
             processItemStack(player, inventory.getStack(i));
         }
@@ -326,6 +332,7 @@ public class Blacklist {
     }
 
     public void processItemStack(ServerPlayerEntity player, ItemStack itemStack) {
+        if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         if (itemStack.isEmpty()) return;
         if (itemStack.getItem() == Items.AIR) return;
         if (isBlacklistedItem(itemStack) && !ItemStackUtils.hasCustomComponentEntry(itemStack, "IgnoreBlacklist")) {

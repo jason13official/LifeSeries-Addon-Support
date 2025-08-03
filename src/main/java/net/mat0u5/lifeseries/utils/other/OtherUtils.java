@@ -21,6 +21,10 @@ import static net.mat0u5.lifeseries.Main.server;
 public class OtherUtils {
     private static final Random rnd = new Random();
 
+    public static void log(Text text) {
+        log(text.getString());
+    }
+
     public static void log(String string) {
         Text message = Text.of(string);
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
