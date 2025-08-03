@@ -481,18 +481,23 @@ public abstract class Season extends Session {
      */
 
     public void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+        boolean soulmateKill = source.getType().msgId().equalsIgnoreCase("soulmate");
         SessionTranscript.onPlayerDeath(player, source);
         boolean killedByPlayer = false;
         if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
             if (player != source.getAttacker()) {
-                onPlayerKilledByPlayer(player, serverAttacker);
+                if (!soulmateKill) {
+                    onPlayerKilledByPlayer(player, serverAttacker);
+                }
                 killedByPlayer = true;
             }
         }
         if (player.getPrimeAdversary() != null && !killedByPlayer) {
             if (player.getPrimeAdversary() instanceof ServerPlayerEntity serverAdversary) {
                 if (player != player.getPrimeAdversary()) {
-                    onPlayerKilledByPlayer(player, serverAdversary);
+                    if (!soulmateKill) {
+                        onPlayerKilledByPlayer(player, serverAdversary);
+                    }
                     killedByPlayer = true;
                 }
             }

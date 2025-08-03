@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.doublelife;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DoubleLifeConfig extends ConfigManager {
@@ -53,8 +55,19 @@ public class DoubleLifeConfig extends ConfigManager {
             "quick_charge"
     );
 
+    public static final ConfigFileEntry<Boolean> ANNOUNCE_SOULMATES = new ConfigFileEntry<>(
+            "announce_soulmates", false, "season", "Announce Soulmates", "Tells you who your soulmate is instead of it saying 'Your soulmate is ????'"
+    );
+
     public DoubleLifeConfig() {
         super("./config/"+ Main.MOD_ID,"doublelife.properties");
+    }
+
+    @Override
+    protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
+        return new ArrayList<>(List.of(
+                ANNOUNCE_SOULMATES
+        ));
     }
 
     @Override

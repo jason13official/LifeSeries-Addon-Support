@@ -114,7 +114,7 @@ public class SuperpowersWildcard extends Wildcard {
         Superpower instance = power.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
 
-        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
     }
 
     public static void setSuperpower(ServerPlayerEntity player, Superpowers superpower) {
@@ -123,7 +123,7 @@ public class SuperpowersWildcard extends Wildcard {
         }
         Superpower instance = superpower.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
-        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
     }
 
     public static void pressedSuperpowerKey(ServerPlayerEntity player) {

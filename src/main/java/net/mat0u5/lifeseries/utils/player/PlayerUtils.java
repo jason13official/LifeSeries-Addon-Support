@@ -88,6 +88,14 @@ public class PlayerUtils {
         }
     }
 
+    public static void playSoundToPlayer(ServerPlayerEntity player, SoundEvent sound) {
+        playSoundToPlayer(player, sound, 1, 1);
+    }
+
+    public static void playSoundToPlayer(ServerPlayerEntity player, SoundEvent sound, float volume, float pitch) {
+        player.playSoundToPlayer(sound, SoundCategory.MASTER, volume, pitch);
+    }
+
     private static final Random rnd = new Random();
     public static void playSoundWithSourceToPlayers(Collection<ServerPlayerEntity> players, Entity source, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
         PlaySoundFromEntityS2CPacket packet = new PlaySoundFromEntityS2CPacket(Registries.SOUND_EVENT.getEntry(sound), soundCategory, source, volume, pitch, rnd.nextLong());

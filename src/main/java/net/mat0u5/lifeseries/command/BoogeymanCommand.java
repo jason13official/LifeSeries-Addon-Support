@@ -99,7 +99,9 @@ public class BoogeymanCommand {
             source.sendError(Text.of("That player is not a Boogeyman"));
             return -1;
         }
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
+        }
         bm.playerFailBoogeyman(target);
 
         return 1;
@@ -118,7 +120,9 @@ public class BoogeymanCommand {
         }
         bm.cure(target);
 
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("{} is now cured", target));
+        if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Curing {}§7...", target));
+        }
 
         return 1;
     }

@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
@@ -22,6 +23,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.border.WorldBorder;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -35,6 +37,7 @@ public class DoubleLife extends Season {
     public static final String COMMANDS_TEXT = "/claimkill, /lives";
     public static final RegistryKey<DamageType> SOULMATE_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "soulmate"));
     StringListConfig soulmateConfig;
+    public boolean ANNOUNCE_SOULMATES = false;
 
     public SessionAction actionChooseSoulmates = new SessionAction(
             OtherUtils.minutesToTicks(1), "§7Assign soulmates if necessary §f[00:01:00]", "Assign Soulmates if necessary"
@@ -118,6 +121,12 @@ public class DoubleLife extends Season {
     public void onPlayerRespawn(ServerPlayerEntity player) {
         super.onPlayerRespawn(player);
         syncPlayer(player);
+    }
+
+    @Override
+    public void reload() {
+        super.reload();
+        ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get(seasonConfig);
     }
 
     public void loadSoulmates() {
@@ -207,9 +216,18 @@ public class DoubleLife extends Season {
             PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.of(Identifier.of("minecraft","doublelife_soulmate_wait")));
         });
         TaskScheduler.scheduleTask(165, () -> {
-            PlayerUtils.sendTitleToPlayers(playersToRoll, Text.literal("????").formatted(Formatting.GREEN),20,60,20);
-            PlayerUtils.playSoundToPlayers(playersToRoll, SoundEvent.of(Identifier.of("minecraft","doublelife_soulmate_chosen")));
             chooseRandomSoulmates();
+            for (ServerPlayerEntity player : playersToRoll) {
+                Text text = Text.literal("????").formatted(Formatting.GREEN);
+                if (hasSoulmate(player) && ANNOUNCE_SOULMATES) {
+                    ServerPlayerEntity soulmate = getSoulmate(player);
+                    if (soulmate != null) {
+                        text = TextUtils.format("{}", soulmate);
+                    }
+                }
+                PlayerUtils.sendTitle(player, text,20,60,20);
+                PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","doublelife_soulmate_chosen")));
+            }
         });
     }
 

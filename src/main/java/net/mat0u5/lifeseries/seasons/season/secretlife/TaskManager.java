@@ -395,19 +395,19 @@ public class TaskManager {
                 return;
             }
 
-            PlayerUtils.playSoundToPlayers(List.of(player), SoundEvents.UI_BUTTON_CLICK.value());
+            PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
             PlayerUtils.sendTitle(player, Text.literal("The reward is more").formatted(Formatting.DARK_GREEN).formatted(Formatting.BOLD),20,35,0);
 
             TaskScheduler.scheduleTask(50, () -> {
-                PlayerUtils.playSoundToPlayers(List.of(player), SoundEvents.UI_BUTTON_CLICK.value());
+                PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
                 PlayerUtils.sendTitle(player, Text.literal("The risk is great").formatted(Formatting.GREEN).formatted(Formatting.BOLD),20,35,0);
             });
             TaskScheduler.scheduleTask(100, () -> {
-                PlayerUtils.playSoundToPlayers(List.of(player), SoundEvents.UI_BUTTON_CLICK.value());
+                PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
                 PlayerUtils.sendTitle(player, Text.literal("Let me open the door").formatted(Formatting.YELLOW).formatted(Formatting.BOLD),20,35,0);
             });
             TaskScheduler.scheduleTask(150, () -> {
-                PlayerUtils.playSoundToPlayers(List.of(player), SoundEvents.UI_BUTTON_CLICK.value());
+                PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
                 PlayerUtils.sendTitle(player, Text.literal("Accept your fate").formatted(Formatting.RED).formatted(Formatting.BOLD),20,30,0);
             });
             TaskScheduler.scheduleTask(200, () -> AnimationUtils.playTotemAnimation(player));

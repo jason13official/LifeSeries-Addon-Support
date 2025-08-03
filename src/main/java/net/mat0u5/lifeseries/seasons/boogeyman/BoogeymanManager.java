@@ -5,7 +5,10 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -26,6 +29,7 @@ public class BoogeymanManager {
     public int BOOGEYMAN_AMOUNT_MIN = 1;
     public int BOOGEYMAN_AMOUNT_MAX = 99;
     public double BOOGEYMAN_CHOOSE_MINUTE = 10;
+    public boolean BOOGEYMAN_ANNOUNCE_OUTCOME = false;
     public List<String> BOOGEYMAN_IGNORE = new ArrayList<>();
     public List<String> BOOGEYMAN_FORCE = new ArrayList<>();
     public String BOOGEYMAN_MESSAGE = "§7You are the Boogeyman. You must by any means necessary kill a §2dark green§7, §agreen§7 or §eyellow§7 name by direct action to be cured of the curse. If you fail, you will become a §cred name§7. All loyalties and friendships are removed while you are the Boogeyman.";
@@ -143,7 +147,10 @@ public class BoogeymanManager {
         boogeyman.failed = false;
         boogeyman.cured = true;
         PlayerUtils.sendTitle(player,Text.of("§aYou are cured!"), 20, 30, 20);
-        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_cure")));
+        if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is cured of the Boogeyman curse!", player));
+        }
     }
 
     public void prepareToChooseBoogeymen() {
@@ -248,8 +255,10 @@ public class BoogeymanManager {
             if (!boogeyman.cured) {
                 ServerPlayerEntity player = PlayerUtils.getPlayer(boogeyman.uuid);
                 if (player == null) {
-                    PlayerUtils.broadcastMessageToAdmins(Text.of("§c[BoogeymanManager] The Boogeyman ("+boogeyman.name+") has failed to kill a person, and is offline at session end. " +
-                            "That means their lives have *not* been lowered. You must do this manually once they are online again."));
+                    if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+                        PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", boogeyman.name));
+                    }
+                    ScoreboardUtils.setScore(ScoreHolder.fromName(boogeyman.name), "Lives", 1);
                     continue;
                 }
                 playerFailBoogeyman(player);
@@ -264,8 +273,10 @@ public class BoogeymanManager {
         if (!currentSeason.isAlive(player)) return;
         if (currentSeason.isOnLastLife(player, true)) return;
         PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
-        PlayerUtils.playSoundToPlayers(List.of(player), SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
-        PlayerUtils.broadcastMessage(player.getStyledDisplayName().copy().append(Text.of("§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7")));
+        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
+        if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
+        }
         currentSeason.setPlayerLives(player, 1);
         boogeyman.failed = true;
         boogeyman.cured = false;
@@ -308,5 +319,6 @@ public class BoogeymanManager {
             if (!name.isEmpty()) BOOGEYMAN_FORCE.add(name.toLowerCase());
         }
         BOOGEYMAN_CHOOSE_MINUTE = seasonConfig.BOOGEYMAN_CHOOSE_MINUTE.get(seasonConfig);
+        BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get(seasonConfig);
     }
 }

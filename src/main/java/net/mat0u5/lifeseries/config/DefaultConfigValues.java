@@ -126,6 +126,9 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Double> BOOGEYMAN_CHOOSE_MINUTE = new ConfigFileEntry<>(
             "boogeyman_choose_minute", 10.0, ConfigTypes.MINUTES, "global.boogeyman", "Boogeyman Choose Time", "The number of minutes (in the session) after which the boogeyman gets picked."
     );
+    public final ConfigFileEntry<Boolean> BOOGEYMAN_ANNOUNCE_OUTCOME = new ConfigFileEntry<>(
+            "boogeyman_announce_outcome", true, "global.boogeyman", "Boogeyman Announce Outcome", "Shows a message in chat when the boogeyman succeeds or fails."
+    );
 
 
     /*

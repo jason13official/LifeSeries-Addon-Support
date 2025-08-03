@@ -35,3 +35,10 @@ Added the Real Life season cuz why not. It's identical to Third Life, just has a
 
 The creative mode ignores blacklist config now works even when players in creative open chests or try to pick up items from the ground.<br>
 Added the 'max_player_kill_health' Secret Life config, which controls the maximum health a player can have after killing another player. Default value is 1000 (so basically uncapped).
+
+----------
+
+Added the 'announce_soulmates' config to Double Life, which shows the soulmate name when they are rolled. Default value is false.<br>
+Added the 'boogeyman_announce_outcome' global config, which broadcasts a message in chat when the boogeyman fails or is cured. Default value is true.<br>
+When the session ends and the boogeyman is offline, it now actually removes their lives instead of telling the adming to do it when the player logs on again.<br>
+Killing a boogeyman in Double Life no longer cures them (they used to be cured because technically they caused the death of their soulmate)
