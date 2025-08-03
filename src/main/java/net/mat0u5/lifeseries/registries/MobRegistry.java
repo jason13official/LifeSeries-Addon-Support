@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.registries;
 
-import eu.pb4.polymer.core.api.entity.PolymerEntityUtils;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
@@ -21,6 +20,14 @@ import net.minecraft.registry.RegistryKey;
 *///?}
 
 public class MobRegistry {
+    public static final EntityType<Snail> SNAIL = Registry.register(
+            Registries.ENTITY_TYPE,
+            Snail.ID,
+            EntityType.Builder.create(Snail::new, SpawnGroup.MONSTER)
+                    .dimensions(0.5f, 0.6f)
+                    .maxTrackingRange(10)
+                    .build()
+    );
 
     //? if <= 1.21 {
     public static final EntityType<Snail> SNAIL = register(
@@ -28,7 +35,7 @@ public class MobRegistry {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Snail::new)
                     .spawnGroup(SpawnGroup.MONSTER)
-                    .dimensions(EntityDimensions.changing(0.5f, 0.6f))
+                    .dimensions(EntityDimensions.changing())
                     .trackRangeChunks(10)
                     .defaultAttributes(Snail::createAttributes)
     );

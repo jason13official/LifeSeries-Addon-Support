@@ -1,14 +1,5 @@
 package net.mat0u5.lifeseries.entity.snail;
 
-import de.tomalbrc.bil.api.AnimatedEntity;
-import de.tomalbrc.bil.api.Animator;
-import de.tomalbrc.bil.core.holder.entity.EntityHolder;
-import de.tomalbrc.bil.core.holder.entity.living.LivingEntityHolder;
-import de.tomalbrc.bil.core.model.Model;
-import de.tomalbrc.bil.file.loader.BbModelLoader;
-import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
-import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
-import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.pathfinder.PathFinder;
 import net.mat0u5.lifeseries.entity.snail.goal.*;
@@ -28,6 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.CustomModelDataComponent;
+import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -78,17 +70,15 @@ import java.util.UUID;
 import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.server;
 
-public class Snail extends HostileEntity implements AnimatedEntity {
+public class Snail extends HostileEntity  {
     public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
     public static final Identifier ID = Identifier.of(Main.MOD_ID, "snail");
-    public static final Model MODEL = BbModelLoader.load(ID);
     public static final Identifier TRIVIA_ID = Identifier.of(Main.MOD_ID, "trivia_snail");
-    public static final Model TRIVIA_MODEL = BbModelLoader.load(TRIVIA_ID);
     public static double GLOBAL_SPEED_MULTIPLIER = 1;
     public static boolean SHOULD_DROWN_PLAYER = true;
 
-    public EntityHolder<Snail> holder = null;
-    public EntityAttachment attachment = null;
+    public final AnimationState animationState = new AnimationState();
+
     public UUID boundPlayerUUID;
     public boolean attacking;
     public boolean flying;
@@ -128,74 +118,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void updateHolderSkin() {
-        if (snailSkin >= 0) {
-            // The snail is made out of 9 ItemDisplayElements, 1 InteractionElement and 1 CollisionElement
-            List<VirtualElement> elements = holder.getElements();
-            for (VirtualElement element : elements) {
-                if (element instanceof ItemDisplayElement itemDisplayElement) {
-                    ItemStack currentItem = itemDisplayElement.getItem();
-                    //? if <= 1.21 {
-                    CustomModelDataComponent modelDataComponent = currentItem.get(DataComponentTypes.CUSTOM_MODEL_DATA);
-                    if (modelDataComponent == null) continue;
-                    int oldValue = modelDataComponent.value();
-                    if (oldValue > 10000) {
-                        oldValue = (oldValue - 9999) % 10;
-                    }
-                    int newValue = 9999 + oldValue + snailSkin * 10;
-                    CustomModelDataComponent newModelDataComponent = new CustomModelDataComponent(newValue);
-                    currentItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, newModelDataComponent);
-                    //?} else {
-                    /*Identifier customModelComponent = currentItem.get(DataComponentTypes.ITEM_MODEL);
-                    if (customModelComponent == null) continue;
-                    int modelIndex = 0;
-                    int oldCMD = 0;
-
-                    String path = customModelComponent.getPath().replaceAll("snail/","").replaceAll("snail_snail_","");
-
-                    if (customModelComponent.getNamespace().equalsIgnoreCase("bil")) {
-                        if (path.startsWith("e4d04078")) modelIndex = 1;
-                        else if (path.startsWith("bfab22f7")) modelIndex = 2;
-                        else if (path.startsWith("795d5ecc")) modelIndex = 3;
-                        else if (path.startsWith("f10b7849")) modelIndex = 4;
-                        else if (path.startsWith("b19373c3")) modelIndex = 5;
-                        else if (path.startsWith("6106e834")) modelIndex = 6;
-                        else if (path.startsWith("21270a34")) modelIndex = 7;
-                        else if (path.startsWith("579f1e4f")) modelIndex = 8;
-                        else if (path.startsWith("b2a5becb")) modelIndex = 9;
-                        oldCMD = modelIndex+1;
-                    }
-                    else if (path.startsWith("body") && path.contains("_")) {
-                        try {
-                            String[] split = path.split("_");
-                            modelIndex = Integer.parseInt(split[0].replaceAll("body",""));
-                            oldCMD = Integer.parseInt(split[1]);
-                        }catch(Exception e) {
-                            continue;
-                        }
-                    }
-
-                    if (modelIndex <= 0 || oldCMD <= 0) continue;
-
-                    if (oldCMD > 10000) {
-                        oldCMD = (oldCMD - 9999) % 10;
-                    }
-                    int newCMD = 9999 + oldCMD + snailSkin * 10;
-                    *///?}
-
-                    //? if = 1.21.2 {
-                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "snail/body"+modelIndex+"_"+newCMD);
-                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
-                    *///?} else if >= 1.21.4 {
-                    /*Identifier finalIdentifier = Identifier.of("snailtextures", "body"+modelIndex+"_"+newCMD);
-                    currentItem.set(DataComponentTypes.ITEM_MODEL, finalIdentifier);
-                    *///?}
-
-                    ItemStack newItem = Items.GOLDEN_HORSE_ARMOR.getDefaultStack();
-                    newItem.applyComponentsFrom(currentItem.getComponents());
-                    itemDisplayElement.setItem(newItem);
-                }
-            }
-        }
+        //TODO
     }
 
     public void updateSkin(ServerPlayerEntity player) {
@@ -212,18 +135,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             return;
         }
         updateModelCooldown = 5;
-        if (attachment != null) this.attachment.destroy();
-        if (holder != null) this.holder.destroy();
-
-        if (!fromTrivia) {
-            this.holder = new LivingEntityHolder<>(this, MODEL);
-        }
-        else {
-            this.holder = new LivingEntityHolder<>(this, TRIVIA_MODEL);
-        }
-        this.holder.tick();
-        this.attachment = EntityAttachment.ofTicking(this.holder, this);
-        this.attachment.tick();
+        //TODO
         if (snailSkin >= 0) updateHolderSkin();
         if (getActualBoundPlayer() != null) {
             sendDisplayEntityPackets(getActualBoundPlayer());
@@ -243,14 +155,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void sendDisplayEntityPackets(ServerPlayerEntity player) {
-        if (holder == null) return;
-        List<VirtualElement> elements = holder.getElements();
-        for (VirtualElement element : elements) {
-            if (element instanceof ItemDisplayElement itemDisplayElement) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(player, "snail_part", itemDisplayElement.getUuid().toString());
-                else NetworkHandlerServer.sendStringPacket(player, "trivia_snail_part", itemDisplayElement.getUuid().toString());
-            }
-        }
+
     }
 
     public void updateSnailName() {
@@ -264,11 +169,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         if (snailName == null) return this.getType().getName();
         if (snailName.getString().isEmpty()) return this.getType().getName();
         return snailName;
-    }
-
-    @Override
-    public EntityHolder<Snail> getHolder() {
-        return holder;
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -334,9 +234,6 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
 
         if (updateModelCooldown > 0) updateModelCooldown--;
-        if ((this.holder == null || this.attachment == null) && age > 2) {
-            updateModel(false);
-        }
 
         if (dontAttackFor > 0) {
             dontAttackFor--;
@@ -351,7 +248,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
 
         if (age % 2 == 0) {
-            updateAnimations();
+            //updateAnimations();
         }
 
         if (age % 50 == 0) {
@@ -512,7 +409,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public SoundCategory getSoundCategory() {
         return SoundCategory.HOSTILE;
     }
-
+/*
     private int flyAnimation = 0;
     public void updateAnimations() {
         if (holder == null) return;
@@ -562,6 +459,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         Animator animator = holder.getAnimator();
         animator.playAnimation("stopFly", 5);
     }
+    */
 
     public void updatePathFinders() {
         if (pathFinder != null && pathFinder.isRegionUnloaded()) {
