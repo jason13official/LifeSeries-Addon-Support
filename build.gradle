@@ -41,9 +41,6 @@ dependencies {
  modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
  modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
- if (project.polymer_version != "null") modImplementation include("eu.pb4:polymer-bundled:${project.polymer_version}")
- if (project.blockbench_import_library_version != "null") modImplementation include("de.tomalbrc:blockbench-import-library:${project.blockbench_import_library_version}")
-
  implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
  if (project.voicechat_mod_version != "null") modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${project.voicechat_mod_version}"
  if (project.carpet_mod_version != "null") modRuntimeOnly "maven.modrinth:carpet:${project.carpet_mod_version}"
