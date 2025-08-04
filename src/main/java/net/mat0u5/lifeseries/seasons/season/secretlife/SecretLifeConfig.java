@@ -76,6 +76,9 @@ public class SecretLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Integer> MAX_PLAYER_KILL_HEALTH = new ConfigFileEntry<>(
             "max_player_kill_health", 1000, ConfigTypes.HEARTS, "season", "Max Health After Killing", "The maximum health a player can have after killing a player (since killing gives hearts)."
     );
+    public static final ConfigFileEntry<Boolean> BROADCAST_SECRET_KEEPER = new ConfigFileEntry<>(
+            "beoadcast_secret_keeper", false, "season", "Secret Keeper Broadcast", "Makes the secret keeper broadcast a message in chat when someone succeeds, fails or rerolls a task."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_HEALTH = new ConfigFileEntry<>(
             "group_health", null, ConfigTypes.TEXT, "{season.health}", "Health Rewards / Punishments", ""
@@ -91,6 +94,7 @@ public class SecretLifeConfig extends ConfigManager {
                 PLAYERS_DROP_TASK_ON_DEATH
                 ,ASSIGN_TASKS_MINUTE
                 ,MAX_PLAYER_KILL_HEALTH
+                ,BROADCAST_SECRET_KEEPER
 
                 ,GROUP_HEALTH //Group
 

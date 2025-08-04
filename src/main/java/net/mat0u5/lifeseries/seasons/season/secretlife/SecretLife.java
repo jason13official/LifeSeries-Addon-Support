@@ -86,6 +86,7 @@ public class SecretLife extends Season {
         TaskManager.RED_SUCCESS = SecretLifeConfig.TASK_HEALTH_RED_PASS.get(config);
         TaskManager.RED_FAIL = SecretLifeConfig.TASK_HEALTH_RED_FAIL.get(config);
         TaskManager.ASSIGN_TASKS_MINUTE = SecretLifeConfig.ASSIGN_TASKS_MINUTE.get(config);
+        TaskManager.BROADCAST_SECRET_KEEPER = SecretLifeConfig.BROADCAST_SECRET_KEEPER.get(config);
     }
 
     @Override

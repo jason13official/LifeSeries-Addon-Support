@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
@@ -42,6 +43,7 @@ public class TaskManager {
     public static int RED_SUCCESS = 10;
     public static int RED_FAIL = -5;
     public static double ASSIGN_TASKS_MINUTE = 1;
+    public static boolean BROADCAST_SECRET_KEEPER = false;
 
     public static BlockPos successButtonPos;
     public static BlockPos rerollButtonPos;
@@ -344,6 +346,9 @@ public class TaskManager {
         SecretLife season = (SecretLife) currentSeason;
         TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
+        if (BROADCAST_SECRET_KEEPER) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§a succeeded their task.", player));
+        }
         SessionTranscript.successTask(player);
         removePlayersTaskBook(player);
         submittedOrFailed.add(player.getUuid());
@@ -387,6 +392,9 @@ public class TaskManager {
         }
         if (type == TaskTypes.EASY) {
             removePlayersTaskBook(player);
+            if (BROADCAST_SECRET_KEEPER) {
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 re-rolled their easy task.", player));
+            }
             SessionTranscript.rerollTask(player);
             secretKeeperBeingUsed = true;
             TaskTypes newType = TaskTypes.HARD;
@@ -434,6 +442,9 @@ public class TaskManager {
         SecretLife season = (SecretLife) currentSeason;
         TaskTypes type = getPlayersTaskType(player);
         if (!hasTaskBookCheck(player, type)) return;
+        if (BROADCAST_SECRET_KEEPER) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§c failed their task.", player));
+        }
         SessionTranscript.failTask(player);
         removePlayersTaskBook(player);
         submittedOrFailed.add(player.getUuid());

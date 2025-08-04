@@ -16,6 +16,8 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.*;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.enums.MColor;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -32,6 +34,7 @@ import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
@@ -46,6 +49,7 @@ public class WildLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /wildcard, /superpower, /snail";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /snail";
     public static boolean KILLING_DARK_GREENS_GAINS_LIVES = true;
+    public static boolean BROADCAST_LIFE_GAIN = true;
 
     @Override
     public Seasons getSeason() {
@@ -118,6 +122,9 @@ public class WildLife extends Season {
             }
             else {
                 if (KILLING_DARK_GREENS_GAINS_LIVES) {
+                    if (BROADCAST_LIFE_GAIN) {
+                        PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
+                    }
                     addPlayerLife(killer);
                 }
                 gaveLife = true;
@@ -141,6 +148,9 @@ public class WildLife extends Season {
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         super.onClaimKill(killer, victim);
         if (isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
+            if (BROADCAST_LIFE_GAIN) {
+                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
+            }
             addPlayerLife(killer);
         }
     }
@@ -216,6 +226,7 @@ public class WildLife extends Season {
         Superspeed.STEP_UP = WildLifeConfig.WILDCARD_SUPERPOWERS_SUPERSPEED_STEP.get(config);
         WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
         KILLING_DARK_GREENS_GAINS_LIVES = WildLifeConfig.KILLING_DARK_GREENS_GAINS_LIVES.get(config);
+        BROADCAST_LIFE_GAIN = WildLifeConfig.BROADCAST_LIFE_GAIN.get(config);
 
         Snails.loadConfig();
         Snails.loadSnailNames();

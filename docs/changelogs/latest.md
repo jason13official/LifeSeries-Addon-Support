@@ -42,3 +42,8 @@ Added the 'announce_soulmates' config to Double Life, which shows the soulmate n
 Added the 'boogeyman_announce_outcome' global config, which broadcasts a message in chat when the boogeyman fails or is cured. Default value is true.<br>
 When the session ends and the boogeyman is offline, it now actually removes their lives instead of telling the adming to do it when the player logs on again.<br>
 Killing a boogeyman in Double Life no longer cures them (they used to be cured because technically they caused the death of their soulmate)
+
+----------
+
+Added the 'broadcast_secret_keeper' Secret Life Config, which shows a message in chat when anyone succeeds, fails or rerolls a task. Default value is false.<br>
+Added the 'broadcast_life_gain' Wild Life config, which shows a message in chat when someone gains a life by killing a dark green. Default value is false.
