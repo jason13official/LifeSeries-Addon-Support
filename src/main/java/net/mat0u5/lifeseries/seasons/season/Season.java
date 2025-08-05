@@ -70,6 +70,7 @@ public abstract class Season extends Session {
     public boolean TAB_LIST_SHOW_LIVES = false;
     public boolean FINAL_DEATH_LIGHTNING = true;
     public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
+    public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
 
     public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
 
@@ -117,6 +118,7 @@ public abstract class Season extends Session {
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seasonConfig);
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
         FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
+        TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get(seasonConfig);
 
         boogeymanManagerNew.onReload();
         createTeams();

@@ -47,3 +47,9 @@ Killing a boogeyman in Double Life no longer cures them (they used to be cured b
 
 Added the 'broadcast_secret_keeper' Secret Life Config, which shows a message in chat when anyone succeeds, fails or rerolls a task. Default value is false.<br>
 Added the 'broadcast_life_gain' Wild Life config, which shows a message in chat when someone gains a life by killing a dark green. Default value is false.
+
+----------
+
+In Double Life, all soulmates are now given a tag, `soulmate_<index>` where the index is determined by sorting all players by UUID and assigning consecutive numbers to each pair (starting from 1)<br>
+Wild Life zombies are periodically checked to be alive, and if so, they are internally removed from the zombies list and given back the default number of hearts.<br>
+Added the 'tab_list_show_exact_lives' config, which controls whether to show '4+' or the exact number of lives in the tab list when above four. Default value is false.

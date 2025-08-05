@@ -61,6 +61,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     //Config
     public static boolean COLORBLIND_SUPPORT = false;
     public static boolean SESSION_TIMER = false;
+    public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
 
     @Override
     public void onInitializeClient() {

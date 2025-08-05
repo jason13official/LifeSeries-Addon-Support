@@ -54,8 +54,8 @@ public class DoubleLife extends Season {
         }
     };
 
-    public Map<UUID, UUID> soulmates = new HashMap<>();
-    public Map<UUID, UUID> soulmatesOrdered = new HashMap<>();
+    public Map<UUID, UUID> soulmates = new TreeMap<>();
+    public Map<UUID, UUID> soulmatesOrdered = new TreeMap<>();
 
     @Override
     public void initialize() {
@@ -140,6 +140,32 @@ public class DoubleLife extends Season {
             if (soulmatesOrdered.containsKey(entry.getKey()) || soulmatesOrdered.containsValue(entry.getKey())) continue;
             if (soulmatesOrdered.containsKey(entry.getValue()) || soulmatesOrdered.containsValue(entry.getValue())) continue;
             soulmatesOrdered.put(entry.getKey(),entry.getValue());
+        }
+
+        removeSoulmateTags();
+
+        int index = 1;
+        for (Map.Entry<UUID, UUID> entry : soulmatesOrdered.entrySet()) {
+            ServerPlayerEntity key = PlayerUtils.getPlayer(entry.getKey());
+            ServerPlayerEntity value = PlayerUtils.getPlayer(entry.getValue());
+            if (key != null) {
+                key.addCommandTag("soulmate_" + index);
+            }
+            if (value != null) {
+                value.addCommandTag("soulmate_" + index);
+            }
+            index++;
+        }
+    }
+
+    public void removeSoulmateTags() {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            List<String> tagsCopy = new ArrayList<>(player.getCommandTags());
+            for (String tag : tagsCopy) {
+                if (tag.startsWith("soulmate_")) {
+                    player.removeCommandTag(tag);
+                }
+            }
         }
     }
 

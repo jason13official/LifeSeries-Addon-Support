@@ -114,8 +114,6 @@ public class WildLife extends Season {
                     }
                     else {
                         addPlayerLife(killer);
-                        Necromancy.removeRessurectedPlayer(killer);
-                        AttributeUtils.resetAttributesOnPlayerJoin(killer);
                         gaveLife = true;
                     }
                 }

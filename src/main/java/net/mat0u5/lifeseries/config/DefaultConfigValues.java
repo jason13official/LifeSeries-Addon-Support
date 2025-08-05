@@ -97,7 +97,10 @@ public class DefaultConfigValues {
             "tab_list_show_dead_players", true, "global.tablist", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_LIVES = new ConfigFileEntry<>(
-            "tab_list_show_lives", false, "global.tablist", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
+            "tab_list_show_lives", false, "{global.tablist.showlives}", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
+    );
+    public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_EXACT_LIVES = new ConfigFileEntry<>(
+            "tab_list_show_exact_lives", false, "global.tablist.showlives", "Show EXACT Lives", "Shows the actual number of lives when above 4 instead of just '4+'."
     );
     public final ConfigFileEntry<Boolean> LOCATOR_BAR = new ConfigFileEntry<>(
             "locator_bar", false, "global", "Locator Bar", "Enables the player Locator Bar."

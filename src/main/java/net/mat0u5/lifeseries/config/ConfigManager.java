@@ -57,6 +57,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,CUSTOM_ENCHANTER_ALGORITHM
                 ,MUTE_DEAD_PLAYERS
                 ,GROUP_TABLIST // Group
+                    ,TAB_LIST_SHOW_DEAD_PLAYERS
+                    ,TAB_LIST_SHOW_LIVES // Group
                 ,GROUP_SPAWN_EGG // Group
 
 
@@ -87,8 +89,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GIVELIFE_LIVES_MAX
                 ,GIVELIFE_BROADCAST
 
-                ,TAB_LIST_SHOW_DEAD_PLAYERS
-                ,TAB_LIST_SHOW_LIVES
+                ,TAB_LIST_SHOW_EXACT_LIVES
 
                 ,SPAWN_EGG_DROP_CHANCE
                 ,SPAWN_EGG_DROP_ONLY_NATURAL

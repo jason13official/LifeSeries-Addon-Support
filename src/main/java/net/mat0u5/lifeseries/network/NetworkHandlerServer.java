@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.DefaultConfigValues;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.network.packets.*;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -305,6 +306,7 @@ public class NetworkHandlerServer {
             sendStringPacket(player, "activeWildcards", String.join("__", activeWildcards));
         }
         sendStringPacket(player, "currentSeason", currentSeason.getSeason().getId());
+        sendStringPacket(player, "tablist_show_exact", String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
     }
 
     public static void sendUpdatePackets() {

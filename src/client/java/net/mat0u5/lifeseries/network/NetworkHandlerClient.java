@@ -199,6 +199,9 @@ public class NetworkHandlerClient {
             MainClient.clientConfig.setProperty(key, String.valueOf(!MainClient.SESSION_TIMER));
             MainClient.reloadConfig();
         }
+        if (name.equalsIgnoreCase("tablist_show_exact")) {
+            MainClient.TAB_LIST_SHOW_EXACT_LIVES = value.equalsIgnoreCase("true");
+        }
     }
 
     public static void handleNumberPacket(String name, double number) {

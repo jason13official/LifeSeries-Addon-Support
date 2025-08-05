@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin.client;
 
 import com.google.common.collect.Maps;
+import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.features.Trivia;
 import net.minecraft.client.MinecraftClient;
@@ -33,7 +34,9 @@ public class ClientPlayNetworkHandlerMixin {
             //?} else {
             /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
              *///?}
-            ci.cancel();
+            if (!Main.DEBUG) {
+                ci.cancel();
+            }
             return;
         }
         if (MainClient.mutedForTicks > 0) {
@@ -42,7 +45,9 @@ public class ClientPlayNetworkHandlerMixin {
              //?} else {
             /*MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."), false);
             *///?}
-            ci.cancel();
+            if (!Main.DEBUG) {
+                ci.cancel();
+            }
             return;
         }
     }

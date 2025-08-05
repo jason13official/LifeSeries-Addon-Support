@@ -3,7 +3,9 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -110,6 +112,17 @@ public class Necromancy extends Superpower {
         perPlayerRessurections.removeAll(deadAgain);
     }
 
+    @Override
+    public void tick() {
+        for (UUID uuid : perPlayerRessurections) {
+            ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+            if (player != null && currentSeason.isAlive(player)) {
+                perPlayerRessurections.remove(uuid);
+                ressurectedPlayers.remove(uuid);
+                AttributeUtils.resetAttributesOnPlayerJoin(player);
+            }
+        }
+    }
 
     public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
@@ -136,9 +149,5 @@ public class Necromancy extends Superpower {
 
     public static boolean isRessurectedPlayer(ServerPlayerEntity player) {
         return ressurectedPlayers.contains(player.getUuid());
-    }
-
-    public static boolean removeRessurectedPlayer(ServerPlayerEntity player) {
-        return ressurectedPlayers.remove(player.getUuid());
     }
 }
