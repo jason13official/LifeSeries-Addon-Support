@@ -58,3 +58,8 @@ Added the 'tab_list_show_exact_lives' config, which controls whether to show '4+
 
 Swapped Real Life and Simple Life order in the choose april fools season menu.<br>
 Added the 'soulbound_food' config to Double Life, which makes you share a hunger bar with your soulmate just like the health bar. Default value is false.
+
+----------
+
+Added the 'show_health_below_name' global config, which allows you to show the health below the player usename. Default value is false.<br>
+Using the '/givelife' command in Double Life now instantly syncs the lives with your soulmate (it was broken both on the sending end and receiving end).

@@ -41,7 +41,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_SEASON // Group
 
                 ,DEFAULT_LIVES
-                ,MAX_PLAYER_HEALTH
+                ,MAX_PLAYER_HEALTH // Group
                 ,KEEP_INVENTORY
 
                 ,WORLDBORDER_SIZE
@@ -63,6 +63,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
 
                 //Group stuff
+                ,SHOW_HEALTH_BELOW_NAME
                 ,BLACKLIST_ITEMS
                 ,BLACKLIST_BLOCKS
                 ,BLACKLIST_CLAMPED_ENCHANTS

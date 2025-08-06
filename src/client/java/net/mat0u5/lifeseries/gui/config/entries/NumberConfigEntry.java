@@ -1,9 +1,10 @@
 package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
 import net.minecraft.client.gui.DrawContext;
 
-public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry {
+public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry implements IEntryGroupHeader {
     protected static final int RANGE_LABEL_OFFSET_X = -12;
     protected static final int RANGE_LABEL_OFFSET_Y = 6;
     private static final int TEXT_FIELD_WIDTH = 60;
@@ -118,5 +119,14 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
 
     public T getMaxValue() {
         return maxValue;
+    }
+
+    @Override
+    public void expand() {
+    }
+
+    @Override
+    public boolean shouldExpand() {
+        return true;
     }
 }

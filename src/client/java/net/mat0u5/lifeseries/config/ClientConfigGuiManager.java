@@ -125,6 +125,9 @@ public class ClientConfigGuiManager {
         if (configEntry instanceof BooleanConfigEntry booleanConfigEntry) {
             return new GroupConfigEntry<>(booleanConfigEntry, new ArrayList<>(), showSidebar, openByDefault);
         }
+        if (configEntry instanceof NumberConfigEntry<?> numberConfigEntry) {
+            return new GroupConfigEntry<>(numberConfigEntry, new ArrayList<>(), showSidebar, openByDefault);
+        }
 
         return null;
     }

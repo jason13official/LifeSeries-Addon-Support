@@ -55,7 +55,10 @@ public class DefaultConfigValues {
             "spawn_egg_allow_on_spawner", false, "global.spawnegg", "Spawn Egg Allow on Spawners", "Controls whether players should be able to use the spawn eggs on spawners."
     );
     public final ConfigFileEntry<Integer> MAX_PLAYER_HEALTH = new ConfigFileEntry<>(
-            "max_player_health", 20, ConfigTypes.HEARTS, "global", "Default Health", "The amount of health (half-hearts) every player will have by default."
+            "max_player_health", 20, ConfigTypes.HEARTS, "{global.health}", "Default Health", "The amount of health (half-hearts) every player will have by default."
+    );
+    public final ConfigFileEntry<Boolean> SHOW_HEALTH_BELOW_NAME = new ConfigFileEntry<>(
+            "show_health_below_name", false, "global.health", "Show Health Below Name", "Show the HP a player is on below their username."
     );
     public final ConfigFileEntry<Integer> DEFAULT_LIVES = new ConfigFileEntry<>(
             "default_lives", 3, "global", "Default Lives", "The number of lives every player will have by default."

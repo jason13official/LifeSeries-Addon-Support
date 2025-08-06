@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.Session;
@@ -28,10 +29,7 @@ import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.scoreboard.ScoreHolder;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
-import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -71,6 +69,7 @@ public abstract class Season extends Session {
     public boolean FINAL_DEATH_LIGHTNING = true;
     public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
+    public static boolean SHOW_HEALTH_BELOW_NAME = false;
 
     public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
 
@@ -108,6 +107,16 @@ public abstract class Season extends Session {
                 ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, null);
             }
         }
+
+        ScoreboardObjective currentBelowNameObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.BELOW_NAME);
+        if (SHOW_HEALTH_BELOW_NAME) {
+            ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.BELOW_NAME, "HP");
+        }
+        else if (currentBelowNameObjective != null) {
+            if (currentBelowNameObjective.getName().equals("HP")) {
+                ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.BELOW_NAME, null);
+            }
+        }
     }
 
     public void reload() {
@@ -119,6 +128,7 @@ public abstract class Season extends Session {
         FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
         FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get(seasonConfig);
+        SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get(seasonConfig);
 
         boogeymanManagerNew.onReload();
         createTeams();
@@ -179,6 +189,7 @@ public abstract class Season extends Session {
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective("Lives");
+        ScoreboardUtils.createObjective("HP", "§c❤", ScoreboardCriterion.HEALTH);
     }
 
     public void reloadAllPlayerTeams() {
@@ -307,6 +318,9 @@ public abstract class Season extends Session {
         AnimationUtils.createSpiral(target, 175);
         currentSeason.reloadPlayerTeam(target);
         SessionTranscript.givelife(playerName, target);
+        if (currentSeason instanceof DoubleLife doubleLife) {
+            doubleLife.syncSoulboundLives(target);
+        }
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {

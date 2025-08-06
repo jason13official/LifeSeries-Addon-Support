@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -74,6 +75,10 @@ public class GivelifeCommand {
         currentSeason.addToLifeNoUpdate(target);
         AnimationUtils.playTotemAnimation(self);
         TaskScheduler.scheduleTask(40, () -> currentSeason.receiveLifeFromOtherPlayer(currentPlayerName, target));
+
+        if (currentSeason instanceof DoubleLife doubleLife) {
+            doubleLife.syncSoulboundLives(self);
+        }
 
         return 1;
     }
