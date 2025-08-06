@@ -53,3 +53,8 @@ Added the 'broadcast_life_gain' Wild Life config, which shows a message in chat 
 In Double Life, all soulmates are now given a tag, `soulmate_<index>` where the index is determined by sorting all players by UUID and assigning consecutive numbers to each pair (starting from 1)<br>
 Wild Life zombies are periodically checked to be alive, and if so, they are internally removed from the zombies list and given back the default number of hearts.<br>
 Added the 'tab_list_show_exact_lives' config, which controls whether to show '4+' or the exact number of lives in the tab list when above four. Default value is false.
+
+----------
+
+Swapped Real Life and Simple Life order in the choose april fools season menu.<br>
+Added the 'soulbound_food' config to Double Life, which makes you share a hunger bar with your soulmate just like the health bar. Default value is false.

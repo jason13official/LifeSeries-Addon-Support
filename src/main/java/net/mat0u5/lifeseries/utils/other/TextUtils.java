@@ -122,8 +122,13 @@ public class TextUtils {
         *///?}
     }
 
+
     public static MutableText formatPlain(String template, Object... args) {
-        return Text.literal(format(template, args).getString());
+        return Text.literal(formatString(template, args));
+    }
+
+    public static String formatString(String template, Object... args) {
+        return format(template, args).getString();
     }
 
     public static MutableText format(String template, Object... args) {

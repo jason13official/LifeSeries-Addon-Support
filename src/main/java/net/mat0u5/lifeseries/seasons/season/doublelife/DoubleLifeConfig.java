@@ -58,6 +58,9 @@ public class DoubleLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> ANNOUNCE_SOULMATES = new ConfigFileEntry<>(
             "announce_soulmates", false, "season", "Announce Soulmates", "Tells you who your soulmate is instead of it saying 'Your soulmate is ????'"
     );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_FOOD = new ConfigFileEntry<>(
+            "soulbound_food", false, "season", "Soulbound Food", "Makes your food bar shared with your soulmate, just like the health bar."
+    );
 
     public DoubleLifeConfig() {
         super("./config/"+ Main.MOD_ID,"doublelife.properties");
@@ -67,6 +70,7 @@ public class DoubleLifeConfig extends ConfigManager {
     protected List<ConfigFileEntry<?>> getSeasonSpecificConfigEntries() {
         return new ArrayList<>(List.of(
                 ANNOUNCE_SOULMATES
+                ,SOULBOUND_FOOD
         ));
     }
 

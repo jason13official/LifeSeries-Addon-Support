@@ -3,10 +3,12 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
+import net.mat0u5.lifeseries.mixin.ServerPlayerEntityMixin;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -23,7 +25,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.border.WorldBorder;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -38,6 +39,7 @@ public class DoubleLife extends Season {
     public static final RegistryKey<DamageType> SOULMATE_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "soulmate"));
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
+    public boolean SOULBOUND_FOOD = false;
 
     public SessionAction actionChooseSoulmates = new SessionAction(
             OtherUtils.minutesToTicks(1), "§7Assign soulmates if necessary §f[00:01:00]", "Assign Soulmates if necessary"
@@ -127,6 +129,8 @@ public class DoubleLife extends Season {
     public void reload() {
         super.reload();
         ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get(seasonConfig);
+        SOULBOUND_FOOD = DoubleLifeConfig.SOULBOUND_FOOD.get(seasonConfig);
+        syncAllPlayers();
     }
 
     public void loadSoulmates() {
@@ -387,6 +391,12 @@ public class DoubleLife extends Season {
 
     }
 
+    public void syncAllPlayers() {
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            syncPlayer(player);
+        }
+    }
+
     public void syncPlayer(ServerPlayerEntity player) {
         ServerPlayerEntity soulmate = getSoulmate(player);
         syncPlayers(player, soulmate);
@@ -412,6 +422,8 @@ public class DoubleLife extends Season {
                 setPlayerLives(soulmate, minLives);
             }
         }
+
+        updateFood(player, soulmate);
     }
 
     public void syncSoulboundLives(ServerPlayerEntity player) {
@@ -439,7 +451,7 @@ public class DoubleLife extends Season {
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
 
-        boolean canHealWithSaturationOther =  soulmate.getHungerManager().getSaturationLevel() > 2.0F && soulmate.getHungerManager().getFoodLevel() >= 20;
+        boolean canHealWithSaturationOther = soulmate.getHungerManager().getSaturationLevel() > 2.0F && soulmate.getHungerManager().getFoodLevel() >= 20;
 
         if (canHealWithSaturationOther) {
             cir.setReturnValue(false);
@@ -472,5 +484,37 @@ public class DoubleLife extends Season {
             }catch(Exception ignored) {}
         }
         return loadedSoulmates;
+    }
+
+    public void updateFood(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+        if (!SOULBOUND_FOOD) return;
+        IHungerManager hungerManager1 = (IHungerManager) player.getHungerManager();
+        IHungerManager hungerManager2 = (IHungerManager) soulmate.getHungerManager();
+        if (hungerManager1 == null || hungerManager2 == null) return;
+
+        int foodLevel = Math.min(hungerManager1.ls$getFoodLevel(), hungerManager2.ls$getFoodLevel());
+        float saturation = Math.max(hungerManager1.ls$getSaturationLevel(), hungerManager2.ls$getSaturationLevel());
+        setHungerManager(hungerManager1, hungerManager2, foodLevel, saturation);
+    }
+
+    public void updateFoodFrom(ServerPlayerEntity player) {
+        if (!SOULBOUND_FOOD) return;
+        if (player == null) return;
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        if (soulmate == null) return;
+        IHungerManager hungerManager1 = (IHungerManager) player.getHungerManager();
+        IHungerManager hungerManager2 = (IHungerManager) soulmate.getHungerManager();
+        if (hungerManager1 == null || hungerManager2 == null) return;
+
+        hungerManager2.ls$setFoodLevel(hungerManager1.ls$getFoodLevel());
+        hungerManager2.ls$setSaturationLevel(hungerManager1.ls$getSaturationLevel());
+    }
+
+    public void setHungerManager(IHungerManager hungerManager1, IHungerManager hungerManager2, int foodLevel, float saturation) {
+        hungerManager1.ls$setFoodLevel(foodLevel);
+        hungerManager1.ls$setSaturationLevel(saturation);
+
+        hungerManager2.ls$setFoodLevel(foodLevel);
+        hungerManager2.ls$setSaturationLevel(saturation);
     }
 }

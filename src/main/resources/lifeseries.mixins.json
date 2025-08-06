@@ -10,6 +10,7 @@
     "EnderPearlEntityMixin",
     "EntityMixin",
     "ForgingScreenHandlerAccessor",
+    "HungerManagerMixin",
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",

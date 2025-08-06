@@ -65,12 +65,12 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
             }
             else if (region != 0) {
                 if (hasSelectedBefore && this.client != null) {
-                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SIMPLE_LIFE.getName()));
-                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.REAL_LIFE.getName()));
+                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.REAL_LIFE.getName()));
+                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SIMPLE_LIFE.getName()));
                 }
                 else {
-                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", Seasons.SIMPLE_LIFE.getName());
-                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", Seasons.REAL_LIFE.getName());
+                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", Seasons.REAL_LIFE.getName());
+                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", Seasons.SIMPLE_LIFE.getName());
                     if (this.client != null) this.client.setScreen(null);
                 }
                 return true;
@@ -94,8 +94,8 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
         context.getMatrices().push();
         context.getMatrices().scale(0.2f, 0.2f, 1.0f);
 
-        context.drawTexture(TEXTURE_SIMPLELIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
-        context.drawTexture(TEXTURE_REALLIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
+        context.drawTexture(TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
+        context.drawTexture(TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
 
         context.getMatrices().pop();
         //?} else if <= 1.21.5 {
@@ -107,8 +107,8 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
         context.getMatrices().push();
         context.getMatrices().scale(0.2f, 0.2f, 1.0f);
 
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SIMPLELIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_REALLIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
 
         context.getMatrices().pop();
         *///?} else {
@@ -120,8 +120,8 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
         context.getMatrices().pushMatrix();
         context.getMatrices().scale(0.2f, 0.2f);
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SIMPLELIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_REALLIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
 
         context.getMatrices().popMatrix();
         *///?}
