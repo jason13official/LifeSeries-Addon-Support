@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.other;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -51,7 +52,7 @@ public class UpdateInfoScreen extends DefaultScreen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of("§0§nA new Life Series mod update is available!"), centerX, startY + 10);
-        RenderUtils.drawTextLeft(context, this.textRenderer, Text.of("§0§nChangelog in version §l" +versionName+ "§0:"), startX + 10, startY + 25 + textRenderer.fontHeight);
+        RenderUtils.drawTextLeft(context, this.textRenderer, TextUtils.formatLoosely("§0§nChangelog in version §l{}§0:",versionName), startX + 10, startY + 25 + textRenderer.fontHeight);
         RenderUtils.drawTextLeftWrapLines(context, this.textRenderer, DEFAULT_TEXT_COLOR, Text.of(description), startX + 10, startY + 30 + textRenderer.fontHeight*2, backgroundWidth-20, 5);
     }
 }

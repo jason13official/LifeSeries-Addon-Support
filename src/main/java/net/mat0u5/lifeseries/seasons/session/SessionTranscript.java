@@ -22,11 +22,11 @@ public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
 
     public static void newSuperpower(ServerPlayerEntity player, Superpowers superpower) {
-        addMessageWithTime(player.getNameForScoreboard() + " has been assigned the " + superpower.getString() + " superpower.");
+        addMessageWithTime(TextUtils.formatString("{} has been assigned the {} superpower.", player, superpower.getString()));
     }
 
     public static void newTriviaBot(ServerPlayerEntity player) {
-        addMessageWithTime("Spawned trivia bot for " + player.getNameForScoreboard());
+        addMessageWithTime(TextUtils.formatString("Spawned trivia bot for {}", player));
     }
 
     public static void endingIsYours() {
@@ -42,11 +42,11 @@ public class SessionTranscript {
     }
 
     public static void deactivateWildcard(Wildcards type) {
-        addMessageWithTime("Deactivated Wildcard: " + type);
+        addMessageWithTime(TextUtils.formatString("Deactivated Wildcard: {}", type));
     }
 
     public static void activateWildcard(Wildcards type) {
-        addMessageWithTime("Activated Wildcard: " + type);
+        addMessageWithTime(TextUtils.formatString("Activated Wildcard: {}", type));
     }
 
     public static void logPlayers() {
@@ -54,47 +54,47 @@ public class SessionTranscript {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             names.add(player.getNameForScoreboard());
         }
-        addMessageWithTime("Players online: " + String.join(", ", names));
+        addMessageWithTime(TextUtils.formatString("Players online: {}", names));
     }
 
     public static void rerollTask(ServerPlayerEntity player) {
-        addMessageWithTime(player.getNameForScoreboard() + " has rerolled their task.");
+        addMessageWithTime(TextUtils.formatString("{} has rerolled their task.", player));
     }
 
     public static void successTask(ServerPlayerEntity player) {
-        addMessageWithTime(player.getNameForScoreboard() + " has passed their task.");
+        addMessageWithTime(TextUtils.formatString("{} has passed their task.", player));
     }
 
     public static void failTask(ServerPlayerEntity player) {
-        addMessageWithTime(player.getNameForScoreboard() + " has failed their task.");
+        addMessageWithTime(TextUtils.formatString("{} has failed their task.", player));
     }
 
     public static void assignTask(ServerPlayerEntity player, Task task, List<String> linesStr) {
-        addMessageWithTime(player.getNameForScoreboard() + " has been given a " + task.type.name() + " task: " + String.join(" ", linesStr));
+        addMessageWithTime(TextUtils.formatString("{} has been given a {} task: {}", player, task.type.name(), String.join(" ", linesStr)));
     }
 
     public static void claimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        addMessageWithTime(killer.getNameForScoreboard() + "'s kill claim of " + victim.getNameForScoreboard() + " has been accepted.");
+        addMessageWithTime(TextUtils.formatString("{}'s kill claim of {} has been accepted.", killer, victim));
     }
 
     public static void soulmate(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
-        addMessageWithTime(player.getNameForScoreboard() + "'s soulmate has been chosen to be " + soulmate.getNameForScoreboard());
+        addMessageWithTime(TextUtils.formatString("{}'s soulmate has been chosen to be {}", player, soulmate));
     }
 
     public static void assignRandomLives(ServerPlayerEntity player, int amount) {
-        addMessageWithTime(player.getNameForScoreboard() + " has been randomly assigned " + amount + " lives");
+        addMessageWithTime(TextUtils.formatString("{} has been randomly assigned {} lives", player, amount));
     }
 
     public static void givelife(Text playerName, ServerPlayerEntity target) {
-        addMessageWithTime("<@","> ",playerName.getString()+" gave a life to " + target.getNameForScoreboard());
+        addMessageWithTime("<@","> ",TextUtils.formatString("{} gave a life to {}", playerName, target));
     }
 
     public static void playerLeave(ServerPlayerEntity player) {
-        addMessageWithTime("<@","> ",player.getNameForScoreboard()+" left the game.");
+        addMessageWithTime("<@","> ",TextUtils.formatString("{} left the game.", player));
     }
 
     public static void playerJoin(ServerPlayerEntity player) {
-        addMessageWithTime("<@","> ",player.getNameForScoreboard()+" joined the game.");
+        addMessageWithTime("<@","> ",TextUtils.formatString("{} joined the game.", player));
     }
 
     public static void triggerSessionAction(String message) {
@@ -107,7 +107,7 @@ public class SessionTranscript {
     }
 
     public static void onPlayerLostAllLives(ServerPlayerEntity player) {
-        addMessageWithTime(player.getNameForScoreboard() + " lost all lives.");
+        addMessageWithTime(TextUtils.formatString("{} lost all lives.", player));
     }
 
     public static void boogeymenChosen(List<ServerPlayerEntity> players) {
@@ -115,7 +115,7 @@ public class SessionTranscript {
         for (ServerPlayerEntity player : players) {
             names.add(player.getNameForScoreboard());
         }
-        addMessageWithTime("Boogeymen chosen: " + String.join(", ", names));
+        addMessageWithTime(TextUtils.formatString("Boogeymen chosen: {}", names));
     }
 
     public static void sessionStart() {
@@ -149,8 +149,8 @@ public class SessionTranscript {
     }
 
     public static void addDefaultMessages() {
-        messages.add("-----  Life Series Mod by Mat0u5  |  Mod version: "+ Main.MOD_VERSION+"  -----");
-        messages.add("-----  "+ currentSeason.getSeason().name()+"  |  Time and date: " + OtherUtils.getTimeAndDate() +  "  -----");
+        messages.add(TextUtils.formatString("-----  Life Series Mod by Mat0u5  |  Mod version: {}  -----", Main.MOD_VERSION));
+        messages.add(TextUtils.formatString("-----  {}  |  Time and date: {}  -----", currentSeason.getSeason().name(), OtherUtils.getTimeAndDate()));
         messages.add("-----  Session Transcript  -----");
     }
 

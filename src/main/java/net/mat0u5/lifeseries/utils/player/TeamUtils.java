@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
@@ -50,7 +51,7 @@ public class TeamUtils {
 
         Team team = scoreboard.getScoreHolderTeam(playerName);
         if (team == null) {
-            Main.LOGGER.warn("Player " + playerName + " is not part of any team!");
+            Main.LOGGER.warn(TextUtils.formatString("Player {} is not part of any team!", playerName));
             return false;
         }
 

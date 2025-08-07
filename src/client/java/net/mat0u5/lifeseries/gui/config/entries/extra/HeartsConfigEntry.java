@@ -51,10 +51,10 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
 
 
         if (hearts == 0 && !hasHalfHeart) {
-            return List.of(Text.literal("No hearts").formatted(Formatting.GRAY));
+            return List.of(Text.literal("§7No hearts"));
         }
         if (absValue > 100) {
-            return List.of(Text.literal(value + " HP").formatted(Formatting.GRAY));
+            return List.of(TextUtils.formatLoosely( "§7{} HP", value));
         }
 
         List<MutableText> heartsList = new ArrayList<>();
@@ -74,7 +74,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
             heartsList.add(Text.literal(HEART_ROW).formatted(Formatting.RED));
         }
 
-        heartsList.set(heartsList.size()-1, heartsList.getLast().append(TextUtils.format(" ({} HP)", value).formatted(Formatting.GRAY)));
+        heartsList.set(heartsList.size()-1, heartsList.getLast().append(TextUtils.formatLoosely("§7 ({} HP)", value)));
 
         return heartsList;
     }

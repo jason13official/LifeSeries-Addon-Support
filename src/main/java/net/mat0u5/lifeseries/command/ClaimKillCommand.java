@@ -92,11 +92,12 @@ public class ClaimKillCommand {
         }
         Text textAll = TextUtils.format("{}§7 claims credit for {}§7's death. Only an admin can validate this claim.", player, victim);
         PlayerUtils.broadcastMessage(textAll);
+        String validateCommand = TextUtils.formatString("/claimkill validate {} {}", player, victim);
         Text adminText = Text.literal("§7Click ").append(
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(TextUtils.runCommandClickEvent("/claimkill validate " + player.getNameForScoreboard() + " "+victim.getNameForScoreboard()))
+                                .withClickEvent(TextUtils.runCommandClickEvent(validateCommand))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept the claim if you think it's valid."));
         PlayerUtils.broadcastMessageToAdmins(adminText, 120);

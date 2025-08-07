@@ -171,7 +171,7 @@ public class WildLifeCommands {
                 Text.literal("here")
                         .styled(style -> style
                                 .withColor(Formatting.BLUE)
-                                .withClickEvent(TextUtils.runCommandClickEvent("/snail names set " + player.getNameForScoreboard() + " "+name))
+                                .withClickEvent(TextUtils.runCommandClickEvent(TextUtils.formatString("/snail names set {} {}", player, name)))
                                 .withUnderline(true)
                         )).append(Text.of("§7 to accept."));
         PlayerUtils.broadcastMessageToAdmins(adminText);

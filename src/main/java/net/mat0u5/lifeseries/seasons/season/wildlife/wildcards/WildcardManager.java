@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.effect.StatusEffects;
@@ -67,7 +68,7 @@ public class WildcardManager {
     }
 
     public static void chosenWildcard(Wildcards wildcard) {
-        PlayerUtils.broadcastMessageToAdmins(Text.of("The " + wildcard + " wildcard has been selected for this session."));
+        PlayerUtils.broadcastMessageToAdmins(TextUtils.format("The {} wildcard has been selected for this session.", wildcard));
         PlayerUtils.broadcastMessageToAdmins(Text.of("§7Use the §f'/wildcard choose' §7 command if you want to change it."));
         WildcardManager.chosenWildcard = wildcard;
     }

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries;
 
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.interfaces.IEntryGroupHeader;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 
 public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfigEntry implements IEntryGroupHeader {
@@ -46,7 +47,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
                 value = newValue;
                 clearError();
             } else {
-                setError("Value must be between " + minValue + " and " + maxValue);
+                setError(TextUtils.formatString("Value must be between {} and {}", minValue, maxValue));
             }
         } catch (NumberFormatException e) {
             setError("Invalid number format");
@@ -57,7 +58,7 @@ public abstract class NumberConfigEntry<T extends Number> extends TextFieldConfi
     @Override
     protected void renderAdditionalContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         if (minValue != null && maxValue != null) {
-            String rangeText = "(" + minValue + "-" + maxValue + ")";
+            String rangeText = TextUtils.formatString("({}-{})", minValue, maxValue);
             int rangeWidth = textRenderer.getWidth(rangeText);
             int entryWidth = getEntryContentWidth(width);
 

@@ -106,7 +106,7 @@ public class UpdateChecker {
                                 version = updateVersionNumber;
                             }
                         }catch(Exception e) {
-                            Main.LOGGER.error("Error while parsing version number for update: " + name + " - " + e.getMessage());
+                            Main.LOGGER.error(TextUtils.formatString("Error while parsing version number for update: {} - {}", name, e.getMessage()));
                         }
                     }
 

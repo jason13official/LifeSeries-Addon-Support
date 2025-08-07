@@ -184,7 +184,7 @@ public class LimitedLife extends Season {
                 player.changeGameMode(GameMode.SURVIVAL);
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
-                Text livesText = Text.literal(colorNow.getName().replaceAll("_", " ").toLowerCase() +  " name").formatted(colorNow);
+                Text livesText = TextUtils.format("{} name", colorNow.getName().replaceAll("_", " ").toLowerCase()).formatted(colorNow);
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 is now a {}§7.", player, livesText));
             }
             reloadPlayerTeam(player);
@@ -293,8 +293,8 @@ public class LimitedLife extends Season {
                         20, 80, 20);
             }
             if (wasAllowedToAttack) return;
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"+killer.getNameForScoreboard() +
-                    "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §agreen name§7), and is not a §cboogeyman§f!"));
+            //TODO test
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §agreen name§7), and is not a §cboogeyman§f!", victim, killer));
             PlayerUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove or add time (using §f/limitedlife time add/remove <player> <time>§7) if this was indeed an unjustified kill."));
             return;
         }

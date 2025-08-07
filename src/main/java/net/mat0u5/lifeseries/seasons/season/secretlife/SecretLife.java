@@ -287,7 +287,7 @@ public class SecretLife extends Season {
         if (!playersWithTaskBooks.isEmpty()) {
             boolean isOne = playersWithTaskBooks.size() == 1;
             String playerNames = String.join(", ", playersWithTaskBooks);
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§4"+playerNames+"§c still " + (isOne?"has":"have") + " not submitted / failed a task this session."));
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.formatLoosely("§4{}§c still {} not submitted / failed a task this session.", playerNames, (isOne?"has":"have")));
         }
     }
 
@@ -311,8 +311,7 @@ public class SecretLife extends Season {
             return;
         }
         else {
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                    +killer.getNameForScoreboard() + "§7, who is not §cred name§7."));
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] §f{}§7 was killed by §f{}§7, who is not §cred name§7.", victim, killer));
         }
     }
 

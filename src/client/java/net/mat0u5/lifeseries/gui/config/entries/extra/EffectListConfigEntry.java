@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -63,11 +64,11 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
                 if (enchantment != null) {
                     newList.add(effectsRegistry.getEntry(enchantment));
                 } else {
-                    setError("Invalid effect: '" + potionId+"'");
+                    setError(TextUtils.formatString("Invalid effect: '{}'", potionId));
                     errors = true;
                 }
             } catch (Exception e) {
-                setError("Error parsing effect ID: '" + potionId+"'");
+                setError(TextUtils.formatString("Error parsing effect ID: '{}'", potionId));
                 errors = true;
             }
         }

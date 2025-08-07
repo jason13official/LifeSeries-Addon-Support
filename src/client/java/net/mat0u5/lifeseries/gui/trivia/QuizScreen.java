@@ -160,9 +160,10 @@ public class QuizScreen extends DefaultScreen {
         while (secondsStr.length() < 2) secondsStr = "0" + secondsStr;
         while (minutesStr.length() < 2) minutesStr = "0" + minutesStr;
 
-        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.RED, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
-        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.ORANGE, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
-        else RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(minutesStr + ":" + secondsStr), centerX, minY);
+        Text timerText = TextUtils.format("{}:{}", minutesStr, secondsStr);
+        if (timerSeconds <= 5) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.RED, timerText, centerX, minY);
+        else if (timerSeconds <= 30) RenderUtils.drawTextCenter(context, this.textRenderer, TextColors.ORANGE, timerText, centerX, minY);
+        else RenderUtils.drawTextCenter(context, this.textRenderer, timerText, centerX, minY);
 
         // Difficulty
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(difficulty), centerX, maxY);

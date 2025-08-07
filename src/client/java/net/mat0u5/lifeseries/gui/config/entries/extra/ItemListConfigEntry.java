@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -39,11 +40,11 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
                 if (item != null) {
                     newList.add(item);
                 } else {
-                    setError("Invalid item: '" + itemId + "'");
+                    setError(TextUtils.formatString("Invalid item: '{}'", itemId));
                     errors = true;
                 }
             } catch (Exception e) {
-                setError("Error parsing item ID: '" + itemId + "'");
+                setError(TextUtils.formatString("Error parsing item ID: '{}'", itemId));
                 errors = true;
             }
         }

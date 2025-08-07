@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.seasons;
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -55,7 +56,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultSmallScreen {
     public void render(DrawContext context, int mouseX, int mouseY) {
         Text prompt1 = Text.of("WARNING: you have already selected a season.");
         Text prompt2 = Text.of("Changing it might cause some saved data to be lost (lives, ...).");
-        Text prompt3 = Text.of("Change the season to " + seasonName + "?");
+        Text prompt3 = TextUtils.formatPlain("Change the season to {}?", seasonName);
         RenderUtils.drawTextCenter(context, textRenderer, prompt1, centerX, startY + 15);
         RenderUtils.drawTextCenter(context, textRenderer, prompt2, centerX, startY + 20 + textRenderer.fontHeight);
         RenderUtils.drawTextCenter(context, textRenderer, prompt3, centerX, startY + 35 + textRenderer.fontHeight*2);

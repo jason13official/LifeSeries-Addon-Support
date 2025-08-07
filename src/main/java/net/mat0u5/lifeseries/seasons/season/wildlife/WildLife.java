@@ -135,8 +135,7 @@ public class WildLife extends Season {
             }
         }
         else {
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§c [Unjustified Kill?] §f"+victim.getNameForScoreboard() + "§7 was killed by §f"
-                    +killer.getNameForScoreboard() + "§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §2dark green name§7)"));
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] §f{}§7 was killed by §f{}§7, who is not §cred name§7 (nor a §eyellow name§7, with the victim being a §2dark green name§7)", victim, killer));
             if (gaveLife) PlayerUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove a life from the killer (using §f/lives remove <player>§7) if this was indeed an unjustified kill."));
         }
     }

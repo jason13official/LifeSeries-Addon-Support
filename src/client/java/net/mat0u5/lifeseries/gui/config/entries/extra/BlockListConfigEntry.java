@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.StringListPopupConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.registry.Registries;
@@ -38,11 +39,11 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
                 if (block != null) {
                     newList.add(block);
                 } else {
-                    setError("Invalid block: '" + blockId+"'");
+                    setError(TextUtils.formatString("Invalid block: '{}'", blockId));
                     errors = true;
                 }
             } catch (Exception e) {
-                setError("Error parsing block ID: '" + blockId+"'");
+                setError(TextUtils.formatString("Error parsing block ID: '{}'", blockId));
                 errors = true;
             }
         }

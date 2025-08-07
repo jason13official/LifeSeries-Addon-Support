@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -164,7 +165,7 @@ public class NetworkHandlerServer {
                 Seasons newSeason = Seasons.getSeasonFromStringName(value);
                 if (newSeason == Seasons.UNASSIGNED) return;
                 if (Main.changeSeasonTo(newSeason.getId())) {
-                    PlayerUtils.broadcastMessage(Text.literal("Successfully changed the season to " + value + ".").formatted(Formatting.GREEN));
+                    PlayerUtils.broadcastMessage(TextUtils.formatLoosely("§aSuccessfully changed the season to {}.", value));
                 }
             }
         }
@@ -219,7 +220,8 @@ public class NetworkHandlerServer {
             return;
         }
 
-        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received handshake (from "+player.getNameForScoreboard()+"): {"+payload.modVersionStr()+", "+payload.modVersion()+"}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
+
         handshakeSuccessful.add(player.getUuid());
     }
 
@@ -228,7 +230,8 @@ public class NetworkHandlerServer {
      */
     public static void sendTriviaPacket(ServerPlayerEntity player, String question, int difficulty, long timestamp, int timeToComplete, List<String> answers) {
         TriviaQuestionPayload triviaQuestionPacket = new TriviaQuestionPayload(question, difficulty, timestamp, timeToComplete, answers);
-        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending trivia question packet to "+player.getNameForScoreboard()+"): {"+question+", " + difficulty+", " + timestamp+", " + timeToComplete + ", " + answers + "}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending trivia question packet to {}): {{}, {}, {}, {}, {}}", player, question, difficulty, timestamp, timeToComplete, answers));
+
         ServerPlayNetworking.send(player, triviaQuestionPacket);
     }
 
@@ -246,7 +249,8 @@ public class NetworkHandlerServer {
         HandshakePayload payload = new HandshakePayload(serverVersionStr, serverVersion, serverCompatibilityStr, serverCompatibility);
         ServerPlayNetworking.send(player, payload);
         handshakeSuccessful.remove(player.getUuid());
-        if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Sending handshake to "+player.getNameForScoreboard()+": {"+serverVersionStr+", "+serverVersion+"}");
+        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Sending handshake to {}: {{}, {}}", player, serverVersionStr, serverVersion));
+
     }
 
     public static void sendStringPacket(ServerPlayerEntity player, String name, String value) {
