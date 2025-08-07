@@ -8,10 +8,12 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class TextHud {
     public static void renderText(DrawContext context) {
@@ -116,7 +118,7 @@ public class TextHud {
         else {
             long remainingTime = roundTime(MainClient.sessionTime) - System.currentTimeMillis();
             if (remainingTime < 0) timerText = timerText.append(Text.of("§7Session has ended"));
-            else timerText = timerText.append(Text.of("§7Session " + OtherUtils.formatTimeMillis(remainingTime)));
+            else timerText = timerText.append(TextUtils.formatLoosely("§7Session {}", OtherUtils.formatTimeMillis(remainingTime)));
         }
 
         int screenWidth = client.getWindow().getScaledWidth();
@@ -132,11 +134,11 @@ public class TextHud {
         if (System.currentTimeMillis()-MainClient.limitedLifeTimeLastUpdated > 15000) return 0;
 
         MutableText timerText = Text.empty();
-        if (MainClient.limitedLifeLives == -1) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
+        if (MainClient.limitedLifeLives == -1) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", MainClient.limitedLifeTimerColor));
         else {
             long remainingTime = roundTime(MainClient.limitedLifeLives*1000);
 
-            if (remainingTime < 0) timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+"0:00:00"));
+            if (remainingTime < 0) timerText = timerText.append(TextUtils.formatLoosely("{}0:00:00", MainClient.limitedLifeTimerColor));
             else timerText = timerText.append(Text.of(MainClient.limitedLifeTimerColor+ OtherUtils.formatTimeMillis(remainingTime)));
         }
 

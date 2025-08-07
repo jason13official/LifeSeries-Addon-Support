@@ -44,7 +44,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                     copiedPlayerUUID = lookingAtPlayer.getUuidAsString();
                     copiedPlayerName = TextUtils.textToLegacyString(lookingAtPlayer.getStyledDisplayName());
                     player.playSoundToPlayer(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.MASTER, 0.3f, 1);
-                    PlayerUtils.displayMessageToPlayer(player, Text.literal("Copied DNA of ").append(lookingAtPlayer.getStyledDisplayName()).append(Text.of(" — Press again to disguise")), 65);
+                    PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Copied DNA of {}", lookingAtPlayer).append(Text.of(" — Press again to disguise")), 65);
                     return;
                 }
             }

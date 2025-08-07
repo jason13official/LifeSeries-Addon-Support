@@ -163,6 +163,7 @@ public class Events {
             if (server.getTickManager().isFrozen()) return;
             if (Main.currentSession != null) {
                 Main.currentSession.tick(server);
+                currentSeason.tick(server);
             }
             PlayerUtils.onTick();
             if (NetworkHandlerServer.updatedConfigThisTick) {

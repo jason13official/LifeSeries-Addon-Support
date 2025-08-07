@@ -39,6 +39,7 @@ public class ConfigFileEntry<T> {
         return ConfigTypes.NULL;
     }
 
+    @SuppressWarnings("unchecked")
     public T get(ConfigManager config) {
         try {
         if (defaultValue instanceof Integer i) {

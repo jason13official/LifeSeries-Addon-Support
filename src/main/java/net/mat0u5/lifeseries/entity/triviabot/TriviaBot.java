@@ -701,8 +701,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             }
 
             String romanNumeral = TextUtils.toRomanNumeral(amplifier + 1);
-            MutableText effectName = Text.translatable(effect.value().getTranslationKey()).formatted(Formatting.GRAY);
-            player.sendMessage(Text.literal(" §a§l+ ").append(effectName).append(Text.of(" §6"+romanNumeral)));
+            Text effectName = Text.translatable(effect.value().getTranslationKey());
+            player.sendMessage(TextUtils.formatLoosely(" §a§l+ §7{}§6 {}", effectName, romanNumeral));
         }
         player.sendMessage(Text.empty());
     }

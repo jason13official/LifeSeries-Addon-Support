@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -13,7 +14,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
@@ -61,15 +61,14 @@ public class Session {
 
     public boolean sessionStart() {
         if (!canStartSession()) return false;
+        activeActions.clear();
         if (!currentSeason.sessionStart()) return false;
         status = SessionStatus.STARTED;
         passedTime = 0;
-        MutableText sessionStartedText = Text.literal("Session started!").formatted(Formatting.GOLD);
-        Text firstLine = sessionStartedText.append(Text.literal(" ["+OtherUtils.formatTime(sessionLength)+"]").formatted(Formatting.GRAY));
-        MutableText infoText2 = Text.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
-        PlayerUtils.broadcastMessage(firstLine);
-        PlayerUtils.broadcastMessage(infoText2);
-        activeActions.clear();
+        Text line1 = TextUtils.formatLoosely("§6Session started! §7[{}]", OtherUtils.formatTime(sessionLength));
+        Text line2 = Text.literal("§f/session timer showDisplay§7 - toggles a session timer on your screen.");
+        PlayerUtils.broadcastMessage(line1);
+        PlayerUtils.broadcastMessage(line2);
         activeActions.add(endWarning1);
         activeActions.add(endWarning2);
         activeActions.add(actionInfoAction);
@@ -204,6 +203,7 @@ public class Session {
         if (!validTime()) return;
         if (!statusStarted()) return;
         tickSessionOn(server);
+        currentSeason.tickSessionOn(server);
     }
 
     public void tickSessionOn(MinecraftServer server) {

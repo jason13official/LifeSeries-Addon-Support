@@ -419,15 +419,15 @@ public abstract class Season {
             String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seasonConfig);
             PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
         }
+        PlayerUtils.broadcastMessage(getDeathMessage(player));
+    }
+
+    public Text getDeathMessage(ServerPlayerEntity player) {
         String message = seasonConfig.FINAL_DEATH_MESSAGE.get(seasonConfig);
         if (message.contains("${player}")) {
-            String before = message.split("\\$\\{player}")[0];
-            String after = message.split("\\$\\{player}")[1];
-            PlayerUtils.broadcastMessage(Text.literal(before).append(player.getStyledDisplayName()).append(Text.of(after)));
+            return TextUtils.format(message.replace("${player}", "{}"), player);
         }
-        else {
-            PlayerUtils.broadcastMessage(Text.literal(message));
-        }
+        return Text.literal(message);
     }
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {

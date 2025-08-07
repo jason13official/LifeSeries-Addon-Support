@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.features.Trivia;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -67,7 +68,7 @@ public class QuizScreen extends DefaultScreen {
         answerRects.clear();
         for (int i = 0; i < Trivia.answers.size(); i++) {
             char answerIndex = (char) (i+65);
-            MutableText label = Text.literal(answerIndex + ": ").formatted(Formatting.BOLD);
+            MutableText label = TextUtils.format("{}: ", answerIndex).formatted(Formatting.BOLD);
             MutableText answerText = Text.literal(Trivia.answers.get(i));
             answerText.setStyle(answerText.getStyle().withBold(false));
             Text text = label.append(answerText);

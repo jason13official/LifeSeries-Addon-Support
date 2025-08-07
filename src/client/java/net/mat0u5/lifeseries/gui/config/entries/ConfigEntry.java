@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.gui.config.ConfigScreen;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -96,7 +97,7 @@ public abstract class ConfigEntry {
         if (hasError()) {
             RenderUtils.drawTextRight(context, textRenderer, TextColors.PASTEL_RED, Text.of("⚠"), x + width + ERROR_LABEL_OFFSET_X, y + ERROR_LABEL_OFFSET_Y);
             if (isHovered) {
-                Text errorText = Text.literal("§cERROR:\n").append(getErrorMessage());
+                Text errorText = TextUtils.format("§cERROR:\n{}",getErrorMessage());
                 //? if <= 1.21.5 {
                 context.drawTooltip(textRenderer, textRenderer.wrapLines(errorText, MAX_DESCRIPTION_WIDTH), HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
                  //?} else {

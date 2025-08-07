@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -38,13 +39,14 @@ public class Mimicry extends Superpower {
         boolean successfullyMimicked = false;
         if (lookingAt != null)  {
             if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
+                //TODO refactor
                 isLookingAtPlayer = true;
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer) && mimicPower != null) {
                     if (mimicPower != Superpowers.NONE && mimicPower != Superpowers.MIMICRY) {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
-                        PlayerUtils.displayMessageToPlayer(player, Text.literal("Mimicked superpower of ").append(lookingAtPlayer.getStyledDisplayName()), 65);
+                        PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Mimicked superpower of {}", lookingAtPlayer), 65);
                         player.playSoundToPlayer(SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.MASTER, 0.3f, 1);
                     }
                     if (mimicPower == Superpowers.MIMICRY) {

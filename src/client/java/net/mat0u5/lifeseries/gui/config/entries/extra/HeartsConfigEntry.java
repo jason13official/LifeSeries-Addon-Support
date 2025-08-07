@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.IntegerConfigEntry;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -73,7 +74,7 @@ public class HeartsConfigEntry extends IntegerConfigEntry implements ITextFieldA
             heartsList.add(Text.literal(HEART_ROW).formatted(Formatting.RED));
         }
 
-        heartsList.set(heartsList.size()-1, heartsList.getLast().append(Text.literal(" ("+value+" HP)").formatted(Formatting.GRAY)));
+        heartsList.set(heartsList.size()-1, heartsList.getLast().append(TextUtils.format(" ({} HP)", value).formatted(Formatting.GRAY)));
 
         return heartsList;
     }

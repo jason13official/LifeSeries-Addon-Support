@@ -9,10 +9,12 @@ import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class SeasonInfoScreen extends DefaultScreen {
 
@@ -61,13 +63,7 @@ public class SeasonInfoScreen extends DefaultScreen {
 
         int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
-        MutableText adminCommandsTextActual = null;
-        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
-        if (season == Seasons.LAST_LIFE) adminCommandsTextActual = Text.literal(LastLife.COMMANDS_ADMIN_TEXT);
-        if (season == Seasons.DOUBLE_LIFE) adminCommandsTextActual = Text.literal(DoubleLife.COMMANDS_ADMIN_TEXT);
-        if (season == Seasons.LIMITED_LIFE) adminCommandsTextActual = Text.literal(LimitedLife.COMMANDS_ADMIN_TEXT);
-        if (season == Seasons.SECRET_LIFE) adminCommandsTextActual = Text.literal(SecretLife.COMMANDS_ADMIN_TEXT);
-        if (season == Seasons.WILD_LIFE) adminCommandsTextActual = Text.literal(WildLife.COMMANDS_ADMIN_TEXT);
+        MutableText adminCommandsTextActual = getSeasonAdminCommands();
         if (adminCommandsTextActual != null) {
             MutableText combined = adminCommandsText.copy().append(adminCommandsTextActual);
             if (textRenderer.getWidth(combined) < (endX - startX)) {
@@ -77,19 +73,13 @@ public class SeasonInfoScreen extends DefaultScreen {
             else {
                 RenderUtils.drawTextLeft(context, this.textRenderer, adminCommandsText, startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 5;
-                RenderUtils.drawTextLeft(context, this.textRenderer, Text.literal("  ").append(adminCommandsTextActual), startX + 20, currentY);
+                RenderUtils.drawTextLeft(context, this.textRenderer, TextUtils.format("  {}", adminCommandsTextActual), startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 8;
             }
         }
 
         MutableText commandsText = Text.literal("§8Available §nnon-admin§8 commands: ");
-        MutableText commandsTextActual = null;
-        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
-        if (season == Seasons.LAST_LIFE) commandsTextActual = Text.literal(LastLife.COMMANDS_TEXT);
-        if (season == Seasons.DOUBLE_LIFE) commandsTextActual = Text.literal(DoubleLife.COMMANDS_TEXT);
-        if (season == Seasons.LIMITED_LIFE) commandsTextActual = Text.literal(LimitedLife.COMMANDS_TEXT);
-        if (season == Seasons.SECRET_LIFE) commandsTextActual = Text.literal(SecretLife.COMMANDS_TEXT);
-        if (season == Seasons.WILD_LIFE) commandsTextActual = Text.literal(WildLife.COMMANDS_TEXT);
+        MutableText commandsTextActual = getSeasonCommands();
         if (commandsTextActual != null) {
             MutableText combined = commandsText.copy().append(commandsTextActual);
             if (textRenderer.getWidth(combined) < (endX - startX)) {
@@ -99,7 +89,7 @@ public class SeasonInfoScreen extends DefaultScreen {
             else {
                 RenderUtils.drawTextLeft(context, this.textRenderer, commandsText, startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 5;
-                RenderUtils.drawTextLeft(context, this.textRenderer, Text.literal("  ").append(commandsTextActual), startX + 20, currentY);
+                RenderUtils.drawTextLeft(context, this.textRenderer, TextUtils.format("  {}", commandsTextActual), startX + 20, currentY);
                 currentY += textRenderer.fontHeight + 10;
             }
         }
@@ -131,5 +121,28 @@ public class SeasonInfoScreen extends DefaultScreen {
         Text configText = Text.of("§0§nRun §8§n'/lifeseries config'§0§n to open the Life Series configuration!");
         RenderUtils.drawTextLeft(context, this.textRenderer, configText, startX + 20, currentY);
         currentY += textRenderer.fontHeight + 5;
+    }
+
+    private static @Nullable MutableText getSeasonCommands() {
+        MutableText commandsTextActual = null;
+        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) commandsTextActual = Text.literal(ThirdLife.COMMANDS_TEXT);
+        if (season == Seasons.LAST_LIFE) commandsTextActual = Text.literal(LastLife.COMMANDS_TEXT);
+        if (season == Seasons.DOUBLE_LIFE) commandsTextActual = Text.literal(DoubleLife.COMMANDS_TEXT);
+        if (season == Seasons.LIMITED_LIFE) commandsTextActual = Text.literal(LimitedLife.COMMANDS_TEXT);
+        if (season == Seasons.SECRET_LIFE) commandsTextActual = Text.literal(SecretLife.COMMANDS_TEXT);
+        if (season == Seasons.WILD_LIFE) commandsTextActual = Text.literal(WildLife.COMMANDS_TEXT);
+        return commandsTextActual;
+    }
+
+    @Nullable
+    private static MutableText getSeasonAdminCommands() {
+        MutableText adminCommandsTextActual = null;
+        if (season == Seasons.THIRD_LIFE || season == Seasons.SIMPLE_LIFE || season == Seasons.REAL_LIFE) adminCommandsTextActual = Text.literal(ThirdLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.LAST_LIFE) adminCommandsTextActual = Text.literal(LastLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.DOUBLE_LIFE) adminCommandsTextActual = Text.literal(DoubleLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.LIMITED_LIFE) adminCommandsTextActual = Text.literal(LimitedLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.SECRET_LIFE) adminCommandsTextActual = Text.literal(SecretLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.WILD_LIFE) adminCommandsTextActual = Text.literal(WildLife.COMMANDS_ADMIN_TEXT);
+        return adminCommandsTextActual;
     }
 }

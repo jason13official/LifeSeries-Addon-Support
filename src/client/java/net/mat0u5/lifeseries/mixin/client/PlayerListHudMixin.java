@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
@@ -61,6 +62,6 @@ public class PlayerListHudMixin {
         if (entry == null) return;
         Team team = entry.getScoreboardTeam();
         if (team == null) return;
-        cir.setReturnValue(Text.literal("["+team.getDisplayName().getString() + "] ").formatted(team.getColor()).append(original));
+        cir.setReturnValue(TextUtils.format("[{}] ", team.getDisplayName().getString()).formatted(team.getColor()).append(original));
     }
 }

@@ -60,6 +60,6 @@ public class EntityRendererMixin<T extends Entity> {
         if (!MainClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;
-        return Text.literal("["+team.getDisplayName().getString() + "] ").formatted(team.getColor()).append(original);
+        return TextUtils.format("[{}] ",team.getDisplayName().getString()).formatted(team.getColor()).append(original);
     }
 }

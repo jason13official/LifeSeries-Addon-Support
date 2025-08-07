@@ -57,9 +57,10 @@ public class LastLifeCommands {
 
         if (players.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7...", players.iterator().next()));
-            return 1;
         }
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7 targets...", players.size()));
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7 targets...", players.size()));
+        }
         ((LastLife) currentSeason).livesManager.assignRandomLives(players);
         return 1;
     }

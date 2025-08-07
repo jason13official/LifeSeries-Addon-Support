@@ -13,6 +13,7 @@ import net.minecraft.util.Formatting;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +32,7 @@ public class UpdateChecker {
             HttpURLConnection connection = null;
             try {
                 // Connect to the GitHub API
-                connection = (HttpURLConnection) new URL(Main.MAJOR_UPDATE_URL).openConnection();
+                connection = (HttpURLConnection) new URI(Main.MAJOR_UPDATE_URL).toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 connection.setConnectTimeout(5000);

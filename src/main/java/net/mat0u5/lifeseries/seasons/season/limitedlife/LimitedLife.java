@@ -265,7 +265,7 @@ public class LimitedLife extends Season {
         else if (wasAlive && SHOW_DEATH_TITLE) {
             PlayerUtils.sendTitleWithSubtitle(killer,
                     Text.literal(msgKiller).formatted(Formatting.GREEN),
-                    Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
+                    getDeathMessage(victim),
                     20, 80, 20);
         }
         else {
@@ -289,7 +289,7 @@ public class LimitedLife extends Season {
             else {
                 PlayerUtils.sendTitleWithSubtitle(killer,
                         Text.literal(msgKiller).formatted(Formatting.GREEN),
-                        Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!")),
+                        getDeathMessage(victim),
                         20, 80, 20);
             }
             if (wasAllowedToAttack) return;
@@ -313,7 +313,7 @@ public class LimitedLife extends Season {
         }
         else {
             PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured, "+msgKiller),
-                    Text.empty().append(victim.getStyledDisplayName()).append(Text.literal(" ran out of time!"))
+                    getDeathMessage(victim)
                     , 20, 80, 20);
         }
     }

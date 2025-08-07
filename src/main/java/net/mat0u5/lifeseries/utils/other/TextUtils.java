@@ -132,7 +132,16 @@ public class TextUtils {
     }
 
     public static MutableText format(String template, Object... args) {
+        return formatStyled(false, template, args);
+    }
+
+    public static MutableText formatLoosely(String template, Object... args) {
+        return formatStyled(true, template, args);
+    }
+
+    private static MutableText formatStyled(boolean looselyStyled, String template, Object... args) {
         MutableText result = Text.empty();
+        StringBuilder resultLooselyStyled = new StringBuilder();
 
         int argIndex = 0;
         int lastIndex = 0;
@@ -152,10 +161,13 @@ public class TextUtils {
             if (placeholderIndex > lastIndex) {
                 String textBefore = template.substring(lastIndex, placeholderIndex);
                 result.append(Text.literal(textBefore));
+                resultLooselyStyled.append(textBefore);
             }
 
             Object arg = args[argIndex];
-            result.append(getTextForArgument(arg));
+            Text argText = getTextForArgument(arg);
+            result.append(argText);
+            resultLooselyStyled.append(argText.getString());
 
             argIndex++;
             lastIndex = placeholderIndex + 2;
@@ -165,6 +177,11 @@ public class TextUtils {
         if (lastIndex < template.length()) {
             String remainingText = template.substring(lastIndex);
             result.append(Text.literal(remainingText));
+            resultLooselyStyled.append(remainingText);
+        }
+
+        if (looselyStyled) {
+            return Text.literal(resultLooselyStyled.toString());
         }
 
         return result;
@@ -178,7 +195,9 @@ public class TextUtils {
             return text;
         }
         if (arg instanceof ServerPlayerEntity player) {
-            return player.getDisplayName();
+            Text name = player.getDisplayName();
+            if (name == null) return Text.empty();
+            return name;
         }
         if (arg instanceof List<?> list) {
             return Text.of(

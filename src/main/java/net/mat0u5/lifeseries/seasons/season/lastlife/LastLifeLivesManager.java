@@ -4,10 +4,10 @@ import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -95,9 +95,8 @@ public class LastLifeLivesManager {
             for (Map.Entry<ServerPlayerEntity, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayerEntity player = playerEntry.getKey();
-                MutableText textLives = currentSeason.getFormattedLives(livesNum).copy();
-                Text finalText = textLives.append(Text.literal(" lives.").formatted(Formatting.GREEN));
-                PlayerUtils.sendTitle(player, finalText, 0, 60, 20);
+                Text textLives = TextUtils.format("{}§a lives.", currentSeason.getFormattedLives(livesNum));
+                PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
                 if (currentSeason.hasAssignedLives(player)) continue;
                 SessionTranscript.assignRandomLives(player, livesNum);
                 currentSeason.setPlayerLives(player, livesNum);
