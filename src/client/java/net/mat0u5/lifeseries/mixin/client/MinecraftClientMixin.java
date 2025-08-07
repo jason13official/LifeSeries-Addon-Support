@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = MinecraftClient.class, priority = 1)
 public abstract class MinecraftClientMixin {
+
     @Inject(method = "getTargetMillisPerTick", at = @At("HEAD"), cancellable = true)
     private void getTargetMillisPerTick(float millis, CallbackInfoReturnable<Float> cir) {
         MinecraftClient client = MinecraftClient.getInstance();

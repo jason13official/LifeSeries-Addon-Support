@@ -21,15 +21,9 @@ public class HungerManagerMixin implements IHungerManager {
     private int foodLevel;
     @Shadow
     private float saturationLevel;
-    @Shadow
-    private float exhaustion;
-    @Shadow
-    private int foodTickTimer;
-    @Shadow
-    private int prevFoodLevel;
 
     @Unique
-    ServerPlayerEntity ls$player;
+    private ServerPlayerEntity ls$player;
 
     @Unique
     @Override
@@ -56,32 +50,38 @@ public class HungerManagerMixin implements IHungerManager {
     }
 
     @Unique
-    private float prevSaturationLevel;
+    private float ls$prevFoodLevel;
+    @Unique
+    private float ls$prevSaturationLevel;
 
     @Inject(method = "update", at = @At("HEAD"))
+    //? if <= 1.21 {
     private void updateHead(PlayerEntity player, CallbackInfo ci) {
+    //?} else {
+    /*private void updateHead(ServerPlayerEntity player, CallbackInfo ci) {
+    *///?}
         if (!Main.isLogicalSide()) return;
         if (player instanceof ServerPlayerEntity serverPlayer) {
             this.ls$player = serverPlayer;
         }
-        prevSaturationLevel = this.saturationLevel;
+        ls$prevFoodLevel = this.foodLevel;
+        ls$prevSaturationLevel = this.saturationLevel;
     }
 
     @Inject(method = "update", at = @At("TAIL"))
+    //? if <= 1.21 {
     private void updateTail(PlayerEntity player, CallbackInfo ci) {
+    //?} else {
+    /*private void updateTail(ServerPlayerEntity player, CallbackInfo ci) {
+    *///?}
         if (!Main.isLogicalSide()) return;
-        if (prevFoodLevel != foodLevel || prevSaturationLevel != saturationLevel) {
+        if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {
             ls$emitUpdate();
         }
     }
 
     @Inject(method = "setFoodLevel", at = @At("TAIL"))
     private void setFoodLevel(CallbackInfo ci) {
-        ls$emitUpdate();
-    }
-
-    @Inject(method = "setExhaustion", at = @At("TAIL"))
-    private void setExhaustion(CallbackInfo ci) {
         ls$emitUpdate();
     }
 

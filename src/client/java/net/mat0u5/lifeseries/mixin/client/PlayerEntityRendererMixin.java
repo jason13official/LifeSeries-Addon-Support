@@ -17,10 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 @Mixin(value = PlayerEntityRenderer.class, priority = 1)
-public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
-    public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
-        super(ctx, model, shadowRadius);
-    }
+public abstract class PlayerEntityRendererMixin {
+    //TODO test
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At("HEAD"), cancellable = true)
     public void replaceRendering(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci){
@@ -38,7 +36,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
             LivingEntity dummy = morphComponent.getDummy();
             if(morphComponent.isMorphed() && dummy != null){
                 MinecraftClient.getInstance().getEntityRenderDispatcher().render(
-                        dummy, 0, 0, 0, f, g, matrixStack, vertexConsumerProvider, i);
+                        dummy, 0, 0, 0, f, g, matrixStack, vertexConsumerProvider, i
+                );
                 ci.cancel();
             }
         }

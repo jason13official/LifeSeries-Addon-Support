@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
 import static net.mat0u5.lifeseries.Main.blacklist;
 
@@ -26,26 +27,24 @@ public abstract class AnvilScreenHandlerMixin {
     private void modifyAnvilResultName(CallbackInfo ci) {
         if (!Main.isLogicalSide()) return;
         if (blacklist == null) return;
-        // Access the parent class's "output" inventory
         ForgingScreenHandlerAccessor accessor = (ForgingScreenHandlerAccessor) (Object) this;
         Inventory outputInventory = accessor.getOutput();
 
-        AnvilScreenHandler self = (AnvilScreenHandler) (Object) this;
-        // Get the result item (slot 0 is the output)
         ItemStack resultStack = outputInventory.getStack(0);
-        if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoAnvil") || ItemStackUtils.hasCustomComponentEntry(resultStack, "NoModifications")) {
+        if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoAnvil") ||
+            ItemStackUtils.hasCustomComponentEntry(resultStack, "NoModifications")) {
             outputInventory.setStack(0, ItemStack.EMPTY);
         }
 
-        if (resultStack.hasEnchantments()) {
-            resultStack.set(DataComponentTypes.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
-            if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
-                for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<RegistryEntry<Enchantment>> enchant : resultStack.getEnchantments().getEnchantmentEntries()) {
-                    Optional<RegistryKey<Enchantment>> enchantRegistry = enchant.getKey().getKey();
-                    if (enchantRegistry.isEmpty()) continue;
-                    if (enchantRegistry.get() == Enchantments.MENDING) {
-                        outputInventory.setStack(0, ItemStack.EMPTY);
-                    }
+        if (!resultStack.hasEnchantments()) return;
+
+        resultStack.set(DataComponentTypes.ENCHANTMENTS, blacklist.clampAndBlacklistEnchantments(resultStack.getEnchantments()));
+        if (ItemStackUtils.hasCustomComponentEntry(resultStack, "NoMending")) {
+            for (Entry<RegistryEntry<Enchantment>> enchant : resultStack.getEnchantments().getEnchantmentEntries()) {
+                Optional<RegistryKey<Enchantment>> enchantRegistry = enchant.getKey().getKey();
+                if (enchantRegistry.isEmpty()) continue;
+                if (enchantRegistry.get() == Enchantments.MENDING) {
+                    outputInventory.setStack(0, ItemStack.EMPTY);
                 }
             }
         }

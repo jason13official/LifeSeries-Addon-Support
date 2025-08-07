@@ -17,13 +17,13 @@ public class EntityMixin {
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (Main.isLogicalSide()) return;
         if (System.currentTimeMillis() - MainClient.snailAirTimestamp > 5000) return;
-        if (MainClient.snailAir < 300) {
-            Entity entity = (Entity) (Object) this;
-            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                int initialAir = cir.getReturnValue();
-                if (MainClient.snailAir < initialAir) {
-                    cir.setReturnValue(MainClient.snailAir);
-                }
+        if (MainClient.snailAir >= 300) return;
+
+        Entity entity = (Entity) (Object) this;
+        if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+            int initialAir = cir.getReturnValue();
+            if (MainClient.snailAir < initialAir) {
+                cir.setReturnValue(MainClient.snailAir);
             }
         }
     }

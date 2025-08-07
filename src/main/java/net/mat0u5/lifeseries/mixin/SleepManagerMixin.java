@@ -23,22 +23,21 @@ public abstract class SleepManagerMixin {
         if (!Main.isLogicalSide()) return;
         if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
         for (ServerPlayerEntity player : players) {
-            if (player.canResetTimeBySleeping()) {
-                if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
-                    cir.setReturnValue(true);
-                }
+            if (!player.canResetTimeBySleeping()) return;
+            if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
+                cir.setReturnValue(true);
             }
         }
     }
+
     @Inject(method = "canSkipNight", at = @At("RETURN"), cancellable = true)
     public void canSkipNight(int percentage, CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;
         if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (player.isSleeping()) {
-                if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
-                    cir.setReturnValue(true);
-                }
+            if (!player.isSleeping()) return;
+            if (SuperpowersWildcard.hasActivePower(player, Superpowers.TIME_CONTROL)) {
+                cir.setReturnValue(true);
             }
         }
     }

@@ -19,7 +19,7 @@ import java.util.UUID;
 @Mixin(ClientCommonNetworkHandler.class)
 public class ClientCommonNetworkHandlerMixin {
     @Unique
-    private static final List<String> bannedURLs = List.of(
+    private static final List<String> ls$bannedURLs = List.of(
             "github.com/Mat0u5/LifeSeries-Resources"
     );
 
@@ -38,16 +38,9 @@ public class ClientCommonNetworkHandlerMixin {
     )
     public void onResourcePackSend(ResourcePackSendS2CPacket packet, CallbackInfo ci) {
         String url = packet.url();
-        String hash = packet.hash();
         UUID uuid = packet.id();
-        /*
-        OtherUtils.log("-----");
-        OtherUtils.log("RP url: " + url);
-        OtherUtils.log("RP uuid: " + uuid);
-        OtherUtils.log("RP hash: " + hash);
-        */
         boolean banned = false;
-        for (String bannedURL : bannedURLs) {
+        for (String bannedURL : ls$bannedURLs) {
             if (url.contains(bannedURL)) {
                 banned = true;
                 break;

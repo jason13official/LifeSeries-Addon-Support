@@ -20,9 +20,11 @@ public class SpawnGroupMixin {
     private void getCapacity(CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide()) return;
         SpawnGroup group = (SpawnGroup)(Object)this;
-        if (group.getName().equalsIgnoreCase("monster") || group.getName().equalsIgnoreCase("creature")) {
-            if (currentSeason instanceof WildLife) {
-                if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) return;
+        if (!group.getName().equalsIgnoreCase("monster") && !group.getName().equalsIgnoreCase("creature")) {
+            return;
+        }
+        if (currentSeason instanceof WildLife) {
+            if (WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.getSpawnCapacity(group, cir);
             }
         }
@@ -33,9 +35,10 @@ public class SpawnGroupMixin {
     private void isRare(CallbackInfoReturnable<Boolean> cir) {
         if (!Main.isLogicalSide()) return;
         SpawnGroup group = (SpawnGroup)(Object)this;
-        if (group.getName().equalsIgnoreCase("creature")) {
-            if (currentSeason instanceof WildLife) {
-                if (!WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) return;
+        if (!group.getName().equalsIgnoreCase("creature")) return;
+
+        if (currentSeason instanceof WildLife) {
+            if (WildcardManager.isActiveWildcard(Wildcards.MOB_SWAP)) {
                 MobSwap.isRare(group, cir);
             }
         }

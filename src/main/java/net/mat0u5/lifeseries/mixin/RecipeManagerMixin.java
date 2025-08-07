@@ -40,7 +40,6 @@ public class RecipeManagerMixin {
         for (Identifier id : toRemove) {
             map.remove(id);
         }
-
     }
 
 }
@@ -76,7 +75,6 @@ public abstract class RecipeManagerMixin {
 
         // Cancel further processing of the original method
         ci.cancel();
-
     }
 
 }

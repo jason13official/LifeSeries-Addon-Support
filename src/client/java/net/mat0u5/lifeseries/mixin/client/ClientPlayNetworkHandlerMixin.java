@@ -86,12 +86,12 @@ public class ClientPlayNetworkHandlerMixin {
     private Map<UUID, PlayerListEntry> playerListEntries;
 
     @Unique
-    private final Map<UUID, PlayerListEntry> copy_playerListEntries = Maps.newHashMap();
+    private final Map<UUID, PlayerListEntry> ls$copy_playerListEntries = Maps.newHashMap();
 
     @Inject(method = "getPlayerListEntry(Ljava/util/UUID;)Lnet/minecraft/client/network/PlayerListEntry;", at = @At("RETURN"), cancellable = true)
     public void getPlayerListEntry(UUID uuid, CallbackInfoReturnable<PlayerListEntry> cir) {
         if (cir.getReturnValue() != null) return;
-        cir.setReturnValue(copy_playerListEntries.get(uuid));
+        cir.setReturnValue(ls$copy_playerListEntries.get(uuid));
     }
 
     @Inject(method = "onPlayerRemove", at = @At("HEAD"))
@@ -99,7 +99,7 @@ public class ClientPlayNetworkHandlerMixin {
         for (UUID uUID : packet.profileIds()) {
             PlayerListEntry playerListEntry = playerListEntries.get(uUID);
             if (playerListEntry != null) {
-                copy_playerListEntries.put(uUID, playerListEntry);
+                ls$copy_playerListEntries.put(uUID, playerListEntry);
             }
         }
     }

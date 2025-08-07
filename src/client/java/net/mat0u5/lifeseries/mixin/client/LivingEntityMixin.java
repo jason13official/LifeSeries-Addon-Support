@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LivingEntity.class, priority = 2)
 public class LivingEntityMixin {
+
     @Inject(method = "jump", at = @At("TAIL"))
     private void onJump(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;

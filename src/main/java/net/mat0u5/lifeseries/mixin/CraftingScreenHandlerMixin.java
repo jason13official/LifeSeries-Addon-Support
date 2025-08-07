@@ -23,15 +23,18 @@ import net.minecraft.world.World;
 public class CraftingScreenHandlerMixin {
     @Inject(method = "updateResult", at = @At("HEAD"), cancellable = true)
     //? if <= 1.21 {
-    private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, World world, PlayerEntity player, RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
+    private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, World world, PlayerEntity player,
+            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
     //?} else {
-    /*private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, ServerWorld world, PlayerEntity player, RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
+    /*private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, ServerWorld world, PlayerEntity player,
+            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
     *///?}
         if (!Main.isLogicalSide()) return;
 
         for (int i = 0; i < craftingInventory.size(); i++) {
             ItemStack stack = craftingInventory.getStack(i);
-            if (ItemStackUtils.hasCustomComponentEntry(stack, "NoCrafting") || ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
+            if (ItemStackUtils.hasCustomComponentEntry(stack, "NoCrafting") ||
+                    ItemStackUtils.hasCustomComponentEntry(stack, "NoModifications")) {
                 resultInventory.setStack(0, ItemStack.EMPTY);
                 ci.cancel();
                 return;

@@ -28,9 +28,8 @@ public abstract class PlayerInventoryMixin {
                 blacklist.onInventoryUpdated(serverPlayer,inventory);
             }
             if (currentSeason instanceof WildLife) {
-                if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
-                    Hunger.updateInventory(serverPlayer);
-                }
+                if (WildcardManager.isActiveWildcard(Wildcards.HUNGER)) return;
+                Hunger.updateInventory(serverPlayer);
             }
         }
     }

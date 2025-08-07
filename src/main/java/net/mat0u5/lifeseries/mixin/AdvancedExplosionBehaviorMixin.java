@@ -20,12 +20,10 @@ public class AdvancedExplosionBehaviorMixin {
     public void getKnockbackModifier(Entity entity, CallbackInfoReturnable<Float> cir) {
         if (!Main.isLogicalSide()) return;
         if (entity instanceof ServerPlayerEntity player) {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
-                if (!player.getAbilities().flying) {
-                    if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
-                        cir.setReturnValue(3f); // Default is 1.22f
-                    }
-                }
+            if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+            if (player.getAbilities().flying) return;
+            if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
+                cir.setReturnValue(3f); // Default is 1.22f
             }
         }
     }

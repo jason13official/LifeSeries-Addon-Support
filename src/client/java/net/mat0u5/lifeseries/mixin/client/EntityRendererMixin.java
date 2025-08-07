@@ -31,26 +31,24 @@ public class EntityRendererMixin<T extends Entity> {
     )
     public Text render(Text text) {
     *///?}
-        if (text != null) {
-            if (MinecraftClient.getInstance().getNetworkHandler() == null) {
-                return text;
-            }
-            if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
-                String name = MainClient.playerDisguiseNames.get(text.getString());
-                for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-                    if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
-                        if (entry.getDisplayName() != null) {
-                            return applyColorblind(entry.getDisplayName(), entry.getScoreboardTeam());
-                        }
-                        return applyColorblind(Text.literal(name), entry.getScoreboardTeam());
+        if (text == null) return text;
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) return text;
+
+        if (MainClient.playerDisguiseNames.containsKey(text.getString())) {
+            String name = MainClient.playerDisguiseNames.get(text.getString());
+            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+                if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(name))) {
+                    if (entry.getDisplayName() != null) {
+                        return ls$applyColorblind(entry.getDisplayName(), entry.getScoreboardTeam());
                     }
+                    return ls$applyColorblind(Text.literal(name), entry.getScoreboardTeam());
                 }
             }
-            else {
-                for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-                    if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
-                        return applyColorblind(text, entry.getScoreboardTeam());
-                    }
+        }
+        else {
+            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+                if (entry.getProfile().getName().equalsIgnoreCase(TextUtils.removeFormattingCodes(text.getString()))) {
+                    return ls$applyColorblind(text, entry.getScoreboardTeam());
                 }
             }
         }
@@ -58,7 +56,7 @@ public class EntityRendererMixin<T extends Entity> {
     }
 
     @Unique
-    public Text applyColorblind(Text original, Team team) {
+    public Text ls$applyColorblind(Text original, Team team) {
         if (!MainClient.COLORBLIND_SUPPORT) return original;
         if (original == null) return original;
         if (team == null) return original;

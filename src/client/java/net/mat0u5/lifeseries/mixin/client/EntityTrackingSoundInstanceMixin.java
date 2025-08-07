@@ -12,6 +12,8 @@ public abstract class EntityTrackingSoundInstanceMixin {
     @Inject(method = "canPlay", at = @At("HEAD"), cancellable = true)
     public void canPlay(CallbackInfoReturnable<Boolean> cir) {
         EntityTrackingSoundInstance instance = (EntityTrackingSoundInstance) (Object) this;
-        if (instance.getId().getPath().contains("wildlife_trivia")) cir.setReturnValue(true);
+        if (instance.getId().getPath().contains("wildlife_trivia")) {
+            cir.setReturnValue(true);
+        }
     }
 }

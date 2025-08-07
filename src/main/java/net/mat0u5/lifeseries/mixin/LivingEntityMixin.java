@@ -40,7 +40,7 @@ public abstract class LivingEntityMixin {
         if (!currentSeason.NO_HEALING) return;
 
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity instanceof ServerPlayerEntity player) {
+        if (entity instanceof ServerPlayerEntity) {
             info.cancel();
         }
     }
@@ -82,7 +82,8 @@ public abstract class LivingEntityMixin {
 
     //? if = 1.21.2 {
     /*@Inject(method = "isEntityLookingAtMe", at = @At("HEAD"), cancellable = true)
-    public void isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier[] entityYChecks, CallbackInfoReturnable<Boolean> cir) {
+    public void isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape
+            , Predicate<LivingEntity> predicate, DoubleSupplier[] entityYChecks, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity me = (LivingEntity) (Object) this;
         if (me instanceof CreakingEntity creaking) {
             if (creaking.isTeammate(entity)) cir.setReturnValue(false);
@@ -107,18 +108,18 @@ public abstract class LivingEntityMixin {
      */
 
     @Unique
-    private DamageSource lastDamageSource;
+    private DamageSource ls$lastDamageSource;
 
 
     //? if <= 1.21 {
     @Inject(method = "damage", at = @At("HEAD"))
     private void captureDamageSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        this.lastDamageSource = source;
+        this.ls$lastDamageSource = source;
     }
     //?} else {
     /*@Inject(method = "damage", at = @At("HEAD"))
     private void captureDamageSource(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        this.lastDamageSource = source;
+        this.ls$lastDamageSource = source;
     }
     *///?}
 
@@ -129,13 +130,13 @@ public abstract class LivingEntityMixin {
     )
     private double modifyKnockback(double strength) {
         if (!Main.isLogicalSide()) return strength;
-        if (lastDamageSource != null) {
-            DamageSource source = lastDamageSource;
-            if (source.getAttacker() instanceof ServerPlayerEntity attacker && source.getType() == attacker.getDamageSources().playerAttack(attacker).getType()) {
-                if (SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
-                    return 3;
-                }
-            }
+        if (ls$lastDamageSource == null) return strength;
+
+        DamageSource source = ls$lastDamageSource;
+        if (source.getAttacker() instanceof ServerPlayerEntity attacker &&
+                source.getType() == attacker.getDamageSources().playerAttack(attacker).getType() &&
+                SuperpowersWildcard.hasActivatedPower(attacker, Superpowers.SUPER_PUNCH)) {
+            return 3;
         }
         return strength;
     }

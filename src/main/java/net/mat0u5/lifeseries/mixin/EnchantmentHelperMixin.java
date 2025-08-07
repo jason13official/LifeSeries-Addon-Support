@@ -17,6 +17,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -45,13 +46,15 @@ public class EnchantmentHelperMixin {
         }
 
         if (seasonConfig.CUSTOM_ENCHANTER_ALGORITHM.get(seasonConfig)) {
-            customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
+            ls$customEnchantmentTableAlgorithm(level, stack, possibleEnchantments, cir);
         }
         else {
-            blacklistEnchantments(level, stack, possibleEnchantments, cir);
+            ls$blacklistEnchantments(level, stack, possibleEnchantments, cir);
         }
     }
-    private static void blacklistEnchantments(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
+
+    @Unique
+    private static void ls$blacklistEnchantments(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
         List<EnchantmentLevelEntry> list = Lists.<EnchantmentLevelEntry>newArrayList();
         boolean bl = stack.isOf(Items.BOOK);
         possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {
@@ -75,7 +78,8 @@ public class EnchantmentHelperMixin {
         cir.setReturnValue(list);
     }
 
-    private static void customEnchantmentTableAlgorithm(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
+    @Unique
+    private static void ls$customEnchantmentTableAlgorithm(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
         List<EnchantmentLevelEntry> list = new ArrayList<>();
         boolean bl = stack.isOf(Items.BOOK);
         possibleEnchantments.filter(enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl).forEach(enchantmentx -> {

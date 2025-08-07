@@ -12,6 +12,7 @@ import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -24,7 +25,7 @@ public class PlayerListHudMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/scoreboard/ReadableScoreboardScore;getFormattedScore(Lnet/minecraft/scoreboard/ReadableScoreboardScore;Lnet/minecraft/scoreboard/number/NumberFormat;)Lnet/minecraft/text/MutableText;"))
     private MutableText modifyFormattedScore(ReadableScoreboardScore readableScoreboardScore, NumberFormat numberFormat) {
-        ScoreboardObjective objective = getDisplayedObjective();
+        ScoreboardObjective objective = ls$getDisplayedObjective();
         MutableText originalText = ReadableScoreboardScore.getFormattedScore(readableScoreboardScore, numberFormat);
         if (readableScoreboardScore == null || originalText == null) return originalText;
 
@@ -43,8 +44,8 @@ public class PlayerListHudMixin {
         return originalText;
     }
 
-
-    private ScoreboardObjective getDisplayedObjective() {
+    @Unique
+    private ScoreboardObjective ls$getDisplayedObjective() {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world == null) return null;
 

@@ -34,15 +34,14 @@ public class WindChargeItemMixin {
     /*public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {*/
         if (!Main.isLogicalSide()) return;
         if (user instanceof ServerPlayerEntity player) {
-            if (currentSeason.getSeason() == Seasons.WILD_LIFE) {
-                if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) {
-                    TaskScheduler.scheduleTask(1, () -> {
-                        player.getInventory().insertStack(Items.WIND_CHARGE.getDefaultStack());
-                        player.getInventory().markDirty();
-                        PlayerUtils.updatePlayerInventory(player);
-                    });
-                }
-            }
+            if (currentSeason.getSeason() != Seasons.WILD_LIFE) return;
+            if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.WIND_CHARGE)) return;
+
+            TaskScheduler.scheduleTask(1, () -> {
+                player.getInventory().insertStack(Items.WIND_CHARGE.getDefaultStack());
+                player.getInventory().markDirty();
+                PlayerUtils.updatePlayerInventory(player);
+            });
         }
     }
 }

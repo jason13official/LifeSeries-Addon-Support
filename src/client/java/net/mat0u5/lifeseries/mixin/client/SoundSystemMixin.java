@@ -16,7 +16,7 @@ import java.util.List;
 @Mixin(value = SoundSystem.class, priority = 1)
 public class SoundSystemMixin {
     @Unique
-    private static final List<String> nonAdjustedSounds = List.of(
+    private static final List<String> ls$nonAdjustedSounds = List.of(
             "block.beacon.deactivate",
             "wildlife_time_slow_down",
             "wildlife_time_speed_up",
@@ -26,8 +26,7 @@ public class SoundSystemMixin {
     @Inject(method = "getAdjustedPitch", at = @At("HEAD"), cancellable = true)
     private void getAdjustedPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
         String name = sound.getId().getPath();
-        if (nonAdjustedSounds.contains(name)) return;
-        //OtherUtils.logIfClient(name);
+        if (ls$nonAdjustedSounds.contains(name)) return;
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world != null) {
             TickManager tickManager = client.world.getTickManager();

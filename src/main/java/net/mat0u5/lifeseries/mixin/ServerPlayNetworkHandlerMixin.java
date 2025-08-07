@@ -37,6 +37,7 @@ public class ServerPlayNetworkHandlerMixin {
         Text originalText = message.getContent();
         String originalContent = originalText.getString();
         if (!originalContent.contains(":")) return;
+
         String formattedContent = TextUtils.replaceEmotes(originalContent);
 
         if (!originalContent.equals(formattedContent)) {

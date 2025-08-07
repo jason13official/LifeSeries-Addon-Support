@@ -80,12 +80,12 @@ public abstract class PlayerEntityMixin {
     public void getBaseDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         MorphComponent morphComponent = MorphManager.getOrCreateComponent(player);
-        if (morphComponent.isMorphed()) {
-            float scaleRatio = 1 / player.getScale();
-            LivingEntity dummy = morphComponent.getDummy();
-            if (morphComponent.isMorphed() && dummy != null){
-                cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
-            }
+        if (!morphComponent.isMorphed()) return;
+
+        float scaleRatio = 1 / player.getScale();
+        LivingEntity dummy = morphComponent.getDummy();
+        if (morphComponent.isMorphed() && dummy != null) {
+            cir.setReturnValue(dummy.getDimensions(pose).scaled(scaleRatio, scaleRatio));
         }
     }
 
@@ -95,14 +95,15 @@ public abstract class PlayerEntityMixin {
     }
 
     @Unique
-    private static final ReplaceDiskEnchantmentEffect frostWalker =  new ReplaceDiskEnchantmentEffect(EnchantmentLevelBasedValue.constant(5.0F), EnchantmentLevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchingBlockTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchingBlocks(Blocks.WATER), BlockPredicate.matchingFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.of(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
+    private static final ReplaceDiskEnchantmentEffect ls$frostWalker =  new ReplaceDiskEnchantmentEffect(EnchantmentLevelBasedValue.constant(5.0F), EnchantmentLevelBasedValue.constant(1.0F), new Vec3i(0, -1, 0), Optional.of(BlockPredicate.allOf(BlockPredicate.matchingBlockTag(new Vec3i(0, 1, 0), BlockTags.AIR), BlockPredicate.matchingBlocks(Blocks.WATER), BlockPredicate.matchingFluids(Fluids.WATER), BlockPredicate.unobstructed())), BlockStateProvider.of(Blocks.FROSTED_ICE), Optional.of(GameEvent.BLOCK_PLACE));
+
     @Inject(method = "travel", at = @At("HEAD"))
     private void travel(Vec3d movementInput, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (!(entity instanceof ServerPlayerEntity player)) return;
         if (!player.isOnGround()) return;
-        if (SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) {
-            frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.getPos());
-        }
+        if (!SuperpowersWildcard.hasActivatedPower(player, Superpowers.SUPERSPEED)) return;
+
+        ls$frostWalker.apply(PlayerUtils.getServerWorld(player), 5, null, player, player.getPos());
     }
 }

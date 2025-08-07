@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -56,35 +57,36 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     }
     */
 
-    private boolean fromMorph = false;
+    @Unique
+    private boolean ls$fromMorph = false;
 
+    @Unique
     @Override
     public void setFromMorph(boolean fromMorph) {
-        this.fromMorph = fromMorph;
+        this.ls$fromMorph = fromMorph;
     }
 
+    @Unique
     @Override
     public boolean isFromMorph() {
-        return fromMorph;
+        return ls$fromMorph;
     }
 
     @Inject(method = "getAir", at = @At("RETURN"), cancellable = true)
     public void getAir(CallbackInfoReturnable<Integer> cir) {
         if (!Main.isLogicalSide()) return;
         if (currentSeason instanceof WildLife) {
-            if (Snail.SHOULD_DROWN_PLAYER) {
-                if (WildcardManager.isActiveWildcard(Wildcards.SNAILS)) {
-                    Entity entity = (Entity) (Object) this;
-                    if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                        if (!Snails.snails.containsKey(player.getUuid())) return;
-                        Snail snail = Snails.snails.get(player.getUuid());
-                        if (snail == null) return;
-                        int snailAir = snail.getAir();
-                        int initialAir = cir.getReturnValue();
-                        if (snailAir < initialAir) {
-                            cir.setReturnValue(snailAir);
-                        }
-                    }
+            if (!Snail.SHOULD_DROWN_PLAYER) return;
+            if (!WildcardManager.isActiveWildcard(Wildcards.SNAILS)) return;
+            Entity entity = (Entity) (Object) this;
+            if (entity instanceof PlayerEntity player && !player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+                if (!Snails.snails.containsKey(player.getUuid())) return;
+                Snail snail = Snails.snails.get(player.getUuid());
+                if (snail == null) return;
+                int snailAir = snail.getAir();
+                int initialAir = cir.getReturnValue();
+                if (snailAir < initialAir) {
+                    cir.setReturnValue(snailAir);
                 }
             }
         }

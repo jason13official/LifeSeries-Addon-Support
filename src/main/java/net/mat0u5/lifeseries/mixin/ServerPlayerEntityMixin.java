@@ -36,12 +36,12 @@ public class ServerPlayerEntityMixin {
     private void onInventoryOpen(@Nullable NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> cir) {
         if (!Main.isLogicalSide()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        if (blacklist != null) {
-            TaskScheduler.scheduleTask(1, () -> {
-                player.currentScreenHandler.getStacks().forEach(itemStack -> blacklist.processItemStack(player, itemStack));
-                PlayerUtils.updatePlayerInventory(player);
-            });
-        }
+        if (blacklist == null) return;
+        
+        TaskScheduler.scheduleTask(1, () -> {
+            player.currentScreenHandler.getStacks().forEach(itemStack -> blacklist.processItemStack(player, itemStack));
+            PlayerUtils.updatePlayerInventory(player);
+        });
     }
 
     @Inject(method = "sendMessageToClient", at = @At("HEAD"), cancellable = true)
@@ -67,5 +67,4 @@ public class ServerPlayerEntityMixin {
             cir.setReturnValue(false);
         }
     }
-
 }

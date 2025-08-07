@@ -19,16 +19,16 @@ public class AbstractClientPlayerEntityMixin {
         AbstractClientPlayerEntity abstrPlayer = (AbstractClientPlayerEntity) (Object) this;
         UUID uuid = abstrPlayer.getUuid();
         if (uuid == null) return;
-        if (MainClient.playerDisguiseUUIDs.containsKey(uuid)) {
-            UUID disguisedUUID = MainClient.playerDisguiseUUIDs.get(uuid);
-            if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+        if (!MainClient.playerDisguiseUUIDs.containsKey(uuid)) return;
+        
+        UUID disguisedUUID = MainClient.playerDisguiseUUIDs.get(uuid);
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+            return;
+        }
+        for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
+            if (entry.getProfile().getId().equals(disguisedUUID)) {
+                cir.setReturnValue(entry.getSkinTextures());
                 return;
-            }
-            for (PlayerListEntry entry : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-                if (entry.getProfile().getId().equals(disguisedUUID)) {
-                    cir.setReturnValue(entry.getSkinTextures());
-                    return;
-                }
             }
         }
     }
