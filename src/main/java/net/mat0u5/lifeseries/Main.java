@@ -94,7 +94,11 @@ public class Main implements ModInitializer {
 
 	public static void parseSeason(String seasonStr) {
 		currentSeason = Seasons.getSeasonFromStringName(seasonStr).getSeasonInstance();
-		currentSession = currentSeason;
+
+		Integer currentSessionLength = (currentSession == null) ? null : currentSession.sessionLength;
+		currentSession = new Session();
+		currentSession.sessionLength = currentSessionLength;
+
 		seasonConfig = currentSeason.getConfig();
 		blacklist = currentSeason.createBlacklist();
 	}

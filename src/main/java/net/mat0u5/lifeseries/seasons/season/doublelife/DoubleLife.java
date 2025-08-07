@@ -104,13 +104,11 @@ public class DoubleLife extends Season {
 
     @Override
     public boolean sessionStart() {
-        if (super.sessionStart()) {
-            activeActions.addAll(
-                    List.of(actionChooseSoulmates, actionRandomTP)
-            );
-            return true;
-        }
-        return false;
+        super.sessionStart();
+        currentSession.activeActions.addAll(
+                List.of(actionChooseSoulmates, actionRandomTP)
+        );
+        return true;
     }
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {

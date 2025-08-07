@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.scoreboard.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -53,7 +54,7 @@ import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
 
-public abstract class Season extends Session {
+public abstract class Season {
     public static final String RESOURCEPACK_MAIN_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-main-a2267cdefcc227356dfa14261923a140cb4635e6/main.zip";
     public static final String RESOURCEPACK_MAIN_SHA ="328550e43f517a5ed26a0a9597c255d15783645e";
     public static final String RESOURCEPACK_SECRETLIFE_URL = "https://github.com/Mat0u5/LifeSeries-Resources/releases/download/release-secretlife-4ef5fb2c497037dc9f18437ec8788eac5e01dbab/secretlife.zip";
@@ -476,20 +477,18 @@ public abstract class Season extends Session {
         return false;
     }
 
-    @Override
     public void sessionEnd() {
-        super.sessionEnd();
         boogeymanManagerNew.sessionEnd();
     }
 
-    @Override
     public boolean sessionStart() {
-        if (super.sessionStart()) {
-            boogeymanManagerNew.resetBoogeymen();
-            activeActions.addAll(boogeymanManagerNew.getSessionActions());
-            return true;
-        }
-        return false;
+        boogeymanManagerNew.resetBoogeymen();
+        currentSession.activeActions.addAll(boogeymanManagerNew.getSessionActions());
+        return true;
+    }
+    public void tick(MinecraftServer server) {
+    }
+    public void tickSessionOn(MinecraftServer server) {
     }
 
     /*
@@ -526,8 +525,8 @@ public abstract class Season extends Session {
 
     public void onPlayerDiedNaturally(ServerPlayerEntity player) {
         if (server == null) return;
-        playerNaturalDeathLog.remove(player.getUuid());
-        playerNaturalDeathLog.put(player.getUuid(), server.getTicks());
+        currentSession.playerNaturalDeathLog.remove(player.getUuid());
+        currentSession.playerNaturalDeathLog.put(player.getUuid(), server.getTicks());
     }
 
     public void onPlayerRespawn(ServerPlayerEntity player) {
@@ -637,7 +636,7 @@ public abstract class Season extends Session {
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         learnRecipes();
-        if (statusNotStarted() && PermissionManager.isAdmin(player)) {
+        if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player)) {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
             player.sendMessage(Text.of("After that, use §b'/session start'§f to start the session."));
         }

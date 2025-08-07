@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
@@ -60,6 +61,7 @@ public class Session {
 
     public boolean sessionStart() {
         if (!canStartSession()) return false;
+        if (!currentSeason.sessionStart()) return false;
         status = SessionStatus.STARTED;
         passedTime = 0;
         MutableText sessionStartedText = Text.literal("Session started!").formatted(Formatting.GOLD);
@@ -84,6 +86,7 @@ public class Session {
         }
         status = SessionStatus.FINISHED;
         passedTime = 0;
+        currentSeason.sessionEnd();
     }
 
     public void sessionPause() {
@@ -258,6 +261,11 @@ public class Session {
     }
     public static final Map<UUID, Integer> skipTimer = new HashMap<>();
     public void displayTimers(MinecraftServer server) {
+        if (currentSeason instanceof LimitedLife limitedLife) {
+            limitedLife.displayTimers(server);
+            return;
+        }
+
         String message = "";
         if (statusNotStarted()) {
             message = "Session has not started";

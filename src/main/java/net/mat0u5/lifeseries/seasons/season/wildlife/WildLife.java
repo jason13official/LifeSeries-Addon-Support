@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
@@ -166,14 +167,12 @@ public class WildLife extends Season {
 
     @Override
     public boolean sessionStart() {
-        if (super.sessionStart()) {
-            WildcardManager.onSessionStart();
-            activeActions.addAll(
-                    WildcardManager.getActions()
-            );
-            return true;
-        }
-        return false;
+        super.sessionStart();
+        WildcardManager.onSessionStart();
+        currentSession.activeActions.addAll(
+                WildcardManager.getActions()
+        );
+        return true;
     }
 
     @Override

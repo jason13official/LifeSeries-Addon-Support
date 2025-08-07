@@ -26,8 +26,7 @@ import net.minecraft.world.GameMode;
 
 import java.util.Collection;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class LimitedLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
@@ -59,19 +58,18 @@ public class LimitedLife extends Season {
         return new LimitedLifeBoogeymanManager();
     }
 
-    @Override
     public void displayTimers(MinecraftServer server) {
         String message = "";
-        if (statusNotStarted()) {
+        if (currentSession.statusNotStarted()) {
             message = "Session has not started";
         }
-        else if (statusStarted()) {
-            message = getRemainingTime();
+        else if (currentSession.statusStarted()) {
+            message = currentSession.getRemainingTime();
         }
-        else if (statusPaused()) {
+        else if (currentSession.statusPaused()) {
             message = "Session has been paused";
         }
-        else if (statusFinished()) {
+        else if (currentSession.statusFinished()) {
             message = "Session has ended";
         }
 
@@ -79,11 +77,11 @@ public class LimitedLife extends Season {
 
             if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
                 long timestamp = SessionTimerStates.OFF.getValue();
-                if (statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
-                else if (statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
-                else if (statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
-                else if (sessionLength != null) {
-                    long remainingMillis = (sessionLength - (int) passedTime) * 50;
+                if (currentSession.statusNotStarted()) timestamp = SessionTimerStates.NOT_STARTED.getValue();
+                else if (currentSession.statusPaused()) timestamp = SessionTimerStates.PAUSED.getValue();
+                else if (currentSession.statusFinished()) timestamp = SessionTimerStates.ENDED.getValue();
+                else if (currentSession.sessionLength != null) {
+                    long remainingMillis = (currentSession.sessionLength - (int) currentSession.passedTime) * 50;
                     timestamp = System.currentTimeMillis() + remainingMillis;
                 }
                 if (timestamp != SessionTimerStates.OFF.getValue()) {
@@ -105,7 +103,7 @@ public class LimitedLife extends Season {
             }
             else {
                 MutableText fullMessage = Text.empty();
-                if (displayTimer.contains(player.getUuid())) {
+                if (currentSession.displayTimer.contains(player.getUuid())) {
                     fullMessage.append(Text.literal(message).formatted(Formatting.GRAY));
                 }
                 if (hasAssignedLives(player)) {
@@ -125,13 +123,13 @@ public class LimitedLife extends Season {
         if (secondCounter <= 0) {
             secondCounter = 20;
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                if (statusStarted() && isAlive(player)) {
+                if (currentSession.statusStarted() && isAlive(player)) {
                     removePlayerLife(player);
                 }
             }
 
             if (TICK_OFFLINE_PLAYERS) {
-                if (statusStarted()) {
+                if (currentSession.statusStarted()) {
                     Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
                     for (ScoreboardEntry entry : entries) {
                         if (entry.value() <= 0) continue;

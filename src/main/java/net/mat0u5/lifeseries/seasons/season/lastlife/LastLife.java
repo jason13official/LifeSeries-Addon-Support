@@ -12,6 +12,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
+import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class LastLife extends Season {
@@ -34,13 +35,11 @@ public class LastLife extends Season {
 
     @Override
     public boolean sessionStart() {
-        if (super.sessionStart()) {
-            activeActions.add(
+        super.sessionStart();
+        currentSession.activeActions.add(
                 livesManager.actionChooseLives
-            );
-            return true;
-        }
-        return false;
+        );
+        return true;
     }
 
     @Override

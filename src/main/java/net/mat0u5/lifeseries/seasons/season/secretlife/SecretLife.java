@@ -33,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 
+import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class SecretLife extends Season {
@@ -261,17 +262,15 @@ public class SecretLife extends Season {
     @Override
     public boolean sessionStart() {
         if (TaskManager.checkSecretLifePositions()) {
-            if (super.sessionStart()) {
-                activeActions.addAll(
-                        List.of(TaskManager.getActionChooseTasks(), taskWarningAction, taskWarningAction2)
-                );
-                SecretLifeCommands.playersGiven.clear();
-                TaskManager.tasksChosen = false;
-                TaskManager.tasksChosenFor.clear();
-                TaskManager.submittedOrFailed.clear();
-                return true;
-            }
-            return false;
+            super.sessionStart();
+            currentSession.activeActions.addAll(
+                    List.of(TaskManager.getActionChooseTasks(), taskWarningAction, taskWarningAction2)
+            );
+            SecretLifeCommands.playersGiven.clear();
+            TaskManager.tasksChosen = false;
+            TaskManager.tasksChosenFor.clear();
+            TaskManager.submittedOrFailed.clear();
+            return true;
         }
         return false;
     }

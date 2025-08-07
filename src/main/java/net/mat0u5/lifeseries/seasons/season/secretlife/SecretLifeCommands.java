@@ -320,7 +320,7 @@ public class SecretLifeCommands {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
-        if (!secretLife.statusStarted()) {
+        if (!currentSession.statusStarted()) {
             source.sendError(Text.of("The session has not started"));
             return -1;
         }
