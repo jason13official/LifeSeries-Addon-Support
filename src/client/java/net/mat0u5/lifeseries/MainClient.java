@@ -62,6 +62,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean COLORBLIND_SUPPORT = false;
     public static boolean SESSION_TIMER = false;
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
+    public static String RUN_COMMAND = "/lifeseries config";
 
     @Override
     public void onInitializeClient() {
@@ -116,6 +117,10 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         }
         else {
             SESSION_TIMER = ClientConfig.SESSION_TIMER.get(clientConfig);
+        }
+        RUN_COMMAND = ClientConfig.RUN_COMMAND.get(clientConfig);
+        if (RUN_COMMAND.startsWith("/")) {
+            RUN_COMMAND = RUN_COMMAND.substring(1);
         }
     }
 

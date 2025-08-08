@@ -311,7 +311,7 @@ public class SecretLife extends Season {
             return;
         }
         else {
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] §f{}§7 was killed by §f{}§7, who is not §cred name§7.", victim, killer));
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
         }
     }
 

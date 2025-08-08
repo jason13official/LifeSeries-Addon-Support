@@ -572,7 +572,7 @@ public abstract class Season {
             }
         }
         else {
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.formatLoosely("§c [Unjustified Kill?] §f{}§7 was killed by §f{}§7, who is not §cred name!", victim, killer));
+            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
         }
     }
 

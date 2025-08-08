@@ -63,3 +63,9 @@ Added the 'soulbound_food' config to Double Life, which makes you share a hunger
 
 Added the 'show_health_below_name' global config, which allows you to show the health below the player usename. Default value is false.<br>
 Using the '/givelife' command in Double Life now instantly syncs the lives with your soulmate (it was broken both on the sending end and receiving end).
+
+----------
+
+Session timer length now persists even if you change the series.<br>
+Shortened the unjustified kill message, because it was too long.<br>
+Added a new keybind, which exectues a command when pressed. Only available in life series developer versions. Default command is '/lifeseries config' and defauly keybind key is left alt. You can change the command it runs in the client config.

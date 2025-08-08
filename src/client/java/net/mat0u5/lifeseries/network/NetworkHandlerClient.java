@@ -319,6 +319,10 @@ public class NetworkHandlerClient {
     public static void pressSuperpowerKey() {
         ClientPlayNetworking.send(new StringPayload("superpower_key", "true"));
     }
+    public static void pressRunCommandKey() {
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand(MainClient.RUN_COMMAND);
+    }
 
     public static void sendStringPacket(String name, String value) {
         ClientPlayNetworking.send(new StringPayload(name, value));

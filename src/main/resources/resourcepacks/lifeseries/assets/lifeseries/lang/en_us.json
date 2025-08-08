@@ -10,5 +10,6 @@
   "death.attack.triviabot.item": "%1$s was slain a Trivia Bot.... How?",
   "death.attack.triviabot.player": "%1$s was slain a Trivia Bot.... How?",
   "key.categories.lifeseries": "Life Series",
-  "key.lifeseries.superpower": "Activate Superpower"
+  "key.lifeseries.superpower": "Activate Superpower",
+  "key.lifeseries.runcommand": "Keybind Command"
 }

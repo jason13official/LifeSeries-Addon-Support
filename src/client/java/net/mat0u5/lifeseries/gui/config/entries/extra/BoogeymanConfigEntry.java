@@ -44,7 +44,6 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         List<String> boogeymanDescription = new ArrayList<>();
         boogeymanDescription.add("§nCurrent Boogeyman Settings:§r");
         if (boogeymanIgnore.length > 0) {
-            //TODO test
             String line = TextUtils.formatString(
                     "{} §f{}§r cannot become the boogeyman.",
                     TextUtils.pluralize("Player", boogeymanIgnore.length),
@@ -72,7 +71,6 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
             if (boogeyNum > boogeymanMax) {
                 currentChance = 0;
             }
-            //TODO test
             boogeymanDescription.add(TextUtils.formatString(
                     "Chance for at least {} {}: {}",
                     boogeyNum,

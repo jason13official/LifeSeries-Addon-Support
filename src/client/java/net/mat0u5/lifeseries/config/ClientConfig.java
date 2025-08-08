@@ -3,7 +3,9 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.versions.VersionControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientConfig extends ConfigManager {
@@ -23,6 +25,9 @@ public class ClientConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> COLORBLIND_SUPPORT = new ConfigFileEntry<>(
             "colorblind_support", false, "", "Colorblind Support", "Enables a feature that shows the team color name next to a players' usernames."
     );
+    public static final ConfigFileEntry<String> RUN_COMMAND = new ConfigFileEntry<>(
+            "run_command", "/lifeseries config", "", "Keybind Command", "Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions."
+    );
 
     @Override
     protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
@@ -31,10 +36,15 @@ public class ClientConfig extends ConfigManager {
             sessionTimer = SESSION_TIMER_LIMITEDLIFE;
         }
 
-        return List.of(
+        List<ConfigFileEntry<?>> result = new ArrayList<>(List.of(
                 MINIMAL_ARMOR
                 ,sessionTimer
                 ,COLORBLIND_SUPPORT
-        );
+        ));
+
+        if (VersionControl.isDevVersion()) {
+            result.add(RUN_COMMAND);
+        }
+        return result;
     }
 }

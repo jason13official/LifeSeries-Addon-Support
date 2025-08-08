@@ -285,7 +285,6 @@ public class DoubleLife extends Season {
             player.sendMessage(Text.of("§6Woosh!"));
         }
         WorldBorder border = server.getOverworld().getWorldBorder();
-        //TODO test
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
         PlayerUtils.broadcastMessageToAdmins(Text.of("Randomly distributed players."));
 
