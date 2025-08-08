@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,9 +213,9 @@ public class WildLifeConfig extends ConfigManager {
     @Override
     public void instantiateProperties() {
         CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
-        BLACKLIST_ITEMS.defaultValue = "["+String.join(", ", BLACKLISTED_ITEMS)+"]";
-        BLACKLIST_BLOCKS.defaultValue = "["+String.join(", ", BLACKLISTED_BLOCKS)+"]";
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = "["+String.join(", ", CLAMPED_ENCHANTMENTS)+"]";
+        BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
+        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_CLAMPED_ENCHANTS);
         DEFAULT_LIVES.defaultValue = 6;
         SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
         SPAWNER_RECIPE.defaultValue = true;

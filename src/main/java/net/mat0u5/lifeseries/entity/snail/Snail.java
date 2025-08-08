@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -323,8 +324,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             BlockPos pos = getBlockPos();
             boolean sameDimensions = getWorld().getRegistryKey().equals(getActualBoundPlayer().getWorld().getRegistryKey());
             if (sameDimensions) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "snail_pos", pos.getX()+"_"+pos.getY()+"_"+pos.getZ());
-                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "trivia_snail_pos", pos.getX()+"_"+pos.getY()+"_"+pos.getZ());
+                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "snail_pos", TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
+                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "trivia_snail_pos", TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
             }
         }
         if (age % 400 == 0 && getActualBoundPlayer() != null) {

@@ -48,7 +48,7 @@ public class WildcardManager {
             );
         }
         result.add(
-            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),"§7Activate Wildcard §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))+"]", "Activate Wildcard") {
+            new SessionAction(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE),TextUtils.formatString("§7Activate Wildcard §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ACTIVATE_WILDCARD_MINUTE))), "Activate Wildcard") {
                 @Override
                 public void trigger() {
                     if (activeWildcards.isEmpty()) {

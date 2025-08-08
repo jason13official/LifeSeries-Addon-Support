@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class SecretLifeLocationConfig extends ConfigManager {
     public void setLocation(String name, BlockPos pos) {
         String posString = "null";
         if (pos != null) {
-            posString = pos.getX()+"_"+pos.getY()+"_"+pos.getZ();
+            posString = TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ());
         }
         setPropertyCommented(name, posString, "-- DO NOT MODIFY --");
     }

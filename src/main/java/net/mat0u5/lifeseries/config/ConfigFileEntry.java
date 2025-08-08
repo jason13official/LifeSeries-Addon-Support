@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.config;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 public class ConfigFileEntry<T> {
     public final String key;
@@ -56,7 +57,7 @@ public class ConfigFileEntry<T> {
         }
         }catch(Exception e) {}
 
-        Main.LOGGER.error("Config value "+ key +" was null, returning default value - "+defaultValue);
+        Main.LOGGER.error(TextUtils.formatString("Config value {} was null, returning default value - {}", key, defaultValue));
         return defaultValue;
     }
 }

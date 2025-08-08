@@ -136,11 +136,11 @@ public class UpdateChecker {
                             .withUnderline(true)
                         )).append(Text.of("§7 to join the mod development discord if you have any questions, issues, requests, or if you just want to hang out :)\n"));
             Text updateText =
-                    Text.literal("A new version of the Life Series Mod is available ("+versionName+") §nserver-side§f. \n")
+                    TextUtils.formatLoosely("A new version of the Life Series Mod is available ({}) §nserver-side§f. \n",versionName)
                         .styled(style -> style
                             .withHoverEvent(
-                                TextUtils.showTextHoverEvent(Text.of(
-                                    "§7§nUpdate Description:§r\n\n"+versionDescription
+                                TextUtils.showTextHoverEvent(TextUtils.formatLoosely(
+                                    "§7§nUpdate Description:§r\n\n{}", versionDescription
                                 ))
                             )
                         )

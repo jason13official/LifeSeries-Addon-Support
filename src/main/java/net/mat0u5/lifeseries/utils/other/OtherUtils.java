@@ -47,7 +47,7 @@ public class OtherUtils {
     }
 
     public static void debugString(String str) {
-        Main.LOGGER.info("String length: " + str.length());
+        Main.LOGGER.info(TextUtils.formatString("String length: {}", str.length()));
 
         // Print each character as its code point
         for (int i = 0; i < str.length(); i++) {
@@ -60,8 +60,7 @@ public class OtherUtils {
         int hours = totalTicks / 72000;
         int minutes = (totalTicks % 72000) / 1200;
         int seconds = (totalTicks % 1200) / 20;
-
-        return hours+":"+ formatTimeNumber(minutes)+":"+ formatTimeNumber(seconds);
+        return TextUtils.formatString("{}:{}:{}", hours, formatTimeNumber(minutes), formatTimeNumber(seconds));
     }
 
     public static String formatTimeMillis(long millis) {
@@ -70,10 +69,10 @@ public class OtherUtils {
         long minutes = (totalSeconds % 3600) / 60;
         long seconds = (totalSeconds % 60);
         if (hours == 0) {
-            return formatTimeNumber(minutes)+":"+ formatTimeNumber(seconds);
+            return TextUtils.formatString("{}:{}", formatTimeNumber(minutes), formatTimeNumber(seconds));
         }
 
-        return hours+":"+ formatTimeNumber(minutes)+":"+ formatTimeNumber(seconds);
+        return TextUtils.formatString("{}:{}:{}", hours, formatTimeNumber(minutes), formatTimeNumber(seconds));
     }
 
     public static String formatTimeNumber(int time) {

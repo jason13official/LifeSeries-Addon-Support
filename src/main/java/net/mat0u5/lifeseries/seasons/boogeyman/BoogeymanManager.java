@@ -69,7 +69,7 @@ public class BoogeymanManager {
         }
         actions.add(
                 new SessionAction(
-                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),"§7Choose Boogeymen §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))+"]", "Choose Boogeymen"
+                        OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),TextUtils.formatString("§7Choose Boogeymen §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))), "Choose Boogeymen"
                 ) {
                     @Override
                     public void trigger() {

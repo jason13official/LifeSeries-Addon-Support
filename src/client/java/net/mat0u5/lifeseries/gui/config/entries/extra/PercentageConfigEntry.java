@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.gui.config.entries.interfaces.IPopup;
 import net.mat0u5.lifeseries.gui.config.entries.interfaces.ITextFieldAddonPopup;
 import net.mat0u5.lifeseries.gui.config.entries.main.DoubleConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -40,7 +41,7 @@ public class PercentageConfigEntry extends DoubleConfigEntry implements ITextFie
 
     @Override
     public Text getPopupText() {
-        return Text.literal((value*100)+"%").formatted(Formatting.GRAY);
+        return TextUtils.formatLoosely("§7{}%", (value*100));
     }
 
     @Override

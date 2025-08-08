@@ -91,7 +91,7 @@ public class NetworkHandlerServer {
             ConfigTypes configType = ConfigTypes.getFromString(payload.configType());
             String id = payload.id();
             List<String> args = payload.args();
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received config update from "+player.getNameForScoreboard()+": {"+configType+", "+id+", "+args+"}");
+            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received config update from {}: {{}, {}, {}}", player, configType, id, args));
 
             if (configType.parentString() && !args.isEmpty()) {
                 seasonConfig.setProperty(id, args.getFirst());
@@ -135,7 +135,7 @@ public class NetworkHandlerServer {
     public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {
         int intValue = (int) value;
         if (name.equalsIgnoreCase("trivia_answer")) {
-            if (VersionControl.isDevVersion()) Main.LOGGER.info("[PACKET_SERVER] Received trivia answer (from "+player.getNameForScoreboard()+"): "+ intValue);
+            if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
             TriviaWildcard.handleAnswer(player, intValue);
         }
     }

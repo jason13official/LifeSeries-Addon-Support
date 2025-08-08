@@ -65,7 +65,7 @@ public class TaskManager {
 
     public static SessionAction getActionChooseTasks() {
         return new SessionAction(
-                OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE),"§7Assign Tasks §f["+OtherUtils.formatTime(OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE))+"]", "Assign Tasks"
+                OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE),TextUtils.formatString("§7Assign Tasks §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(ASSIGN_TASKS_MINUTE))), "Assign Tasks"
         ) {
             @Override
             public void trigger() {
@@ -143,7 +143,7 @@ public class TaskManager {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         List<RawFilteredPair<Text>> lines = task.getBookLines();
         WrittenBookContentComponent bookContent = new WrittenBookContentComponent(
-            RawFilteredPair.of("§c"+player.getNameForScoreboard()+"'s Secret Task"),
+            RawFilteredPair.of(TextUtils.formatString("§c{}'s Secret Task", player)),
                 "Secret Keeper",
                 0,
                 lines,
@@ -501,7 +501,7 @@ public class TaskManager {
         Formatting formatting = Formatting.GREEN;
         if (finalAmount < 0) formatting = Formatting.RED;
         else finalStr = "+"+finalStr;
-        PlayerUtils.sendTitle(player, Text.literal(finalStr+" Hearts").formatted(formatting), 20, 40, 20);
+        PlayerUtils.sendTitle(player, TextUtils.format("{} Hearts", finalStr).formatted(formatting), 20, 40, 20);
     }
 
     public static boolean alreadyHasPos(BlockPos pos) {

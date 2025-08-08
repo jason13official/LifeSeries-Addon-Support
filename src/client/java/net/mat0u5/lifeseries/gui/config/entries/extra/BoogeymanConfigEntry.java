@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
@@ -43,15 +44,21 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
         List<String> boogeymanDescription = new ArrayList<>();
         boogeymanDescription.add("§nCurrent Boogeyman Settings:§r");
         if (boogeymanIgnore.length > 0) {
-            String line = "Player" + (boogeymanIgnore.length > 1 ? "s " : " ");
-            line += "§f"+String.join("§r, §f", boogeymanIgnore)+"§r";
-            line += " cannot become the boogeyman.";
+            //TODO test
+            String line = TextUtils.formatString(
+                    "{} §f{}§r cannot become the boogeyman.",
+                    TextUtils.pluralize("Player", boogeymanIgnore.length),
+                    String.join("§r, §f", boogeymanIgnore)
+            );
+
             boogeymanDescription.add(line);
         }
         if (boogeymanForce.length > 0) {
-            String line = "Player" + (boogeymanForce.length > 1 ? "s " : " ");
-            line += "§f"+String.join("§r, §f", boogeymanForce)+"§r";
-            line += " will be forced to become the Boogeyman.";
+            String line = TextUtils.formatString(
+                    "{} §f{}§r will be forced to become the Boogeyman.",
+                    TextUtils.pluralize("Player", boogeymanForce.length),
+                    String.join("§r, §f", boogeymanForce)
+            );
             boogeymanDescription.add(line);
         }
         boogeymanDescription.add("");
@@ -65,7 +72,13 @@ public class BoogeymanConfigEntry extends BooleanConfigEntry {
             if (boogeyNum > boogeymanMax) {
                 currentChance = 0;
             }
-            boogeymanDescription.add("Chance for at least "+boogeyNum+" Boogeym"+(boogeyNum==1?"a":"e")+"n: " + String.format("%.1f%%", currentChance * 100));
+            //TODO test
+            boogeymanDescription.add(TextUtils.formatString(
+                    "Chance for at least {} {}: {}",
+                    boogeyNum,
+                    TextUtils.pluralize("Boogeyman","Boogeymen",boogeyNum),
+                    String.format("%.1f%%", currentChance * 100)
+            ));
         }
 
         int currentY = y + DESCRIPTION_OFFSET_Y;

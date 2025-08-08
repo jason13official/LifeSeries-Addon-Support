@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.gui.config.entries.extra;
 
 import net.mat0u5.lifeseries.gui.config.entries.main.StringConfigEntry;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.Registry;
@@ -54,11 +55,11 @@ public class EnchantListConfigEntry extends StringConfigEntry {
                 if (enchantment != null) {
                     newList.add(enchantmentRegistry.getKey(enchantment).orElseThrow());
                 } else {
-                    setError("Invalid enchantment: '" + enchantmentId+"'");
+                    setError(TextUtils.formatString("Invalid enchantment: '{}'", enchantmentId));
                     errors = true;
                 }
             } catch (Exception e) {
-                setError("Error parsing enchantment ID: '" + enchantmentId+"'");
+                setError(TextUtils.formatString("Error parsing enchantment ID: '{}'", enchantmentId));
                 errors = true;
             }
         }

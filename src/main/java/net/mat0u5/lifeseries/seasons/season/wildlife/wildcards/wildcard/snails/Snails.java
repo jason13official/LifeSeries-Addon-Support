@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.registries.MobRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
@@ -135,7 +136,7 @@ public class Snails extends Wildcard {
         if (snailNames.containsKey(player.getUuid())) {
             return snailNames.get(player.getUuid());
         }
-        return player.getNameForScoreboard()+"'s Snail";
+        return TextUtils.formatString("{}'s Snail", player);
     }
 
     public static void saveSnailNames() {

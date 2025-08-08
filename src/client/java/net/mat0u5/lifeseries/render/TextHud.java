@@ -185,7 +185,7 @@ public class TextHud {
         boolean keyPressed = pressedAgo < 500;
         if (pressedAgo > 6000) return 0;
 
-        Text timerText = Text.of((keyPressed?"§c§n":"§7")+"Superpower cooldown:§f "+OtherUtils.formatTimeMillis(millisLeft));
+        Text timerText = TextUtils.formatLoosely("{}Superpower cooldown:§f {}", (keyPressed?"§c§n":"§7") , OtherUtils.formatTimeMillis(millisLeft));
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;
@@ -201,7 +201,7 @@ public class TextHud {
         long millisLeft = roundTime(MainClient.MIMICRY_COOLDOWN_TIMESTAMP) - currentMillis;
         if (millisLeft > 10000000) return 0;
 
-        Text timerText = Text.of("§7Mimic power cooldown: §f"+OtherUtils.formatTimeMillis(millisLeft));
+        Text timerText = TextUtils.formatLoosely("§7Mimic power cooldown: §f{}", OtherUtils.formatTimeMillis(millisLeft));
 
         int screenWidth = client.getWindow().getScaledWidth();
         int x = screenWidth - 5;

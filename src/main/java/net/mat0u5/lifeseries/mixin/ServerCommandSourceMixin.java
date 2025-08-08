@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,6 +29,6 @@ public class ServerCommandSourceMixin {
         if (source.getPlayer() != null) {
             sourceStr = source.getPlayer().getName().getString();
         }
-        SessionTranscript.addMessageWithTime("[COMMAND (source: "+sourceStr+")] " + text.getString());
+        SessionTranscript.addMessageWithTime(TextUtils.formatString("[COMMAND (source: {})] {}", sourceStr, text.getString()));
     }
 }

@@ -219,4 +219,15 @@ public class TextUtils {
         }
         return textPlural;
     }
+
+    public static String pluralize(String text, Double amount) {
+        return pluralize(text, text+"s", amount);
+    }
+
+    public static String pluralize(String textSingular, String textPlural, Double amount) {
+        if (amount == null || Math.abs(amount) == 1) {
+            return textSingular;
+        }
+        return textPlural;
+    }
 }
