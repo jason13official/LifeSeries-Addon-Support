@@ -59,7 +59,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
 
 
         /*
-
+            Second column
          */
 
         this.addDrawableChild(

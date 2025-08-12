@@ -16,10 +16,6 @@ public class DependencyManager {
         return isModLoaded("polymer-bundled");
     }
 
-    public static boolean clothConfigLoaded() {
-        return isModLoaded("cloth-config");
-    }
-
     public static boolean voicechatLoaded() {
         return isModLoaded("voicechat");
     }

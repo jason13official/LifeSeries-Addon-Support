@@ -35,15 +35,13 @@ public class ClientResourcePacks {
 
     public static void enableClientResourcePack(String id, boolean forceReload) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.getResourcePackManager() != null) {
-            if (!client.getResourcePackManager().getEnabledIds().contains(id)) {
-                for (ResourcePackProfile profile : client.getResourcePackManager().getProfiles()) {
-                    if (profile.getId().equals(id)) {
-                        client.getResourcePackManager().enable(id);
-                        Main.LOGGER.info("Enabling resourcepack " + id);
-                        client.reloadResources();
-                        return;
-                    }
+        if (client.getResourcePackManager() != null && !client.getResourcePackManager().getEnabledIds().contains(id)) {
+            for (ResourcePackProfile profile : client.getResourcePackManager().getProfiles()) {
+                if (profile.getId().equals(id)) {
+                    client.getResourcePackManager().enable(id);
+                    Main.LOGGER.info("Enabling resourcepack " + id);
+                    client.reloadResources();
+                    return;
                 }
             }
         }
@@ -55,16 +53,15 @@ public class ClientResourcePacks {
 
     public static void disableClientResourcePack(String id) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.getResourcePackManager() != null) {
-            if (client.getResourcePackManager().getEnabledIds().contains(id)) {
-                for (ResourcePackProfile profile : client.getResourcePackManager().getProfiles()) {
-                    if (profile.getId().equals(id)) {
-                        client.getResourcePackManager().disable(id);
-                        Main.LOGGER.info("Disabling resourcepack " + id);
-                        client.reloadResources();
-                        return;
-                    }
-                }
+        if (client.getResourcePackManager() == null) return;
+        if (!client.getResourcePackManager().getEnabledIds().contains(id)) return;
+
+        for (ResourcePackProfile profile : client.getResourcePackManager().getProfiles()) {
+            if (profile.getId().equals(id)) {
+                client.getResourcePackManager().disable(id);
+                Main.LOGGER.info("Disabling resourcepack " + id);
+                client.reloadResources();
+                return;
             }
         }
     }
