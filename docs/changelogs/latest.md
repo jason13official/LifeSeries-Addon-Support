@@ -69,3 +69,8 @@ Using the '/givelife' command in Double Life now instantly syncs the lives with 
 Session timer length now persists even if you change the series.<br>
 Shortened the unjustified kill message, because it was too long.<br>
 Added a new keybind, which exectues a command when pressed. Only available in life series developer versions. Default command is '/lifeseries config' and defauly keybind key is left alt. You can change the command it runs in the client config.
+
+----------
+
+The blacklists are now compatible with modded items.<br>
+The blacklists no longer sometimes show incorrect items in the client GUI when empty entries are present.

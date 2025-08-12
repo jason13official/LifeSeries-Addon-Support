@@ -29,8 +29,8 @@ public class ItemListConfigEntry extends StringListPopupConfigEntry<Item> {
         boolean errors = false;
 
         for (String itemId : items) {
-            if (itemId.isEmpty()) break;
-            if (!itemId.startsWith("minecraft:")) itemId = "minecraft:" + itemId;
+            if (itemId.isEmpty()) continue;
+            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
             try {
                 Identifier id = Identifier.of(itemId);

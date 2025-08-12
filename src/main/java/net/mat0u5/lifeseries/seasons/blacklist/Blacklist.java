@@ -104,7 +104,7 @@ public class Blacklist {
         }
 
         for (String itemId : loadItemBlacklist()) {
-            if (!itemId.startsWith("minecraft:")) itemId = "minecraft:" + itemId;
+            if (!itemId.contains(":")) itemId = "minecraft:" + itemId;
 
             try {
                 Identifier id = Identifier.of(itemId);
@@ -133,7 +133,7 @@ public class Blacklist {
         List<Block> newList = new ArrayList<>();
 
         for (String blockId : loadBlockBlacklist()) {
-            if (!blockId.startsWith("minecraft:")) blockId = "minecraft:" + blockId;
+            if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
 
             try {
                 Identifier id = Identifier.of(blockId);
@@ -170,7 +170,7 @@ public class Blacklist {
 
 
         for (String enchantmentId : loadClampedEnchants()) {
-            if (!enchantmentId.startsWith("minecraft:")) enchantmentId = "minecraft:" + enchantmentId;
+            if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
                 Identifier id = Identifier.of(enchantmentId);
@@ -205,7 +205,7 @@ public class Blacklist {
 
 
         for (String enchantmentId : loadBlacklistedEnchants()) {
-            if (!enchantmentId.startsWith("minecraft:")) enchantmentId = "minecraft:" + enchantmentId;
+            if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
                 Identifier id = Identifier.of(enchantmentId);
@@ -238,7 +238,7 @@ public class Blacklist {
         /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
 
         for (String potionId : loadBannedPotions()) {
-            if (!potionId.startsWith("minecraft:")) potionId = "minecraft:" + potionId;
+            if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
                 Identifier id = Identifier.of(potionId);

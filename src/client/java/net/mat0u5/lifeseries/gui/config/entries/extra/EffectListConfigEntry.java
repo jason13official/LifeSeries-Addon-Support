@@ -54,8 +54,8 @@ public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEn
         /*.getOrThrow(RegistryKey.ofRegistry(Identifier.of("minecraft", "mob_effect")));*/
 
         for (String potionId : items) {
-            if (potionId.isEmpty()) break;
-            if (!potionId.startsWith("minecraft:")) potionId = "minecraft:" + potionId;
+            if (potionId.isEmpty()) continue;
+            if (!potionId.contains(":")) potionId = "minecraft:" + potionId;
 
             try {
                 Identifier id = Identifier.of(potionId);

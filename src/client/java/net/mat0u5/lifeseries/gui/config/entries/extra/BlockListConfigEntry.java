@@ -28,8 +28,8 @@ public class BlockListConfigEntry extends StringListPopupConfigEntry<Block> {
         boolean errors = false;
 
         for (String blockId : items) {
-            if (blockId.isEmpty()) break;
-            if (!blockId.startsWith("minecraft:")) blockId = "minecraft:" + blockId;
+            if (blockId.isEmpty()) continue;
+            if (!blockId.contains(":")) blockId = "minecraft:" + blockId;
 
             try {
                 Identifier id = Identifier.of(blockId);

@@ -45,8 +45,8 @@ public class EnchantListConfigEntry extends StringConfigEntry {
 
 
         for (String enchantmentId : items) {
-            if (enchantmentId.isEmpty()) break;
-            if (!enchantmentId.startsWith("minecraft:")) enchantmentId = "minecraft:" + enchantmentId;
+            if (enchantmentId.isEmpty()) continue;
+            if (!enchantmentId.contains(":")) enchantmentId = "minecraft:" + enchantmentId;
 
             try {
                 Identifier id = Identifier.of(enchantmentId);
