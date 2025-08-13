@@ -105,3 +105,9 @@ Added the 'watchers_muted' global config, which controls whether the Watchers ca
 ----------
 
 Player muting when playing trivia, or when dead / being a watcher with the appropriate config, is now handled server-side, not client-side.
+
+----------
+
+Some season specific commands no longer even get suggested when you are not playing that season.<br>
+You now cannot give a life to your soulmate in Double Life<br>
+When using /givelife in Double Life, your soulmate now has to confirm the action.

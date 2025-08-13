@@ -44,6 +44,7 @@ public class LimitedLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("limitedlife")
+            .requires(source -> isAllowed())
             .then(literal("time")
                 .executes(context -> showLives(context.getSource()))
                 .then(literal("reload")

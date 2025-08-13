@@ -47,6 +47,7 @@ public class SecretLifeCommands {
 
         dispatcher.register(
             literal("health")
+                .requires(source -> isAllowed())
                 .executes(context -> showHealth(context.getSource()))
                 .then(literal("sync")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
@@ -109,7 +110,7 @@ public class SecretLifeCommands {
         );
         dispatcher.register(
             literal("task")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(literal("succeed")
                             .then(argument("player", EntityArgumentType.player())
                                     .executes(context -> succeedTask(
@@ -164,6 +165,7 @@ public class SecretLifeCommands {
         );
         dispatcher.register(
             literal("gift")
+                .requires(source -> isAllowed())
                 .then(argument("player", EntityArgumentType.player())
                     .executes(context -> gift(
                         context.getSource(), EntityArgumentType.getPlayer(context, "player"))
@@ -172,7 +174,7 @@ public class SecretLifeCommands {
         );
         dispatcher.register(
             literal("secretlife")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("changeLocations")
                     .executes(context -> changeLocations(
                         context.getSource())

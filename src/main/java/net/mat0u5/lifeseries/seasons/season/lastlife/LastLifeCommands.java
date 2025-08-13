@@ -37,7 +37,7 @@ public class LastLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("lastlife")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("rollLives")
                     .executes(context -> LastLifeCommands.assignRandomLives(
                         context.getSource(), PlayerUtils.getAllPlayers()

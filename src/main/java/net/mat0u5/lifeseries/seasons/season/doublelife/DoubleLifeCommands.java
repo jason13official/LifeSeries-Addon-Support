@@ -36,7 +36,7 @@ public class DoubleLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("soulmate")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("get")
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> getSoulmate(context.getSource(), EntityArgumentType.getPlayer(context, "player")))

@@ -50,7 +50,7 @@ public class WildLifeCommands {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("wildcard")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("list")
                     .executes(context -> listWildcards(
                         context.getSource())
@@ -86,6 +86,7 @@ public class WildLifeCommands {
         );
         dispatcher.register(
             literal("snail")
+                .requires(source -> isAllowed())
                 .then(literal("names")
                     .then(literal("set")
                         .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
@@ -125,7 +126,7 @@ public class WildLifeCommands {
         );
         dispatcher.register(
             literal("superpower")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                 .then(literal("set")
                     .then(argument("player", EntityArgumentType.players())
                         .then(argument("superpower", StringArgumentType.string())
