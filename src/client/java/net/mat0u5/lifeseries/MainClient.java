@@ -48,7 +48,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static int snailAir = 300;
     public static long snailAirTimestamp = 0;
     public static boolean preventGliding = false;
-    public static int mutedForTicks = 0;
     public static long sessionTime = 0;
     public static long sessionTimeLastUpdated = 0;
 
@@ -148,7 +147,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         snailAir = 300;
         snailAirTimestamp = 0;
         preventGliding = false;
-        mutedForTicks = 0;
         sessionTime = 0;
         sessionTimeLastUpdated = 0;
 

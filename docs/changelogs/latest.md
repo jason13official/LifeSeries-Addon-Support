@@ -101,3 +101,7 @@ You can now be dark green in Limited Life when you are above the default number 
 
 Added the 'watchers_in_tab' global config, which controls whether the Watchers are shown in the tab list. Default value is true.<br>
 Added the 'watchers_muted' global config, which controls whether the Watchers can send messages in chat. Default value is false.
+
+----------
+
+Player muting when playing trivia, or when dead / being a watcher with the appropriate config, is now handled server-side, not client-side.

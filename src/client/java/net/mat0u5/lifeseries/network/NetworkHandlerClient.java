@@ -217,9 +217,6 @@ public class NetworkHandlerClient {
         if (name.equalsIgnoreCase("fake_thunder") && MinecraftClient.getInstance().world != null) {
             MinecraftClient.getInstance().world.setLightningTicksLeft(intNumber);
         }
-        if (name.equalsIgnoreCase("mute")) {
-            MainClient.mutedForTicks = intNumber;
-        }
     }
 
     public static void handleLongPacket(String name, long number) {

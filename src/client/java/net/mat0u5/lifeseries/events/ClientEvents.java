@@ -84,7 +84,6 @@ public class ClientEvents {
                 tryTripleJump(player);
                 checkSnailInvisible(client, player);
                 checkTriviaSnailInvisible(client, player);
-                if (MainClient.mutedForTicks > 0) MainClient.mutedForTicks--;
                 checkOnGroundFor(player);
             }
             ClientKeybinds.tick();

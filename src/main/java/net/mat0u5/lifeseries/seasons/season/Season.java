@@ -74,6 +74,8 @@ public abstract class Season {
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static boolean SHOW_HEALTH_BELOW_NAME = false;
     public boolean WATCHERS_IN_TAB = true;
+    public boolean MUTE_DEAD_PLAYERS = false;
+    public boolean WATCHERS_MUTED = false;
 
     public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
 
@@ -124,8 +126,7 @@ public abstract class Season {
     }
 
     public void reload() {
-        Session.MUTE_DEAD_PLAYERS = seasonConfig.MUTE_DEAD_PLAYERS.get(seasonConfig);
-        Session.WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
+        MUTE_DEAD_PLAYERS = seasonConfig.MUTE_DEAD_PLAYERS.get(seasonConfig);
         SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
         GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get(seasonConfig);
         TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get(seasonConfig);
@@ -135,6 +136,7 @@ public abstract class Season {
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get(seasonConfig);
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get(seasonConfig);
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get(seasonConfig);
+        WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
 
         boogeymanManagerNew.onReload();
         createTeams();

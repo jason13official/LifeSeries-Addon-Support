@@ -2,11 +2,21 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
+import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.network.message.LastSeenMessageList;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.network.packet.c2s.play.ChatCommandSignedC2SPacket;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
+import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -14,10 +24,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Set;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
@@ -28,12 +40,16 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 @Mixin(value = ServerPlayNetworkHandler.class, priority = 1)
 public class ServerPlayNetworkHandlerMixin {
 
-    @Inject(method = "handleDecoratedMessage(Lnet/minecraft/network/message/SignedMessage;)V",
-            at = @At("HEAD"), cancellable = true)
+    @Inject(method = "handleDecoratedMessage", at = @At("HEAD"), cancellable = true)
     private void onHandleDecoratedMessage(SignedMessage message, CallbackInfo ci) {
         if (!Main.isLogicalSide()) return;
         ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
         ServerPlayerEntity player = handler.player;
+
+        if (ls$mute(handler.player, ci)) {
+            return;
+        }
+
         Text originalText = message.getContent();
         String originalContent = originalText.getString();
         if (!originalContent.contains(":")) return;
@@ -75,5 +91,58 @@ public class ServerPlayNetworkHandlerMixin {
                 world.getChunkManager().updatePosition(player);
             }
         }
+    }
+
+
+    @Unique
+    private static final List<String> mutedCommands = List.of("msg", "tell", "whisper", "w", "me");
+
+    @Inject(method = "executeCommand", at = @At("HEAD"), cancellable = true)
+    private void executeCommand(String command, CallbackInfo ci) {
+        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
+        for (String mutedCmd : mutedCommands) {
+            if (command.startsWith(mutedCmd + " ")) {
+                boolean stoppedCommand = ls$mute(handler.player, ci);
+                if (stoppedCommand) return;
+            }
+        }
+    }
+
+    @Inject(method = "handleCommandExecution", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/CommandManager;execute(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"), cancellable = true)
+    private void handleCommandExecution(ChatCommandSignedC2SPacket packet, LastSeenMessageList lastSeenMessages, CallbackInfo ci) {
+        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
+        for (String command : mutedCommands) {
+            if (packet.command().startsWith(command + " ")) {
+                boolean stoppedCommand = ls$mute(handler.player, ci);
+                if (stoppedCommand) return;
+            }
+        }
+    }
+
+    @Unique
+    private boolean ls$mute(ServerPlayerEntity player, CallbackInfo ci) {
+        if (player == null || PermissionManager.isAdmin(player)) {
+            return false;
+        }
+        if (TriviaWildcard.bots.containsKey(player.getUuid())) {
+            TriviaBot bot = TriviaWildcard.bots.get(player.getUuid());
+            if (bot.interactedWith && !bot.submittedAnswer) {
+                player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
+                ci.cancel();
+                return true;
+            }
+        }
+
+        if (currentSeason.WATCHERS_MUTED && WatcherManager.isWatcher(player)) {
+            player.sendMessage(Text.of("Watchers aren't allowed to talk in chat! Admins can change this behavior in the config."));
+            ci.cancel();
+            return true;
+        }
+        if (currentSeason.MUTE_DEAD_PLAYERS && !currentSeason.isAlive(player) && !WatcherManager.isWatcher(player)) {
+            player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior in the config."));
+            ci.cancel();
+            return true;
+        }
+        return false;
     }
 }
