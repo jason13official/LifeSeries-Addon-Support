@@ -96,3 +96,8 @@ This is an experimental feature, report any bugs you find! (There will probably 
 
 Using `/lives reset <player>` or `/lives resetAll` now sets the players' lives to the default, instead of letting them be unassigned.<br>
 You can now be dark green in Limited Life when you are above the default number of seconds.
+
+----------
+
+Added the 'watchers_in_tab' global config, which controls whether the Watchers are shown in the tab list. Default value is true.<br>
+Added the 'watchers_muted' global config, which controls whether the Watchers can send messages in chat. Default value is false.

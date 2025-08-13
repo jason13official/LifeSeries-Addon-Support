@@ -60,6 +60,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                     ,TAB_LIST_SHOW_DEAD_PLAYERS
                     ,TAB_LIST_SHOW_LIVES // Group
                 ,GROUP_SPAWN_EGG // Group
+                ,GROUP_WATCHERS // Group
 
 
                 //Group stuff
@@ -96,6 +97,9 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,SPAWN_EGG_DROP_ONLY_NATURAL
                 ,SPAWN_EGG_ALLOW_ON_SPAWNER
                 ,SPAWNER_RECIPE
+
+                ,WATCHERS_IN_TAB
+                ,WATCHERS_MUTED
         ));
     }
 

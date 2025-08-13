@@ -35,6 +35,7 @@ public class Session {
     public static final int DISPLAY_TIMER_INTERVAL = 5;
     public static final int TAB_LIST_INTERVAL = 20;
     public static boolean MUTE_DEAD_PLAYERS = false;
+    public static boolean WATCHERS_MUTED = false;
     public long currentTimer = 0;
 
     public Integer sessionLength = null;
@@ -157,6 +158,12 @@ public class Session {
             displayTimers(server);
             if (MUTE_DEAD_PLAYERS) {
                 for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
+                    if (PermissionManager.isAdmin(player)) continue;
+                    NetworkHandlerServer.sendNumberPacket(player, "mute", 50);
+                }
+            }
+            if (WATCHERS_MUTED) {
+                for (ServerPlayerEntity player : WatcherManager.getWatcherPlayers()) {
                     if (PermissionManager.isAdmin(player)) continue;
                     NetworkHandlerServer.sendNumberPacket(player, "mute", 50);
                 }

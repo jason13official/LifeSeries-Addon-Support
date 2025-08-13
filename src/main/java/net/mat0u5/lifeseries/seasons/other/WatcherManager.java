@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.other;
 
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScoreboardEntry;
@@ -45,7 +46,17 @@ public class WatcherManager {
         return watchers.contains(player.getNameForScoreboard());
     }
 
+    private static boolean isNotWatcher(PlayerEntity player) {
+        return !isWatcher(player);
+    }
+
     public static List<String> getWatchers() {
         return watchers;
+    }
+
+    public static List<ServerPlayerEntity> getWatcherPlayers() {
+        List<ServerPlayerEntity> watcherPlayers = PlayerUtils.getAllPlayers();
+        watcherPlayers.removeIf(WatcherManager::isNotWatcher);
+        return watcherPlayers;
     }
 }

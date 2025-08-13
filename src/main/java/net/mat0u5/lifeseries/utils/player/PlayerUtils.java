@@ -288,12 +288,21 @@ public class PlayerUtils {
             for (ServerPlayerEntity player : allPlayers) {
                 if (player == receivingPlayer) continue;
 
-                if (!currentSeason.isAlive(receivingPlayer) || currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS || currentSeason.isAlive(player)) {
-                    visiblePlayers.add(player);
-                    continue;
+                boolean hidePlayer = false;
+
+                if (!currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS && currentSeason.isAlive(receivingPlayer) && !currentSeason.isAlive(player) && !WatcherManager.isWatcher(player)) {
+                    hidePlayer = true;
+                }
+                if (!currentSeason.WATCHERS_IN_TAB && !WatcherManager.isWatcher(receivingPlayer) && WatcherManager.isWatcher(player)) {
+                    hidePlayer = true;
                 }
 
-                hiddenPlayerUUIDs.add(player.getUuid());
+                if (hidePlayer) {
+                    hiddenPlayerUUIDs.add(player.getUuid());
+                }
+                else {
+                    visiblePlayers.add(player);
+                }
             }
             if (!visiblePlayers.isEmpty()) {
                 receivingPlayer.networkHandler.sendPacket(PlayerListS2CPacket.entryFromPlayer(visiblePlayers));

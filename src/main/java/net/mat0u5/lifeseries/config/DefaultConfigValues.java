@@ -43,7 +43,7 @@ public class DefaultConfigValues {
             "blacklist_banned_enchants", "[]", ConfigTypes.ENCHANT_LIST, "global.blacklist", "Blacklisted Enchants", "List of banned enchants."
     );
     public final ConfigFileEntry<Boolean> MUTE_DEAD_PLAYERS = new ConfigFileEntry<>(
-            "mute_dead_players", false, "global", "Mute Dead Players", "Controls whether dead players should be allowed to type in chat or not."
+            "mute_dead_players", false, "global", "Mute Dead Players", "Controls whether dead players should be allowed to type in chat."
     );
     public final ConfigFileEntry<String> BLACKLIST_BANNED_POTION_EFFECTS = new ConfigFileEntry<>(
             "blacklist_banned_potion_effects", "[strength, instant_health, instant_damage]", ConfigTypes.EFFECT_LIST, "global.blacklist", "Banned Potion Effects", "List of banned potion effects."
@@ -135,6 +135,12 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> BOOGEYMAN_ANNOUNCE_OUTCOME = new ConfigFileEntry<>(
             "boogeyman_announce_outcome", true, "global.boogeyman", "Boogeyman Announce Outcome", "Shows a message in chat when the boogeyman succeeds or fails."
     );
+    public final ConfigFileEntry<Boolean> WATCHERS_IN_TAB = new ConfigFileEntry<>(
+            "watchers_in_tab", true, "global.watchers", "Show Watchers In Tab", "Controls whether Watchers should show up in the tab list."
+    );
+    public final ConfigFileEntry<Boolean> WATCHERS_MUTED = new ConfigFileEntry<>(
+            "watchers_muted", false, "global.watchers", "Mute Watchers", "Controls whether the Watchers should be allowed to type in chat."
+    );
 
 
     /*
@@ -157,6 +163,9 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<Object> GROUP_SPAWN_EGG = new ConfigFileEntry<>(
             "group_spawn_egg", null, ConfigTypes.TEXT, "{global.spawnegg}", "Spawn Egg", ""
+    );
+    public final ConfigFileEntry<Object> GROUP_WATCHERS = new ConfigFileEntry<>(
+            "group_watchers", null, ConfigTypes.TEXT, "{global.watchers}", "Watchers §7('/watcher' command)", ""
     );
 
     public static final List<String> RELOAD_NEEDED = List.of(

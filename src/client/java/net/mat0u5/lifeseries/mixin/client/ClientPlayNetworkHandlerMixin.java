@@ -28,6 +28,24 @@ public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessage(String message, CallbackInfo ci) {
         if (MinecraftClient.getInstance().player == null) return;
+        ls$stopChat(ci);
+    }
+
+    @Unique
+    private static final List<String> notAllowedCommand = List.of("msg", "tell", "whisper", "w", "me");
+    @Inject(method = "sendChatCommand", at = @At("HEAD"), cancellable = true)
+    private void onSendChatCommand(String command, CallbackInfo ci) {
+        if (MinecraftClient.getInstance().player == null) return;
+        for (String s : notAllowedCommand) {
+            if (command.startsWith(s+" ")) {
+                boolean stoppedCommand = ls$stopChat(ci);
+                if (stoppedCommand) return;
+            }
+        }
+    }
+
+    @Unique
+    private boolean ls$stopChat(CallbackInfo ci) {
         if (Trivia.isDoingTrivia()) {
             //? if <= 1.21 {
             MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
@@ -37,38 +55,20 @@ public class ClientPlayNetworkHandlerMixin {
             if (!Main.DEBUG) {
                 ci.cancel();
             }
-            return;
+            return true;
         }
-        if (MainClient.mutedForTicks > 0) {
+        else if (MainClient.mutedForTicks > 0) {
             //? if <= 1.21 {
-            MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."));
-             //?} else {
-            /*MinecraftClient.getInstance().player.sendMessage(Text.of("Dead players aren't allowed to talk in chat! Admins can change this behavior."), false);
-            *///?}
+            MinecraftClient.getInstance().player.sendMessage(Text.of("You aren't allowed to talk in chat! Admins can change this behavior."));
+            //?} else {
+            /*MinecraftClient.getInstance().player.sendMessage(Text.of("You aren't allowed to talk in chat! Admins can change this behavior."), false);
+             *///?}
             if (!Main.DEBUG) {
                 ci.cancel();
             }
-            return;
+            return true;
         }
-    }
-
-    @Unique
-    private static final List<String> notAllowedCommand = List.of("msg", "tell", "whisper", "w", "me");
-    @Inject(method = "sendChatCommand", at = @At("HEAD"), cancellable = true)
-    private void onSendChatCommand(String command, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().player == null) return;
-        if (!Trivia.isDoingTrivia()) return;
-        for (String s : notAllowedCommand) {
-            if (command.startsWith(s+" ")) {
-                //? if <= 1.21 {
-                MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"));
-                //?} else {
-                /*MinecraftClient.getInstance().player.sendMessage(Text.of("<Trivia Bot> No phoning a friend allowed!"), false);
-                 *///?}
-                ci.cancel();
-                return;
-            }
-        }
+        return false;
     }
 
     @Inject(method = "handlePlayerListAction", at = @At("HEAD"), cancellable = true)
