@@ -298,10 +298,18 @@ public abstract class Season {
         onPlayerFinishJoining(player);
     }
 
-    public void resetAllPlayerLives() {
+    public void resetAllPlayerLivesInner() {
         ScoreboardUtils.removeObjective("Lives");
         createScoreboards();
         currentSeason.reloadAllPlayerTeams();
+    }
+
+    public void resetAllPlayerLives() {
+        resetAllPlayerLivesInner();
+        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            currentSeason.onPlayerJoin(player);
+            currentSeason.onPlayerFinishJoining(player);
+        }
     }
 
     public void addPlayerLife(ServerPlayerEntity player) {
@@ -355,10 +363,7 @@ public abstract class Season {
 
     @Nullable
     public Boolean isOnLastLife(ServerPlayerEntity player) {
-        if (!isAlive(player)) return null;
-        Integer lives = currentSeason.getPlayerLives(player);
-        if (lives == null) return null;
-        return lives == 1;
+        return isOnSpecificLives(player, 1);
     }
 
     public boolean isOnLastLife(ServerPlayerEntity player, boolean fallback) {

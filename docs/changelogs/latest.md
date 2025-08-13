@@ -91,3 +91,8 @@ This is very useful for spectators and for admins.
 </details>
 
 This is an experimental feature, report any bugs you find! (There will probably be many bugs.)
+
+----------
+
+Using `/lives reset <player>` or `/lives resetAll` now sets the players' lives to the default, instead of letting them be unassigned.<br>
+You can now be dark green in Limited Life when you are above the default number of seconds.

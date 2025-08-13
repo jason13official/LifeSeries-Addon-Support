@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.6.21";
+	public static final String MOD_VERSION = "dev-1.3.6.22";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -137,7 +137,7 @@ public class Main implements ModInitializer {
 		}
 
 		config.setProperty("currentSeries", changeTo);
-		currentSeason.resetAllPlayerLives();
+		currentSeason.resetAllPlayerLivesInner();
 		currentSession.sessionEnd();
 		Main.parseSeason(changeTo);
 		currentSeason.initialize();

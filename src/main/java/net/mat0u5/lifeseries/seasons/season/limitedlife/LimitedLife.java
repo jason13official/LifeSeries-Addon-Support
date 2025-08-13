@@ -143,10 +143,12 @@ public class LimitedLife extends Season {
 
     @Override
     public Formatting getColorForLives(Integer lives) {
+        lives = getEquivalentLives(lives);
         if (lives == null) return Formatting.GRAY;
-        if (lives > YELLOW_TIME) return Formatting.GREEN;
-        if (lives > RED_TIME) return Formatting.YELLOW;
-        if (lives > 0) return Formatting.RED;
+        if (lives == 1) return Formatting.RED;
+        if (lives == 2) return Formatting.YELLOW;
+        if (lives == 3) return Formatting.GREEN;
+        if (lives >= 4) return Formatting.DARK_GREEN;
         return Formatting.DARK_GRAY;
     }
 
@@ -159,11 +161,13 @@ public class LimitedLife extends Season {
 
     @Override
     public String getTeamForLives(Integer lives) {
+        lives = getEquivalentLives(lives);
         if (lives == null) return "lives_null";
-        else if (lives <= 0) return "lives_0";
-        else if (lives > YELLOW_TIME) return "lives_3";
-        else if (lives > RED_TIME) return "lives_2";
-        else return "lives_1";
+        if (lives == 1) return "lives_1";
+        if (lives == 2) return "lives_2";
+        if (lives == 3) return "lives_3";
+        if (lives >= 4) return "lives_4";
+        return "lives_0";
     }
 
     @Override
@@ -192,22 +196,20 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public Boolean isOnLastLife(ServerPlayerEntity player) {
-        if (!isAlive(player)) return null;
-        Integer lives = currentSeason.getPlayerLives(player);
-        if (lives == null) return null;
-        return lives < RED_TIME;
-    }
-
-    @Override
     public Boolean isOnSpecificLives(ServerPlayerEntity player, int check) {
         if (!isAlive(player)) return null;
-        Integer lives = currentSeason.getPlayerLives(player);
+        Integer lives = getEquivalentLives(currentSeason.getPlayerLives(player));
         if (lives == null) return null;
-        if (check == 1) return 0 < lives && lives < RED_TIME;
-        if (check == 2) return RED_TIME <= lives && lives < YELLOW_TIME;
-        if (check == 3) return lives >= YELLOW_TIME;
-        return null;
+        return lives == check;
+    }
+
+    public Integer getEquivalentLives(Integer limitedLifeLives) {
+        if (limitedLifeLives == null) return null;
+        if (limitedLifeLives <= 0) return 0;
+        if (limitedLifeLives <= RED_TIME) return 1;
+        if (limitedLifeLives <= YELLOW_TIME) return 2;
+        if (limitedLifeLives <= DEFAULT_TIME) return 3;
+        return 4;
     }
 
     @Override
