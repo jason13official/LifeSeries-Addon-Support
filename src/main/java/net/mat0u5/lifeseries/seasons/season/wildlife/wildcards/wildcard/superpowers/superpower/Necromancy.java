@@ -99,7 +99,7 @@ public class Necromancy extends Superpower {
     public void deactivate() {
         super.deactivate();
         List<UUID> deadAgain = new ArrayList<>();
-        for (ServerPlayerEntity player : getDeadPlayers()) {
+        for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
             if (player.isSpectator()) continue;
             UUID uuid = player.getUuid();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
@@ -126,25 +126,15 @@ public class Necromancy extends Superpower {
 
     public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (currentSeason.isAlive(player)) continue;
+        for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
             if (!player.isSpectator()) continue;
             deadPlayers.add(player);
         }
         return deadPlayers;
     }
 
-    public static List<ServerPlayerEntity> getDeadPlayers() {
-        List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (currentSeason.isAlive(player)) continue;
-            deadPlayers.add(player);
-        }
-        return deadPlayers;
-    }
-
     public static boolean shouldBeIncluded() {
-        return !getDeadPlayers().isEmpty();
+        return !currentSeason.getDeadPlayers().isEmpty();
     }
 
     public static boolean isRessurectedPlayer(ServerPlayerEntity player) {

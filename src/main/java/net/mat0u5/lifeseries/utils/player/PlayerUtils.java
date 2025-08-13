@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.utils.player;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.session.Session;
@@ -105,12 +106,22 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayerEntity> getAllPlayers() {
+        //TODO cache
         if (server == null) return new ArrayList<>();
         List<ServerPlayerEntity> result = new ArrayList<>();
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             if (!(player instanceof FakePlayer)) {
                 result.add(player);
             }
+        }
+        return result;
+    }
+
+    public static List<ServerPlayerEntity> getAllFunctioningPlayers() {
+        List<ServerPlayerEntity> result = new ArrayList<>();
+        for (ServerPlayerEntity player : getAllPlayers()) {
+            if (WatcherManager.isWatcher(player)) continue;
+            result.add(player);
         }
         return result;
     }

@@ -199,7 +199,7 @@ public class BoogeymanManager {
         }
         if (additionalRoll) {
             chooseBoogeymen = 0;
-            if ((1.0 / PlayerUtils.getAllPlayers().size()) >= Math.random()) {
+            if ((1.0 / PlayerUtils.getAllFunctioningPlayers().size()) >= Math.random()) {
                 chooseBoogeymen = 1;
             }
         }

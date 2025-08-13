@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.lastlife;
 
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -28,7 +29,7 @@ public class LastLifeLivesManager {
 
     public void assignRandomLivesToUnassignedPlayers() {
         List<ServerPlayerEntity> assignTo = new ArrayList<>();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             if (currentSeason.hasAssignedLives(player)) continue;
             assignTo.add(player);
         }
@@ -39,6 +40,7 @@ public class LastLifeLivesManager {
     public void assignRandomLives(Collection<ServerPlayerEntity> players) {
         HashMap<ServerPlayerEntity, Integer> lives = new HashMap<>();
         for (ServerPlayerEntity player : players) {
+            if (WatcherManager.isWatcher(player)) continue;
             if (lives.containsKey(player)) continue;
             lives.put(player,-1);
         }
@@ -48,6 +50,7 @@ public class LastLifeLivesManager {
     }
 
     public void lifeRoll(int currentStep, int lastNum,  Map<ServerPlayerEntity, Integer> lives) {
+        //TODO refactor
         int delay = 1;
         if (currentStep >= 30) delay = 2;
         if (currentStep >= 50) delay = 4;

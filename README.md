@@ -120,6 +120,14 @@ This command **always** available
 </details>
 
 
+<details open>
+<summary>/watcher</summary>
+
+- `/watcher info` - Shows info on what the Watchers are.
+- `/watcher list` - Shows a list of all the Watchers.
+- `/watcher add <player>` - Removes `<player>` from the Watchers.
+- `/watcher remove <player>` - Adds `<player>` to the Watchers.
+</details>
 
 <details open>
 <summary>/wildcard</summary>
@@ -147,7 +155,7 @@ This command **always** available
 <details open>
 <summary>/boogeyman</summary>
 
-*This command is only available when playing Last Life or Limited Life.*
+*This command is only available when the boogeyman has been enabled in the config.*
 - `/boogeyman list` - Shows you the list of all the Boogeymen.
 - `/boogeyman clear` - Removes all Boogeymen.
 - `/boogeyman add <player>` - Makes `<player>` the Boogeyman if they aren't one already.
@@ -173,7 +181,7 @@ This command **always** available
 <details open>
 <summary>Other series specific commands</summary>
 
-- `/givelife <player>` - Gives one of your lives to `<player>`. *This command is only available when playing Last Life.* *No permissions required.*
+- `/givelife <player>` - Gives one of your lives to `<player>`. *This command is only available when enabled in the config.* *No permissions required.*
 - `/lastlife rollLives [<player>]` - Rolls 2-6 lives for everyone or for the `[<player>]`, if specified. *This command is only available when playing Last Life.*
 - `/limitedlife time` - Same syntax as normal `/lives`, but with the <time> argument instead of numbers i am not writing it all down :). *This command is only available when playing Limited Life.*
 

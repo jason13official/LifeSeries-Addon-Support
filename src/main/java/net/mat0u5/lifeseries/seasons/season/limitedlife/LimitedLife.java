@@ -27,6 +27,7 @@ import net.minecraft.world.GameMode;
 import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 public class LimitedLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman";
@@ -119,23 +120,22 @@ public class LimitedLife extends Season {
     @Override
     public void tickSessionOn(MinecraftServer server) {
         super.tickSessionOn(server);
+        if (!currentSession.statusStarted()) return;
+
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                if (currentSession.statusStarted() && isAlive(player)) {
-                    removePlayerLife(player);
-                }
+            //TODO refactor
+            for (ServerPlayerEntity player : currentSeason.getAlivePlayers()) {
+                removePlayerLife(player);
             }
 
             if (TICK_OFFLINE_PLAYERS) {
-                if (currentSession.statusStarted()) {
-                    Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
-                    for (ScoreboardEntry entry : entries) {
-                        if (entry.value() <= 0) continue;
-                        if (PlayerUtils.getPlayer(entry.owner()) != null) continue;
-                        ScoreboardUtils.setScore(ScoreHolder.fromName(entry.owner()), "Lives", entry.value() - 1);
-                    }
+                Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
+                for (ScoreboardEntry entry : entries) {
+                    if (entry.value() <= 0) continue;
+                    if (PlayerUtils.getPlayer(entry.owner()) != null) continue;
+                    ScoreboardUtils.setScore(ScoreHolder.fromName(entry.owner()), "Lives", entry.value() - 1);
                 }
             }
         }
@@ -158,17 +158,17 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public void reloadPlayerTeamActual(ServerPlayerEntity player) {
-        Integer lives = getPlayerLives(player);
-        if (lives == null) TeamUtils.addEntityToTeam("lives_null",player);
-        else if (lives <= 0) TeamUtils.addEntityToTeam("lives_0",player);
-        else if (lives > YELLOW_TIME) TeamUtils.addEntityToTeam("lives_3",player);
-        else if (lives > RED_TIME) TeamUtils.addEntityToTeam("lives_2",player);
-        else if (lives > 0) TeamUtils.addEntityToTeam("lives_1",player);
+    public String getTeamForLives(Integer lives) {
+        if (lives == null) return "lives_null";
+        else if (lives <= 0) return "lives_0";
+        else if (lives > YELLOW_TIME) return "lives_3";
+        else if (lives > RED_TIME) return "lives_2";
+        else return "lives_1";
     }
 
     @Override
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
+        if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         Formatting colorBefore = null;
         if (player.getScoreboardTeam() != null) {

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -28,6 +29,7 @@ public class ServerPlayerEntityMixin {
     private void getRespawnTarget(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
         if (!Main.isLogicalSide()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (WatcherManager.isWatcher(player)) return;
         UUID uuid = player.getUuid();
         TaskScheduler.scheduleTask(1, () -> currentSeason.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid))));
     }

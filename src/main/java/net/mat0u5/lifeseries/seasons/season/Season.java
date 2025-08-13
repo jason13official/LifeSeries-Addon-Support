@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
@@ -51,6 +52,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 //? if >= 1.21.2
 /*import net.minecraft.server.world.ServerWorld;*/
 
@@ -138,6 +140,7 @@ public abstract class Season {
         reloadAllPlayerTeams();
         reloadPlayers();
         Events.updatePlayerListsNextTick = true;
+        WatcherManager.reloadWatchers();
     }
 
     public void reloadPlayers() {
@@ -156,8 +159,9 @@ public abstract class Season {
             }
         }
 
-        TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
+        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, Formatting.DARK_GRAY);
 
+        TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
         TeamUtils.createTeam("lives_0", "Dead", Formatting.DARK_GRAY);
         TeamUtils.createTeam("lives_1", "Red", Formatting.RED);
         TeamUtils.createTeam("lives_2", "Yellow", Formatting.YELLOW);
@@ -190,6 +194,7 @@ public abstract class Season {
 
     public void createScoreboards() {
         ScoreboardUtils.createObjective("Lives");
+        ScoreboardUtils.createObjective(WatcherManager.SCOREBOARD_NAME);
         ScoreboardUtils.createObjective("HP", "§c❤", ScoreboardCriterion.HEALTH);
     }
 
@@ -210,13 +215,20 @@ public abstract class Season {
     }
 
     public void reloadPlayerTeamActual(ServerPlayerEntity player) {
-        Integer lives = getPlayerLives(player);
-        String team = getTeamForLives(lives);
-
-        TeamUtils.addEntityToTeam(team,player);
+        String team = getTeamForPlayer(player);
+        TeamUtils.addEntityToTeam(team, player);
 
         if (currentSeason.getSeason() == Seasons.WILD_LIFE) WildLife.changedPlayerTeam(player);
         Events.updatePlayerListsNextTick = true;
+    }
+
+    public String getTeamForPlayer(ServerPlayerEntity player) {
+        if (isWatcher(player)) {
+            return WatcherManager.TEAM_NAME;
+        }
+
+        Integer lives = getPlayerLives(player);
+        return getTeamForLives(lives);
     }
 
     public String getTeamForLives(Integer lives) {
@@ -259,7 +271,8 @@ public abstract class Season {
 
     @Nullable
     public Integer getPlayerLives(ServerPlayerEntity player) {
-        return ScoreboardUtils.getScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives");
+        if (isWatcher(player)) return null;
+        return ScoreboardUtils.getScore(player, "Lives");
     }
 
     public boolean hasAssignedLives(ServerPlayerEntity player) {
@@ -279,8 +292,10 @@ public abstract class Season {
     }
 
     public void resetPlayerLife(ServerPlayerEntity player) {
-        ScoreboardUtils.resetScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives");
+        ScoreboardUtils.resetScore(player, "Lives");
         reloadPlayerTeam(player);
+        onPlayerJoin(player);
+        onPlayerFinishJoining(player);
     }
 
     public void resetAllPlayerLives() {
@@ -302,11 +317,12 @@ public abstract class Season {
     }
 
     public void addToLifeNoUpdate(ServerPlayerEntity player) {
+        if (isWatcher(player)) return;
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + 1;
         if (lives < 0) lives = 0;
-        ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
+        ScoreboardUtils.setScore(player, "Lives", lives);
     }
 
     public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
@@ -325,8 +341,9 @@ public abstract class Season {
     }
 
     public void setPlayerLives(ServerPlayerEntity player, int lives) {
+        if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
-        ScoreboardUtils.setScore(ScoreHolder.fromName(player.getNameForScoreboard()), "Lives", lives);
+        ScoreboardUtils.setScore(player, "Lives", lives);
         if (lives <= 0) {
             playerLostAllLives(player, livesBefore);
         }
@@ -440,7 +457,8 @@ public abstract class Season {
     }
 
     public List<ServerPlayerEntity> getNonRedPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
+        //TODO refactor
+        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
         if (players.isEmpty()) return new ArrayList<>();
         List<ServerPlayerEntity> nonRedPlayers = new ArrayList<>();
         for (ServerPlayerEntity player : players) {
@@ -453,7 +471,8 @@ public abstract class Season {
     }
 
     public List<ServerPlayerEntity> getAlivePlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
+        //TODO refactor
+        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
         if (players.isEmpty()) return new ArrayList<>();
         List<ServerPlayerEntity> alivePlayers = new ArrayList<>();
         for (ServerPlayerEntity player : players) {
@@ -463,15 +482,27 @@ public abstract class Season {
         return alivePlayers;
     }
 
+    public List<ServerPlayerEntity> getDeadPlayers() {
+        //TODO refactor
+        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+        if (players.isEmpty()) return new ArrayList<>();
+        List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
+        for (ServerPlayerEntity player : players) {
+            if (isAlive(player)) continue;
+            deadPlayers.add(player);
+        }
+        return deadPlayers;
+    }
+
     public boolean anyGreenPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             if (isOnSpecificLives(player, 3, false)) return true;
         }
         return false;
     }
 
     public boolean anyYellowPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             if (isOnSpecificLives(player, 2, false)) return true;
         }
         return false;
@@ -486,10 +517,9 @@ public abstract class Season {
         currentSession.activeActions.addAll(boogeymanManagerNew.getSessionActions());
         return true;
     }
-    public void tick(MinecraftServer server) {
-    }
-    public void tickSessionOn(MinecraftServer server) {
-    }
+
+    public void tick(MinecraftServer server) {}
+    public void tickSessionOn(MinecraftServer server) {}
 
     /*
         Events

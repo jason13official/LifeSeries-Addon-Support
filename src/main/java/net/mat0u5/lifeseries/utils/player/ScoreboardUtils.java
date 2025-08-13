@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.utils.player;
 
 import net.minecraft.scoreboard.*;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
@@ -53,6 +54,10 @@ public class ScoreboardUtils {
         scoreboard.removeObjective(objective);
     }
 
+    public static void setScore(ServerPlayerEntity player, String objectiveName, int score) {
+        setScore(ScoreHolder.fromName(player.getNameForScoreboard()), objectiveName, score);
+    }
+
     public static void setScore(ScoreHolder holder, String objectiveName, int score) {
         if (server == null) return;
         Scoreboard scoreboard = server.getScoreboard();
@@ -77,6 +82,10 @@ public class ScoreboardUtils {
         ReadableScoreboardScore score = scoreboard.getScore(holder, objective);
         if (score == null) return null;
         return score.getScore();
+    }
+
+    public static void setScore(ServerPlayerEntity player, String objectiveName) {
+        resetScore(ScoreHolder.fromName(player.getNameForScoreboard()), objectiveName);
     }
 
     public static void resetScore(ScoreHolder holder, String objectiveName) {

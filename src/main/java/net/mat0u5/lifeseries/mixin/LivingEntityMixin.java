@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.events.Events;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.WindCharge;
@@ -50,6 +51,7 @@ public abstract class LivingEntityMixin {
         if (!Main.isLogicalSide()) return;
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayerEntity player) {
+            if (WatcherManager.isWatcher(player)) return;
             currentSeason.onPlayerHeal(player, amount);
         }
     }

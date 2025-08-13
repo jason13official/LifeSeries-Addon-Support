@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
@@ -194,7 +195,7 @@ public class Events {
     }
 
     public static void onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
-        if (isFakePlayer(player)) return;
+        if (isExcludedPlayer(player)) return;
 
         try {
             if (!Main.isLogicalSide()) return;
@@ -332,11 +333,22 @@ public class Events {
         }
 
     }
+
     public static void finishedJoining(UUID uuid) {
         joiningPlayers.remove(uuid);
         joiningPlayersPos.remove(uuid);
         joiningPlayersYaw.remove(uuid);
         joiningPlayersPitch.remove(uuid);
+    }
+
+    public static boolean isExcludedPlayer(Entity entity) {
+        //TODO use
+        if (entity instanceof ServerPlayerEntity player) {
+            if (WatcherManager.isWatcher(player)) {
+                return true;
+            }
+        }
+        return isFakePlayer(entity);
     }
     public static boolean isFakePlayer(Entity entity) {
         return entity instanceof FakePlayer;

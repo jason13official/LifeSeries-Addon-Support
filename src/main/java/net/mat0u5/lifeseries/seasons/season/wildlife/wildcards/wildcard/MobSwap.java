@@ -177,6 +177,7 @@ public class MobSwap extends Wildcard {
     }
 
     public void mobSwap() {
+        //TODO refactor
         swaps++;
         if (swaps < 1) return;
 

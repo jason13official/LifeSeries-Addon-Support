@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphComponent;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -46,6 +47,8 @@ public abstract class PlayerEntityMixin {
     /*private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {*/
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
+        if (WatcherManager.isWatcher(player)) return;
+
         if (player instanceof ServerPlayerEntity serverPlayer) {
             currentSeason.onPlayerDamage(serverPlayer, source, amount, ci);
         }
@@ -59,6 +62,8 @@ public abstract class PlayerEntityMixin {
     *///?}
         if (!Main.isLogicalSide()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
+        if (WatcherManager.isWatcher(player)) return;
+
         if (player instanceof ServerPlayerEntity serverPlayer) {
             currentSeason.onPrePlayerDamage(serverPlayer, source, amount, cir);
         }
@@ -69,6 +74,8 @@ public abstract class PlayerEntityMixin {
         if (!Main.isLogicalSide()) return;
         if (currentSeason instanceof DoubleLife doubleLife)  {
             PlayerEntity player = (PlayerEntity) (Object) this;
+            if (WatcherManager.isWatcher(player)) return;
+
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 doubleLife.canFoodHeal(serverPlayer, cir);
             }

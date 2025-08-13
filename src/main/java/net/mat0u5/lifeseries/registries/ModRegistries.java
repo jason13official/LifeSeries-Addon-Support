@@ -35,6 +35,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(LifeSeriesCommand::register);
         CommandRegistrationCallback.EVENT.register(GivelifeCommand::register);
         CommandRegistrationCallback.EVENT.register(SelfMessageCommand::register);
+        CommandRegistrationCallback.EVENT.register(WatcherCommand::register);
     }
 
     private static void registerEvents() {

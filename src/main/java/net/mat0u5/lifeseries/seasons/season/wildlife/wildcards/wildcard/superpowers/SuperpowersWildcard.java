@@ -62,7 +62,7 @@ public class SuperpowersWildcard extends Wildcard {
         double necromancyRandomizeChance = 0;
         if (shouldIncludeNecromancy) {
             int alivePlayersNum = currentSeason.getAlivePlayers().size();
-            int deadPlayersNum = Necromancy.getDeadPlayers().size();
+            int deadPlayersNum = currentSeason.getDeadPlayers().size();
             int totalPlayersNum = alivePlayersNum + deadPlayersNum;
             if (totalPlayersNum >= 6) {
                 implemented.remove(Superpowers.NECROMANCY);

@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -155,8 +156,7 @@ public class Session {
         if (currentTimer % DISPLAY_TIMER_INTERVAL == 0) {
             displayTimers(server);
             if (MUTE_DEAD_PLAYERS) {
-                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                    if (currentSeason.isAlive(player)) continue;
+                for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
                     if (PermissionManager.isAdmin(player)) continue;
                     NetworkHandlerServer.sendNumberPacket(player, "mute", 50);
                 }
@@ -233,6 +233,7 @@ public class Session {
     }
 
     public void checkPlayerPosition(ServerPlayerEntity player) {
+        //TODO improve
         WorldBorder border = player.getWorld().getWorldBorder();
         double playerSize = player.getBoundingBox().getLengthX()/2;
         double minX = Math.floor(border.getBoundWest()) + playerSize;

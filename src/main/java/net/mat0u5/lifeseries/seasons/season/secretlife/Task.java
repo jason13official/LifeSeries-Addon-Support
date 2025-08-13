@@ -54,11 +54,7 @@ public class Task {
 
     public String formatString(String page) {
         if (page.contains("${random_player}")) {
-            List<ServerPlayerEntity> players = new ArrayList<>();
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                if (!currentSeason.isAlive(player)) continue;
-                players.add(player);
-            }
+            List<ServerPlayerEntity> players = currentSeason.getAlivePlayers();
             Collections.shuffle(players);
             page = page.replaceAll("\\$\\{random_player}",players.getFirst().getNameForScoreboard());
         }

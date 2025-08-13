@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
@@ -133,6 +134,7 @@ public class Callback extends Wildcard {
     }
 
     public void showEndingTitles() {
+        //TODO refactor PlayerUtils.getAllPlayers() calls
         PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.of("§7The ending is §cyours§7..."), 0, 90, 0);
         TaskScheduler.scheduleTask(80, () -> {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);

@@ -162,6 +162,7 @@ public class Hunger extends Wildcard {
     }
 
     public void newFoodRules() {
+        //TODO refactor getAllPlayer calls
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
             PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());

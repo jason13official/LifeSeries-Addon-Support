@@ -261,7 +261,7 @@ public class DoubleLife extends Season {
 
     public List<ServerPlayerEntity> getNonAssignedPlayers() {
         List<ServerPlayerEntity> playersToRoll = new ArrayList<>();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             if (!isAlive(player)) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
@@ -276,7 +276,7 @@ public class DoubleLife extends Season {
         if (players.size() == 1) return;
         PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ENDERMAN_TELEPORT);
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             player.removeCommandTag("randomTeleport");
         }
 
@@ -288,7 +288,7 @@ public class DoubleLife extends Season {
         OtherUtils.executeCommand(TextUtils.formatString("spreadplayers {} {} 0 {} false @a[tag=randomTeleport]", border.getCenterX(), border.getCenterZ(), (border.getSize()/2)));
         PlayerUtils.broadcastMessageToAdmins(Text.of("Randomly distributed players."));
 
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             player.removeCommandTag("randomTeleport");
         }
     }
@@ -390,7 +390,7 @@ public class DoubleLife extends Season {
     }
 
     public void syncAllPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
             syncPlayer(player);
         }
     }
