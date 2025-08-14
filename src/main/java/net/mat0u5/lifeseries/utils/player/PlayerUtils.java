@@ -106,9 +106,9 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayerEntity> getAllPlayers() {
-        //TODO cache
-        if (server == null) return new ArrayList<>();
         List<ServerPlayerEntity> result = new ArrayList<>();
+        if (server == null) return result;
+
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             if (!(player instanceof FakePlayer)) {
                 result.add(player);
@@ -118,11 +118,8 @@ public class PlayerUtils {
     }
 
     public static List<ServerPlayerEntity> getAllFunctioningPlayers() {
-        List<ServerPlayerEntity> result = new ArrayList<>();
-        for (ServerPlayerEntity player : getAllPlayers()) {
-            if (WatcherManager.isWatcher(player)) continue;
-            result.add(player);
-        }
+        List<ServerPlayerEntity> result = getAllPlayers();
+        result.removeIf(WatcherManager::isWatcher);
         return result;
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Unit;
@@ -178,6 +179,7 @@ public class MobSwap extends Wildcard {
 
     public void mobSwap() {
         //TODO refactor
+        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
         swaps++;
         if (swaps < 1) return;
 
@@ -203,7 +205,7 @@ public class MobSwap extends Wildcard {
         }
 
         if (swaps > 1) {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_BEACON_DEACTIVATE);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_BEACON_DEACTIVATE);
         }
 
         killNonNamedMobs();
@@ -218,13 +220,13 @@ public class MobSwap extends Wildcard {
 
         for (int i = timeForSpawning; i > 120; i -= 20) {
             TaskScheduler.scheduleTask(i, () -> {
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_CHICKEN_EGG);
             });
         }
 
         for (int delay : eggSounds) {
             TaskScheduler.scheduleTask(timeForSpawning + delay, () -> {
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_CHICKEN_EGG);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_CHICKEN_EGG);
             });
         }
 
@@ -235,8 +237,8 @@ public class MobSwap extends Wildcard {
         });
 
         TaskScheduler.scheduleTask(timeForSpawning + 240, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
             transformNonNamedMobs(progress);
         });
     }

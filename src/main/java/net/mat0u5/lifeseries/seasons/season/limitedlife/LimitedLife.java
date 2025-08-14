@@ -125,10 +125,7 @@ public class LimitedLife extends Season {
         secondCounter--;
         if (secondCounter <= 0) {
             secondCounter = 20;
-            //TODO refactor
-            for (ServerPlayerEntity player : currentSeason.getAlivePlayers()) {
-                removePlayerLife(player);
-            }
+            currentSeason.getAlivePlayers().forEach(this::removePlayerLife);
 
             if (TICK_OFFLINE_PLAYERS) {
                 Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");

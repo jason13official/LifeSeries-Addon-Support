@@ -314,9 +314,7 @@ public class NetworkHandlerServer {
     }
 
     public static void sendUpdatePackets() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            sendUpdatePacketTo(player);
-        }
+        PlayerUtils.getAllPlayers().forEach(NetworkHandlerServer::sendUpdatePacketTo);
     }
 
     public static void sendPlayerDisguise(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) {

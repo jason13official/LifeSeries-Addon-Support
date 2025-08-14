@@ -149,9 +149,7 @@ public abstract class Season {
     }
 
     public void reloadPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            AttributeUtils.resetAttributesOnPlayerJoin(player);
-        }
+        PlayerUtils.getAllPlayers().forEach(AttributeUtils::resetAttributesOnPlayerJoin);
     }
 
     public void createTeams() {
@@ -204,9 +202,7 @@ public abstract class Season {
     }
 
     public void reloadAllPlayerTeams() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            reloadPlayerTeam(player);
-        }
+        PlayerUtils.getAllPlayers().forEach(this::reloadPlayerTeam);
     }
 
     public void reloadPlayerTeam(ServerPlayerEntity player) {
@@ -467,41 +463,21 @@ public abstract class Season {
     }
 
     public List<ServerPlayerEntity> getNonRedPlayers() {
-        //TODO refactor
         List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        if (players.isEmpty()) return new ArrayList<>();
-        List<ServerPlayerEntity> nonRedPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : players) {
-            Boolean isOnLastLife = currentSeason.isOnLastLife(player);
-            if (isOnLastLife == null) continue;
-            if (isOnLastLife) continue;
-            nonRedPlayers.add(player);
-        }
-        return nonRedPlayers;
+        players.removeIf(player -> currentSeason.isOnLastLife(player, true));
+        return players;
     }
 
     public List<ServerPlayerEntity> getAlivePlayers() {
-        //TODO refactor
         List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        if (players.isEmpty()) return new ArrayList<>();
-        List<ServerPlayerEntity> alivePlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : players) {
-            if (!isAlive(player)) continue;
-            alivePlayers.add(player);
-        }
-        return alivePlayers;
+        players.removeIf(player -> !isAlive(player));
+        return players;
     }
 
     public List<ServerPlayerEntity> getDeadPlayers() {
-        //TODO refactor
         List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        if (players.isEmpty()) return new ArrayList<>();
-        List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : players) {
-            if (isAlive(player)) continue;
-            deadPlayers.add(player);
-        }
-        return deadPlayers;
+        players.removeIf(this::isAlive);
+        return players;
     }
 
     public boolean anyGreenPlayers() {

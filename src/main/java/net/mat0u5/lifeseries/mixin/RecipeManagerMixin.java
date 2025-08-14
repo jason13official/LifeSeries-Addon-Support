@@ -37,9 +37,7 @@ public class RecipeManagerMixin {
                 toRemove.add(identifier);
             }
         }
-        for (Identifier id : toRemove) {
-            map.remove(id);
-        }
+        toRemove.forEach(map::remove);
     }
 
 }

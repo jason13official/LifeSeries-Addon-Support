@@ -134,19 +134,20 @@ public class Callback extends Wildcard {
     }
 
     public void showEndingTitles() {
-        //TODO refactor PlayerUtils.getAllPlayers() calls
-        PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.of("§7The ending is §cyours§7..."), 0, 90, 0);
+        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
+        PlayerUtils.sendTitleToPlayers(players, Text.of("§7The ending is §cyours§7..."), 0, 90, 0);
         TaskScheduler.scheduleTask(80, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.of("§cMake"), 0, 40, 0);
+
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake"), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(110, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.of("§cMake §eit"), 0, 40, 0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO.value(), 0.4f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake §eit"), 0, 40, 0);
         });
         TaskScheduler.scheduleTask(140, () -> {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
-            PlayerUtils.sendTitleToPlayers(PlayerUtils.getAllPlayers(), Text.of("§cMake §eit §a§lWILD"), 0, 90, 20);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 0.2f, 1);
+            PlayerUtils.sendTitleToPlayers(players, Text.of("§cMake §eit §a§lWILD"), 0, 90, 20);
 
         });
     }

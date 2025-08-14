@@ -217,9 +217,7 @@ public class LivesCommand {
             }
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
-            for (ServerPlayerEntity player : targets) {
-                doubleLife.syncSoulboundLives(player);
-            }
+            targets.forEach(doubleLife::syncSoulboundLives);
         }
         return 1;
     }
@@ -228,9 +226,8 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        for (ServerPlayerEntity player : targets) {
-            currentSeason.resetPlayerLife(player);
-        }
+        targets.forEach(currentSeason::resetPlayerLife);
+
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s lives", targets.iterator().next()));
         }

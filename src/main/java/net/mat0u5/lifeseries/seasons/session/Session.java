@@ -183,9 +183,7 @@ public class Session {
                 }
             }
             if (!removeQueue.isEmpty()) {
-                for (UUID uuid : removeQueue) {
-                    playerNaturalDeathLog.remove(uuid);
-                }
+                removeQueue.forEach(playerNaturalDeathLog::remove);
             }
         }
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
@@ -226,7 +224,7 @@ public class Session {
     }
 
     public void checkPlayerPosition(ServerPlayerEntity player) {
-        //TODO improve
+        //TODO improve teleporting
         WorldBorder border = player.getWorld().getWorldBorder();
         double playerSize = player.getBoundingBox().getLengthX()/2;
         double minX = Math.floor(border.getBoundWest()) + playerSize;
@@ -319,9 +317,8 @@ public class Session {
             }
             messages.add(Text.of("§7- "+actionMessage));
         }
-        for (Text text : messages) {
-            PlayerUtils.broadcastMessageToAdmins(text);
-        }
+
+        messages.forEach(PlayerUtils::broadcastMessageToAdmins);
     }
 
     public boolean statusStarted() {

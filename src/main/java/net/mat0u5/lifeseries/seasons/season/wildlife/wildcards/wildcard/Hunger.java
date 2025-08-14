@@ -162,18 +162,16 @@ public class Hunger extends Wildcard {
     }
 
     public void newFoodRules() {
-        //TODO refactor getAllPlayer calls
+        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
-            PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), Text.empty(), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
+            PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());
+            PlayerUtils.sendTitleWithSubtitleToPlayers(players, Text.empty(), Text.of("§7Food is about to be randomised..."), 0, 140, 0);
             TaskScheduler.scheduleTask(40, WildcardManager::showDots);
             TaskScheduler.scheduleTask(140, () -> {
-                for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                    addHunger(player);
-                }
+                addHunger();
                 updateInventories();
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
+                PlayerUtils.playSoundToPlayers(players, SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, 0.2f, 1);
                 shuffleVersion++;
             });
         }
@@ -182,17 +180,13 @@ public class Hunger extends Wildcard {
             shuffleVersion++;
         }
         shuffledBefore = true;
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            addHunger(player);
-        }
+        addHunger();
         TaskScheduler.scheduleTask(1, OtherUtils::reloadServerNoUpdate);
         NetworkHandlerServer.sendUpdatePackets();
     }
 
     public static void updateInventories() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            updateInventory(player);
-        }
+        PlayerUtils.getAllPlayers().forEach(Hunger::updateInventory);
     }
 
     public static void updateInventory(ServerPlayerEntity player) {
@@ -215,7 +209,11 @@ public class Hunger extends Wildcard {
         PlayerUtils.updatePlayerInventory(player);
     }
 
+    public static void addHunger() {
+        PlayerUtils.getAllPlayers().forEach(Hunger::addHunger);
+    }
     public static void addHunger(ServerPlayerEntity player) {
+        if (player == null) return;
         if (player.isSpectator()) return;
         StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, 2, false, false, false);
         player.addStatusEffect(statusEffectInstance);
