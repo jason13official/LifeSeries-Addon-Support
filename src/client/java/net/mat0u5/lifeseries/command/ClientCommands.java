@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
@@ -83,14 +84,14 @@ public class ClientCommands {
 
     public static int sendStringPacket(FabricClientCommandSource source, String name, String value)  {
         final PlayerEntity self = source.getPlayer();
-        NetworkHandlerClient.sendStringPacket(name, value);
+        NetworkHandlerClient.sendStringPacket(PacketNames.fromName(name), value);
         self.sendMessage(Text.of("String packet sent."), false);
         return 1;
     }
 
     public static int sendNumberPacket(FabricClientCommandSource source, String name, double value)  {
         final PlayerEntity self = source.getPlayer();
-        NetworkHandlerClient.sendNumberPacket(name, value);
+        NetworkHandlerClient.sendNumberPacket(PacketNames.fromName(name), value);
         self.sendMessage(Text.of("Number packet sent."), false);
         return 1;
     }

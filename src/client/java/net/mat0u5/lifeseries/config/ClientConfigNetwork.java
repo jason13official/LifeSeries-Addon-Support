@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class ClientConfigNetwork {
     public static void load() {
         configObjects.clear();
         clientConfigObjects.clear();
-        NetworkHandlerClient.sendStringPacket("request_config", "");
+        NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_CONFIG, "");
 
         int index = 0;
         for (ConfigFileEntry<?> entry : clientConfig.getAllConfigEntries()) {

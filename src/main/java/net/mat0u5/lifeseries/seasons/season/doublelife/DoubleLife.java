@@ -441,11 +441,10 @@ public class DoubleLife extends Season {
             return;
         }
 
-        DoubleLife doubleLife = ((DoubleLife) currentSeason);
-        if (!doubleLife.hasSoulmate(player)) return;
-        if (!doubleLife.isSoulmateOnline(player)) return;
-        if (doubleLife.isMainSoulmate(player)) return;
-        ServerPlayerEntity soulmate = doubleLife.getSoulmate(player);
+        if (!hasSoulmate(player)) return;
+        if (!isSoulmateOnline(player)) return;
+        if (isMainSoulmate(player)) return;
+        ServerPlayerEntity soulmate = getSoulmate(player);
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
 

@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -106,7 +107,7 @@ public class LifeSeriesCommand {
             return -1;
         }
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the season selection GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_season", currentSeason.getSeason().getId());
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.SELECT_SEASON, currentSeason.getSeason().getId());
         return 1;
     }
 
@@ -153,7 +154,7 @@ public class LifeSeriesCommand {
         }
 
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the config GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "open_config","");
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.OPEN_CONFIG,"");
         return 1;
     }
 
@@ -189,7 +190,7 @@ public class LifeSeriesCommand {
     public static int getSeason(ServerCommandSource source) {
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Current season: {}", currentSeason.getSeason().getId()));
         if (source.getPlayer() != null) {
-            NetworkHandlerServer.sendStringPacket(source.getPlayer(), "season_info", currentSeason.getSeason().getId());
+            NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.SEASON_INFO, currentSeason.getSeason().getId());
         }
         return 1;
     }

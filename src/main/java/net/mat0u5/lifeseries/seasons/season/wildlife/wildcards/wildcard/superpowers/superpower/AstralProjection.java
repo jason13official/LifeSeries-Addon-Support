@@ -86,7 +86,7 @@ public class AstralProjection extends ToggleableSuperpower {
                 startedGameMode, false, inv, player.getUuid()).thenAccept((fakePlayer) -> {
             clone = fakePlayer;
             String name = TextUtils.textToLegacyString(player.getStyledDisplayName());
-            NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
+            NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), player.getUuid().toString(), name);
         });
     }
 
@@ -99,7 +99,7 @@ public class AstralProjection extends ToggleableSuperpower {
         if (clone != null) {
             toBackPos = clone.getPos();
             clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
-            NetworkHandlerServer.sendPlayerDisguise("player_disguise", clone.getUuid().toString(), clone.getName().getString(), "", "");
+            NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");
         }
 
         if (startedWorld != null && toBackPos != null) {

@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -155,7 +156,7 @@ public class Session {
         if (currentTimer % DISPLAY_TIMER_INTERVAL == 0) {
             displayTimers(server);
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-                NetworkHandlerServer.sendStringPacket(player, "sessionStatus", status.getName());
+                NetworkHandlerServer.sendStringPacket(player, PacketNames.SESSION_STATUS, status.getName());
             }
             for (RegistryEntry<StatusEffect> effect : blacklist.getBannedEffects()) {
                 for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
@@ -297,7 +298,7 @@ public class Session {
                     timestamp = System.currentTimeMillis() + remainingMillis;
                 }
                 if (timestamp != SessionTimerStates.OFF.getValue()) {
-                    NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
+                    NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, timestamp);
                 }
             }
         }

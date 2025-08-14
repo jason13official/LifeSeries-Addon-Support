@@ -62,7 +62,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
                 2, 0, 0, 0, 0
         );
-        NetworkHandlerServer.sendPlayerDisguise("player_disguise", player.getUuid().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
+        NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), copiedPlayerUUID, copiedPlayerName);
 
         super.activate();
     }
@@ -79,7 +79,7 @@ public class PlayerDisguise extends ToggleableSuperpower {
                 player.getPos().getX(), player.getPos().getY(), player.getPos().getZ(),
                 2, 0, 0, 0, 0
         );
-        NetworkHandlerServer.sendPlayerDisguise("player_disguise", player.getUuid().toString(), player.getName().getString(), "", "");
+        NetworkHandlerServer.sendPlayerDisguise(player.getUuid().toString(), player.getName().getString(), "", "");
     }
 
     public void onTakeDamage() {

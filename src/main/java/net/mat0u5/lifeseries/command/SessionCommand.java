@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -127,7 +128,7 @@ public class SessionCommand {
 
         if (self == null) return -1;
         if (NetworkHandlerServer.wasHandshakeSuccessful(self)) {
-            NetworkHandlerServer.sendStringPacket(self, "toggle_timer", "");
+            NetworkHandlerServer.sendStringPacket(self, PacketNames.TOGGLE_TIMER, "");
         }
 
         boolean isInDisplayTimer = currentSession.isInDisplayTimer(self);

@@ -24,6 +24,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
@@ -244,7 +245,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         List<VirtualElement> elements = holder.getElements();
         for (VirtualElement element : elements) {
             if (element instanceof ItemDisplayElement itemDisplayElement) {
-                NetworkHandlerServer.sendStringPacket(player, "trivia_bot_part", itemDisplayElement.getUuid().toString());
+                NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIVIA_BOT_PART, itemDisplayElement.getUuid().toString());
             }
         }
     }
@@ -304,7 +305,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
                 if (!ranOutOfTime) {
                     ServerPlayerEntity boundPlayer = getBoundPlayer();
                     if (boundPlayer != null) {
-                        NetworkHandlerServer.sendStringPacket(boundPlayer, "reset_trivia", "true");
+                        NetworkHandlerServer.sendStringPacket(boundPlayer, PacketNames.RESET_TRIVIA, "true");
                     }
                 }
                 ranOutOfTime = true;

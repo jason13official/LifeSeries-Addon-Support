@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -86,7 +87,7 @@ public class LimitedLife extends Season {
                     timestamp = System.currentTimeMillis() + remainingMillis;
                 }
                 if (timestamp != SessionTimerStates.OFF.getValue()) {
-                    NetworkHandlerServer.sendLongPacket(player, "session_timer", timestamp);
+                    NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, timestamp);
                 }
 
                 if (hasAssignedLives(player) && getPlayerLives(player) != null) {
@@ -99,7 +100,7 @@ public class LimitedLife extends Season {
                         playerLives = -1;
                     }
                     String livesColor = getColorForLives(getPlayerLives(player)).toString();
-                    NetworkHandlerServer.sendLongPacket(player, "limited_life_timer__"+livesColor, playerLives);
+                    NetworkHandlerServer.sendLongPacket(player, PacketNames.fromName(PacketNames.LIMITED_LIFE_TIMER.getName()+livesColor), playerLives);
                 }
             }
             else {

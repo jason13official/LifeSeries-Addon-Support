@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.other;
 import net.mat0u5.lifeseries.gui.DefaultScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -22,7 +23,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Size Shifting"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","size_shifting");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"size_shifting");
                         })
                         .position(oneThirdX - 40, startY  + 45)
                         .size(80, 20)
@@ -32,7 +33,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Hunger"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","hunger");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"hunger");
                         })
                         .position(oneThirdX - 40, startY  + 75)
                         .size(80, 20)
@@ -41,7 +42,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Snails"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","snails");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"snails");
                         })
                         .position(oneThirdX - 40, startY  + 105)
                         .size(80, 20)
@@ -50,7 +51,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Time Dilation"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","time_dilation");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"time_dilation");
                         })
                         .position(oneThirdX - 40, startY  + 135)
                         .size(80, 20)
@@ -65,7 +66,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Trivia"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","trivia");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"trivia");
                         })
                         .position(twoThirdX - 40, startY  + 45)
                         .size(80, 20)
@@ -75,7 +76,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Mob Swap"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","mob_swap");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"mob_swap");
                         })
                         .position(twoThirdX - 40, startY  + 75)
                         .size(80, 20)
@@ -84,7 +85,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Superpowers"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","superpowers");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"superpowers");
                         })
                         .position(twoThirdX - 40, startY  + 105)
                         .size(80, 20)
@@ -93,7 +94,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Callback"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("selected_wildcard","callback");
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"callback");
                         })
                         .position(twoThirdX - 40, startY  + 135)
                         .size(80, 20)

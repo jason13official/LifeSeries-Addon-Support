@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -40,7 +41,7 @@ public class UnassignedSeason extends Season {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         super.onPlayerFinishJoining(player);
-        NetworkHandlerServer.sendStringPacket(player, "select_season", "");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_SEASON, "");
     }
 
     @Override

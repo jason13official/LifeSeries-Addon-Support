@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.seasons;
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -35,7 +36,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultSmallScreen {
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
                             if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket("set_season", seasonName);
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonName);
                         })
                         .position(fifth2 - 40, startY + BG_HEIGHT - 35)
                         .size(60, 20)

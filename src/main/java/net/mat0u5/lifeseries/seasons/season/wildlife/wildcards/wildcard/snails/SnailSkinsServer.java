@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ImagePayload;
 import net.mat0u5.lifeseries.resources.ResourceHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -81,7 +82,7 @@ public class SnailSkinsServer {
             String replacedName = name.toLowerCase().replaceAll(".png","");
             int imageIndex = indexedSkins.get(replacedName);
             for (ServerPlayerEntity player : players) {
-                sendImageToClient(player, "snail_skin", imageIndex, maxIndex, file.toPath());
+                sendImageToClient(player, PacketNames.SNAIL_SKIN.getName(), imageIndex, maxIndex, file.toPath());
             }
         }
     }

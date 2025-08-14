@@ -20,6 +20,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -248,8 +249,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         List<VirtualElement> elements = holder.getElements();
         for (VirtualElement element : elements) {
             if (element instanceof ItemDisplayElement itemDisplayElement) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(player, "snail_part", itemDisplayElement.getUuid().toString());
-                else NetworkHandlerServer.sendStringPacket(player, "trivia_snail_part", itemDisplayElement.getUuid().toString());
+                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(player, PacketNames.SNAIL_PART, itemDisplayElement.getUuid().toString());
+                else NetworkHandlerServer.sendStringPacket(player, PacketNames.TRIVIA_SNAIL_PART, itemDisplayElement.getUuid().toString());
             }
         }
     }
@@ -324,8 +325,8 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             BlockPos pos = getBlockPos();
             boolean sameDimensions = getWorld().getRegistryKey().equals(getActualBoundPlayer().getWorld().getRegistryKey());
             if (sameDimensions) {
-                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "snail_pos", TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
-                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), "trivia_snail_pos", TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
+                if (!fromTrivia) NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), PacketNames.SNAIL_POS, TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
+                else NetworkHandlerServer.sendStringPacket(getActualBoundPlayer(), PacketNames.TRIVIA_SNAIL_POS, TextUtils.formatString("{}_{}_{}", pos.getX(), pos.getY(), pos.getZ()));
             }
         }
         if (age % 400 == 0 && getActualBoundPlayer() != null) {
@@ -392,7 +393,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             }
             if (lastAir != currentAir) {
                 lastAir = currentAir;
-                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", currentAir);
+                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, currentAir);
             }
             if (currentAir == 0) damageFromDrowning();
         }
@@ -434,7 +435,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void despawn() {
-        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), "snail_air", 300);
+        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, 300);
         if (boundPlayerUUID != null) {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }

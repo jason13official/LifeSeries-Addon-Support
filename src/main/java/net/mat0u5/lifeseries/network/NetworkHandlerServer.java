@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -69,12 +70,12 @@ public class NetworkHandlerServer {
         ServerPlayNetworking.registerGlobalReceiver(NumberPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> handleNumberPacket(player, payload.name(), payload.number()));
+            server.execute(() -> handleNumberPacket(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(StringPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
             MinecraftServer server = context.server();
-            server.execute(() -> handleStringPacket(player, payload.name(),payload.value()));
+            server.execute(() -> handleStringPacket(player, payload));
         });
         ServerPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
@@ -131,35 +132,43 @@ public class NetworkHandlerServer {
         Main.softestReloadStart();
     }
 
-    public static void handleNumberPacket(ServerPlayerEntity player, String name, double value) {
+    public static void handleNumberPacket(ServerPlayerEntity player, NumberPayload payload) {
+        String nameStr = payload.name();
+        PacketNames name = PacketNames.fromName(nameStr);
+        double value = payload.number();
+
         int intValue = (int) value;
-        if (name.equalsIgnoreCase("trivia_answer")) {
+        if (name == PacketNames.TRIVIA_ANSWER) {
             if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, intValue));
             TriviaWildcard.handleAnswer(player, intValue);
         }
     }
-    public static void handleStringPacket(ServerPlayerEntity player, String name, String value) {
-        if (name.equalsIgnoreCase("holding_jump") && currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
+    public static void handleStringPacket(ServerPlayerEntity player, StringPayload payload) {
+        String nameStr = payload.name();
+        PacketNames name = PacketNames.fromName(nameStr);
+        String value = payload.value();
+
+        if (name == PacketNames.HOLDING_JUMP && currentSeason.getSeason() == Seasons.WILD_LIFE && WildcardManager.isActiveWildcard(Wildcards.SIZE_SHIFTING)) {
             SizeShifting.onHoldingJump(player);
         }
-        if (name.equalsIgnoreCase("superpower_key") && currentSeason.getSeason() == Seasons.WILD_LIFE) {
+        if (name == PacketNames.SUPERPOWER_KEY && currentSeason.getSeason() == Seasons.WILD_LIFE) {
             SuperpowersWildcard.pressedSuperpowerKey(player);
         }
-        if (name.equalsIgnoreCase("transcript")) {
+        if (name == PacketNames.TRANSCRIPT) {
             player.sendMessage(SessionTranscript.getTranscriptMessage());
         }
         if (PermissionManager.isAdmin(player)) {
-            if (name.equalsIgnoreCase("selected_wildcard")) {
+            if (name == PacketNames.SELECTED_WILDCARD) {
                 Wildcards wildcard = Wildcards.getFromString(value);
                 if (wildcard != null && wildcard != Wildcards.NULL) {
                     WildcardManager.chosenWildcard(wildcard);
                 }
             }
-            if (name.equalsIgnoreCase("request_config")) {
+            if (name == PacketNames.REQUEST_CONFIG) {
                 seasonConfig.sendConfigTo(player);
             }
         }
-        if (name.equalsIgnoreCase("set_season")) {
+        if (name == PacketNames.SET_SEASON) {
             if (PermissionManager.isAdmin(player) || currentSeason.getSeason() == Seasons.UNASSIGNED) {
                 Seasons newSeason = Seasons.getSeasonFromStringName(value);
                 if (newSeason == Seasons.UNASSIGNED) return;
@@ -168,7 +177,7 @@ public class NetworkHandlerServer {
                 }
             }
         }
-        if (name.equalsIgnoreCase("reset_snail_model")) {
+        if (name == PacketNames.REQUEST_SNAIL_MODEL) {
             if (Snails.snails.containsKey(player.getUuid())) {
                 Snail snail = Snails.snails.get(player.getUuid());
                 snail.updateModel(true);
@@ -178,7 +187,7 @@ public class NetworkHandlerServer {
                 snail.updateModel(true);
             }
         }
-        if (name.equalsIgnoreCase("triple_jump")) {
+        if (name == PacketNames.TRIPLE_JUMP) {
             if (currentSeason.getSeason() == Seasons.WILD_LIFE && SuperpowersWildcard.hasActivatedPower(player, Superpowers.TRIPLE_JUMP)) {
                 Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
                 if (power instanceof TripleJump tripleJump) {
@@ -260,32 +269,32 @@ public class NetworkHandlerServer {
 
     }
 
-    public static void sendStringPacket(ServerPlayerEntity player, String name, String value) {
-        StringPayload payload = new StringPayload(name, value);
+    public static void sendStringPacket(ServerPlayerEntity player, PacketNames name, String value) {
+        StringPayload payload = new StringPayload(name.getName(), value);
         ServerPlayNetworking.send(player, payload);
     }
 
-    public static void sendStringListPacket(ServerPlayerEntity player, String name, List<String> value) {
-        StringListPayload payload = new StringListPayload(name, value);
+    public static void sendStringListPacket(ServerPlayerEntity player, PacketNames name, List<String> value) {
+        StringListPayload payload = new StringListPayload(name.getName(), value);
         ServerPlayNetworking.send(player, payload);
     }
 
-    public static void sendStringListPackets(String name, List<String> value) {
+    public static void sendStringListPackets(PacketNames name, List<String> value) {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            StringListPayload payload = new StringListPayload(name, value);
+            StringListPayload payload = new StringListPayload(name.getName(), value);
             ServerPlayNetworking.send(player, payload);
         }
     }
 
-    public static void sendNumberPacket(ServerPlayerEntity player, String name, double number) {
+    public static void sendNumberPacket(ServerPlayerEntity player, PacketNames name, double number) {
         if (player == null) return;
-        NumberPayload payload = new NumberPayload(name, number);
+        NumberPayload payload = new NumberPayload(name.getName(), number);
         ServerPlayNetworking.send(player, payload);
     }
 
-    public static void sendLongPacket(ServerPlayerEntity player, String name, long number) {
+    public static void sendLongPacket(ServerPlayerEntity player, PacketNames name, long number) {
         if (player == null) return;
-        LongPayload payload = new LongPayload(name, number);
+        LongPayload payload = new LongPayload(name.getName(), number);
         ServerPlayNetworking.send(player, payload);
     }
 
@@ -300,7 +309,7 @@ public class NetworkHandlerServer {
         }
     }
 
-    public static void sendLongPackets(String name, long number) {
+    public static void sendLongPackets(PacketNames name, long number) {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             sendLongPacket(player, name, number);
         }
@@ -308,38 +317,38 @@ public class NetworkHandlerServer {
 
     public static void sendUpdatePacketTo(ServerPlayerEntity player) {
         if (currentSeason instanceof WildLife) {
-            sendNumberPacket(player, "player_min_mspt", TimeDilation.MIN_PLAYER_MSPT);
+            sendNumberPacket(player, PacketNames.PLAYER_MIN_MSPT, TimeDilation.MIN_PLAYER_MSPT);
 
             List<String> activeWildcards = new ArrayList<>();
             for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
                 activeWildcards.add(wildcard.getStringName());
             }
-            sendStringPacket(player, "activeWildcards", String.join("__", activeWildcards));
+            sendStringPacket(player, PacketNames.ACTIVE_WILDCARDS, String.join("__", activeWildcards));
         }
-        sendStringPacket(player, "currentSeason", currentSeason.getSeason().getId());
-        sendStringPacket(player, "tablist_show_exact", String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
+        sendStringPacket(player, PacketNames.CURRENT_SEASON, currentSeason.getSeason().getId());
+        sendStringPacket(player, PacketNames.TABLIST_SHOW_EXACT, String.valueOf(Season.TAB_LIST_SHOW_EXACT_LIVES));
     }
 
     public static void sendUpdatePackets() {
         PlayerUtils.getAllPlayers().forEach(NetworkHandlerServer::sendUpdatePacketTo);
     }
 
-    public static void sendPlayerDisguise(String name, String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
-        PlayerDisguisePayload payload = new PlayerDisguisePayload(name, hiddenUUID, hiddenName, shownUUID, shownName);
+    public static void sendPlayerDisguise(String hiddenUUID, String hiddenName, String shownUUID, String shownName) {
+        PlayerDisguisePayload payload = new PlayerDisguisePayload(PacketNames.PLAYER_DISGUISE.getName(), hiddenUUID, hiddenName, shownUUID, shownName);
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             ServerPlayNetworking.send(player, payload);
         }
     }
 
     public static void sendPlayerInvisible(UUID uuid, long timestamp) {
-        LongPayload payload = new LongPayload("player_invisible__"+uuid.toString(), timestamp);
+        LongPayload payload = new LongPayload(PacketNames.PLAYER_INVISIBLE.getName()+uuid.toString(), timestamp);
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
             ServerPlayNetworking.send(player, payload);
         }
     }
 
     public static void sendVignette(ServerPlayerEntity player, long durationMillis) {
-        LongPayload payload = new LongPayload("show_vignette", durationMillis);
+        LongPayload payload = new LongPayload(PacketNames.SHOW_VIGNETTE.getName(), durationMillis);
         ServerPlayNetworking.send(player, payload);
     }
 

@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TimeControl;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -227,7 +228,7 @@ public class WildcardManager {
         if (isActiveWildcard(Wildcards.TRIVIA)) {
             for (UUID uuid : TriviaBot.cursedSliding) {
                 ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
-                NetworkHandlerServer.sendLongPacket(player, "curse_sliding", System.currentTimeMillis());
+                NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, System.currentTimeMillis());
             }
         }
     }
@@ -243,7 +244,7 @@ public class WildcardManager {
         if (chosenWildcard == null && activeWildcards.isEmpty()) {
             for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
                 if (PermissionManager.isAdmin(player)) {
-                    NetworkHandlerServer.sendStringPacket(player, "select_wildcards", "true");
+                    NetworkHandlerServer.sendStringPacket(player, PacketNames.SELECT_WILDCARDS, "true");
                 }
             }
         }

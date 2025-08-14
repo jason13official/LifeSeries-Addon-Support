@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.TextColors;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -86,12 +87,12 @@ public class ChooseSeasonScreen extends DefaultScreen {
                     if (region == 6) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.WILD_LIFE.getName()));
                 }
                 else {
-                    if (region == 1) NetworkHandlerClient.sendStringPacket("set_season", Seasons.THIRD_LIFE.getName());
-                    if (region == 2) NetworkHandlerClient.sendStringPacket("set_season", Seasons.LAST_LIFE.getName());
-                    if (region == 3) NetworkHandlerClient.sendStringPacket("set_season", Seasons.DOUBLE_LIFE.getName());
-                    if (region == 4) NetworkHandlerClient.sendStringPacket("set_season", Seasons.LIMITED_LIFE.getName());
-                    if (region == 5) NetworkHandlerClient.sendStringPacket("set_season", Seasons.SECRET_LIFE.getName());
-                    if (region == 6) NetworkHandlerClient.sendStringPacket("set_season", Seasons.WILD_LIFE.getName());
+                    if (region == 1) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.THIRD_LIFE.getName());
+                    if (region == 2) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.LAST_LIFE.getName());
+                    if (region == 3) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.DOUBLE_LIFE.getName());
+                    if (region == 4) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.LIMITED_LIFE.getName());
+                    if (region == 5) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.SECRET_LIFE.getName());
+                    if (region == 6) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.WILD_LIFE.getName());
                     if (this.client != null) this.client.setScreen(null);
                 }
                 return true;

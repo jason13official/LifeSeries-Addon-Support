@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -61,13 +62,13 @@ public class Flight extends Superpower {
         }
         if (!isLaunchedUp) {
             onGroundTicks = 0;
-            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "true");
+            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
             return;
         }
 
         if (player.isOnGround()) {
             onGroundTicks++;
-            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "true");
+            if (ticks % 5 == 0) NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "true");
         }
 
         else {
@@ -92,10 +93,10 @@ public class Flight extends Superpower {
 
         StatusEffectInstance effect = new StatusEffectInstance(StatusEffects.JUMP_BOOST, 20, 54, false, false, false);
         player.addStatusEffect(effect);
-        NetworkHandlerServer.sendStringPacket(player, "jump", "");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.JUMP, "");
 
         isLaunchedUp = true;
-        NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "false");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
     }
 
     @Override
@@ -104,7 +105,7 @@ public class Flight extends Superpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
         TaskScheduler.scheduleTask(1, () -> player.getInventory().markDirty());
-        NetworkHandlerServer.sendStringPacket(player, "prevent_gliding", "false");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.PREVENT_GLIDING, "false");
     }
 
     private void giveHelmet() {

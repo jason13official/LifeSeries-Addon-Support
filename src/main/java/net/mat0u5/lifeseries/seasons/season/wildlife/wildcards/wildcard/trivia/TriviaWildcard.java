@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
@@ -213,7 +214,7 @@ public class TriviaWildcard extends Wildcard {
             bot.setBoundPlayer(player);
             bots.put(player.getUuid(), bot);
             player.playSoundToPlayer(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 0.5f, 1);
-            NetworkHandlerServer.sendNumberPacket(player, "fake_thunder", 7);
+            NetworkHandlerServer.sendNumberPacket(player, PacketNames.FAKE_THUNDER, 7);
         }
     }
 
@@ -241,9 +242,9 @@ public class TriviaWildcard extends Wildcard {
 
         TriviaBot.cursedSliding.remove(player.getUuid());
         TriviaBot.cursedRoboticVoicePlayers.remove(player.getUuid());
-        NetworkHandlerServer.sendLongPacket(player, "curse_sliding", 0);
+        NetworkHandlerServer.sendLongPacket(player, PacketNames.CURSE_SLIDING, 0);
 
-        NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
     }
 
     public static void killAllBots() {
@@ -258,7 +259,7 @@ public class TriviaWildcard extends Wildcard {
         }
         toKill.forEach(Entity::discard);
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            NetworkHandlerServer.sendStringPacket(player, "reset_trivia", "true");
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.RESET_TRIVIA, "true");
         }
     }
 

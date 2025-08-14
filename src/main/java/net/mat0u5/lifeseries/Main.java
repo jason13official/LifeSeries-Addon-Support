@@ -19,6 +19,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.interfaces.IClientHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.6.26";
+	public static final String MOD_VERSION = "dev-1.3.6.27";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -151,8 +152,8 @@ public class Main implements ModInitializer {
 			currentSeason.onPlayerJoin(player);
 			currentSeason.onPlayerFinishJoining(player);
 			NetworkHandlerServer.tryKickFailedHandshake(player);
-			NetworkHandlerServer.sendStringPacket(player, "season_info", currentSeason.getSeason().getId());
-			NetworkHandlerServer.sendLongPacket(player, "session_timer", SessionTimerStates.NOT_STARTED.getValue());
+			NetworkHandlerServer.sendStringPacket(player, PacketNames.SEASON_INFO, currentSeason.getSeason().getId());
+			NetworkHandlerServer.sendLongPacket(player, PacketNames.SESSION_TIMER, SessionTimerStates.NOT_STARTED.getValue());
 		}
 		SessionTranscript.resetStats();
 		return true;

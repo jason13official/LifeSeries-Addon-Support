@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.S
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -184,7 +185,7 @@ public class WildLifeCommands {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        NetworkHandlerServer.sendStringPacket(player, "snail_textures_info" ,"");
+        NetworkHandlerServer.sendStringPacket(player, PacketNames.SNAIL_TEXTURES_INFO ,"");
 
         return 1;
     }
@@ -209,7 +210,7 @@ public class WildLifeCommands {
         }
 
         OtherUtils.sendCommandFeedback(source, Text.of("§7Opening the Wildcard selection GUI..."));
-        NetworkHandlerServer.sendStringPacket(source.getPlayer(), "select_wildcards", "true");
+        NetworkHandlerServer.sendStringPacket(source.getPlayer(), PacketNames.SELECT_WILDCARDS, "true");
         return 1;
     }
 
@@ -261,7 +262,7 @@ public class WildLifeCommands {
             return -1;
         }
         superpower.cooldown = 0;
-        NetworkHandlerServer.sendLongPacket(player, "superpower_cooldown", 0);
+        NetworkHandlerServer.sendLongPacket(player, PacketNames.SUPERPOWER_COOLDOWN, 0);
 
         OtherUtils.sendCommandFeedback(source, Text.of("Your superpower cooldown has been skipped"));
         return 1;

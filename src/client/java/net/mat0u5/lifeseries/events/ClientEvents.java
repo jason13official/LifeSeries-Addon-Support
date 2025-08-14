@@ -14,6 +14,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -175,7 +176,7 @@ public class ClientEvents {
         jumpedInAir++;
         player.jump();
         player.playSoundToPlayer(SoundEvents.ENTITY_WIND_CHARGE_WIND_BURST.value(), SoundCategory.MASTER, 0.25f, 1f);
-        NetworkHandlerClient.sendStringPacket("triple_jump","");
+        NetworkHandlerClient.sendStringPacket(PacketNames.TRIPLE_JUMP,"");
     }
 
     private static boolean hasTripleJumpEffect(ClientPlayerEntity player) {
@@ -198,7 +199,7 @@ public class ClientEvents {
         if (System.currentTimeMillis() - MainClient.snailPosTime > 2000) return;
         if (invisibleSnailFor > 60) {
             invisibleSnailFor = 0;
-            NetworkHandlerClient.sendStringPacket("reset_snail_model", "");
+            NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_SNAIL_MODEL, "");
         }
 
         List<Entity> snailEntities = new ArrayList<>();
@@ -226,7 +227,7 @@ public class ClientEvents {
         if (System.currentTimeMillis() - MainClient.triviaSnailPosTime > 2000) return;
         if (invisibleTriviaSnailFor > 60) {
             invisibleTriviaSnailFor = 0;
-            NetworkHandlerClient.sendStringPacket("reset_snail_model", "");
+            NetworkHandlerClient.sendStringPacket(PacketNames.REQUEST_SNAIL_MODEL, "");
         }
 
         List<Entity> snailEntities = new ArrayList<>();
