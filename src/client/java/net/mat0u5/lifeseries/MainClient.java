@@ -27,7 +27,7 @@ import java.util.*;
 
 public class MainClient implements ClientModInitializer, IClientHelper {
 
-    public static Seasons clientCurrentSeason = Seasons.UNASSIGNED;
+    public static Seasons clientCurrentSeason = Main.DEFAULT_SEASON;
     public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
     public static List<Wildcards> clientActiveWildcards = new ArrayList<>();
     public static long TIME_DILATION_TIMESTAMP = 0;

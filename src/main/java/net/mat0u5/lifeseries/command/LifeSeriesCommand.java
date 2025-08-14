@@ -217,10 +217,15 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test {}", player));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{}Test5 {}", player, 5));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test6 {}{} in the {}", player, 5, false));
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Test8 {} {} in the {} for the {}.", player, 5, false, source));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("v.1.3.6.25"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("1.3.6.25"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-1.3.6.25"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("1.3.6.25-personname"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-1.3.6.25-personname-two"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-test-1.3.6.25-personname-two"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-test-...1.3.-personname-two"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-test-...1..3.-personname-two"))));
+        OtherUtils.sendCommandFeedbackQuiet(source, Text.of(String.valueOf(VersionControl.getModVersionInt("dev-test-...1......3.-personname-two"))));
 
         return 1;
     }

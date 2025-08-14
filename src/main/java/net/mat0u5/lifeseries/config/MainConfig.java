@@ -15,6 +15,6 @@ public class MainConfig extends ConfigManager {
     }
     @Override
     public void instantiateProperties() {
-        getOrCreateProperty("currentSeries","unassigned");
+        getOrCreateProperty("currentSeries", Main.DEFAULT_SEASON.getId());
     }
 }

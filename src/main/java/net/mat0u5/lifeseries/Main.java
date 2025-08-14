@@ -33,12 +33,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.6.25";
+	public static final String MOD_VERSION = "dev-1.3.6.26";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final boolean DEBUG = false;
+	public static final boolean ISOLATED_ENVIROMENT = false;
+	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static ConfigManager config;
 	public static IClientHelper clientHelper;
 
@@ -61,13 +64,15 @@ public class Main implements ModInitializer {
 		}
 
 		config = new MainConfig();
-		String season = config.getOrCreateProperty("currentSeries", Seasons.UNASSIGNED.getId());
+		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
 		parseSeason(season);
 		ConfigManager.createConfigs();
 
 		ModRegistries.registerModStuff();
-		UpdateChecker.checkForMajorUpdates();
+		if (!ISOLATED_ENVIROMENT) {
+			UpdateChecker.checkForMajorUpdates();
+		}
 
 		NetworkHandlerServer.registerPackets();
 		NetworkHandlerServer.registerServerReceiver();

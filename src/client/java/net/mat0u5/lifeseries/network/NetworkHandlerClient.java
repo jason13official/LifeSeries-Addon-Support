@@ -21,6 +21,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.TimeDila
 import net.mat0u5.lifeseries.seasons.session.SessionStatus;
 import net.mat0u5.lifeseries.utils.ClientResourcePacks;
 import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
@@ -44,7 +45,7 @@ public class NetworkHandlerClient {
         });
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
-            client.execute(NetworkHandlerClient::sendHandshake);
+            client.execute(() -> handleHandshake(payload));
         });
         ClientPlayNetworking.registerGlobalReceiver(TriviaQuestionPayload.ID, (payload, context) -> {
             MinecraftClient client = context.client();
@@ -283,7 +284,9 @@ public class NetworkHandlerClient {
         }
     }
 
-    public static void sendHandshake() {
+    public static void handleHandshake(HandshakePayload payload) {
+        Main.LOGGER.info(TextUtils.formatString("[PACKET_CLIENT] Received handshake (from server): {{}, {}}", payload.modVersionStr(), payload.modVersion()));
+
         String clientVersionStr = Main.MOD_VERSION;
         String clientCompatibilityStr = VersionControl.clientCompatibilityMin();
 

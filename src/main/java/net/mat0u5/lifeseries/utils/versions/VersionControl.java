@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.utils.versions;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.utils.other.TextUtils;
 
 import static net.mat0u5.lifeseries.Main.MOD_VERSION;
 
@@ -11,17 +12,25 @@ public class VersionControl {
 
 
     public static int getModVersionInt(String string) {
-        if (string.startsWith("v.")) {
-            string = string.substring(2);
-        }
-        string = string.replaceAll("^\\D+", "");
+        String originalVersion = string;
+        string = string.replaceAll("[^\\d.]", ""); //Remove all non-digit and non-dot characters.
+        string = string.replaceAll("^\\.+|\\.+$", ""); //Remove all leading or trailing dots.
+        while (string.contains("..")) string = string.replace("..",".");
 
         String[] parts = string.split("\\.");
 
-        int major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
-        int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-        int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
-        int build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
+        int major = 0;
+        int minor = 0;
+        int patch = 0;
+        int build = 0;
+        try {
+            major = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
+            minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+            patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+            build = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
+        }catch(Exception e) {
+            Main.LOGGER.error(TextUtils.formatString("Failed to parse mod version to int: {} (formatted to {})", originalVersion, string));
+        }
 
         return (major * 100000) + (minor * 10000) + (patch * 1000) + build;
     }
@@ -52,11 +61,13 @@ public class VersionControl {
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
+        if (Main.ISOLATED_ENVIROMENT) return MOD_VERSION;
         return "1.3.6";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
+        if (Main.ISOLATED_ENVIROMENT) return MOD_VERSION;
         return "dev-1.3.6.8";
     }
 }

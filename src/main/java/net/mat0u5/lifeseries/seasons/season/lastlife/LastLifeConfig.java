@@ -88,8 +88,8 @@ public class LastLifeConfig extends ConfigManager {
     public void instantiateProperties() {
         CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_CLAMPED_ENCHANTS);
+        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
         GIVELIFE_COMMAND_ENABLED.defaultValue = true;
         BOOGEYMAN.defaultValue = true;
         super.instantiateProperties();

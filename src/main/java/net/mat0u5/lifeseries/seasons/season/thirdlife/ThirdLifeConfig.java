@@ -59,8 +59,8 @@ public class ThirdLifeConfig extends ConfigManager {
     @Override
     public void instantiateProperties() {
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_CLAMPED_ENCHANTS);
+        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
         super.instantiateProperties();
     }
 }

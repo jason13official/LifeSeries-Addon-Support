@@ -29,7 +29,6 @@ import net.minecraft.network.DisconnectionInfo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,36 +191,44 @@ public class NetworkHandlerServer {
     public static void handleHandshakeResponse(ServerPlayerEntity player, HandshakePayload payload) {
         String clientVersionStr = payload.modVersionStr();
         String clientCompatibilityStr = payload.compatibilityStr();
-
-        int clientVersion = payload.modVersion();
-        int clientCompatibility = payload.compatibility();
-
-
         String serverVersionStr = Main.MOD_VERSION;
         String serverCompatibilityStr = VersionControl.serverCompatibilityMin();
 
-        int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
-        int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
+        if (!Main.ISOLATED_ENVIROMENT) {
+            int clientVersion = payload.modVersion();
+            int clientCompatibility = payload.compatibility();
+            int serverVersion = VersionControl.getModVersionInt(serverVersionStr);
+            int serverCompatibility = VersionControl.getModVersionInt(serverCompatibilityStr);
 
-        //Check if client version is compatible with the server version
-        if (clientVersion < serverCompatibility) {
-            Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
-                    "Update the client version to at least version "+serverCompatibilityStr);
-            player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
-            return;
+            //Check if client version is compatible with the server version
+            if (clientVersion < serverCompatibility) {
+                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                        "Update the client version to at least version "+serverCompatibilityStr);
+                player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
+                return;
+            }
+
+            //Check if server version is compatible with the client version
+            if (serverVersion < clientCompatibility) {
+                Text disconnectText = Text.literal("[Life Series Mod] Server-Client version mismatch!\n" +
+                        "The client version is too new for the server.\n" +
+                        "Either update the server, or downgrade the client version to " + serverVersionStr);
+                player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
+                return;
+            }
+        }
+        else {
+            //Isolated enviroment -> mod versions must be IDENTICAL between client and server
+            //Check if client version is the same as the server version
+            if (!clientVersionStr.equalsIgnoreCase(serverVersionStr)) {
+                Text disconnectText = Text.literal("[Life Series Mod] Client-Server version mismatch!\n" +
+                        "You must join with version "+serverCompatibilityStr);
+                player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
+                return;
+            }
         }
 
-        //Check if server version is compatible with the client version
-        if (serverVersion < clientCompatibility) {
-            Text disconnectText = Text.literal("[Life Series Mod] Server-Client version mismatch!\n" +
-                    "The client version is too new for the server.\n" +
-                    "Either update the server, or downgrade the client version to " + serverVersionStr);
-            player.networkHandler.disconnect(new DisconnectionInfo(disconnectText));
-            return;
-        }
-
-        if (VersionControl.isDevVersion()) Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
-
+        Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
         handshakeSuccessful.add(player.getUuid());
     }
 

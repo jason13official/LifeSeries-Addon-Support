@@ -214,8 +214,8 @@ public class WildLifeConfig extends ConfigManager {
     public void instantiateProperties() {
         CUSTOM_ENCHANTER_ALGORITHM.defaultValue = true;
         BLACKLIST_ITEMS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_ITEMS);
-        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_BLOCKS);
-        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", BLACKLIST_CLAMPED_ENCHANTS);
+        BLACKLIST_BLOCKS.defaultValue = TextUtils.formatString("[{}]", BLACKLISTED_BLOCKS);
+        BLACKLIST_CLAMPED_ENCHANTS.defaultValue = TextUtils.formatString("[{}]", CLAMPED_ENCHANTMENTS);
         DEFAULT_LIVES.defaultValue = 6;
         SPAWN_EGG_ALLOW_ON_SPAWNER.defaultValue = true;
         SPAWNER_RECIPE.defaultValue = true;
