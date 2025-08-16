@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.mixin.client;
 
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -30,7 +31,7 @@ public class PlayerListHudMixin {
         MutableText originalText = ReadableScoreboardScore.getFormattedScore(readableScoreboardScore, numberFormat);
         if (readableScoreboardScore == null || originalText == null) return originalText;
 
-        if (objective != null && objective.getName().equals("Lives")) {
+        if (objective != null && objective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
             int score = readableScoreboardScore.getScore();
             if (MainClient.clientCurrentSeason != Seasons.LIMITED_LIFE) {
                 if (score >= 4 && !MainClient.TAB_LIST_SHOW_EXACT_LIVES && !Main.DEBUG) {

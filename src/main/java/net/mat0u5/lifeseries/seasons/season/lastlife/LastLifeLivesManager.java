@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.lastlife;
 
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -15,8 +16,9 @@ import net.minecraft.util.Formatting;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 
-public class LastLifeLivesManager {
+public class LastLifeLivesManager extends LivesManager {
     public SessionAction actionChooseLives = new SessionAction(
             OtherUtils.minutesToTicks(1),"§7Assign lives if necessary §f[00:01:00]", "Assign lives if necessary"
     ) {
@@ -30,7 +32,7 @@ public class LastLifeLivesManager {
     public void assignRandomLivesToUnassignedPlayers() {
         List<ServerPlayerEntity> assignTo = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (currentSeason.hasAssignedLives(player)) continue;
+            if (livesManager.hasAssignedLives(player)) continue;
             assignTo.add(player);
         }
         if (assignTo.isEmpty()) return;
@@ -62,7 +64,7 @@ public class LastLifeLivesManager {
             int totalSize = lives.size();
             int chosenNotRandomly = LastLife.ROLL_MIN_LIVES;
             for (ServerPlayerEntity player : lives.keySet()) {
-                Integer currentLives = currentSeason.getPlayerLives(player);
+                Integer currentLives = livesManager.getPlayerLives(player);
                 if (currentLives != null) {
                     lives.put(player, currentLives);
                     continue;
@@ -86,7 +88,7 @@ public class LastLifeLivesManager {
             for (Map.Entry<ServerPlayerEntity, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayerEntity player = playerEntry.getKey();
-                Text textLives = currentSeason.getFormattedLives(livesNum);
+                Text textLives = livesManager.getFormattedLives(livesNum);
                 PlayerUtils.sendTitle(player, textLives, 0, 25, 0);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.UI_BUTTON_CLICK.value());
@@ -98,11 +100,11 @@ public class LastLifeLivesManager {
             for (Map.Entry<ServerPlayerEntity, Integer> playerEntry : lives.entrySet()) {
                 Integer livesNum = playerEntry.getValue();
                 ServerPlayerEntity player = playerEntry.getKey();
-                Text textLives = TextUtils.format("{}§a lives.", currentSeason.getFormattedLives(livesNum));
+                Text textLives = TextUtils.format("{}§a lives.", livesManager.getFormattedLives(livesNum));
                 PlayerUtils.sendTitle(player, textLives, 0, 60, 20);
-                if (currentSeason.hasAssignedLives(player)) continue;
+                if (livesManager.hasAssignedLives(player)) continue;
                 SessionTranscript.assignRandomLives(player, livesNum);
-                currentSeason.setPlayerLives(player, livesNum);
+                livesManager.setPlayerLives(player, livesNum);
             }
             PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.BLOCK_END_PORTAL_SPAWN);
             currentSeason. reloadAllPlayerTeams();
@@ -116,7 +118,7 @@ public class LastLifeLivesManager {
             displayLives = rnd.nextInt(minLives, maxLives+1);
         }
         int finalDisplayLives = displayLives;
-        PlayerUtils.sendTitleToPlayers(lives.keySet(), currentSeason.getFormattedLives(finalDisplayLives), 0, 25, 0);
+        PlayerUtils.sendTitleToPlayers(lives.keySet(), livesManager.getFormattedLives(finalDisplayLives), 0, 25, 0);
         PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.UI_BUTTON_CLICK.value());
         TaskScheduler.scheduleTask(delay, ()-> lifeRoll( currentStep+1, finalDisplayLives, lives));
     }

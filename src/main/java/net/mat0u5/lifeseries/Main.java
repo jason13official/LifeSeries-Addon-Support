@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.registries.ModRegistries;
 import net.mat0u5.lifeseries.resources.datapack.DatapackManager;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
@@ -50,6 +51,7 @@ public class Main implements ModInitializer {
 	public static MinecraftServer server;
 	public static Season currentSeason;
 	public static Session currentSession;
+	public static LivesManager livesManager;
 	public static Blacklist blacklist;
 	public static ConfigManager seasonConfig;
 	public static final List<String> ALLOWED_SEASON_NAMES = Seasons.getSeasonIds();
@@ -105,6 +107,7 @@ public class Main implements ModInitializer {
 		currentSession = new Session();
 		currentSession.sessionLength = currentSessionLength;
 
+		livesManager = currentSeason.livesManager;
 		seasonConfig = currentSeason.getConfig();
 		blacklist = currentSeason.createBlacklist();
 	}
@@ -143,7 +146,7 @@ public class Main implements ModInitializer {
 		}
 
 		config.setProperty("currentSeries", changeTo);
-		currentSeason.resetAllPlayerLivesInner();
+		livesManager.resetAllPlayerLivesInner();
 		currentSession.sessionEnd();
 		Main.parseSeason(changeTo);
 		currentSeason.initialize();

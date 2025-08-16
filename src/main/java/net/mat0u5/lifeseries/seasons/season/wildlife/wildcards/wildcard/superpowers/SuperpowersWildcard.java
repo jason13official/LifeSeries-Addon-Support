@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class SuperpowersWildcard extends Wildcard {
     private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
@@ -61,8 +62,8 @@ public class SuperpowersWildcard extends Wildcard {
         boolean shouldRandomizeNecromancy = false;
         double necromancyRandomizeChance = 0;
         if (shouldIncludeNecromancy) {
-            int alivePlayersNum = currentSeason.getAlivePlayers().size();
-            int deadPlayersNum = currentSeason.getDeadPlayers().size();
+            int alivePlayersNum = livesManager.getAlivePlayers().size();
+            int deadPlayersNum = livesManager.getDeadPlayers().size();
             int totalPlayersNum = alivePlayersNum + deadPlayersNum;
             if (totalPlayersNum >= 6) {
                 implemented.remove(Superpowers.NECROMANCY);
@@ -76,7 +77,7 @@ public class SuperpowersWildcard extends Wildcard {
 
         Collections.shuffle(implemented);
         int pos = 0;
-        List<ServerPlayerEntity> allPlayers = currentSeason.getAlivePlayers();
+        List<ServerPlayerEntity> allPlayers = livesManager.getAlivePlayers();
         Collections.shuffle(allPlayers);
         for (ServerPlayerEntity player : allPlayers) {
             Superpowers power = implemented.get(pos%implemented.size());
@@ -128,7 +129,7 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void pressedSuperpowerKey(ServerPlayerEntity player) {
         if (playerSuperpowers.containsKey(player.getUuid())) {
-            if (currentSeason.isAlive(player)) {
+            if (livesManager.isAlive(player)) {
                 playerSuperpowers.get(player.getUuid()).onKeyPressed();
             }
             else {

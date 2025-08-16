@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.limitedlife;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.command.SessionCommand;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -126,13 +128,13 @@ public class LimitedLifeCommands {
         ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!currentSeason.hasAssignedLives(self)) {
+        if (!livesManager.hasAssignedLives(self)) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any time yet"));
             return 1;
         }
 
-        Integer playerLives = currentSeason.getPlayerLives(self);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} left", currentSeason.getFormattedLives(playerLives)));
+        Integer playerLives = livesManager.getPlayerLives(self);
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} left", livesManager.getFormattedLives(playerLives)));
         if (playerLives == null || playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
@@ -143,12 +145,12 @@ public class LimitedLifeCommands {
     public static int getAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        if (!ScoreboardUtils.existsObjective("Lives")) {
+        if (!ScoreboardUtils.existsObjective(LivesManager.SCOREBOARD_NAME)) {
             source.sendError(Text.of("Nobody has been assigned time yet"));
             return -1;
         }
 
-        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
+        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         if (entries.isEmpty()) {
             source.sendError(Text.of("Nobody has been assigned time yet"));
             return -1;
@@ -158,8 +160,8 @@ public class LimitedLifeCommands {
             String name = entry.owner();
             if (name.startsWith("`")) continue;
             int lives = entry.value();
-            Formatting color = currentSeason.getColorForLives(lives);
-            text.append(TextUtils.format("{} has {} left\n", Text.literal(name).formatted(color), currentSeason.getFormattedLives(lives)));
+            Formatting color = livesManager.getColorForLives(lives);
+            text.append(TextUtils.format("{} has {} left\n", Text.literal(name).formatted(color), livesManager.getFormattedLives(lives)));
         }
 
         OtherUtils.sendCommandFeedbackQuiet(source, text);
@@ -170,12 +172,12 @@ public class LimitedLifeCommands {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        if (!currentSeason.hasAssignedLives(target)) {
+        if (!livesManager.hasAssignedLives(target)) {
             source.sendError(TextUtils.formatPlain("{} has not been assigned any time", target));
             return -1;
         }
-        Integer lives = currentSeason.getPlayerLives(target);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} left", target,currentSeason.getFormattedLives(lives)));
+        Integer lives = livesManager.getPlayerLives(target);
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} left", target,livesManager.getFormattedLives(lives)));
         return 1;
     }
 
@@ -199,14 +201,14 @@ public class LimitedLifeCommands {
 
         if (setNotGive) {
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s time to {}", targets.iterator().next(), currentSeason.getFormattedLives(amount)));
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s time to {}", targets.iterator().next(), livesManager.getFormattedLives(amount)));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set time to {} for {} targets", currentSeason.getFormattedLives(amount), targets.size()));
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set time to {} for {} targets", livesManager.getFormattedLives(amount), targets.size()));
             }
 
             for (ServerPlayerEntity player : targets) {
-                currentSeason.setPlayerLives(player, amount);
+                livesManager.setPlayerLives(player, amount);
             }
         }
         else {
@@ -222,7 +224,7 @@ public class LimitedLifeCommands {
             }
 
             for (ServerPlayerEntity player : targets) {
-                currentSeason.addToPlayerLives(player,amount);
+                livesManager.addToPlayerLives(player,amount);
             }
         }
 
@@ -234,7 +236,7 @@ public class LimitedLifeCommands {
         if (targets == null || targets.isEmpty()) return -1;
 
         for (ServerPlayerEntity player : targets) {
-            currentSeason.resetPlayerLife(player);
+            livesManager.resetPlayerLife(player);
         }
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s time", targets.iterator().next()));
@@ -248,7 +250,7 @@ public class LimitedLifeCommands {
     public static int resetAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        currentSeason.resetAllPlayerLives();
+        livesManager.resetAllPlayerLives();
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's time"));
         return 1;
     }

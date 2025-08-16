@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -20,6 +21,7 @@ import net.minecraft.util.Formatting;
 import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -122,13 +124,13 @@ public class LivesCommand {
         ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!currentSeason.hasAssignedLives(self)) {
+        if (!livesManager.hasAssignedLives(self)) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You have not been assigned any lives yet"));
             return 1;
         }
 
-        Integer playerLives = currentSeason.getPlayerLives(self);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} {}", currentSeason.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
+        Integer playerLives = livesManager.getPlayerLives(self);
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} {}", livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
         if (playerLives == null || playerLives <= 0) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Womp womp."));
         }
@@ -139,12 +141,12 @@ public class LivesCommand {
     public static int getAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        if (!ScoreboardUtils.existsObjective("Lives")) {
+        if (!ScoreboardUtils.existsObjective(LivesManager.SCOREBOARD_NAME)) {
             source.sendError(Text.of("Nobody has been assigned lives yet"));
             return -1;
         }
 
-        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores("Lives");
+        Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(LivesManager.SCOREBOARD_NAME);
         if (entries.isEmpty()) {
             source.sendError(Text.of("Nobody has been assigned lives yet"));
             return -1;
@@ -154,8 +156,8 @@ public class LivesCommand {
             String name = entry.owner();
             if (name.startsWith("`")) continue;
             int lives = entry.value();
-            Formatting color = currentSeason.getColorForLives(lives);
-            text.append(TextUtils.format("{} has {} {}\n", Text.literal(name).formatted(color), currentSeason.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+            Formatting color = livesManager.getColorForLives(lives);
+            text.append(TextUtils.format("{} has {} {}\n", Text.literal(name).formatted(color), livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         }
 
         OtherUtils.sendCommandFeedbackQuiet(source, text);
@@ -166,12 +168,12 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (target == null) return -1;
 
-        if (!currentSeason.hasAssignedLives(target)) {
+        if (!livesManager.hasAssignedLives(target)) {
             source.sendError(TextUtils.formatPlain("{} has not been assigned any lives", target));
             return -1;
         }
-        Integer lives = currentSeason.getPlayerLives(target);
-        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} {}", target, currentSeason.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
+        Integer lives = livesManager.getPlayerLives(target);
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} {}", target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         return 1;
     }
 
@@ -189,14 +191,14 @@ public class LivesCommand {
         if (setNotGive) {
 
             if (targets.size() == 1) {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s lives to {}", targets.iterator().next(), currentSeason.getFormattedLives(amount)));
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set {}'s lives to {}", targets.iterator().next(), livesManager.getFormattedLives(amount)));
             }
             else {
-                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set lives to {} for {} targets", currentSeason.getFormattedLives(amount), targets.size()));
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Set lives to {} for {} targets", livesManager.getFormattedLives(amount), targets.size()));
             }
 
             for (ServerPlayerEntity player : targets) {
-                currentSeason.setPlayerLives(player, amount);
+                livesManager.setPlayerLives(player, amount);
             }
         }
         else {
@@ -213,7 +215,7 @@ public class LivesCommand {
             }
 
             for (ServerPlayerEntity player : targets) {
-                currentSeason.addToPlayerLives(player,amount);
+                livesManager.addToPlayerLives(player,amount);
             }
         }
         if (currentSeason instanceof DoubleLife doubleLife) {
@@ -226,7 +228,7 @@ public class LivesCommand {
         if (checkBanned(source)) return -1;
         if (targets == null || targets.isEmpty()) return -1;
 
-        targets.forEach(currentSeason::resetPlayerLife);
+        targets.forEach(livesManager::resetPlayerLife);
 
         if (targets.size() == 1) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("Reset {}'s lives", targets.iterator().next()));
@@ -241,7 +243,7 @@ public class LivesCommand {
     public static int resetAllLives(ServerCommandSource source) {
         if (checkBanned(source)) return -1;
 
-        currentSeason.resetAllPlayerLives();
+        livesManager.resetAllPlayerLives();
         OtherUtils.sendCommandFeedback(source, Text.literal("Reset everyone's lives"));
         return 1;
     }

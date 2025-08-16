@@ -27,8 +27,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Necromancy extends Superpower {
     public static final List<UUID> ressurectedPlayers = new ArrayList<>();
@@ -99,7 +98,7 @@ public class Necromancy extends Superpower {
     public void deactivate() {
         super.deactivate();
         List<UUID> deadAgain = new ArrayList<>();
-        for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
+        for (ServerPlayerEntity player : livesManager.getDeadPlayers()) {
             if (player.isSpectator()) continue;
             UUID uuid = player.getUuid();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
@@ -116,7 +115,7 @@ public class Necromancy extends Superpower {
     public void tick() {
         for (UUID uuid : perPlayerRessurections) {
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
-            if (player != null && currentSeason.isAlive(player)) {
+            if (player != null && livesManager.isAlive(player)) {
                 perPlayerRessurections.remove(uuid);
                 ressurectedPlayers.remove(uuid);
                 AttributeUtils.resetAttributesOnPlayerJoin(player);
@@ -126,7 +125,7 @@ public class Necromancy extends Superpower {
 
     public static List<ServerPlayerEntity> getDeadSpectatorPlayers() {
         List<ServerPlayerEntity> deadPlayers = new ArrayList<>();
-        for (ServerPlayerEntity player : currentSeason.getDeadPlayers()) {
+        for (ServerPlayerEntity player : livesManager.getDeadPlayers()) {
             if (!player.isSpectator()) continue;
             deadPlayers.add(player);
         }
@@ -134,7 +133,7 @@ public class Necromancy extends Superpower {
     }
 
     public static boolean shouldBeIncluded() {
-        return !currentSeason.getDeadPlayers().isEmpty();
+        return !livesManager.getDeadPlayers().isEmpty();
     }
 
     public static boolean isRessurectedPlayer(ServerPlayerEntity player) {

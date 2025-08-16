@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
@@ -159,7 +160,7 @@ public class BoogeymanManager {
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
             resetBoogeymen();
-            chooseBoogeymen(currentSeason.getAlivePlayers(), false);
+            chooseBoogeymen(livesManager.getAlivePlayers(), false);
         });
     }
 
@@ -187,7 +188,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (BOOGEYMAN_AMOUNT_MAX <= 0) return;
         if (BOOGEYMAN_AMOUNT_MAX < BOOGEYMAN_AMOUNT_MIN) return;
-        List<ServerPlayerEntity> nonRedPlayers = currentSeason.getNonRedPlayers();
+        List<ServerPlayerEntity> nonRedPlayers = livesManager.getNonRedPlayers();
         Collections.shuffle(nonRedPlayers);
 
         List<ServerPlayerEntity> normalPlayers = new ArrayList<>();
@@ -258,7 +259,7 @@ public class BoogeymanManager {
                     if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
                         PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", boogeyman.name));
                     }
-                    ScoreboardUtils.setScore(ScoreHolder.fromName(boogeyman.name), "Lives", 1);
+                    ScoreboardUtils.setScore(ScoreHolder.fromName(boogeyman.name), LivesManager.SCOREBOARD_NAME, 1);
                     continue;
                 }
                 playerFailBoogeyman(player);
@@ -270,14 +271,14 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
-        if (!currentSeason.isAlive(player)) return;
-        if (currentSeason.isOnLastLife(player, true)) return;
+        if (!livesManager.isAlive(player)) return;
+        if (livesManager.isOnLastLife(player, true)) return;
         PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
         }
-        currentSeason.setPlayerLives(player, 1);
+        livesManager.setPlayerLives(player, 1);
         boogeyman.failed = true;
         boogeyman.cured = false;
         if (currentSeason instanceof DoubleLife doubleLife) {
@@ -296,7 +297,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUuid())) return;
-        if (!currentSeason.isAlive(player)) return;
+        if (!livesManager.isAlive(player)) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         TaskScheduler.scheduleTask(40, () -> {
             player.sendMessage(Text.of("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));

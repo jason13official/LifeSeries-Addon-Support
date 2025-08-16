@@ -23,8 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.currentSession;
+import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -317,7 +316,7 @@ public class SecretLifeCommands {
             source.sendError(Text.of("You have already gifted a heart this session"));
             return -1;
         }
-        if (!secretLife.isAlive(target)) {
+        if (!livesManager.isAlive(target)) {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
@@ -349,7 +348,7 @@ public class SecretLifeCommands {
 
         SecretLife secretLife = (SecretLife) currentSeason;
 
-        if (!secretLife.isAlive(self)) {
+        if (!livesManager.isAlive(self)) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You're dead..."));
             return -1;
         }
@@ -365,7 +364,7 @@ public class SecretLifeCommands {
         if (target == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeason;
-        if (!secretLife.isAlive(target)) {
+        if (!livesManager.isAlive(target)) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} is dead", target));
             return -1;
         }

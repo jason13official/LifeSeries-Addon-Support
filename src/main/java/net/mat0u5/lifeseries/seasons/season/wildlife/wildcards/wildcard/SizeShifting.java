@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class SizeShifting extends Wildcard {
 
@@ -83,7 +84,7 @@ public class SizeShifting extends Wildcard {
 
     public static void resetSizesTick(boolean isActive) {
         for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            if (!isActive || (player.isSpectator() && !currentSeason.isAlive(player))) {
+            if (!isActive || (player.isSpectator() && !livesManager.isAlive(player))) {
                 double size = getPlayerSize(player);
                 if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) continue;
                 if (size == 1) continue;

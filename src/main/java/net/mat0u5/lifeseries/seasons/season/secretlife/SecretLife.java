@@ -101,7 +101,7 @@ public class SecretLife extends Season {
             }
         }
         TaskTypes type = TaskManager.getPlayersTaskType(player);
-        if (isOnLastLife(player, false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
+        if (livesManager.isOnLastLife(player, false) && TaskManager.submittedOrFailed.contains(player.getUuid()) && type == null) {
             TaskManager.chooseTasks(List.of(player), TaskTypes.RED);
         }
     }
@@ -235,9 +235,9 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
-        if (!hasAssignedLives(player)) {
+        if (!livesManager.hasAssignedLives(player)) {
             int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            setPlayerLives(player, lives);
+            livesManager.setPlayerLives(player, lives);
             setPlayerHealth(player, MAX_HEALTH);
             player.setHealth((float) MAX_HEALTH);
         }
@@ -279,8 +279,8 @@ public class SecretLife extends Season {
     public void sessionEnd() {
         super.sessionEnd();
         List<String> playersWithTaskBooks = new ArrayList<>();
-        for (ServerPlayerEntity player : getNonRedPlayers()) {
-            if (!isAlive(player)) continue;
+        for (ServerPlayerEntity player : livesManager.getNonRedPlayers()) {
+            if (!livesManager.isAlive(player)) continue;
             if (TaskManager.submittedOrFailed.contains(player.getUuid())) continue;
             playersWithTaskBooks.add(player.getNameForScoreboard());
         }
@@ -294,11 +294,11 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         if (isAllowedToAttack(killer, victim)) {
-            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
-                boogeymanManagerNew.cure(killer);
+            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
+                boogeymanManager.cure(killer);
             }
-            if (isOnLastLife(killer, false)) {
+            if (livesManager.isOnLastLife(killer, false)) {
                 double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
                 if (amountGained <= 0) {
                     return;

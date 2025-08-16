@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class Task {
     public String rawTask;
@@ -22,8 +23,8 @@ public class Task {
     }
 
     public static void checkPlayerColors() {
-        anyGreenPlayers = currentSeason.anyGreenPlayers();
-        anyYellowPlayers = currentSeason.anyYellowPlayers();
+        anyGreenPlayers = livesManager.anyGreenPlayers();
+        anyYellowPlayers = livesManager.anyYellowPlayers();
     }
 
     public boolean isValid() {
@@ -54,7 +55,7 @@ public class Task {
 
     public String formatString(String page) {
         if (page.contains("${random_player}")) {
-            List<ServerPlayerEntity> players = currentSeason.getAlivePlayers();
+            List<ServerPlayerEntity> players = livesManager.getAlivePlayers();
             Collections.shuffle(players);
             page = page.replaceAll("\\$\\{random_player}",players.getFirst().getNameForScoreboard());
         }

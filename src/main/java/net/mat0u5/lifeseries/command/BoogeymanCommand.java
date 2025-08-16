@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -37,7 +38,7 @@ public class BoogeymanCommand {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("boogeyman")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeason.isAlive(source.getPlayer())))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !livesManager.isAlive(source.getPlayer())))
                 .then(literal("clear")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> boogeyClear(
@@ -45,7 +46,7 @@ public class BoogeymanCommand {
                     ))
                 )
                 .then(literal("list")
-                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !currentSeason.isAlive(source.getPlayer())))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !livesManager.isAlive(source.getPlayer())))
                     .executes(context -> boogeyList(
                         context.getSource()
                     ))
@@ -85,7 +86,7 @@ public class BoogeymanCommand {
     }
 
     public static BoogeymanManager getBM() {
-        return currentSeason.boogeymanManagerNew;
+        return currentSeason.boogeymanManager;
     }
 
     public static int failBoogey(ServerCommandSource source, ServerPlayerEntity target) {

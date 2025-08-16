@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
@@ -33,7 +34,6 @@ import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
@@ -65,9 +65,9 @@ public class WildLife extends Season {
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
 
-        if (!hasAssignedLives(player)) {
+        if (!livesManager.hasAssignedLives(player)) {
             int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            setPlayerLives(player, lives);
+            livesManager.setPlayerLives(player, lives);
         }
         WildcardManager.onPlayerJoin(player);
     }
@@ -87,14 +87,14 @@ public class WildLife extends Season {
     @Override
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
         if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) return true;
-        if (isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && (isOnLastLife(victim, false))) return true;
+        if (livesManager.isOnLastLife(attacker, false)) return true;
+        if (attacker.getPrimeAdversary() == victim && (livesManager.isOnLastLife(victim, false))) return true;
 
-        if (isOnSpecificLives(attacker, 2, false) && isOnAtLeastLives(victim, 3, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && isOnSpecificLives(victim, 2, false) && isOnAtLeastLives(attacker, 3, false)) return true;
+        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) return true;
+        if (attacker.getPrimeAdversary() == victim && livesManager.isOnSpecificLives(victim, 2, false) && livesManager.isOnAtLeastLives(attacker, 3, false)) return true;
 
-        Boogeyman boogeymanAttacker = boogeymanManagerNew.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManagerNew.getBoogeyman(victim);
+        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
+        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
         if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
         return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
@@ -103,17 +103,17 @@ public class WildLife extends Season {
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         boolean gaveLife = false;
         boolean isAllowedToAttack = isAllowedToAttack(killer, victim);
-        if (isOnAtLeastLives(victim, 4, false)) {
+        if (livesManager.isOnAtLeastLives(victim, 4, false)) {
             if (Necromancy.isRessurectedPlayer(killer) && seasonConfig instanceof WildLifeConfig config) {
                 if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get(config)) {
-                    Integer currentLives = getPlayerLives(killer);
+                    Integer currentLives = livesManager.getPlayerLives(killer);
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
-                        ScoreboardUtils.setScore(ScoreHolder.fromName(killer.getNameForScoreboard()), "Lives", lives);
+                        ScoreboardUtils.setScore(ScoreHolder.fromName(killer.getNameForScoreboard()), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
-                        addPlayerLife(killer);
+                        livesManager.addPlayerLife(killer);
                         gaveLife = true;
                     }
                 }
@@ -123,15 +123,15 @@ public class WildLife extends Season {
                     if (BROADCAST_LIFE_GAIN) {
                         PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
                     }
-                    addPlayerLife(killer);
+                    livesManager.addPlayerLife(killer);
                 }
                 gaveLife = true;
             }
         }
         if (isAllowedToAttack) {
-            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
-                boogeymanManagerNew.cure(killer);
+            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
+                boogeymanManager.cure(killer);
             }
         }
         else {
@@ -144,11 +144,11 @@ public class WildLife extends Season {
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         super.onClaimKill(killer, victim);
-        if (isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
+        if (livesManager.isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             if (BROADCAST_LIFE_GAIN) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
             }
-            addPlayerLife(killer);
+            livesManager.addPlayerLife(killer);
         }
     }
 

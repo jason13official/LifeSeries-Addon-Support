@@ -15,6 +15,7 @@ import net.minecraft.text.Text;
 import java.util.Collection;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -61,7 +62,9 @@ public class LastLifeCommands {
         else {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Assigning random lives to {}§7 targets...", players.size()));
         }
-        ((LastLife) currentSeason).livesManager.assignRandomLives(players);
+        if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
+            lastLifeLivesManager.assignRandomLives(players);
+        }
         return 1;
     }
 }

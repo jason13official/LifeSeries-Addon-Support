@@ -2,9 +2,11 @@ package net.mat0u5.lifeseries.seasons.other;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
+import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
 import java.util.ArrayList;
@@ -19,6 +21,14 @@ public class WatcherManager {
     public static final String TEAM_DISPLAY_NAME = "Watcher";
     private static List<String> watchers = new ArrayList<>();
 
+    public static void createTeams() {
+        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, Formatting.DARK_GRAY);
+    }
+
+    public void createScoreboards() {
+
+    }
+
     public static void reloadWatchers() {
         watchers.clear();
         Collection<ScoreboardEntry> entries = ScoreboardUtils.getScores(SCOREBOARD_NAME);
@@ -32,14 +42,14 @@ public class WatcherManager {
     public static void addWatcher(ServerPlayerEntity player) {
         watchers.add(player.getNameForScoreboard());
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, 1);
-        currentSeason.resetPlayerLife(player);
+        currentSeason.livesManager.resetPlayerLife(player);
         player.changeGameMode(GameMode.SPECTATOR);
     }
 
     public static void removeWatcher(ServerPlayerEntity player) {
         watchers.remove(player.getNameForScoreboard());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
-        currentSeason.resetPlayerLife(player);
+        currentSeason.livesManager.resetPlayerLife(player);
     }
 
     public static boolean isWatcher(PlayerEntity player) {

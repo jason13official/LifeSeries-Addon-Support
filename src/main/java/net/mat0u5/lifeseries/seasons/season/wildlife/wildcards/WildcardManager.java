@@ -24,8 +24,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 //? if >= 1.21.2
 /*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;*/
 
@@ -107,7 +106,7 @@ public class WildcardManager {
     }
 
     public static void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (isActiveWildcard(Wildcards.SUPERPOWERS) && !SuperpowersWildcard.hasPower(player) && currentSeason.isAlive(player)) {
+        if (isActiveWildcard(Wildcards.SUPERPOWERS) && !SuperpowersWildcard.hasPower(player) && livesManager.isAlive(player)) {
             SuperpowersWildcard.rollRandomSuperpowerForPlayer(player);
         }
     }

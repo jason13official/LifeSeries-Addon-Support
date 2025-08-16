@@ -30,8 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class PlayerUtils {
     private static HashMap<Text, Integer> broadcastCooldown = new HashMap<>();
@@ -287,7 +286,7 @@ public class PlayerUtils {
 
                 boolean hidePlayer = false;
 
-                if (!currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS && currentSeason.isAlive(receivingPlayer) && !currentSeason.isAlive(player) && !WatcherManager.isWatcher(player)) {
+                if (!currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS && livesManager.isAlive(receivingPlayer) && !livesManager.isAlive(player) && !WatcherManager.isWatcher(player)) {
                     hidePlayer = true;
                 }
                 if (!currentSeason.WATCHERS_IN_TAB && !WatcherManager.isWatcher(receivingPlayer) && WatcherManager.isWatcher(player)) {

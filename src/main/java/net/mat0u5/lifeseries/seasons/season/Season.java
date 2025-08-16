@@ -7,11 +7,11 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
+import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
-import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -65,19 +65,17 @@ public abstract class Season {
     public static final String RESOURCEPACK_MINIMAL_ARMOR_SHA ="d5e9e21ab788974ef3a58bd8b14ccc7d34ea422c";
 
     public boolean NO_HEALING = false;
-    public boolean SHOW_DEATH_TITLE = false;
     public int GIVELIFE_MAX_LIVES = 99;
     public boolean TAB_LIST_SHOW_DEAD_PLAYERS = true;
     public boolean TAB_LIST_SHOW_LIVES = false;
-    public boolean FINAL_DEATH_LIGHTNING = true;
-    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static boolean SHOW_HEALTH_BELOW_NAME = false;
     public boolean WATCHERS_IN_TAB = true;
     public boolean MUTE_DEAD_PLAYERS = false;
     public boolean WATCHERS_MUTED = false;
 
-    public BoogeymanManager boogeymanManagerNew = createBoogeymanManager();
+    public BoogeymanManager boogeymanManager = createBoogeymanManager();
+    public LivesManager livesManager = createLivesManager();
 
     public abstract Seasons getSeason();
     public abstract ConfigManager getConfig();
@@ -88,6 +86,10 @@ public abstract class Season {
 
     public BoogeymanManager createBoogeymanManager() {
         return new BoogeymanManager();
+    }
+
+    public LivesManager createLivesManager() {
+        return new LivesManager();
     }
 
     public void initialize() {
@@ -106,10 +108,10 @@ public abstract class Season {
 
         ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.LIST);
         if (TAB_LIST_SHOW_LIVES) {
-            ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, "Lives");
+            ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, LivesManager.SCOREBOARD_NAME);
         }
         else if (currentListObjective != null) {
-            if (currentListObjective.getName().equals("Lives")) {
+            if (currentListObjective.getName().equals(LivesManager.SCOREBOARD_NAME)) {
                 ScoreboardUtils.setObjectiveInSlot(ScoreboardDisplaySlot.LIST, null);
             }
         }
@@ -127,18 +129,18 @@ public abstract class Season {
 
     public void reload() {
         MUTE_DEAD_PLAYERS = seasonConfig.MUTE_DEAD_PLAYERS.get(seasonConfig);
-        SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
+        LivesManager.SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
         GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get(seasonConfig);
         TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get(seasonConfig);
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seasonConfig);
-        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
-        FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
+        LivesManager.FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
+        LivesManager.FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get(seasonConfig);
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get(seasonConfig);
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get(seasonConfig);
         WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
 
-        boogeymanManagerNew.onReload();
+        boogeymanManager.onReload();
         createTeams();
         createScoreboards();
         updateStuff();
@@ -162,41 +164,12 @@ public abstract class Season {
             }
         }
 
-        TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, Formatting.DARK_GRAY);
-
-        TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
-        TeamUtils.createTeam("lives_0", "Dead", Formatting.DARK_GRAY);
-        TeamUtils.createTeam("lives_1", "Red", Formatting.RED);
-        TeamUtils.createTeam("lives_2", "Yellow", Formatting.YELLOW);
-        TeamUtils.createTeam("lives_3", "Green", Formatting.GREEN);
-        TeamUtils.createTeam("lives_4", "Dark Green", Formatting.DARK_GREEN);
+        WatcherManager.createTeams();
+        livesManager.createTeams();
     }
 
-    public Formatting getColorForLives(Integer lives) {
-        Team team = TeamUtils.getTeam(getTeamForLives(lives));
-        if (team != null) {
-            Formatting color = team.getColor();
-            if (color != null) {
-                return color;
-            }
-        }
-        return Formatting.DARK_GRAY;
-    }
-
-    public Text getFormattedLives(ServerPlayerEntity player) {
-        return getFormattedLives(getPlayerLives(player));
-    }
-
-    public Text getFormattedLives(@Nullable Integer lives) {
-        if (lives == null) {
-            lives = 0;
-        }
-        Formatting color = getColorForLives(lives);
-        return Text.literal(String.valueOf(lives)).formatted(color);
-    }
 
     public void createScoreboards() {
-        ScoreboardUtils.createObjective("Lives");
         ScoreboardUtils.createObjective(WatcherManager.SCOREBOARD_NAME);
         ScoreboardUtils.createObjective("HP", "§c❤", ScoreboardCriterion.HEALTH);
     }
@@ -228,200 +201,9 @@ public abstract class Season {
             return WatcherManager.TEAM_NAME;
         }
 
-        Integer lives = getPlayerLives(player);
-        return getTeamForLives(lives);
+        return livesManager.getTeamForPlayer(player);
     }
 
-    public String getTeamForLives(Integer lives) {
-        String prefix = "lives_";
-        String nullTeam = prefix+"null";
-        if (lives == null) {
-            return nullTeam;
-        }
-        List<Integer> livesTeams = new ArrayList<>();
-        Collection<Team> allTeams = TeamUtils.getAllTeams();
-        if (allTeams != null) {
-            for (Team team : allTeams) {
-                String name = team.getName();
-                if (name.startsWith(prefix)) {
-                    try {
-                        int index = Integer.parseInt(name.replaceAll(prefix,""));
-                        if (index == lives) {
-                            return name;
-                        }
-                        livesTeams.add(index);
-                    }catch(Exception ignored) {}
-                }
-            }
-        }
-        if (!livesTeams.isEmpty()) {
-            Collections.sort(livesTeams);
-
-            if (lives <= livesTeams.getFirst()) {
-                return prefix + livesTeams.getFirst();
-            }
-            Collections.reverse(livesTeams);
-            for (int i : livesTeams) {
-                if (lives >= i) {
-                    return prefix + i;
-                }
-            }
-        }
-        return nullTeam;
-    }
-
-    @Nullable
-    public Integer getPlayerLives(ServerPlayerEntity player) {
-        if (isWatcher(player)) return null;
-        return ScoreboardUtils.getScore(player, "Lives");
-    }
-
-    public boolean hasAssignedLives(ServerPlayerEntity player) {
-        Integer lives = getPlayerLives(player);
-        return lives != null;
-    }
-
-    public boolean isAlive(ServerPlayerEntity player) {
-        Integer lives = getPlayerLives(player);
-        if (lives == null) return false;
-        if (!hasAssignedLives(player)) return false;
-        return lives > 0;
-    }
-
-    public void removePlayerLife(ServerPlayerEntity player) {
-        addToPlayerLives(player,-1);
-    }
-
-    public void resetPlayerLife(ServerPlayerEntity player) {
-        ScoreboardUtils.resetScore(player, "Lives");
-        reloadPlayerTeam(player);
-        onPlayerJoin(player);
-        onPlayerFinishJoining(player);
-    }
-
-    public void resetAllPlayerLivesInner() {
-        ScoreboardUtils.removeObjective("Lives");
-        createScoreboards();
-        currentSeason.reloadAllPlayerTeams();
-    }
-
-    public void resetAllPlayerLives() {
-        resetAllPlayerLivesInner();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            currentSeason.onPlayerJoin(player);
-            currentSeason.onPlayerFinishJoining(player);
-        }
-    }
-
-    public void addPlayerLife(ServerPlayerEntity player) {
-        addToPlayerLives(player,1);
-    }
-
-    public void addToPlayerLives(ServerPlayerEntity player, int amount) {
-        Integer currentLives = getPlayerLives(player);
-        if (currentLives == null) currentLives = 0;
-        int lives = currentLives + amount;
-        if (lives < 0 && !Necromancy.isRessurectedPlayer(player)) lives = 0;
-        setPlayerLives(player, lives);
-    }
-
-    public void addToLifeNoUpdate(ServerPlayerEntity player) {
-        if (isWatcher(player)) return;
-        Integer currentLives = getPlayerLives(player);
-        if (currentLives == null) currentLives = 0;
-        int lives = currentLives + 1;
-        if (lives < 0) lives = 0;
-        ScoreboardUtils.setScore(player, "Lives", lives);
-    }
-
-    public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
-        target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
-        if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
-            PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
-        }
-        target.sendMessage(TextUtils.format("You received a life from {}", playerName));
-        PlayerUtils.sendTitleWithSubtitle(target, Text.of("You received a life"), TextUtils.format("from {}", playerName), 10, 60, 10);
-        AnimationUtils.createSpiral(target, 175);
-        currentSeason.reloadPlayerTeam(target);
-        SessionTranscript.givelife(playerName, target);
-        if (currentSeason instanceof DoubleLife doubleLife) {
-            doubleLife.syncSoulboundLives(target);
-        }
-    }
-
-    public void setPlayerLives(ServerPlayerEntity player, int lives) {
-        if (isWatcher(player)) return;
-        Integer livesBefore = getPlayerLives(player);
-        ScoreboardUtils.setScore(player, "Lives", lives);
-        if (lives <= 0) {
-            playerLostAllLives(player, livesBefore);
-        }
-        else if (player.isSpectator()) {
-            player.changeGameMode(GameMode.SURVIVAL);
-        }
-        reloadPlayerTeam(player);
-    }
-
-    @Nullable
-    public Boolean isOnLastLife(ServerPlayerEntity player) {
-        return isOnSpecificLives(player, 1);
-    }
-
-    public boolean isOnLastLife(ServerPlayerEntity player, boolean fallback) {
-        Boolean isOnLastLife = isOnLastLife(player);
-        if (isOnLastLife == null) return fallback;
-        return isOnLastLife;
-    }
-
-    @Nullable
-    public Boolean isOnSpecificLives(ServerPlayerEntity player, int check) {
-        if (!isAlive(player)) return null;
-        Integer lives = currentSeason.getPlayerLives(player);
-        if (lives == null) return null;
-        return lives == check;
-    }
-
-    public boolean isOnSpecificLives(ServerPlayerEntity player, int check, boolean fallback) {
-        Boolean isOnLife = isOnSpecificLives(player, check);
-        if (isOnLife == null) return fallback;
-        return isOnLife;
-    }
-
-    @Nullable
-    public Boolean isOnAtLeastLives(ServerPlayerEntity player, int check) {
-        if (!isAlive(player)) return null;
-        Integer lives = currentSeason.getPlayerLives(player);
-        if (lives == null) return null;
-        return lives >= check;
-    }
-
-    public boolean isOnAtLeastLives(ServerPlayerEntity player, int check, boolean fallback) {
-        Boolean isOnAtLeast = isOnAtLeastLives(player, check);
-        if (isOnAtLeast == null) return fallback;
-        return isOnAtLeast;
-    }
-
-
-    private final HashMap<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
-    public void playerLostAllLives(ServerPlayerEntity player, Integer livesBefore) {
-        player.changeGameMode(GameMode.SPECTATOR);
-        Vec3d pos = player.getPos();
-        HashMap<Vec3d, List<Float>> info = new HashMap<>();
-        info.put(pos, List.of(player.getYaw(),player.getPitch()));
-        respawnPositions.put(player.getUuid(), info);
-        dropItemsOnLastDeath(player);
-        if (livesBefore != null && livesBefore > 0) {
-            if (FINAL_DEATH_SOUND != null) {
-                PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
-            }
-            if (FINAL_DEATH_LIGHTNING) {
-                WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
-            }
-            showDeathTitle(player);
-        }
-        SessionTranscript.onPlayerLostAllLives(player);
-        boogeymanManagerNew.playerLostAllLives(player);
-    }
 
     public void dropItemsOnLastDeath(ServerPlayerEntity player) {
         boolean doDrop = seasonConfig.PLAYERS_DROP_ITEMS_ON_FINAL_DEATH.get(seasonConfig);
@@ -437,70 +219,22 @@ public abstract class Season {
         }
     }
 
-    public void showDeathTitle(ServerPlayerEntity player) {
-        if (SHOW_DEATH_TITLE) {
-            String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seasonConfig);
-            PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
-        }
-        PlayerUtils.broadcastMessage(getDeathMessage(player));
-    }
-
-    public Text getDeathMessage(ServerPlayerEntity player) {
-        String message = seasonConfig.FINAL_DEATH_MESSAGE.get(seasonConfig);
-        if (message.contains("${player}")) {
-            return TextUtils.format(message.replace("${player}", "{}"), player);
-        }
-        return Text.literal(message);
-    }
-
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && isOnLastLife(victim, false)) return true;
-        Boogeyman boogeymanAttacker = boogeymanManagerNew.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManagerNew.getBoogeyman(victim);
+        if (livesManager.isOnLastLife(attacker, false)) return true;
+        if (attacker.getPrimeAdversary() == victim && livesManager.isOnLastLife(victim, false)) return true;
+        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
+        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
         if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
         return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
     }
 
-    public List<ServerPlayerEntity> getNonRedPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        players.removeIf(player -> currentSeason.isOnLastLife(player, true));
-        return players;
-    }
-
-    public List<ServerPlayerEntity> getAlivePlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        players.removeIf(player -> !isAlive(player));
-        return players;
-    }
-
-    public List<ServerPlayerEntity> getDeadPlayers() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
-        players.removeIf(this::isAlive);
-        return players;
-    }
-
-    public boolean anyGreenPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (isOnSpecificLives(player, 3, false)) return true;
-        }
-        return false;
-    }
-
-    public boolean anyYellowPlayers() {
-        for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (isOnSpecificLives(player, 2, false)) return true;
-        }
-        return false;
-    }
-
     public void sessionEnd() {
-        boogeymanManagerNew.sessionEnd();
+        boogeymanManager.sessionEnd();
     }
 
     public boolean sessionStart() {
-        boogeymanManagerNew.resetBoogeymen();
-        currentSession.activeActions.addAll(boogeymanManagerNew.getSessionActions());
+        boogeymanManager.resetBoogeymen();
+        currentSession.activeActions.addAll(boogeymanManager.getSessionActions());
         return true;
     }
 
@@ -536,7 +270,7 @@ public abstract class Season {
         if (!killedByPlayer) {
             onPlayerDiedNaturally(player);
         }
-        removePlayerLife(player);
+        livesManager.removePlayerLife(player);
     }
 
     public void onPlayerDiedNaturally(ServerPlayerEntity player) {
@@ -545,11 +279,12 @@ public abstract class Season {
         currentSession.playerNaturalDeathLog.put(player.getUuid(), server.getTicks());
     }
 
+    public final Map<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
     public void onPlayerRespawn(ServerPlayerEntity player) {
         if (!respawnPositions.containsKey(player.getUuid())) return;
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
-        if (isAlive(player)) return;
+        if (livesManager.isAlive(player)) return;
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             Vec3d pos = entry.getKey();
             if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;
@@ -565,9 +300,9 @@ public abstract class Season {
 
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         SessionTranscript.claimKill(killer, victim);
-        Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
-        if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
-            boogeymanManagerNew.cure(killer);
+        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+        if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
+            boogeymanManager.cure(killer);
         }
     }
 
@@ -582,9 +317,9 @@ public abstract class Season {
 
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
         if (isAllowedToAttack(killer, victim)) {
-            Boogeyman boogeyman  = boogeymanManagerNew.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !isOnLastLife(victim, true)) {
-                boogeymanManagerNew.cure(killer);
+            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
+            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
+                boogeymanManager.cure(killer);
             }
         }
         else {
@@ -655,7 +390,7 @@ public abstract class Season {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));
             player.sendMessage(Text.of("After that, use §b'/session start'§f to start the session."));
         }
-        boogeymanManagerNew.onPlayerFinishJoining(player);
+        boogeymanManager.onPlayerFinishJoining(player);
     }
 
 

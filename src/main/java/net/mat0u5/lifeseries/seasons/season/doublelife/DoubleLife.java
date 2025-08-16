@@ -79,9 +79,9 @@ public class DoubleLife extends Season {
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
 
-        if (!hasAssignedLives(player)) {
+        if (!livesManager.hasAssignedLives(player)) {
             int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            setPlayerLives(player, lives);
+            livesManager.setPlayerLives(player, lives);
         }
 
         if (player == null) return;
@@ -262,7 +262,7 @@ public class DoubleLife extends Season {
     public List<ServerPlayerEntity> getNonAssignedPlayers() {
         List<ServerPlayerEntity> playersToRoll = new ArrayList<>();
         for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
-            if (!isAlive(player)) continue;
+            if (!livesManager.isAlive(player)) continue;
             if (hasSoulmate(player)) continue;
             playersToRoll.add(player);
         }
@@ -411,13 +411,13 @@ public class DoubleLife extends Season {
             }
         }
         
-        Integer soulmateLives = getPlayerLives(soulmate);
-        Integer playerLives = getPlayerLives(player);
+        Integer soulmateLives = livesManager.getPlayerLives(soulmate);
+        Integer playerLives = livesManager.getPlayerLives(player);
         if (soulmateLives != null && playerLives != null)  {
             if (!Objects.equals(soulmateLives, playerLives)) {
                 int minLives = Math.min(soulmateLives,playerLives);
-                setPlayerLives(player, minLives);
-                setPlayerLives(soulmate, minLives);
+                livesManager.setPlayerLives(player, minLives);
+                livesManager.setPlayerLives(soulmate, minLives);
             }
         }
 
@@ -426,12 +426,12 @@ public class DoubleLife extends Season {
 
     public void syncSoulboundLives(ServerPlayerEntity player) {
         if (player == null) return;
-        Integer lives = getPlayerLives(player);
+        Integer lives = livesManager.getPlayerLives(player);
         ServerPlayerEntity soulmate = getSoulmate(player);
         if (lives == null) return;
         if (soulmate == null) return;
         if (player.isDead() || soulmate.isDead()) return;
-        setPlayerLives(soulmate, lives);
+        livesManager.setPlayerLives(soulmate, lives);
     }
 
     public void canFoodHeal(ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {

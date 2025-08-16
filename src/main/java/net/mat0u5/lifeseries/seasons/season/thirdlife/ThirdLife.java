@@ -27,9 +27,9 @@ public class ThirdLife extends Season {
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
 
-        if (!hasAssignedLives(player)) {
+        if (!livesManager.hasAssignedLives(player)) {
             int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            setPlayerLives(player, lives);
+            livesManager.setPlayerLives(player, lives);
         }
     }
 

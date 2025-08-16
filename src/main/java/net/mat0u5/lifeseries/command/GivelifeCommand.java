@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -56,11 +55,11 @@ public class GivelifeCommand {
         final ServerPlayerEntity self = source.getPlayer();
         if (self == null) return -1;
         if (target == null) return -1;
-        if (!currentSeason.isAlive(self)) {
+        if (!livesManager.isAlive(self)) {
             source.sendError(Text.of("You do not have any lives to give"));
             return -1;
         }
-        if (!currentSeason.isAlive(target)) {
+        if (!livesManager.isAlive(target)) {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
@@ -68,12 +67,12 @@ public class GivelifeCommand {
             source.sendError(Text.of("You cannot give a life to yourself"));
             return -1;
         }
-        Integer currentLives = currentSeason.getPlayerLives(self);
+        Integer currentLives = livesManager.getPlayerLives(self);
         if (currentLives == null || currentLives <= 1) {
             source.sendError(Text.of("You cannot give away your last life"));
             return -1;
         }
-        Integer targetLives = currentSeason.getPlayerLives(target);
+        Integer targetLives = livesManager.getPlayerLives(target);
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
             source.sendError(Text.of("That player cannot receive any more lives"));
             return -1;
@@ -93,10 +92,10 @@ public class GivelifeCommand {
         }
 
         Text currentPlayerName = self.getStyledDisplayName();
-        currentSeason.removePlayerLife(self);
-        currentSeason.addToLifeNoUpdate(target);
+        livesManager.removePlayerLife(self);
+        livesManager.addToLifeNoUpdate(target);
         AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(40, () -> currentSeason.receiveLifeFromOtherPlayer(currentPlayerName, target));
+        TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target));
 
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.syncSoulboundLives(self);

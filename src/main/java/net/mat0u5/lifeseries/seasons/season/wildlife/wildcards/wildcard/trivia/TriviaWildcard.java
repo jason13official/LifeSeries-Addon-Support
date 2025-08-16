@@ -113,7 +113,7 @@ public class TriviaWildcard extends Wildcard {
         int sessionEnd = currentSession.sessionLength - 6000; // Don't spawn bots 5 minutes before the end
         int availableTime = sessionEnd - sessionStart;
 
-        List<ServerPlayerEntity> players = currentSeason.getAlivePlayers();
+        List<ServerPlayerEntity> players = livesManager.getAlivePlayers();
         if (players.isEmpty()) return;
         if (isBuffed()) Collections.shuffle(players);
 
