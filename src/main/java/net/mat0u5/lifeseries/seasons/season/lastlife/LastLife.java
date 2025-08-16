@@ -39,6 +39,16 @@ public class LastLife extends Season {
     }
 
     @Override
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
+    }
+
+    @Override
     public boolean sessionStart() {
         super.sessionStart();
         if (livesManager instanceof LastLifeLivesManager lastLifeLivesManager) {
@@ -50,21 +60,15 @@ public class LastLife extends Season {
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Last Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Last Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
-        super.onPlayerFinishJoining(player);
-    }
-
-    @Override
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof LastLifeConfig config)) return;
         ROLL_MIN_LIVES = config.RANDOM_LIVES_MIN.get(config);
         ROLL_MAX_LIVES = config.RANDOM_LIVES_MAX.get(config);
+    }
+
+    @Override
+    public Integer getDefaultLives() {
+        return null;
     }
 }

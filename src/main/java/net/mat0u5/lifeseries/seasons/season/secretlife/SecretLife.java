@@ -66,6 +66,16 @@ public class SecretLife extends Season {
     }
 
     @Override
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
+    }
+
+    @Override
     public void initialize() {
         super.initialize();
         NO_HEALING = true;
@@ -234,13 +244,13 @@ public class SecretLife extends Season {
 
     @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
-        super.onPlayerJoin(player);
         if (!livesManager.hasAssignedLives(player)) {
-            int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            livesManager.setPlayerLives(player, lives);
             setPlayerHealth(player, MAX_HEALTH);
             player.setHealth((float) MAX_HEALTH);
+            //TODO test
+            OtherUtils.log("Assigning default health");
         }
+        super.onPlayerJoin(player);
 
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUuid())) {
             TaskScheduler.scheduleTask(100, () -> TaskManager.chooseTasks(List.of(player), null));
@@ -250,12 +260,6 @@ public class SecretLife extends Season {
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
         TaskManager.checkSecretLifePositions();
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Secret Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Secret Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
         super.onPlayerFinishJoining(player);
     }
 

@@ -62,24 +62,23 @@ public class WildLife extends Season {
     }
 
     @Override
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
+    }
+
+    @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
-
-        if (!livesManager.hasAssignedLives(player)) {
-            int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            livesManager.setPlayerLives(player, lives);
-        }
         WildcardManager.onPlayerJoin(player);
     }
 
     @Override
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Wild Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Wild Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
         super.onPlayerFinishJoining(player);
         WildcardManager.onPlayerFinishJoining(player);
     }

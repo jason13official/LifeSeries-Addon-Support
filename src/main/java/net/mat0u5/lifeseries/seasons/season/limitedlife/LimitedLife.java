@@ -61,6 +61,16 @@ public class LimitedLife extends Season {
         return new LimitedLifeLivesManager();
     }
 
+    @Override
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
+    }
+
     public void displayTimers(MinecraftServer server) {
         String message = "";
         if (currentSession.statusNotStarted()) {
@@ -260,25 +270,6 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
-        super.onPlayerJoin(player);
-        if (!livesManager.hasAssignedLives(player)) {
-            livesManager.setPlayerLives(player, LimitedLifeLivesManager.DEFAULT_TIME);
-        }
-    }
-
-    @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Limited Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Limited Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
-        super.onPlayerFinishJoining(player);
-    }
-
-    @Override
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof LimitedLifeConfig config)) return;
@@ -291,5 +282,10 @@ public class LimitedLife extends Season {
         KILL_BOOGEYMAN = LimitedLifeConfig.TIME_KILL_BOOGEYMAN.get(config);
         TICK_OFFLINE_PLAYERS = LimitedLifeConfig.TICK_OFFLINE_PLAYERS.get(config);
         LimitedLifeLivesManager.BROADCAST_COLOR_CHANGES = LimitedLifeConfig.BROADCAST_COLOR_CHANGES.get(config);
+    }
+
+    @Override
+    public Integer getDefaultLives() {
+        return LimitedLifeLivesManager.DEFAULT_TIME;
     }
 }

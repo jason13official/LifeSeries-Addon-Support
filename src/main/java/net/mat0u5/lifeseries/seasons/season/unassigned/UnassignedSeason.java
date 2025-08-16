@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class UnassignedSeason extends Season {
     @Override
@@ -48,6 +49,21 @@ public class UnassignedSeason extends Season {
     public void initialize() {
         super.initialize();
         broadcastNotice();
+    }
+
+    @Override
+    public String getAdminCommands() {
+        return "";
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return "";
+    }
+
+    @Override
+    public Integer getDefaultLives() {
+        return null;
     }
 
     public void broadcastNotice() {

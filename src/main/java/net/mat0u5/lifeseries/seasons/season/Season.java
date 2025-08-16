@@ -79,6 +79,8 @@ public abstract class Season {
 
     public abstract Seasons getSeason();
     public abstract ConfigManager getConfig();
+    public abstract String getAdminCommands();
+    public abstract String getNonAdminCommands();
 
     public Blacklist createBlacklist() {
         return new Blacklist();
@@ -90,6 +92,10 @@ public abstract class Season {
 
     public LivesManager createLivesManager() {
         return new LivesManager();
+    }
+
+    public Integer getDefaultLives() {
+        return seasonConfig.DEFAULT_LIVES.get(seasonConfig);
     }
 
     public void initialize() {
@@ -382,9 +388,24 @@ public abstract class Season {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
+        if (!livesManager.hasAssignedLives(player)) {
+            Integer lives = getDefaultLives();
+            if (lives != null) {
+                livesManager.setPlayerLives(player, lives);
+            }
+        }
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
+        if (getSeason() != Seasons.UNASSIGNED) {
+            if (PermissionManager.isAdmin(player)) {
+                player.sendMessage(TextUtils.formatLoosely("§7{} commands: §r{}", getSeason().getName(), getAdminCommands()));
+            }
+            else {
+                player.sendMessage(TextUtils.formatLoosely("§7{} non-admin commands: §r{}", getSeason().getName(), getNonAdminCommands()));
+            }
+        }
+
         learnRecipes();
         if (currentSession.statusNotStarted() && PermissionManager.isAdmin(player)) {
             player.sendMessage(Text.of("\nUse §b'/session timer set <time>'§f to set the desired session time."));

@@ -24,27 +24,12 @@ public class ThirdLife extends Season {
     }
 
     @Override
-    public void onPlayerJoin(ServerPlayerEntity player) {
-        super.onPlayerJoin(player);
-
-        if (!livesManager.hasAssignedLives(player)) {
-            int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            livesManager.setPlayerLives(player, lives);
-        }
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
     }
 
     @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        sendPlayerJoinMessage(player);
-        super.onPlayerFinishJoining(player);
-    }
-
-    public void sendPlayerJoinMessage(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Third Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Third Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
     }
 }

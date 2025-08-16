@@ -3,16 +3,13 @@ package net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.TraderLlamaEntity;
 import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
@@ -38,16 +35,6 @@ public class SimpleLife extends ThirdLife {
     @Override
     public ConfigManager getConfig() {
         return new SimpleLifeConfig();
-    }
-
-    @Override
-    public void sendPlayerJoinMessage(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Simple Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Simple Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
     }
 
     @Override

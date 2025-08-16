@@ -76,30 +76,24 @@ public class DoubleLife extends Season {
     }
 
     @Override
+    public String getAdminCommands() {
+        return COMMANDS_ADMIN_TEXT;
+    }
+
+    @Override
+    public String getNonAdminCommands() {
+        return COMMANDS_TEXT;
+    }
+
+    @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
         super.onPlayerJoin(player);
-
-        if (!livesManager.hasAssignedLives(player)) {
-            int lives = seasonConfig.DEFAULT_LIVES.get(seasonConfig);
-            livesManager.setPlayerLives(player, lives);
-        }
 
         if (player == null) return;
         if (!hasSoulmate(player)) return;
         if (!isSoulmateOnline(player)) return;
 
         syncPlayer(player);
-    }
-
-    @Override
-    public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (PermissionManager.isAdmin(player)) {
-            player.sendMessage(Text.of("§7Double Life commands: §r"+COMMANDS_ADMIN_TEXT));
-        }
-        else {
-            player.sendMessage(Text.of("§7Double Life non-admin commands: §r"+COMMANDS_TEXT));
-        }
-        super.onPlayerFinishJoining(player);
     }
 
     @Override
