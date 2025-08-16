@@ -5,8 +5,6 @@ import net.mat0u5.lifeseries.command.*;
 import net.mat0u5.lifeseries.dependencies.DependencyManager;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
-import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeCommands;
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeCommands;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -23,8 +21,6 @@ public class ModRegistries {
 
     private static void registerCommands() {
         CommandRegistrationCallback.EVENT.register(DoubleLifeCommands::register);
-        CommandRegistrationCallback.EVENT.register(LastLifeCommands::register);
-        CommandRegistrationCallback.EVENT.register(LimitedLifeCommands::register);
         CommandRegistrationCallback.EVENT.register(SecretLifeCommands::register);
         CommandRegistrationCallback.EVENT.register(WildLifeCommands::register);
 

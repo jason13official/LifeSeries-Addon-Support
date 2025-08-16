@@ -120,3 +120,8 @@ Fixed block blacklist and clamped enchants blacklist having the wrong default va
 
 All minutes config entries can now be properly saved.<br>
 Any time a player is put into survival while they are in the air, they are now teleported to the ground so that they don't take fall damage.
+
+----------
+
+Merged the '/limitedlife time' command into the '/lives' command. Finally. (Needs the time argument in Limited Life, otherwise accepts normal numbers.)<br>
+Changed the '/lastlife rollLives' command into the '/lives rollLives' command.

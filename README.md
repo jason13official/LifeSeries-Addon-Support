@@ -108,6 +108,8 @@ This command **always** available
 - `/lives get <player>` - Shows you how many lives `<player>` has.
 - `/lives reset <player>` - Resets `<player>`'s lives.
 - `/lives resetAll` - Resets the lives of all online and offline players.
+
+*In Limited Life, all the `<amount>`'s are replaced with time arguments. Examples of valid time arguments are: `16h, 8h, 5h2m1s, 3h30m, 1h1s, 5h2s, 10s`*
 </details>
 
 
@@ -182,8 +184,8 @@ This command **always** available
 <summary>Other series specific commands</summary>
 
 - `/givelife <player>` - Gives one of your lives to `<player>`. *This command is only available when enabled in the config.* *No permissions required.*
-- `/lastlife rollLives [<player>]` - Rolls 2-6 lives for everyone or for the `[<player>]`, if specified. *This command is only available when playing Last Life.*
-- `/limitedlife time` - Same syntax as normal `/lives`, but with the <time> argument instead of numbers i am not writing it all down :). *This command is only available when playing Limited Life.*
+- 
+- `/lives rollLives [<player>]` - Rolls 2-6 lives for everyone or for the `[<player>]`, if specified. *This command is only available when playing Last Life.*
 
 - `/gift <player>` - Gives one free heart to `<player>`. *This command is only available when playing Secret Life.* *No permissions required.*
 
