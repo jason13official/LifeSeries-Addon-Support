@@ -402,7 +402,7 @@ public class PlayerUtils {
         //? if <= 1.21 {
         player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch);
         //?} else {
-        /*player.teleport(world, destX, destY, destZ, flags, yaw, pitch, false);
+        /*player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch, false);
          *///?}
     }
 
