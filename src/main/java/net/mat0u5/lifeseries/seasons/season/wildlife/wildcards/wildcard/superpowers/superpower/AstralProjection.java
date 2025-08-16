@@ -103,13 +103,7 @@ public class AstralProjection extends ToggleableSuperpower {
         }
 
         if (startedWorld != null && toBackPos != null) {
-            //? if <= 1.21 {
-            player.teleport(startedWorld, toBackPos.getX(), toBackPos.getY(), toBackPos.getZ(),
-                    EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1]);
-             //?} else {
-            /*player.teleport(startedWorld, toBackPos.getX(), toBackPos.getY(), toBackPos.getZ(),
-                    EnumSet.noneOf(PositionFlag.class), startedLooking[0], startedLooking[1], false);
-            *///?}
+            PlayerUtils.teleport(player, startedWorld, toBackPos, startedLooking[0], startedLooking[1]);
         }
         player.changeGameMode(startedGameMode);
         player.playSoundToPlayer(SoundEvents.ENTITY_EVOKER_DEATH, SoundCategory.MASTER, 0.3f, 1);

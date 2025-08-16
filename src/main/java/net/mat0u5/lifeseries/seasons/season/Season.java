@@ -295,11 +295,7 @@ public abstract class Season {
             Vec3d pos = entry.getKey();
             if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;
 
-            //? if <= 1.21 {
-            player.teleport(PlayerUtils.getServerWorld(player), pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1));
-            //?} else {
-            /*player.teleport(PlayerUtils.getServerWorld(player), pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), entry.getValue().get(0), entry.getValue().get(1), false);
-            *///?}
+            PlayerUtils.teleport(player, PlayerUtils.getServerWorld(player), pos, entry.getValue().get(0), entry.getValue().get(1));
             break;
         }
     }

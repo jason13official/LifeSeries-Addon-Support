@@ -75,13 +75,8 @@ public class Teleportation extends Superpower {
                     float storedYaw = player.getYaw();
                     float storedPitch = player.getPitch();
 
-                    //? if <= 1.21 {
-                    player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
-                    lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch);
-                    //?} else {
-                    /*player.teleport(lookingAtPlayerWorld, lookingAtPlayer.getX(), lookingAtPlayer.getY(), lookingAtPlayer.getZ(), flags, lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch(), true);
-                    lookingAtPlayer.teleport(storedWorld, storedPos.getX(), storedPos.getY(), storedPos.getZ(), flags, storedYaw, storedPitch, true);
-                    *///?}
+                    PlayerUtils.teleport(player, lookingAtPlayerWorld, lookingAtPlayer.getPos(), lookingAtPlayer.getYaw(), lookingAtPlayer.getPitch());
+                    PlayerUtils.teleport(lookingAtPlayer, storedWorld, storedPos, storedYaw, storedPitch);
 
                     playTeleportSound(playerWorld, player.getPos());
                     playTeleportSound(lookingAtPlayerWorld, lookingAtPlayer.getPos());
@@ -100,13 +95,7 @@ public class Teleportation extends Superpower {
                 playTeleportSound(playerWorld, player.getPos());
                 spawnTeleportParticles(playerWorld, player.getPos());
 
-                Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-
-                //? if <= 1.21 {
-                player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch());
-                //?} else {
-                /*player.teleport(playerWorld, lookingAtPos.getX(), lookingAtPos.getY(), lookingAtPos.getZ(), flags, player.getYaw(), player.getPitch(), true);
-                *///?}
+                PlayerUtils.teleport(player, lookingAtPos);
 
                 playTeleportSound(playerWorld, player.getPos());
                 spawnTeleportParticles(playerWorld, player.getPos());

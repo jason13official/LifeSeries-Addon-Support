@@ -241,15 +241,10 @@ public class Session {
 
             double clampedX = Math.clamp(playerX, minX, maxX);
             double clampedZ = Math.clamp(playerZ, minZ, maxZ);
-            double safeY = WorldUitls.findSafeY(player.getWorld(), new Vec3d(clampedX, player.getY(), clampedZ));
+            double safeY = WorldUitls.findTopSafeY(player.getWorld(), new Vec3d(clampedX, player.getY(), clampedZ));
 
             // Teleport player inside the world border
-            //? if <=1.21 {
-            player.teleport(PlayerUtils.getServerWorld(player),clampedX, safeY, clampedZ, player.getYaw(), player.getPitch());
-            //?} else {
-                /*Set<PositionFlag> flags = EnumSet.noneOf(PositionFlag.class);
-                player.teleport(PlayerUtils.getServerWorld(player),clampedX, safeY, clampedZ, flags, player.getYaw(), player.getPitch(), false);
-            *///?}
+            PlayerUtils.teleport(player, clampedX, safeY, clampedZ);
         }
     }
     public static final Map<UUID, Integer> skipTimer = new HashMap<>();

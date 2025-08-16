@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -25,7 +26,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -365,5 +368,53 @@ public class PlayerUtils {
             player.sendMessage(message, false);
         }
         Main.LOGGER.info(message.getString());
+    }
+
+    public static void teleport(ServerPlayerEntity player, BlockPos pos) {
+        teleport(player, getServerWorld(player), pos.toBottomCenterPos());
+    }
+
+    public static void teleport(ServerPlayerEntity player, Vec3d pos) {
+        teleport(player, getServerWorld(player), pos);
+    }
+
+    public static void teleport(ServerPlayerEntity player, double destX, double destY, double destZ) {
+        teleport(player, getServerWorld(player), destX, destY, destZ);
+    }
+
+    public static void teleport(ServerPlayerEntity player, ServerWorld world, double destX, double destY, double destZ) {
+        teleport(player, world, destX, destY, destZ, player.getYaw(), player.getPitch());
+    }
+
+    public static void teleport(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
+        teleport(player, world, pos.toBottomCenterPos());
+    }
+
+    public static void teleport(ServerPlayerEntity player, ServerWorld world, Vec3d pos) {
+        teleport(player, world, pos.getX(), pos.getY(), pos.getZ(), player.getYaw(), player.getPitch());
+    }
+
+    public static void teleport(ServerPlayerEntity player, ServerWorld world, Vec3d pos, float yaw, float pitch) {
+        teleport(player, world, pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
+    }
+
+    public static void teleport(ServerPlayerEntity player, ServerWorld world, double destX, double destY, double destZ, float yaw, float pitch) {
+        //? if <= 1.21 {
+        player.teleport(world, destX, destY, destZ, EnumSet.noneOf(PositionFlag.class), yaw, pitch);
+        //?} else {
+        /*player.teleport(world, destX, destY, destZ, flags, yaw, pitch, false);
+         *///?}
+    }
+
+    public static void safelyPutIntoSurvival(ServerPlayerEntity player) {
+        if (player.interactionManager.getGameMode() == GameMode.SURVIVAL) return;
+
+        //Teleport to the highest block in the terrain
+        BlockPos.Mutable playerBlockPos = player.getBlockPos().mutableCopy();
+        int safeY = WorldUitls.findTopSafeY(getServerWorld(player), playerBlockPos.toCenterPos());
+        playerBlockPos.setY(safeY);
+        teleport(player, playerBlockPos);
+
+        player.changeGameMode(GameMode.SURVIVAL);
     }
 }

@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerInventory;
@@ -81,11 +82,7 @@ public class FakePlayer extends ServerPlayerEntity {
             FakeClientConnection connection = new FakeClientConnection(NetworkSide.SERVERBOUND);
             ConnectedClientData data =  new ConnectedClientData(current, 0, instance.getClientOptions(), true);
             server.getPlayerManager().onPlayerConnect(connection, instance, data);
-            //? if <= 1.21 {
-            instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch);
-             //?} else {
-            /*instance.teleport(worldIn, pos.x, pos.y, pos.z, EnumSet.noneOf(PositionFlag.class), (float) yaw, (float) pitch, false);
-            *///?}
+            PlayerUtils.teleport(instance, worldIn, pos, (float) yaw, (float) pitch);
             instance.setHealth(20.0F);
             instance.unsetRemoved();
             instance.changeGameMode(gamemode);

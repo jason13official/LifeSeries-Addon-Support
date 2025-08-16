@@ -111,3 +111,12 @@ Player muting when playing trivia, or when dead / being a watcher with the appro
 Some season specific commands no longer even get suggested when you are not playing that season.<br>
 You now cannot give a life to your soulmate in Double Life<br>
 When using /givelife in Double Life, your soulmate now has to confirm the action.
+
+----------
+
+Fixed block blacklist and clamped enchants blacklist having the wrong default values in all seasons.
+
+----------
+
+All minutes config entries can now be properly saved.<br>
+Any time a player is put into survival while they are in the air, they are now teleported to the ground so that they don't take fall damage.

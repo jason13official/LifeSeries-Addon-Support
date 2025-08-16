@@ -200,7 +200,7 @@ public class LivesManager {
             playerLostAllLives(player, livesBefore);
         }
         else if (player.isSpectator()) {
-            player.changeGameMode(GameMode.SURVIVAL);
+            PlayerUtils.safelyPutIntoSurvival(player);
         }
         currentSeason.reloadPlayerTeam(player);
     }

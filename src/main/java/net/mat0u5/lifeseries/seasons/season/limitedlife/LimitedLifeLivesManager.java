@@ -64,7 +64,7 @@ public class LimitedLifeLivesManager extends LivesManager {
         Formatting colorNow = getColorForLives(lives);
         if (colorBefore != colorNow) {
             if (player.isSpectator() && lives > 0) {
-                player.changeGameMode(GameMode.SURVIVAL);
+                PlayerUtils.safelyPutIntoSurvival(player);
             }
             if (lives > 0 && colorBefore != null && livesBefore != null && BROADCAST_COLOR_CHANGES) {
                 Text livesText = TextUtils.format("{} name", colorNow.getName().replaceAll("_", " ").toLowerCase()).formatted(colorNow);

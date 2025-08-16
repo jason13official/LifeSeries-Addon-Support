@@ -58,6 +58,6 @@ public class MinutesConfigEntry extends DoubleConfigEntry implements ITextFieldA
 
     @Override
     public ConfigTypes getValueType() {
-        return ConfigTypes.SECONDS;
+        return ConfigTypes.MINUTES;
     }
 }

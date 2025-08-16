@@ -247,8 +247,6 @@ public class SecretLife extends Season {
         if (!livesManager.hasAssignedLives(player)) {
             setPlayerHealth(player, MAX_HEALTH);
             player.setHealth((float) MAX_HEALTH);
-            //TODO test
-            OtherUtils.log("Assigning default health");
         }
         super.onPlayerJoin(player);
 

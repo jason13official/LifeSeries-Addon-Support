@@ -13,20 +13,17 @@ import java.util.List;
 
 public class WorldUitls {
 
-    public static double findSafeY(World world, Vec3d pos) {
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable(pos.getX(), pos.getY(), pos.getZ());
-        for (boolean movingUp : List.of(true,false)) {
-            // Check upwards or downwards for the first safe position
-            while (mutablePos.getY() >= world.getBottomY() && mutablePos.getY() < world.getHeight()) {
-                if (isSafeSpot(world, mutablePos)) {
-                    return mutablePos.getY(); // Found a safe spot
-                }
-                mutablePos.move(0, movingUp ? 1 : -1, 0);
+    public static int findTopSafeY(World world, Vec3d pos) {
+        BlockPos.Mutable mutablePos = new BlockPos.Mutable(pos.getX(), world.getHeight(), pos.getZ());
+        // Check upwards or downwards for the first safe position
+        while (mutablePos.getY() >= world.getBottomY()) {
+            if (isSafeSpot(world, mutablePos)) {
+                return mutablePos.getY(); // Found a safe spot
             }
-            mutablePos = new BlockPos.Mutable(pos.getX(), pos.getY(), pos.getZ());
+            mutablePos.move(0, -1, 0);
         }
         // Fallback to original position if no safe spot found
-        return pos.getY();
+        return (int) pos.getY();
     }
 
     public static boolean isSafeSpot(World world, BlockPos.Mutable pos) {
