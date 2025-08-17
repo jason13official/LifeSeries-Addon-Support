@@ -266,9 +266,7 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
             }
         }
         if (age % 400 == 0 && getActualBoundPlayer() != null) {
-            if (getActualBoundPlayer() != null) {
-                sendDisplayEntityPackets(getActualBoundPlayer());
-            }
+            sendDisplayEntityPackets(getActualBoundPlayer());
         }
 
         if (submittedAnswer && answeredRight != null) {

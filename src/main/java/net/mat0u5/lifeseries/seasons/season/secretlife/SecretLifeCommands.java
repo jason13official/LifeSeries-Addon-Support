@@ -111,23 +111,23 @@ public class SecretLifeCommands {
             literal("task")
                 .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .then(literal("succeed")
-                            .then(argument("player", EntityArgumentType.player())
+                            .then(argument("player", EntityArgumentType.players())
                                     .executes(context -> succeedTask(
-                                            context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("fail")
-                            .then(argument("player", EntityArgumentType.player())
+                            .then(argument("player", EntityArgumentType.players())
                                     .executes(context -> failTask(
-                                            context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
                                     )
                             )
                     )
                     .then(literal("reroll")
-                            .then(argument("player", EntityArgumentType.player())
+                            .then(argument("player", EntityArgumentType.players())
                                     .executes(context -> rerollTask(
-                                            context.getSource(), EntityArgumentType.getPlayer(context, "player"))
+                                            context.getSource(), EntityArgumentType.getPlayers(context, "player"))
                                     )
                             )
                     )
@@ -146,13 +146,13 @@ public class SecretLifeCommands {
                             )
                     )
                     .then(literal("set")
-                            .then(argument("player", EntityArgumentType.player())
+                            .then(argument("player", EntityArgumentType.players())
                                     .then(argument("type", StringArgumentType.string())
                                             .suggests((context, builder) -> CommandSource.suggestMatching(List.of("easy","hard","red"), builder))
                                             .then(argument("task", StringArgumentType.greedyString())
                                                     .executes(context -> setTask(
                                                             context.getSource(),
-                                                            EntityArgumentType.getPlayer(context, "player"),
+                                                            EntityArgumentType.getPlayers(context, "player"),
                                                             StringArgumentType.getString(context, "type"),
                                                             StringArgumentType.getString(context, "task")
                                                             )
@@ -182,9 +182,9 @@ public class SecretLifeCommands {
         );
     }
 
-    public static int setTask(ServerCommandSource source, ServerPlayerEntity target, String type, String task) {
+    public static int setTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets, String type, String task) {
         if (checkBanned(source)) return -1;
-        if (target == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
         TaskTypes taskType = TaskTypes.EASY;
 
@@ -193,16 +193,24 @@ public class SecretLifeCommands {
 
         task = task.replaceAll("\\\\n","\n");
 
-        TaskManager.preAssignedTasks.put(target.getUuid(), new Task(task, taskType));
+        for (ServerPlayerEntity player : targets) {
+            TaskManager.preAssignedTasks.put(player.getUuid(), new Task(task, taskType));
 
-        if (TaskManager.removePlayersTaskBook(target)) {
-            TaskManager.assignRandomTaskToPlayer(target, taskType);
-            AnimationUtils.playTotemAnimation(target);
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Changed {}'s task", target));
+            if (TaskManager.removePlayersTaskBook(player) || TaskManager.tasksChosen) {
+                TaskManager.assignRandomTaskToPlayer(player, taskType);
+                AnimationUtils.playTotemAnimation(player);
+                if (targets.size() == 1) {
+                    OtherUtils.sendCommandFeedback(source, TextUtils.format("Changed {}'s task", player));
+                }
+            }
+            else if (targets.size() == 1) {
+                OtherUtils.sendCommandFeedback(source, TextUtils.format("Pre-assigned {}'s task for randomization", player));
+                OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7They will be given the task book once you / the game rolls the tasks"));
+            }
         }
-        else {
-            OtherUtils.sendCommandFeedback(source, TextUtils.format("Pre-assigned {}'s task for randomization", target));
-            OtherUtils.sendCommandFeedbackQuiet(source, Text.of("§7They will be given the task book once you / the game rolls the tasks"));
+
+        if (targets.size() != 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("Changed or pre-assigned task of {} targets", targets.size()));
         }
 
         return 1;
@@ -253,49 +261,56 @@ public class SecretLifeCommands {
         return 1;
     }
 
-    public static int succeedTask(ServerCommandSource source, ServerPlayerEntity player) {
+    public static int succeedTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        if (player == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
-        if (currentSession.statusNotStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
-            return -1;
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Succeeding task for {}§7...", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Succeeding task for {}§7 targets...", targets.size()));
         }
 
-
-        TaskManager.succeedTask(player);
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Succeeding task for {}", player));
+        for (ServerPlayerEntity player : targets) {
+            TaskManager.succeedTask(player, true);
+        }
 
         return 1;
     }
 
-    public static int failTask(ServerCommandSource source, ServerPlayerEntity player) {
+    public static int failTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        if (player == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
-        if (currentSession.statusNotStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
-            return -1;
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing task for {}§7...", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing task for {}§7 targets...", targets.size()));
         }
 
-
-        TaskManager.failTask(player);
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Failing task for {}", player));
+        for (ServerPlayerEntity player : targets) {
+            TaskManager.failTask(player, true);
+        }
 
         return 1;
     }
 
-    public static int rerollTask(ServerCommandSource source, ServerPlayerEntity player) {
+    public static int rerollTask(ServerCommandSource source, Collection<ServerPlayerEntity> targets) {
         if (checkBanned(source)) return -1;
-        if (player == null) return -1;
+        if (targets == null || targets.isEmpty()) return -1;
 
-        if (currentSession.statusNotStarted()) {
-            source.sendError(Text.of("The session has not started yet"));
-            return -1;
+        if (targets.size() == 1) {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Rerolling task for {}§7...", targets.iterator().next()));
+        }
+        else {
+            OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Rerolling task for {}§7 targets...", targets.size()));
         }
 
-        TaskManager.rerollTask(player);
-        OtherUtils.sendCommandFeedback(source, TextUtils.format("Rerolling task for {}", player));
+        for (ServerPlayerEntity player : targets) {
+            TaskManager.rerollTask(player, true);
+        }
 
         return 1;
     }

@@ -125,3 +125,9 @@ Any time a player is put into survival while they are in the air, they are now t
 
 Merged the '/limitedlife time' command into the '/lives' command. Finally. (Needs the time argument in Limited Life, otherwise accepts normal numbers.)<br>
 Changed the '/lastlife rollLives' command into the '/lives rollLives' command.
+
+----------
+
+You can now use multiple targets for '/task set/fail/succeed/reroll'.<br>
+You can now use '/task fail/succeed/reroll' when the session is not on.<br>
+Using '/task set' while the session is on but the player has already submitted their task now gives a book instead of pre-assigning.
