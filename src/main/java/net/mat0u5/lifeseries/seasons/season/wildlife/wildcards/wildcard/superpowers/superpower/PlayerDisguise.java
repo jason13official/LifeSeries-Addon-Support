@@ -39,7 +39,8 @@ public class PlayerDisguise extends ToggleableSuperpower {
         if (player == null) return;
         Entity lookingAt = PlayerUtils.getEntityLookingAt(player, 50);
         if (lookingAt != null)  {
-            if (lookingAt instanceof PlayerEntity lookingAtPlayer) {
+            if (lookingAt instanceof ServerPlayerEntity lookingAtPlayer) {
+                lookingAtPlayer = PlayerUtils.getPlayerOrProjection(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer)) {
                     copiedPlayerUUID = lookingAtPlayer.getUuidAsString();
                     copiedPlayerName = TextUtils.textToLegacyString(lookingAtPlayer.getStyledDisplayName());

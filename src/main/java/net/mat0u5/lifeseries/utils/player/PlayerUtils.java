@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -416,5 +417,15 @@ public class PlayerUtils {
         teleport(player, playerBlockPos);
 
         player.changeGameMode(GameMode.SURVIVAL);
+    }
+
+    public static ServerPlayerEntity getPlayerOrProjection(ServerPlayerEntity player) {
+        if (player == null) return null;
+        if (!PlayerUtils.isFakePlayer(player)) return player;
+
+        if (player instanceof FakePlayer fakePlayer) {
+            return PlayerUtils.getPlayer(fakePlayer.shadow);
+        }
+        return player;
     }
 }

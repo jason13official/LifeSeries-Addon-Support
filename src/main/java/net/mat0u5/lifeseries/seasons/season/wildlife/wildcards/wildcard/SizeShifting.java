@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class SizeShifting extends Wildcard {
@@ -46,6 +45,7 @@ public class SizeShifting extends Wildcard {
 
     public static void onHoldingJump(ServerPlayerEntity player) {
         if (TriviaBot.cursedGigantificationPlayers.contains(player.getUuid())) return;
+        if (player.isSpectator()) return;
         addPlayerSize(player, SIZE_CHANGE_STEP * SIZE_CHANGE_MULTIPLIER);
     }
 

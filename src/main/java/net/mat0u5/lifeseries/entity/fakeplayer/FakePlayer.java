@@ -37,7 +37,7 @@ import java.util.concurrent.CompletableFuture;
 public class FakePlayer extends ServerPlayerEntity {
     private static final Set<String> spawning = new HashSet<>();
     public Runnable fixStartingPosition = () -> {};
-    private UUID shadow;
+    public UUID shadow;
 
     public static CompletableFuture<FakePlayer> createFake(
             String username, MinecraftServer server, Vec3d pos, double yaw, double pitch,

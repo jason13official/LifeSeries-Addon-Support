@@ -136,3 +136,10 @@ Using '/task set' while the session is on but the player has already submitted t
 
 Snails no longer chase players in creative mode.<br>
 Snails now properly despawn when you're dead.
+
+----------
+
+You can no longer evade snails by using the astral projection superpower.<br>
+Mimicry now works with astral projection. clones, same with player disguise.<br>
+You can no longer get bigger when the size shifting wildcard is active while you're in astral projection.<br>
+You no longer get put back into survival when the session ends and you had the astrap projection superpower.

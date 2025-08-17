@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
+import static net.mat0u5.lifeseries.Main.livesManager;
+
 public class AstralProjection extends ToggleableSuperpower {
     @Nullable
     public FakePlayer clone;
@@ -94,13 +96,14 @@ public class AstralProjection extends ToggleableSuperpower {
         ServerPlayerEntity player = getPlayer();
         if (player == null) return;
 
-
         Vec3d toBackPos = startedPos;
         if (clone != null) {
             toBackPos = clone.getPos();
             clone.networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
             NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");
         }
+
+        if (!livesManager.isAlive(player)) return;
 
         if (startedWorld != null && toBackPos != null) {
             PlayerUtils.teleport(player, startedWorld, toBackPos, startedLooking[0], startedLooking[1]);
