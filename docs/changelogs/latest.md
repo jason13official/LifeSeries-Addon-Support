@@ -131,3 +131,8 @@ Changed the '/lastlife rollLives' command into the '/lives rollLives' command.
 You can now use multiple targets for '/task set/fail/succeed/reroll'.<br>
 You can now use '/task fail/succeed/reroll' when the session is not on.<br>
 Using '/task set' while the session is on but the player has already submitted their task now gives a book instead of pre-assigning.
+
+----------
+
+Snails no longer chase players in creative mode.<br>
+Snails now properly despawn when you're dead.

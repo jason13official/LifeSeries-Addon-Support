@@ -77,8 +77,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.currentSession;
-import static net.mat0u5.lifeseries.Main.server;
+import static net.mat0u5.lifeseries.Main.*;
 
 public class Snail extends HostileEntity implements AnimatedEntity {
     public static final RegistryKey<DamageType> SNAIL_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(Main.MOD_ID, "snail"));
@@ -778,13 +777,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     public ServerPlayerEntity getBoundPlayer() {
         if (server == null) return null;
         ServerPlayerEntity player = PlayerUtils.getPlayer(boundPlayerUUID);
-        if (player == null || (player.isSpectator() && player.isDead())) {
+        if (player == null || (player.isSpectator() && !livesManager.isAlive(player))) {
             nullPlayerChecks++;
             return null;
         }
         nullPlayerChecks = 0;
+        if (player.isCreative()) return null;
         if (player.isSpectator()) return null;
-        if (player.isDead()) return null;
+        if (!livesManager.isAlive(player)) return null;
         if (Events.joiningPlayers.contains(player.getUuid())) return null;
         return player;
     }
