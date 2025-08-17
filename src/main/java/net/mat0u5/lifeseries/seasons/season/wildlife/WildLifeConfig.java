@@ -67,10 +67,10 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_sizeshifting_size_change_multiplier", 1.0, "season.sizeshifting", "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_hunger_randomize_interval", 36000, ConfigTypes.SECONDS, "season", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
+            "wildcard_hunger_randomize_interval", 36000, ConfigTypes.SECONDS, "season.hunger", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
-            "wildcard_hunger_effect_level", 3, "season", "Hunger: Effect Level", "Controls the hunger effect level."
+            "wildcard_hunger_effect_level", 3, "season.hunger", "Hunger: Effect Level", "Controls the hunger effect level."
     );
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "season.snails", "Speed Multiplier", "Snail movement speed multiplier."
@@ -137,6 +137,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Object> GROUP_SIZESHIFTING = new ConfigFileEntry<>(
             "group_sizeshifting", null, ConfigTypes.TEXT, "{season.sizeshifting}", "Size Shifting", ""
     );
+    public static final ConfigFileEntry<Object> GROUP_HUNGER = new ConfigFileEntry<>(
+            "group_hunger", null, ConfigTypes.TEXT, "{season.hunger}", "Hunger", ""
+    );
     public static final ConfigFileEntry<Object> GROUP_SNAILS = new ConfigFileEntry<>(
             "group_snails", null, ConfigTypes.TEXT, "{season.snails}", "Snails", ""
     );
@@ -173,8 +176,7 @@ public class WildLifeConfig extends ConfigManager {
                 GROUP_GENERAL //Group
                     ,KILLING_DARK_GREENS_GAINS_LIVES//Group
                 ,GROUP_SIZESHIFTING //Group
-                ,WILDCARD_HUNGER_EFFECT_LEVEL
-                ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
+                ,GROUP_HUNGER //Group
                 ,GROUP_SNAILS //Group
                 ,GROUP_TIMEDILATION //Group
                 ,GROUP_TRIVIA //Group
@@ -188,6 +190,9 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SIZESHIFTING_MIN_SIZE
                 ,WILDCARD_SIZESHIFTING_MAX_SIZE
                 ,WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER
+
+                ,WILDCARD_HUNGER_EFFECT_LEVEL
+                ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
 
                 ,WILDCARD_SNAILS_SPEED_MULTIPLIER
                 ,WILDCARD_SNAILS_DROWN_PLAYERS

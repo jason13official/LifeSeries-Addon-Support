@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.blacklist;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -311,7 +312,7 @@ public class Blacklist {
         for (int i = 0; i < inventory.size(); i++) {
             processItemStack(player, inventory.getStack(i));
         }
-        TaskScheduler.scheduleTask(1, () -> PlayerUtils.updatePlayerInventory(player));
+        PlayerUtils.updatePlayerInventory(player);
     }
 
     public boolean isBlacklistedItemSimple(ItemStack itemStack) {

@@ -284,6 +284,9 @@ public abstract class Season {
 
     public final Map<UUID, HashMap<Vec3d,List<Float>>> respawnPositions = new HashMap<>();
     public void onPlayerRespawn(ServerPlayerEntity player) {
+
+    }
+    public void postPlayerRespawn(ServerPlayerEntity player) {
         if (!respawnPositions.containsKey(player.getUuid())) return;
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
@@ -412,5 +415,8 @@ public abstract class Season {
     }
 
     public void onAttackEntity(ServerPlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
+    }
+
+    public void onUpdatedInventory(ServerPlayerEntity player) {
     }
 }

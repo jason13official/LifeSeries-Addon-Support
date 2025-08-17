@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
-import net.mat0u5.lifeseries.mixin.ServerPlayerEntityMixin;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -12,10 +11,12 @@ import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -24,6 +25,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.border.WorldBorder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -40,6 +42,8 @@ public class DoubleLife extends Season {
     StringListConfig soulmateConfig;
     public boolean ANNOUNCE_SOULMATES = false;
     public boolean SOULBOUND_FOOD = false;
+    public boolean SOULBOUND_EFFECTS = false;
+    public boolean SOULBOUND_INVENTORIES = false;
 
     public SessionAction actionChooseSoulmates = new SessionAction(
             OtherUtils.minutesToTicks(1), "§7Assign soulmates if necessary §f[00:01:00]", "Assign Soulmates if necessary"
@@ -112,10 +116,20 @@ public class DoubleLife extends Season {
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
+    private List<UUID> respawningPlayers = new ArrayList<>();
     @Override
     public void onPlayerRespawn(ServerPlayerEntity player) {
+        respawningPlayers.add(player.getUuid());
         super.onPlayerRespawn(player);
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        if (soulmate != null) syncPlayerInventory(soulmate, player);
+    }
+
+    @Override
+    public void postPlayerRespawn(ServerPlayerEntity player) {
+        super.postPlayerRespawn(player);
         syncPlayer(player);
+        respawningPlayers.remove(player.getUuid());
     }
 
     @Override
@@ -123,6 +137,8 @@ public class DoubleLife extends Season {
         super.reload();
         ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get(seasonConfig);
         SOULBOUND_FOOD = DoubleLifeConfig.SOULBOUND_FOOD.get(seasonConfig);
+        SOULBOUND_EFFECTS = DoubleLifeConfig.SOULBOUND_EFFECTS.get(seasonConfig);
+        SOULBOUND_INVENTORIES = DoubleLifeConfig.SOULBOUND_INVENTORIES.get(seasonConfig);
         syncAllPlayers();
     }
 
@@ -177,22 +193,31 @@ public class DoubleLife extends Season {
 
     public boolean hasSoulmate(ServerPlayerEntity player) {
         if (player == null) return false;
-        UUID playerUUID = player.getUuid();
+        return hasSoulmate(player.getUuid());
+    }
+    public boolean hasSoulmate(UUID playerUUID) {
         return soulmates.containsKey(playerUUID);
     }
 
     public boolean isSoulmateOnline(ServerPlayerEntity player) {
-        if (server == null) return false;
-        if (!hasSoulmate(player)) return false;
-        UUID soulmateUUID = soulmates.get(player.getUuid());
+        return isSoulmateOnline(player.getUuid());
+    }
+
+    public boolean isSoulmateOnline(UUID playerUUID) {
+        if (!hasSoulmate(playerUUID)) return false;
+        UUID soulmateUUID = soulmates.get(playerUUID);
         return PlayerUtils.getPlayer(soulmateUUID) != null;
     }
 
     @Nullable
     public ServerPlayerEntity getSoulmate(ServerPlayerEntity player) {
-        if (server == null) return null;
-        if (!isSoulmateOnline(player)) return null;
-        UUID soulmateUUID = soulmates.get(player.getUuid());
+        return getSoulmate(player.getUuid());
+    }
+
+    @Nullable
+    public ServerPlayerEntity getSoulmate(UUID playerUUID) {
+        if (!isSoulmateOnline(playerUUID)) return null;
+        UUID soulmateUUID = soulmates.get(playerUUID);
         return PlayerUtils.getPlayer(soulmateUUID);
     }
 
@@ -361,8 +386,12 @@ public class DoubleLife extends Season {
         if (!isSoulmateOnline(player)) return;
 
         ServerPlayerEntity soulmate = getSoulmate(player);
+
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
+        if (SOULBOUND_INVENTORIES && !player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+            soulmate.getInventory().clear();
+        }
 
         //? if <=1.21 {
         DamageSource damageSource = new DamageSource( soulmate.getWorld().getRegistryManager()
@@ -392,7 +421,7 @@ public class DoubleLife extends Season {
 
     public void syncPlayer(ServerPlayerEntity player) {
         ServerPlayerEntity soulmate = getSoulmate(player);
-        syncPlayers(player, soulmate);
+        syncPlayers(soulmate, player);
     }
 
     public void syncPlayers(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
@@ -417,6 +446,7 @@ public class DoubleLife extends Season {
         }
 
         updateFood(player, soulmate);
+        syncPlayerInventory(player, soulmate);
     }
 
     public void syncSoulboundLives(ServerPlayerEntity player) {
@@ -508,5 +538,71 @@ public class DoubleLife extends Season {
 
         hungerManager2.ls$setFoodLevel(foodLevel);
         hungerManager2.ls$setSaturationLevel(saturation);
+    }
+
+    @Override
+    public void onUpdatedInventory(ServerPlayerEntity player) {
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        if (soulmate == null) return;
+        syncPlayerInventory(player, soulmate);
+    }
+
+    public void syncPlayerInventory(ServerPlayerEntity player, ServerPlayerEntity soulmate) {
+        if (!SOULBOUND_INVENTORIES) return;
+        if (isRecentlyDead(player) && isRecentlyDead(soulmate)) return;
+        boolean swapDirection = false;
+        if (isRecentlyDead(player) && !isRecentlyDead(soulmate)) swapDirection = true;
+
+        if (!swapDirection) {
+            setPlayerInventory(soulmate, player.getInventory());
+        }
+        else {
+            setPlayerInventory(player, soulmate.getInventory());
+        }
+    }
+
+    public boolean isRecentlyDead(ServerPlayerEntity player) {
+        return player.isDead() || respawningPlayers.contains(player.getUuid());
+    }
+
+    public void setPlayerInventory(ServerPlayerEntity player, PlayerInventory inventory) {
+        List<ItemStack> newInventory = getPlayerInventory(inventory);
+        PlayerInventory playerInventory = player.getInventory();
+        for (int i = 0; i < Math.min(newInventory.size(), playerInventory.size()); i++) {
+            ItemStack newStack = newInventory.get(i).copy();
+            if (ItemStack.areEqual(playerInventory.getStack(i), newStack)) continue;
+            playerInventory.setStack(i, newStack);
+        }
+        player.sendAbilitiesUpdate();
+    }
+
+    public List<ItemStack> getPlayerInventory(PlayerInventory inventory) {
+        List<ItemStack> result = new ArrayList<>(inventory.main);
+        result.addAll(inventory.armor);
+        result.addAll(inventory.offHand);
+        return result;
+    }
+
+    public void syncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
+        TaskScheduler.scheduleTask(0, () -> delayedSyncStatusEffectsFrom(player, effect, add));
+    }
+    public void delayedSyncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
+        if (!SOULBOUND_EFFECTS) return;
+        ServerPlayerEntity soulmate = getSoulmate(player);
+        if (soulmate == null) return;
+
+        if (add) {
+            if (!soulmate.getStatusEffects().contains(effect)) {
+                soulmate.addStatusEffect(effect);
+            }
+        }
+        else {
+            if (soulmate.hasStatusEffect(effect.getEffectType())) {
+                soulmate.removeStatusEffect(effect.getEffectType());
+            }
+            if (player.hasStatusEffect(effect.getEffectType())) {
+                soulmate.addStatusEffect(player.getStatusEffect(effect.getEffectType()));
+            }
+        }
     }
 }

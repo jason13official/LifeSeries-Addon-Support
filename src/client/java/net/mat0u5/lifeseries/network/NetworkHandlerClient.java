@@ -144,7 +144,7 @@ public class NetworkHandlerClient {
 
         if (name == PacketNames.OPEN_CONFIG) {
             ClientConfigNetwork.load();
-            ClientTaskScheduler.scheduleTask(20, ClientConfigGuiManager::openConfig);
+            ClientTaskScheduler.scheduleTask(10, ClientConfigGuiManager::openConfig);
         }
 
 

@@ -62,6 +62,12 @@ public class DoubleLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> SOULBOUND_FOOD = new ConfigFileEntry<>(
             "soulbound_food", false, "season", "Soulbound Food", "Makes your food bar shared with your soulmate, just like the health bar."
     );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_EFFECTS = new ConfigFileEntry<>(
+            "soulbound_effects", false, "season", "Soulbound Effects", "Makes your effects be shared with your soulmate."
+    );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_INVENTORIES = new ConfigFileEntry<>(
+            "soulbound_inventories", false, "season", "Soulbound Inventories", "Makes your inventory be shared with your soulmate. \nWARNING: There could be some ways of abusing this (duping etc). Use with caution."
+    );
 
     public DoubleLifeConfig() {
         super("./config/"+ Main.MOD_ID,"doublelife.properties");
@@ -72,6 +78,8 @@ public class DoubleLifeConfig extends ConfigManager {
         return new ArrayList<>(List.of(
                 ANNOUNCE_SOULMATES
                 ,SOULBOUND_FOOD
+                ,SOULBOUND_EFFECTS
+                ,SOULBOUND_INVENTORIES
         ));
     }
 

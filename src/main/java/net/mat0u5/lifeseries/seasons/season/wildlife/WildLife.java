@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.MobSwap;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.SizeShifting;
@@ -28,6 +29,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
@@ -329,5 +331,11 @@ public class WildLife extends Season {
                 power.onAttack();
             }
         }
+    }
+
+    @Override
+    public void onUpdatedInventory(ServerPlayerEntity player) {
+        if (WildcardManager.isActiveWildcard(Wildcards.HUNGER)) return;
+        Hunger.updateInventory(player);
     }
 }

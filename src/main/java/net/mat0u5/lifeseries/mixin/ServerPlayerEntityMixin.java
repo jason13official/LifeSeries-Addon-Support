@@ -3,14 +3,19 @@ package net.mat0u5.lifeseries.mixin;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.TeleportTarget;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,7 +36,8 @@ public class ServerPlayerEntityMixin {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         if (WatcherManager.isWatcher(player)) return;
         UUID uuid = player.getUuid();
-        TaskScheduler.scheduleTask(1, () -> currentSeason.onPlayerRespawn(Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer(uuid))));
+        currentSeason.onPlayerRespawn(Objects.requireNonNull(PlayerUtils.getPlayer(uuid)));
+        TaskScheduler.scheduleTask(1, () -> currentSeason.postPlayerRespawn(Objects.requireNonNull(PlayerUtils.getPlayer(uuid))));
     }
 
     @Inject(method = "openHandledScreen", at = @At("HEAD"))
@@ -67,6 +73,41 @@ public class ServerPlayerEntityMixin {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         if (player instanceof FakePlayer) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "onStatusEffectApplied", at = @At("TAIL"))
+    private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
+        ls$onUpdatedEffects(effect, true);
+    }
+
+    @Inject(method = "onStatusEffectRemoved", at = @At("TAIL"))
+    private void onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
+        ls$onUpdatedEffects(effect, false);
+    }
+
+    @Inject(method = "onStatusEffectUpgraded", at = @At("TAIL"))
+    private void onStatusEffectUpgraded(StatusEffectInstance effect, boolean reapplyEffect, Entity source, CallbackInfo ci) {
+        ls$onUpdatedEffects(effect, true);
+    }
+
+
+    @Unique
+    private boolean ls$processing = false;
+
+    @Unique
+    private void ls$onUpdatedEffects(StatusEffectInstance effect, boolean add) {
+        if (ls$processing) {
+            return;
+        }
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ls$processing = true;
+        try {
+            if (currentSeason instanceof DoubleLife doubleLife) {
+                doubleLife.syncStatusEffectsFrom(player, effect, add);
+            }
+        }finally {
+            ls$processing = false;
         }
     }
 }

@@ -154,3 +154,8 @@ Added the 'allow_self_defense' global config, which controls whether self-defens
 ----------
 
 Added the 'wildcard_hunger_effect_level' Wild Life config, which controls the hunger effect level. Default value is 3.
+
+----------
+
+Added the 'soulbound_effects' Double Life config, which makes your effects be shared with your soulmate. Default value is false.<br>
+Added the 'soulbound_inventories' Double Life config, which makes your inventory be shared with your soulmate. Default value is false. WARNING: There could be some ways of abusing this (duping etc). Use with caution.

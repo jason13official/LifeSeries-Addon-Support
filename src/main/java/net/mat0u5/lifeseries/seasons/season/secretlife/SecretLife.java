@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.secretlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -9,7 +8,6 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.ItemSpawner;
 import net.mat0u5.lifeseries.utils.world.ItemStackUtils;
@@ -101,8 +99,8 @@ public class SecretLife extends Season {
     }
 
     @Override
-    public void onPlayerRespawn(ServerPlayerEntity player) {
-        super.onPlayerRespawn(player);
+    public void postPlayerRespawn(ServerPlayerEntity player) {
+        super.postPlayerRespawn(player);
         if (giveBookOnRespawn.containsKey(player.getUuid())) {
             ItemStack book = giveBookOnRespawn.get(player.getUuid());
             giveBookOnRespawn.remove(player.getUuid());

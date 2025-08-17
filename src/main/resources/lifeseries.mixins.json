@@ -24,6 +24,7 @@
     "ServerCommandSourceMixin",
     "ServerCommonNetworkHandlerMixin",
     "ServerPlayerEntityMixin",
+    "ServerPlayerInteractionManagerMixin",
     "ServerPlayNetworkHandlerMixin",
     "SleepManagerMixin",
     "SpawnEggItemMixin",
