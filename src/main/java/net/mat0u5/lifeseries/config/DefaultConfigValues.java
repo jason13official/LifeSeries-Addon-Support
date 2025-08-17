@@ -141,6 +141,9 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> WATCHERS_MUTED = new ConfigFileEntry<>(
             "watchers_muted", false, "global.watchers", "Mute Watchers", "Controls whether the Watchers should be allowed to type in chat."
     );
+    public final ConfigFileEntry<Boolean> ALLOW_SELF_DEFENSE = new ConfigFileEntry<>(
+            "allow_self_defense", true, "global", "Allow Self Defense Kills", "Controls whether self-defense kills should count as unjustified."
+    );
 
 
     /*

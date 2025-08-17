@@ -5,20 +5,15 @@ import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.*;
-import net.mat0u5.lifeseries.utils.world.AnimationUtils;
-import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,23 +24,17 @@ import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.scoreboard.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -73,6 +62,7 @@ public abstract class Season {
     public boolean WATCHERS_IN_TAB = true;
     public boolean MUTE_DEAD_PLAYERS = false;
     public boolean WATCHERS_MUTED = false;
+    public boolean ALLOW_SELF_DEFENSE = true;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public LivesManager livesManager = createLivesManager();
@@ -145,6 +135,7 @@ public abstract class Season {
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get(seasonConfig);
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get(seasonConfig);
         WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
+        ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get(seasonConfig);
 
         boogeymanManager.onReload();
         createTeams();
@@ -226,12 +217,22 @@ public abstract class Season {
     }
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (livesManager.isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && livesManager.isOnLastLife(victim, false)) return true;
-        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
-        if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
-        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
+        return isAllowedToAttack(attacker, victim, ALLOW_SELF_DEFENSE);
+    }
+
+    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
+        if (livesManager.isOnLastLife(attacker, false)) {
+            return true;
+        }
+        if (boogeymanManager.isBoogeymanThatCanBeCured(attacker, victim)) {
+            return true;
+        }
+        if (allowSelfDefense) {
+             if (attacker.getPrimeAdversary() == victim && isAllowedToAttack(victim, attacker, false)) {
+                 return true;
+             }
+        }
+        return false;
     }
 
     public void sessionEnd() {
@@ -256,19 +257,15 @@ public abstract class Season {
         SessionTranscript.onPlayerDeath(player, source);
         boolean killedByPlayer = false;
         if (source.getAttacker() instanceof ServerPlayerEntity serverAttacker) {
-            if (player != source.getAttacker()) {
-                if (!soulmateKill) {
-                    onPlayerKilledByPlayer(player, serverAttacker);
-                }
+            if (player != source.getAttacker() && !soulmateKill) {
+                onPlayerKilledByPlayer(player, serverAttacker);
                 killedByPlayer = true;
             }
         }
         if (player.getPrimeAdversary() != null && !killedByPlayer) {
             if (player.getPrimeAdversary() instanceof ServerPlayerEntity serverAdversary) {
-                if (player != player.getPrimeAdversary()) {
-                    if (!soulmateKill) {
-                        onPlayerKilledByPlayer(player, serverAdversary);
-                    }
+                if (player != player.getPrimeAdversary() && !soulmateKill) {
+                    onPlayerKilledByPlayer(player, serverAdversary);
                     killedByPlayer = true;
                 }
             }
@@ -302,8 +299,7 @@ public abstract class Season {
 
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         SessionTranscript.claimKill(killer, victim);
-        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-        if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
+        if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
             boogeymanManager.cure(killer);
         }
     }
@@ -318,14 +314,12 @@ public abstract class Season {
     }
 
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        if (isAllowedToAttack(killer, victim)) {
-            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
-                boogeymanManager.cure(killer);
-            }
-        }
-        else {
+        if (!isAllowedToAttack(killer, victim)) {
             PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
+        }
+
+        if (boogeymanManager.isBoogeymanThatCanBeCured(killer, victim)) {
+            boogeymanManager.cure(killer);
         }
     }
 

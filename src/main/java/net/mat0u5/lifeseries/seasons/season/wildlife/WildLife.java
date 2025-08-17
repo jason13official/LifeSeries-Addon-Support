@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -20,7 +19,6 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpow
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.minecraft.entity.Entity;
@@ -34,7 +32,6 @@ import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
@@ -85,25 +82,22 @@ public class WildLife extends Season {
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) return true;
-        if (livesManager.isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && (livesManager.isOnLastLife(victim, false))) return true;
-
-        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && livesManager.isOnSpecificLives(victim, 2, false) && livesManager.isOnAtLeastLives(attacker, 3, false)) return true;
-
-        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
-        if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
-        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
+    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
+        if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) {
+            return true;
+        }
+        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) {
+            return true;
+        }
+        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        boolean gaveLife = false;
-        boolean isAllowedToAttack = isAllowedToAttack(killer, victim);
-        if (livesManager.isOnAtLeastLives(victim, 4, false)) {
+        boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
+        boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
+        super.onPlayerKilledByPlayer(victim, killer);
+        if (livesManager.isOnAtLeastLives(victim, 4, false) && wasAllowedToAttack && !wasBoogeyCure) {
             if (Necromancy.isRessurectedPlayer(killer) && seasonConfig instanceof WildLifeConfig config) {
                 if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get(config)) {
                     Integer currentLives = livesManager.getPlayerLives(killer);
@@ -114,7 +108,6 @@ public class WildLife extends Season {
                     }
                     else {
                         livesManager.addPlayerLife(killer);
-                        gaveLife = true;
                     }
                 }
             }
@@ -125,31 +118,20 @@ public class WildLife extends Season {
                     }
                     livesManager.addPlayerLife(killer);
                 }
-                gaveLife = true;
             }
-        }
-        if (isAllowedToAttack) {
-            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
-                boogeymanManager.cure(killer);
-            }
-        }
-        else {
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
-            if (gaveLife) PlayerUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove a life from the killer if this was indeed an unjustified kill."));
         }
     }
 
 
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        super.onClaimKill(killer, victim);
         if (livesManager.isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             if (BROADCAST_LIFE_GAIN) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
             }
             livesManager.addPlayerLife(killer);
         }
+        super.onClaimKill(killer, victim);
     }
 
     @Override
@@ -254,6 +236,21 @@ public class WildLife extends Season {
 
         TriviaBot.cursedMoonJumpPlayers.remove(player.getUuid());
         AttributeUtils.resetPlayerJumpHeight(player);
+
+        Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
+        if (power != null) {
+            power.deactivate();
+        }
+    }
+
+    @Override
+    public void onPlayerDisconnect(ServerPlayerEntity player) {
+        super.onPlayerDisconnect(player);
+
+        Superpower power = SuperpowersWildcard.getSuperpowerInstance(player);
+        if (power != null) {
+            power.deactivate();
+        }
     }
 
     public static void changedPlayerTeam(ServerPlayerEntity player) {

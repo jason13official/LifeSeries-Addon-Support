@@ -93,6 +93,12 @@ public class BoogeymanManager {
         return false;
     }
 
+
+    public boolean isBoogeymanThatCanBeCured(ServerPlayerEntity player, ServerPlayerEntity victim) {
+        Boogeyman boogeyman = getBoogeyman(player);
+        return boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true);
+    }
+
     public Boogeyman getBoogeyman(ServerPlayerEntity player) {
         if (player == null) return null;
         for (Boogeyman boogeyman : boogeymen) {

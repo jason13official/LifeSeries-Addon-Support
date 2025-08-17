@@ -177,96 +177,97 @@ public class LimitedLife extends Season {
 
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        SessionTranscript.claimKill(killer, victim);
-        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-        if (boogeyman == null || boogeyman.cured || livesManager.isOnLastLife(victim, true)) {
-            livesManager.addToPlayerLives(killer, KILL_NORMAL);
-            PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
-            return;
-        }
+        boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
+        boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
 
-        boogeymanManager.cure(killer);
-
-        //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-        boolean wasAlive = false;
-
-        String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN-DEATH_NORMAL);
-        String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
-
-        if (livesManager.isAlive(victim)) {
-            livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN-DEATH_NORMAL);
-            wasAlive = true;
-        }
-        livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
-        if (livesManager.isAlive(victim)) {
-            PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
-            PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
-        }
-        else if (wasAlive && SHOW_DEATH_TITLE) {
-            PlayerUtils.sendTitleWithSubtitle(killer,
-                    Text.literal(msgKiller).formatted(Formatting.GREEN),
-                    livesManager.getDeathMessage(victim),
-                    20, 80, 20);
+        if (!wasBoogeyCure) {
+            if (wasAllowedToAttack) {
+                livesManager.addToPlayerLives(killer, KILL_NORMAL);
+                PlayerUtils.sendTitle(killer, Text.literal(OtherUtils.formatSecondsToReadable(KILL_NORMAL)).formatted(Formatting.GREEN), 20, 80, 20);
+            }
         }
         else {
-            PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
-        }
-    }
+            //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
 
-    @Override
-    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-        if (boogeyman == null || boogeyman.cured || livesManager.isOnLastLife(victim, true)) {
-            boolean wasAllowedToAttack = isAllowedToAttack(killer, victim);
-            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
-            String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
-            livesManager.addToPlayerLives(victim, DEATH_NORMAL);
-            livesManager.addToPlayerLives(killer, KILL_NORMAL);
-            if (livesManager.isAlive(victim) || !SHOW_DEATH_TITLE) {
-                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
-                PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+            boolean wasAlive = false;
+
+            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN-DEATH_NORMAL);
+            String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
+
+            if (livesManager.isAlive(victim)) {
+                livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN-DEATH_NORMAL);
+                wasAlive = true;
             }
-            else {
+            livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
+            if (livesManager.isAlive(victim)) {
+                PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
+            }
+            else if (wasAlive && SHOW_DEATH_TITLE) {
                 PlayerUtils.sendTitleWithSubtitle(killer,
                         Text.literal(msgKiller).formatted(Formatting.GREEN),
                         livesManager.getDeathMessage(victim),
                         20, 80, 20);
             }
-            if (wasAllowedToAttack) return;
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
-            PlayerUtils.broadcastMessageToAdmins(Text.of("§7Remember to remove time from the killer if this was indeed an unjustified kill."));
-            return;
+            else {
+                PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+            }
         }
 
-        boogeymanManager.cure(killer);
+        super.onClaimKill(killer, victim);
+    }
 
-        //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
-        String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN);
-        String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
-        livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN);
-        livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
+    @Override
+    public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
+        boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
+        boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
+        super.onPlayerKilledByPlayer(victim, killer);
 
-        if (livesManager.isAlive(victim) || !SHOW_DEATH_TITLE) {
-            PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
-            PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured!"), Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+        if (!wasBoogeyCure) {
+            boolean wasFinalKill = livesManager.isAlive(victim) || !SHOW_DEATH_TITLE;
+            if (wasAllowedToAttack) {
+                String msgKiller = OtherUtils.formatSecondsToReadable(KILL_NORMAL);
+                livesManager.addToPlayerLives(killer, KILL_NORMAL);
+                if (wasFinalKill) {
+                    PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+                }
+                else {
+                    PlayerUtils.sendTitleWithSubtitle(killer,
+                            Text.literal(msgKiller).formatted(Formatting.GREEN),
+                            livesManager.getDeathMessage(victim),
+                            20, 80, 20);
+                }
+            }
+            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_NORMAL);
+            livesManager.addToPlayerLives(victim, DEATH_NORMAL);
+            if (wasFinalKill) {
+                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
+            }
         }
         else {
-            PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured, "+msgKiller),
-                    livesManager.getDeathMessage(victim)
-                    , 20, 80, 20);
+
+            //Victim was killed by boogeyman - remove 2 hours from victim and add 1 hour to boogey
+            String msgVictim = OtherUtils.formatSecondsToReadable(DEATH_BOOGEYMAN);
+            String msgKiller = OtherUtils.formatSecondsToReadable(KILL_BOOGEYMAN);
+            livesManager.addToPlayerLives(victim, DEATH_BOOGEYMAN);
+            livesManager.addToPlayerLives(killer, KILL_BOOGEYMAN);
+
+            if (livesManager.isAlive(victim) || !SHOW_DEATH_TITLE) {
+                PlayerUtils.sendTitle(victim, Text.literal(msgVictim).formatted(Formatting.RED), 20, 80, 20);
+                PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured!"), Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
+            }
+            else {
+                PlayerUtils.sendTitleWithSubtitle(killer,Text.of("§aYou are cured, "+msgKiller),
+                        livesManager.getDeathMessage(victim)
+                        , 20, 80, 20);
+            }
         }
     }
 
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        if (livesManager.isOnLastLife(attacker, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && livesManager.isOnLastLife(victim, false)) return true;
-        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnSpecificLives(victim, 3, false)) return true;
-        if (attacker.getPrimeAdversary() == victim && (livesManager.isOnSpecificLives(victim, 2, false) && livesManager.isOnSpecificLives(attacker, 3, false))) return true;
-        Boogeyman boogeymanAttacker = boogeymanManager.getBoogeyman(attacker);
-        Boogeyman boogeymanVictim = boogeymanManager.getBoogeyman(victim);
-        if (boogeymanAttacker != null && !boogeymanAttacker.cured) return true;
-        return attacker.getPrimeAdversary() == victim && (boogeymanVictim != null && !boogeymanVictim.cured);
+    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
+        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) return true;
+        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
     @Override

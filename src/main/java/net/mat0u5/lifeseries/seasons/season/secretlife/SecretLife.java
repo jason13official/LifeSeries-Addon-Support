@@ -295,25 +295,15 @@ public class SecretLife extends Season {
 
     @Override
     public void onPlayerKilledByPlayer(ServerPlayerEntity victim, ServerPlayerEntity killer) {
-        if (isAllowedToAttack(killer, victim)) {
-            Boogeyman boogeyman  = boogeymanManager.getBoogeyman(killer);
-            if (boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true)) {
-                boogeymanManager.cure(killer);
-            }
-            if (livesManager.isOnLastLife(killer, false)) {
-                double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
-                if (amountGained <= 0) {
-                    return;
-                }
+        super.onPlayerKilledByPlayer(victim, killer);
+        if (livesManager.isOnLastLife(killer, false)) {
+            double amountGained = Math.min(Math.max(MAX_KILL_HEALTH, MAX_HEALTH) - getPlayerHealth(killer), 20);
+            if (amountGained > 0) {
                 addPlayerHealth(killer, amountGained);
                 double roundedHearts = Math.ceil(amountGained) / 2.0;
                 String text = TextUtils.pluralize(TextUtils.formatString("+{} Heart{}", roundedHearts), roundedHearts);
                 PlayerUtils.sendTitle(killer, Text.literal(text).formatted(Formatting.RED), 0, 40, 20);
             }
-            return;
-        }
-        else {
-            PlayerUtils.broadcastMessageToAdmins(TextUtils.format("§c [Unjustified Kill?] {}§7 was killed by {}", victim, killer));
         }
     }
 

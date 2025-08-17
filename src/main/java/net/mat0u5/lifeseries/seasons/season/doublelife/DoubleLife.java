@@ -104,11 +104,12 @@ public class DoubleLife extends Season {
         );
         return true;
     }
+
     @Override
-    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
+    public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
         ServerPlayerEntity soulmate = getSoulmate(victim);
         if (soulmate != null && soulmate == attacker) return true;
-        return super.isAllowedToAttack(attacker, victim);
+        return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
     }
 
     @Override

@@ -48,6 +48,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 //? if >= 1.21.6 {
                 /*,LOCATOR_BAR
                  *///?}
+                ,ALLOW_SELF_DEFENSE
 
 
                 ,GROUP_BLACKLIST // Group
