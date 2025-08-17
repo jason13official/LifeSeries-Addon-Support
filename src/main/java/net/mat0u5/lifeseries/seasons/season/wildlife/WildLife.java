@@ -175,6 +175,7 @@ public class WildLife extends Season {
         super.reload();
         if (!(seasonConfig instanceof WildLifeConfig config)) return;
         Hunger.SWITCH_DELAY = WildLifeConfig.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get(config);
+        Hunger.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_HUNGER_EFFECT_LEVEL.get(config);
 
         SizeShifting.MIN_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MIN_SIZE.get(config);
         SizeShifting.MAX_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MAX_SIZE.get(config);

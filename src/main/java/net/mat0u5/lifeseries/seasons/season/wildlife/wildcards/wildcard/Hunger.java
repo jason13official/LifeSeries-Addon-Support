@@ -49,6 +49,8 @@ public class Hunger extends Wildcard {
     private static int lastVersion = -1;
     private static long ticks = 0;
 
+    public static int HUNGER_EFFECT_LEVEL = 3;
+
     private static final List<RegistryEntry<StatusEffect>> effects = List.of(
             StatusEffects.SPEED,
             StatusEffects.SLOWNESS,
@@ -215,7 +217,7 @@ public class Hunger extends Wildcard {
     public static void addHunger(ServerPlayerEntity player) {
         if (player == null) return;
         if (player.isSpectator()) return;
-        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, 2, false, false, false);
+        StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.HUNGER, -1, HUNGER_EFFECT_LEVEL-1, false, false, false);
         player.addStatusEffect(statusEffectInstance);
     }
 

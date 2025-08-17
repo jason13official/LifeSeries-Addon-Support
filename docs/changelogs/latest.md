@@ -150,3 +150,7 @@ When a player dies or logs off, their superpower now gets deactivated.<br>
 Reworked the backend logic for if a player is allowed to attack another player.<br>
 In seasons where you gain a reward for killing, you no longer do when it's an unjustified kill.<br>
 Added the 'allow_self_defense' global config, which controls whether self-defense kills should count as unjustified. Default value is true. You do not gain rewards for killing for self-defence.
+
+----------
+
+Added the 'wildcard_hunger_effect_level' Wild Life config, which controls the hunger effect level. Default value is 3.

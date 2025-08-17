@@ -69,6 +69,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
             "wildcard_hunger_randomize_interval", 36000, ConfigTypes.SECONDS, "season", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
     );
+    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
+            "wildcard_hunger_effect_level", 3, "season", "Hunger: Effect Level", "Controls the hunger effect level."
+    );
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "season.snails", "Speed Multiplier", "Snail movement speed multiplier."
     );
@@ -170,6 +173,7 @@ public class WildLifeConfig extends ConfigManager {
                 GROUP_GENERAL //Group
                     ,KILLING_DARK_GREENS_GAINS_LIVES//Group
                 ,GROUP_SIZESHIFTING //Group
+                ,WILDCARD_HUNGER_EFFECT_LEVEL
                 ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
                 ,GROUP_SNAILS //Group
                 ,GROUP_TIMEDILATION //Group
