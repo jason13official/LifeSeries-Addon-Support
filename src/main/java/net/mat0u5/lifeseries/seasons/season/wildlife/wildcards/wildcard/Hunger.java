@@ -135,7 +135,7 @@ public class Hunger extends Wildcard {
         }
         ticks++;
         if (ticks % 20 == 0) {
-            for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
+            for (ServerPlayerEntity player : PlayerUtils.getAllFunctioningPlayers()) {
                 if (!player.hasStatusEffect(StatusEffects.HUNGER)) {
                     addHunger(player);
                 }
@@ -164,7 +164,7 @@ public class Hunger extends Wildcard {
     }
 
     public void newFoodRules() {
-        List<ServerPlayerEntity> players = PlayerUtils.getAllPlayers();
+        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
         SessionTranscript.newHungerRule();
         if (shuffledBefore) {
             PlayerUtils.playSoundToPlayers(players, SoundEvents.BLOCK_NOTE_BLOCK_PLING.value());
@@ -188,7 +188,7 @@ public class Hunger extends Wildcard {
     }
 
     public static void updateInventories() {
-        PlayerUtils.getAllPlayers().forEach(Hunger::updateInventory);
+        PlayerUtils.getAllFunctioningPlayers().forEach(Hunger::updateInventory);
     }
 
     public static void updateInventory(ServerPlayerEntity player) {
@@ -212,7 +212,7 @@ public class Hunger extends Wildcard {
     }
 
     public static void addHunger() {
-        PlayerUtils.getAllPlayers().forEach(Hunger::addHunger);
+        PlayerUtils.getAllFunctioningPlayers().forEach(Hunger::addHunger);
     }
     public static void addHunger(ServerPlayerEntity player) {
         if (player == null) return;

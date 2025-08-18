@@ -33,6 +33,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -167,8 +168,9 @@ public abstract class Season {
 
 
     public void createScoreboards() {
-        ScoreboardUtils.createObjective(WatcherManager.SCOREBOARD_NAME);
         ScoreboardUtils.createObjective("HP", "§c❤", ScoreboardCriterion.HEALTH);
+        WatcherManager.createScoreboards();
+        livesManager.createScoreboards();
     }
 
     public void reloadAllPlayerTeams() {
@@ -383,6 +385,9 @@ public abstract class Season {
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
         if (!livesManager.hasAssignedLives(player)) {
             assignDefaultLives(player);
+        }
+        if (!livesManager.isAlive(player) && !PermissionManager.isAdmin(player)) {
+            player.changeGameMode(GameMode.SPECTATOR);
         }
     }
 

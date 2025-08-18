@@ -1,11 +1,13 @@
 package net.mat0u5.lifeseries.seasons.other;
 
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 
@@ -25,8 +27,8 @@ public class WatcherManager {
         TeamUtils.createTeam(WatcherManager.TEAM_NAME, WatcherManager.TEAM_DISPLAY_NAME, Formatting.DARK_GRAY);
     }
 
-    public void createScoreboards() {
-
+    public static void createScoreboards() {
+        ScoreboardUtils.createObjective(WatcherManager.SCOREBOARD_NAME);
     }
 
     public static void reloadWatchers() {
@@ -44,12 +46,16 @@ public class WatcherManager {
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, 1);
         currentSeason.livesManager.resetPlayerLife(player);
         player.changeGameMode(GameMode.SPECTATOR);
+        player.sendMessage(Text.of("§7§nYou are now a Watcher.\n"));
+        player.sendMessage(Text.of("§7Watchers are players that are online, but are not affected by most season mechanics. They can only observe - this is very useful for spectators and for admins."));
+        player.sendMessage(Text.of("§8§oNOTE: This is an experimental feature, report any bugs you find!"));
     }
 
     public static void removeWatcher(ServerPlayerEntity player) {
         watchers.remove(player.getNameForScoreboard());
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.livesManager.resetPlayerLife(player);
+        player.sendMessage(Text.of("§7You are no longer a Watcher."));
     }
 
     public static boolean isWatcher(PlayerEntity player) {
