@@ -305,6 +305,7 @@ public class BoogeymanManager {
         if (rolledPlayers.contains(player.getUuid())) return;
         if (!livesManager.isAlive(player)) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
+        if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(40, () -> {
             player.sendMessage(Text.of("§cSince you were not present when the Boogeyman was being chosen, your chance to become the Boogeyman is now. Good luck!"));
             chooseBoogeymen(List.of(player), true);

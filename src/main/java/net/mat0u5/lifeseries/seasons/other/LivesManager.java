@@ -139,6 +139,9 @@ public class LivesManager {
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
         currentSeason.assignDefaultLives(player);
+        if (currentSeason instanceof DoubleLife doubleLife) {
+            doubleLife.syncSoulboundLives(player);
+        }
     }
 
     public void resetAllPlayerLivesInner() {
@@ -266,7 +269,10 @@ public class LivesManager {
             String subtitle = seasonConfig.FINAL_DEATH_TITLE_SUBTITLE.get(seasonConfig);
             PlayerUtils.sendTitleWithSubtitleToPlayers(PlayerUtils.getAllPlayers(), player.getStyledDisplayName(), Text.literal(subtitle), 20, 80, 20);
         }
-        PlayerUtils.broadcastMessage(getDeathMessage(player));
+        Text deathMessage = getDeathMessage(player);
+        if (!deathMessage.getString().isEmpty()) {
+            PlayerUtils.broadcastMessage(deathMessage);
+        }
     }
 
     public Text getDeathMessage(ServerPlayerEntity player) {

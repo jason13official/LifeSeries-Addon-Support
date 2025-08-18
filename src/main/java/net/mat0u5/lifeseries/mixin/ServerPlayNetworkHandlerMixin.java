@@ -145,13 +145,6 @@ public class ServerPlayNetworkHandlerMixin {
         return false;
     }
 
-    @Inject(method = "onHandSwing", at = @At("TAIL"))
-    public void onHandSwing(HandSwingC2SPacket packet, CallbackInfo ci) {
-        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
-        if (!Main.isLogicalSide()) return;
-        currentSeason.onUpdatedInventory(handler.player);
-    }
-
     @Inject(method = "onPlayerAction", at = @At("RETURN"))
     public void onPlayerAction(PlayerActionC2SPacket packet, CallbackInfo ci) {
         ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;

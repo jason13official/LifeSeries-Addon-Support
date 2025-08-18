@@ -127,8 +127,8 @@ This command **always** available
 
 - `/watcher info` - Shows info on what the Watchers are.
 - `/watcher list` - Shows a list of all the Watchers.
-- `/watcher add <player>` - Removes `<player>` from the Watchers.
-- `/watcher remove <player>` - Adds `<player>` to the Watchers.
+- `/watcher add <player>` - Adds `<player>` from the Watchers.
+- `/watcher remove <player>` - Removes `<player>` to the Watchers.
 </details>
 
 <details open>

@@ -46,7 +46,6 @@ public abstract class Superpower {
     }
 
     public void deactivate() {
-        OtherUtils.log("Deactivatin");
         active = false;
     }
 
