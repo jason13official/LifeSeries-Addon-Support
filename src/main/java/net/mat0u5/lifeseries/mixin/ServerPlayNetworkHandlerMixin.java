@@ -9,15 +9,13 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.network.message.LastSeenMessageList;
 import net.minecraft.network.message.SignedMessage;
-import net.minecraft.network.packet.c2s.play.ChatCommandSignedC2SPacket;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.network.packet.c2s.play.*;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -67,7 +65,7 @@ public class ServerPlayNetworkHandlerMixin {
     }
 
     @Inject(method = "onPlayerInteractItem", at = @At("HEAD"))
-    private void onPlayerAction(PlayerInteractItemC2SPacket packet, CallbackInfo ci) {
+    private void onPlayerInteractItem(PlayerInteractItemC2SPacket packet, CallbackInfo ci) {
         if (!Main.isLogicalSide()) return;
         ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
         ServerPlayerEntity player = handler.player;
@@ -145,5 +143,21 @@ public class ServerPlayNetworkHandlerMixin {
             return true;
         }
         return false;
+    }
+
+    @Inject(method = "onHandSwing", at = @At("TAIL"))
+    public void onHandSwing(HandSwingC2SPacket packet, CallbackInfo ci) {
+        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
+        if (!Main.isLogicalSide()) return;
+        currentSeason.onUpdatedInventory(handler.player);
+    }
+
+    @Inject(method = "onPlayerAction", at = @At("RETURN"))
+    public void onPlayerAction(PlayerActionC2SPacket packet, CallbackInfo ci) {
+        ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
+        if (!Main.isLogicalSide()) return;
+        if (packet.getAction() == PlayerActionC2SPacket.Action.SWAP_ITEM_WITH_OFFHAND) {
+            currentSeason.onUpdatedInventory(handler.player);
+        }
     }
 }

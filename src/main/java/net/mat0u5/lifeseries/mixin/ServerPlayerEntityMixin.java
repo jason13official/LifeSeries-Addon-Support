@@ -77,6 +77,12 @@ public class ServerPlayerEntityMixin {
         }
     }
 
+    @Inject(method = "attack", at = @At("HEAD"))
+    private void onAttackEntity(Entity target, CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        currentSeason.onUpdatedInventory(player);
+    }
+
     @Inject(method = "onStatusEffectApplied", at = @At("TAIL"))
     private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
         ls$onUpdatedEffects(effect, true);

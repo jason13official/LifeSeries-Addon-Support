@@ -422,5 +422,6 @@ public abstract class Season {
     }
 
     public void onUpdatedInventory(ServerPlayerEntity player) {
+        OtherUtils.log("InvUpdated");
     }
 }
