@@ -242,15 +242,18 @@ public class SecretLife extends Season {
 
     @Override
     public void onPlayerJoin(ServerPlayerEntity player) {
-        if (!livesManager.hasAssignedLives(player)) {
-            setPlayerHealth(player, MAX_HEALTH);
-            player.setHealth((float) MAX_HEALTH);
-        }
         super.onPlayerJoin(player);
 
         if (TaskManager.tasksChosen && !TaskManager.tasksChosenFor.contains(player.getUuid())) {
             TaskScheduler.scheduleTask(100, () -> TaskManager.chooseTasks(List.of(player), null));
         }
+    }
+
+    @Override
+    public void assignDefaultLives(ServerPlayerEntity player) {
+        setPlayerHealth(player, MAX_HEALTH);
+        player.setHealth((float) MAX_HEALTH);
+        super.assignDefaultLives(player);
     }
 
     @Override

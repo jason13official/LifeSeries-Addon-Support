@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.UUID;
@@ -81,10 +82,19 @@ public class ServerPlayerEntityMixin {
         ls$onUpdatedEffects(effect, true);
     }
 
+    //? if <= 1.21 {
     @Inject(method = "onStatusEffectRemoved", at = @At("TAIL"))
     private void onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
         ls$onUpdatedEffects(effect, false);
     }
+    //?} else {
+    /*@Inject(method = "onStatusEffectsRemoved", at = @At("TAIL"))
+    private void onStatusEffectRemoved(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
+        for (StatusEffectInstance effect : effects) {
+            ls$onUpdatedEffects(effect, false);
+        }
+    }
+    *///?}
 
     @Inject(method = "onStatusEffectUpgraded", at = @At("TAIL"))
     private void onStatusEffectUpgraded(StatusEffectInstance effect, boolean reapplyEffect, Entity source, CallbackInfo ci) {

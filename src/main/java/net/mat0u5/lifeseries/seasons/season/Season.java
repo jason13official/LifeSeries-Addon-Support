@@ -382,10 +382,14 @@ public abstract class Season {
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
         if (!livesManager.hasAssignedLives(player)) {
-            Integer lives = getDefaultLives();
-            if (lives != null) {
-                livesManager.setPlayerLives(player, lives);
-            }
+            assignDefaultLives(player);
+        }
+    }
+
+    public void assignDefaultLives(ServerPlayerEntity player) {
+        Integer lives = getDefaultLives();
+        if (lives != null) {
+            livesManager.setPlayerLives(player, lives);
         }
     }
 

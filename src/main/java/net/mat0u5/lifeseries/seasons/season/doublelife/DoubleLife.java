@@ -389,7 +389,7 @@ public class DoubleLife extends Season {
 
         if (soulmate == null) return;
         if (soulmate.isDead()) return;
-        if (SOULBOUND_INVENTORIES && !player.server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        if (SOULBOUND_INVENTORIES && server != null && !server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
             soulmate.getInventory().clear();
         }
 
@@ -577,15 +577,23 @@ public class DoubleLife extends Season {
     }
 
     public List<ItemStack> getPlayerInventory(PlayerInventory inventory) {
+        //? if <= 1.21.4 {
         List<ItemStack> result = new ArrayList<>(inventory.main);
         result.addAll(inventory.armor);
         result.addAll(inventory.offHand);
+        //?} else {
+        /*List<ItemStack> result = new ArrayList<>(inventory.getMainStacks());
+        for (int i = result.size(); i < inventory.size(); i++) {
+            result.add(inventory.getStack(i));
+        }
+        *///?}
         return result;
     }
 
     public void syncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
         TaskScheduler.scheduleTask(0, () -> delayedSyncStatusEffectsFrom(player, effect, add));
     }
+
     public void delayedSyncStatusEffectsFrom(ServerPlayerEntity player, StatusEffectInstance effect, boolean add) {
         if (!SOULBOUND_EFFECTS) return;
         ServerPlayerEntity soulmate = getSoulmate(player);

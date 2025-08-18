@@ -138,8 +138,7 @@ public class LivesManager {
     public void resetPlayerLife(ServerPlayerEntity player) {
         ScoreboardUtils.resetScore(player, SCOREBOARD_NAME);
         currentSeason.reloadPlayerTeam(player);
-        currentSeason.onPlayerJoin(player);
-        currentSeason.onPlayerFinishJoining(player);
+        currentSeason.assignDefaultLives(player);
     }
 
     public void resetAllPlayerLivesInner() {
@@ -150,10 +149,7 @@ public class LivesManager {
 
     public void resetAllPlayerLives() {
         resetAllPlayerLivesInner();
-        for (ServerPlayerEntity player : PlayerUtils.getAllPlayers()) {
-            currentSeason.onPlayerJoin(player);
-            currentSeason.onPlayerFinishJoining(player);
-        }
+        PlayerUtils.getAllPlayers().forEach(currentSeason::assignDefaultLives);
     }
 
     public void addPlayerLife(ServerPlayerEntity player) {
