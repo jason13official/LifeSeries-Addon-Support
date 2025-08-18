@@ -141,3 +141,10 @@ publishing {
   // retrieving dependencies.
  }
 }
+
+task runClientNamed {
+ doFirst {
+  runClient.args('--username', 'Player')
+ }
+ finalizedBy 'runClient'
+}
