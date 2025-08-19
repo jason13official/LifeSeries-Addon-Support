@@ -13,8 +13,13 @@ on:
         required: true
         default: 'version'
         type: string
+      platform_changelog:
+        description: 'Platform Changelog'
+        required: true
+        default: 'No changelog provided'
+        type: string
       changelog:
-        description: 'Shortened Changelog'
+        description: 'Github and Discord Changelog'
         required: true
         default: 'No changelog provided'
         type: string
@@ -73,7 +78,7 @@ jobs:
 
       - name: Commit message line break
         run: |
-          COMMIT_MESSAGE_RAW="${{ github.event.inputs.changelog }}"
+          COMMIT_MESSAGE_RAW="${{ github.event.inputs.platform_changelog }}"
           COMMIT_MESSAGE_BR=$(echo "$COMMIT_MESSAGE_RAW" | sed 's/\\n/<br>/g')
           echo "COMMIT_MESSAGE_BR=$COMMIT_MESSAGE_BR" >> $GITHUB_ENV
 
