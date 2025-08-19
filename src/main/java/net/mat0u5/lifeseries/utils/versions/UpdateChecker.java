@@ -93,7 +93,11 @@ public class UpdateChecker {
                         JsonObject json = jsonElement.getAsJsonObject();
 
                         String name = json.get("tag_name").getAsString();
-                        if (name.contains("dev")) continue;
+                        boolean draft = json.get("draft").getAsBoolean();
+                        boolean prerelease = json.get("prerelease").getAsBoolean();
+
+                        if (draft || prerelease) continue;
+
                         try {
                             int currentVersionNumber = VersionControl.getModVersionInt(Main.MOD_VERSION);
                             int updateVersionNumber = VersionControl.getModVersionInt(name);
