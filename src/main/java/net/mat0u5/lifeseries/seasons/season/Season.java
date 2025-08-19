@@ -386,7 +386,7 @@ public abstract class Season {
         if (!player.ls$hasAssignedLives()) {
             assignDefaultLives(player);
         }
-        if (!player.ls$isAlive() && !PermissionManager.isAdmin(player)) {
+        if (player.ls$hasAssignedLives() && !player.ls$isAlive() && !PermissionManager.isAdmin(player)) {
             player.changeGameMode(GameMode.SPECTATOR);
         }
     }

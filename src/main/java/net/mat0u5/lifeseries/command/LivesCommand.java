@@ -165,7 +165,7 @@ public class LivesCommand {
                     )
             )
             .then(literal("rollLives")
-                    .requires(source -> isLastLife())
+                    .requires(source -> isLastLife() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> assignRandomLives(
                             context.getSource(), PlayerUtils.getAllPlayers()
                     ))
