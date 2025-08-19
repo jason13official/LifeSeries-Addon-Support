@@ -103,7 +103,7 @@ public class AstralProjection extends ToggleableSuperpower {
             NetworkHandlerServer.sendPlayerDisguise(clone.getUuid().toString(), clone.getName().getString(), "", "");
         }
 
-        if (!livesManager.isAlive(player)) return;
+        if (!player.ls$isAlive()) return;
 
         if (startedWorld != null && toBackPos != null) {
             PlayerUtils.teleport(player, startedWorld, toBackPos, startedLooking[0], startedLooking[1]);

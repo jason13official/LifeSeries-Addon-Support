@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -26,15 +27,14 @@ import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
-import static net.mat0u5.lifeseries.Main.currentSeason;
+import static net.mat0u5.lifeseries.Main.*;
 
 @Mixin(value = ServerPlayerEntity.class, priority = 1)
-public class ServerPlayerEntityMixin {
+public class ServerPlayerEntityMixin implements IServerPlayerEntity {
     @Inject(method = "getRespawnTarget", at = @At("HEAD"))
     private void getRespawnTarget(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
         if (!Main.isLogicalSide()) return;
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         if (WatcherManager.isWatcher(player)) return;
         UUID uuid = player.getUuid();
         currentSeason.onPlayerRespawn(Objects.requireNonNull(PlayerUtils.getPlayer(uuid)));
@@ -44,7 +44,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "openHandledScreen", at = @At("HEAD"))
     private void onInventoryOpen(@Nullable NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> cir) {
         if (!Main.isLogicalSide()) return;
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         if (blacklist == null) return;
         
         TaskScheduler.scheduleTask(1, () -> {
@@ -55,7 +55,7 @@ public class ServerPlayerEntityMixin {
 
     @Inject(method = "sendMessageToClient", at = @At("HEAD"), cancellable = true)
     private void sendMessageToClient(Text message, boolean overlay, CallbackInfo ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         if (player instanceof FakePlayer) {
             ci.cancel();
         }
@@ -63,7 +63,7 @@ public class ServerPlayerEntityMixin {
 
     @Inject(method = "acceptsMessage", at = @At("HEAD"), cancellable = true)
     private void acceptsMessage(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         if (player instanceof FakePlayer) {
             cir.setReturnValue(false);
         }
@@ -71,7 +71,7 @@ public class ServerPlayerEntityMixin {
 
     @Inject(method = "acceptsChatMessage", at = @At("HEAD"), cancellable = true)
     private void acceptsChatMessage(CallbackInfoReturnable<Boolean> cir) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         if (player instanceof FakePlayer) {
             cir.setReturnValue(false);
         }
@@ -79,7 +79,7 @@ public class ServerPlayerEntityMixin {
 
     @Inject(method = "attack", at = @At("HEAD"))
     private void onAttackEntity(Entity target, CallbackInfo ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         currentSeason.onUpdatedInventory(player);
     }
 
@@ -116,7 +116,7 @@ public class ServerPlayerEntityMixin {
         if (ls$processing) {
             return;
         }
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ServerPlayerEntity player = ls$get();
         ls$processing = true;
         try {
             if (currentSeason instanceof DoubleLife doubleLife) {
@@ -125,5 +125,53 @@ public class ServerPlayerEntityMixin {
         }finally {
             ls$processing = false;
         }
+    }
+    
+    @Unique
+    private ServerPlayerEntity ls$get() {
+        return (ServerPlayerEntity) (Object) this;
+    }
+
+    /*
+        Injected Interface
+     */
+    @Unique @Override @Nullable
+    public Integer ls$getLives() {
+        return livesManager.getPlayerLives(ls$get());
+    }
+
+    @Unique @Override
+    public boolean ls$hasAssignedLives() {
+        return livesManager.hasAssignedLives(ls$get());
+    }
+
+    @Unique @Override
+    public boolean ls$isAlive() {
+        return livesManager.isAlive(ls$get());
+    }
+
+    @Unique @Override
+    public void ls$addToLives(int amount) {
+        livesManager.addToPlayerLives(ls$get(), amount);
+    }
+
+    @Unique @Override
+    public void ls$setLives(int lives) {
+        livesManager.setPlayerLives(ls$get(), lives);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnLastLife(boolean fallback) {
+        return livesManager.isOnLastLife(ls$get(), fallback);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnSpecificLives(int check, boolean fallback) {
+        return livesManager.isOnSpecificLives(ls$get(), check, fallback);
+    }
+
+    @Unique @Override
+    public boolean ls$isOnAtLeastLives(int check, boolean fallback) {
+        return livesManager.isOnAtLeastLives(ls$get(), check, fallback);
     }
 }

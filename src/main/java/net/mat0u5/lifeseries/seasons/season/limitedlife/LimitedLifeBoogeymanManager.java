@@ -48,13 +48,13 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
     }
     @Override
     public void playerFailBoogeyman(ServerPlayerEntity player) {
-        if (!livesManager.isAlive(player)) return;
-        if (livesManager.isOnLastLife(player, true)) return;
-        if (livesManager.isOnSpecificLives(player, 3, false)) {
-            livesManager.setPlayerLives(player, LimitedLifeLivesManager.YELLOW_TIME);
+        if (!player.ls$isAlive()) return;
+        if (player.ls$isOnLastLife(true)) return;
+        if (player.ls$isOnSpecificLives(3, false)) {
+            player.ls$setLives(LimitedLifeLivesManager.YELLOW_TIME);
         }
-        else if (livesManager.isOnSpecificLives(player, 2, false)) {
-            livesManager.setPlayerLives(player, LimitedLifeLivesManager.RED_TIME);
+        else if (player.ls$isOnSpecificLives(2, false)) {
+            player.ls$setLives(LimitedLifeLivesManager.RED_TIME);
         }
         Text setTo = livesManager.getFormattedLives(player);
 

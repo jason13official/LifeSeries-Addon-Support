@@ -29,7 +29,6 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.server.MinecraftServer;
@@ -88,7 +87,7 @@ public class WildLife extends Season {
         if (Necromancy.isRessurectedPlayer(victim) || Necromancy.isRessurectedPlayer(attacker)) {
             return true;
         }
-        if (livesManager.isOnSpecificLives(attacker, 2, false) && livesManager.isOnAtLeastLives(victim, 3, false)) {
+        if (attacker.ls$isOnSpecificLives(2, false) && victim.ls$isOnAtLeastLives(3, false)) {
             return true;
         }
         return super.isAllowedToAttack(attacker, victim, allowSelfDefense);
@@ -99,10 +98,10 @@ public class WildLife extends Season {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
         super.onPlayerKilledByPlayer(victim, killer);
-        if (livesManager.isOnAtLeastLives(victim, 4, false) && wasAllowedToAttack && !wasBoogeyCure) {
+        if (victim.ls$isOnAtLeastLives(4, false) && wasAllowedToAttack && !wasBoogeyCure) {
             if (Necromancy.isRessurectedPlayer(killer) && seasonConfig instanceof WildLifeConfig config) {
                 if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN.get(config)) {
-                    Integer currentLives = livesManager.getPlayerLives(killer);
+                    Integer currentLives = killer.ls$getLives();
                     if (currentLives == null) currentLives = 0;
                     int lives = currentLives + 1;
                     if (lives <= 0) {
@@ -127,7 +126,7 @@ public class WildLife extends Season {
 
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
-        if (livesManager.isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
+        if (victim.ls$isOnAtLeastLives(4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             if (BROADCAST_LIFE_GAIN) {
                 PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
             }

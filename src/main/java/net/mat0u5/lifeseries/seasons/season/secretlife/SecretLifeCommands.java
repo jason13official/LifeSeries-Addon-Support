@@ -331,7 +331,7 @@ public class SecretLifeCommands {
             source.sendError(Text.of("You have already gifted a heart this session"));
             return -1;
         }
-        if (!livesManager.isAlive(target)) {
+        if (!target.ls$isAlive()) {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
@@ -363,7 +363,7 @@ public class SecretLifeCommands {
 
         SecretLife secretLife = (SecretLife) currentSeason;
 
-        if (!livesManager.isAlive(self)) {
+        if (!self.ls$isAlive()) {
             OtherUtils.sendCommandFeedbackQuiet(source, Text.of("You're dead..."));
             return -1;
         }
@@ -379,7 +379,7 @@ public class SecretLifeCommands {
         if (target == null) return -1;
 
         SecretLife secretLife = (SecretLife) currentSeason;
-        if (!livesManager.isAlive(target)) {
+        if (!target.ls$isAlive()) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} is dead", target));
             return -1;
         }

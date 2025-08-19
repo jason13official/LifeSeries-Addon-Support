@@ -169,7 +169,7 @@ public class TaskManager {
         }
 
         removePlayersTaskBook(player);
-        if (!livesManager.isAlive(player)) return;
+        if (!player.ls$isAlive()) return;
         Task task;
         if (preAssignedTasks.containsKey(player.getUuid())) {
             task = preAssignedTasks.get(player.getUuid());
@@ -186,11 +186,11 @@ public class TaskManager {
 
     public static void assignRandomTasks(List<ServerPlayerEntity> allowedPlayers, TaskTypes type) {
         for (ServerPlayerEntity player : allowedPlayers) {
-            if (!livesManager.isAlive(player)) continue;
+            if (!player.ls$isAlive()) continue;
             TaskTypes thisType = type;
             if (thisType == null) {
                 thisType = TaskTypes.EASY;
-                if (livesManager.isOnLastLife(player, false)) thisType = TaskTypes.RED;
+                if (player.ls$isOnLastLife(false)) thisType = TaskTypes.RED;
             }
             assignRandomTaskToPlayer(player, thisType);
         }
@@ -381,7 +381,7 @@ public class TaskManager {
                 addHealthThenItems(player, RED_SUCCESS);
             }
         });
-        if (livesManager.isOnLastLife(player, false)) {
+        if (player.ls$isOnLastLife(false)) {
             TaskScheduler.scheduleTask(120, () -> {
                 chooseTasks(List.of(player), TaskTypes.RED);
             });
@@ -407,7 +407,7 @@ public class TaskManager {
             SessionTranscript.rerollTask(player);
             secretKeeperBeingUsed = true;
             TaskTypes newType = TaskTypes.HARD;
-            if (livesManager.isOnLastLife(player, false)) {
+            if (player.ls$isOnLastLife(false)) {
                 chooseTasks(List.of(player), TaskTypes.RED);
                 return;
             }
@@ -435,7 +435,7 @@ public class TaskManager {
             return;
         }
         if (type == TaskTypes.HARD) {
-            if (!livesManager.isOnLastLife(player, true)) {
+            if (!player.ls$isOnLastLife(true)) {
                 player.sendMessage(Text.of("§cYou cannot re-roll a Hard task."));
             }
             else {
@@ -479,11 +479,11 @@ public class TaskManager {
                 showHeartTitle(player, RED_FAIL);
                 season.removePlayerHealth(player, -RED_FAIL);
             }
-            if (!livesManager.isOnLastLife(player, false)) {
+            if (!player.ls$isOnLastLife(false)) {
                 secretKeeperBeingUsed = false;
             }
         });
-        if (livesManager.isOnLastLife(player, false)) {
+        if (player.ls$isOnLastLife(false)) {
             TaskScheduler.scheduleTask(120, () -> chooseTasks(List.of(player), TaskTypes.RED));
         }
     }

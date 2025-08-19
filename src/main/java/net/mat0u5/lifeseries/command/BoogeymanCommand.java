@@ -38,7 +38,7 @@ public class BoogeymanCommand {
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(
             literal("boogeyman")
-                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !livesManager.isAlive(source.getPlayer())))
+                .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !source.getPlayer().ls$isAlive()))
                 .then(literal("clear")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
                     .executes(context -> boogeyClear(
@@ -46,7 +46,7 @@ public class BoogeymanCommand {
                     ))
                 )
                 .then(literal("list")
-                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !livesManager.isAlive(source.getPlayer())))
+                    .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null) || !source.getPlayer().ls$isAlive()))
                     .executes(context -> boogeyList(
                         context.getSource()
                     ))

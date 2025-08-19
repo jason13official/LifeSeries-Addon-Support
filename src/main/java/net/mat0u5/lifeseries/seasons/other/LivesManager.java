@@ -114,17 +114,17 @@ public class LivesManager {
     }
 
     @Nullable
-    public Integer getPlayerLives(ServerPlayerEntity player) {
+    public Integer getPlayerLives(ServerPlayerEntity player) { // Triggered via injected interface
         if (isWatcher(player)) return null;
         return ScoreboardUtils.getScore(player, SCOREBOARD_NAME);
     }
 
-    public boolean hasAssignedLives(ServerPlayerEntity player) {
+    public boolean hasAssignedLives(ServerPlayerEntity player) { // Triggered via injected interface
         Integer lives = getPlayerLives(player);
         return lives != null;
     }
 
-    public boolean isAlive(ServerPlayerEntity player) {
+    public boolean isAlive(ServerPlayerEntity player) { // Triggered via injected interface
         Integer lives = getPlayerLives(player);
         if (lives == null) return false;
         if (!hasAssignedLives(player)) return false;
@@ -159,7 +159,7 @@ public class LivesManager {
         addToPlayerLives(player,1);
     }
 
-    public void addToPlayerLives(ServerPlayerEntity player, int amount) {
+    public void addToPlayerLives(ServerPlayerEntity player, int amount) { // Triggered via injected interface
         Integer currentLives = getPlayerLives(player);
         if (currentLives == null) currentLives = 0;
         int lives = currentLives + amount;
@@ -191,7 +191,7 @@ public class LivesManager {
         }
     }
 
-    public void setPlayerLives(ServerPlayerEntity player, int lives) {
+    public void setPlayerLives(ServerPlayerEntity player, int lives) { // Triggered via injected interface
         if (isWatcher(player)) return;
         Integer livesBefore = getPlayerLives(player);
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
@@ -209,7 +209,7 @@ public class LivesManager {
         return isOnSpecificLives(player, 1);
     }
 
-    public boolean isOnLastLife(ServerPlayerEntity player, boolean fallback) {
+    public boolean isOnLastLife(ServerPlayerEntity player, boolean fallback) { // Triggered via injected interface
         Boolean isOnLastLife = isOnLastLife(player);
         if (isOnLastLife == null) return fallback;
         return isOnLastLife;
@@ -223,7 +223,7 @@ public class LivesManager {
         return lives == check;
     }
 
-    public boolean isOnSpecificLives(ServerPlayerEntity player, int check, boolean fallback) {
+    public boolean isOnSpecificLives(ServerPlayerEntity player, int check, boolean fallback) { // Triggered via injected interface
         Boolean isOnLife = isOnSpecificLives(player, check);
         if (isOnLife == null) return fallback;
         return isOnLife;
@@ -237,7 +237,7 @@ public class LivesManager {
         return lives >= check;
     }
 
-    public boolean isOnAtLeastLives(ServerPlayerEntity player, int check, boolean fallback) {
+    public boolean isOnAtLeastLives(ServerPlayerEntity player, int check, boolean fallback) { // Triggered via injected interface
         Boolean isOnAtLeast = isOnAtLeastLives(player, check);
         if (isOnAtLeast == null) return fallback;
         return isOnAtLeast;
