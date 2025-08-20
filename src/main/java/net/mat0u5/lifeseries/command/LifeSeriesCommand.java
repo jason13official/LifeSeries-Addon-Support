@@ -51,8 +51,7 @@ public class LifeSeriesCommand {
                     .executes(context -> getVersion(context.getSource()))
                 )
                 .then(literal("config")
-                        .requires(source -> (NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer()) || (source.getEntity() == null)))
-                        .executes(context -> config(context.getSource()))
+                    .executes(context -> config(context.getSource()))
                 )
                 .then(literal("reload")
                     .requires(source -> (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
@@ -144,11 +143,8 @@ public class LifeSeriesCommand {
             return -1;
         }
         if (!NetworkHandlerServer.wasHandshakeSuccessful(source.getPlayer())) {
-            if (isAdmin(source.getPlayer())) {
-                OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("§7The Life Series config folder is located server-side at §8{}", new File("./config/lifeseries").getAbsolutePath()));
-            }
             source.sendError(Text.of("You must have the Life Series mod installed §nclient-side§r to open the config GUI."));
-            source.sendError(Text.of("Either install the mod on the client on modify the config folder (see above)."));
+            source.sendError(Text.of("Either install the mod on the client on modify the config folder."));
             return -1;
         }
 

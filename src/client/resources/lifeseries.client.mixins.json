@@ -16,6 +16,7 @@
     "EntityRendererMixin",
     "EntityTrackingSoundInstanceAccessor",
     "EntityTrackingSoundInstanceMixin",
+    "InGameHudMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "PlayerEntityRendererMixin",

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
 
 import java.util.ArrayList;
@@ -29,6 +30,16 @@ public class ClientConfig extends ConfigManager {
             "run_command", "/lifeseries config", "", "Keybind Command", "Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions."
     );
 
+    public static final ConfigFileEntry<Boolean> COLORED_HEARTS = new ConfigFileEntry<>(
+            "colored_hearts", false, "{coloredhearts}", "Colored Hearts Based on Lives", "Makes your hearts the same color as how many lives you have."
+    );
+    public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = new ConfigFileEntry<>(
+            "colored_hearts_hardcore_last_life", true, "coloredhearts", "Show Last Life as Hardcore", "When you are on your last life, the hearts will appear as though you are in hardcore."
+    );
+    public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = new ConfigFileEntry<>(
+            "colored_hearts_hardcore_all_lives", false, "coloredhearts", "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
+    );
+
     @Override
     protected List<ConfigFileEntry<?>> getDefaultConfigEntries() {
         ConfigFileEntry<?> sessionTimer = SESSION_TIMER;
@@ -40,6 +51,10 @@ public class ClientConfig extends ConfigManager {
                 MINIMAL_ARMOR
                 ,sessionTimer
                 ,COLORBLIND_SUPPORT
+                ,COLORED_HEARTS // Group
+
+                ,COLORED_HEARTS_HARDCORE_LAST_LIFE
+                ,COLORED_HEARTS_HARDCORE_ALL_LIVES
         ));
 
         if (VersionControl.isDevVersion()) {

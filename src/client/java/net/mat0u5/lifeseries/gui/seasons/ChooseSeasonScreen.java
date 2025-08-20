@@ -201,7 +201,6 @@ public class ChooseSeasonScreen extends DefaultScreen {
         else {
             RenderUtils.drawTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, aprilFools, rect.x+1, rect.y+1);
         }
-
     }
 }
 

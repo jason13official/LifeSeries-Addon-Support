@@ -62,6 +62,9 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static boolean SESSION_TIMER = false;
     public static boolean TAB_LIST_SHOW_EXACT_LIVES = false;
     public static String RUN_COMMAND = "/lifeseries config";
+    public static boolean COLORED_HEARTS = false;
+    public static boolean COLORED_HEARTS_HARDCORE_LAST_LIFE = true;
+    public static boolean COLORED_HEARTS_HARDCORE_ALL_LIVES = false;
 
     @Override
     public void onInitializeClient() {
@@ -121,6 +124,9 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         if (RUN_COMMAND.startsWith("/")) {
             RUN_COMMAND = RUN_COMMAND.substring(1);
         }
+        COLORED_HEARTS = ClientConfig.COLORED_HEARTS.get(clientConfig);
+        COLORED_HEARTS_HARDCORE_LAST_LIFE = ClientConfig.COLORED_HEARTS_HARDCORE_LAST_LIFE.get(clientConfig);
+        COLORED_HEARTS_HARDCORE_ALL_LIVES = ClientConfig.COLORED_HEARTS_HARDCORE_ALL_LIVES.get(clientConfig);
     }
 
     public static void resetClientData() {

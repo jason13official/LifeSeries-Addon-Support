@@ -9,3 +9,12 @@
 Fixed some scaled textures not being properly cut off.<br>
 When a zombie gets revived in Wild Life by killing a dark green, the message that shows they gained a life now properly shows up.<br>
 Added the 'wildcard_superpowers_disable_intro_theme' Wild Life config. Default value is false.
+
+----------
+
+Added the ability to set your in-game hearts color based on the number of lives you have (or rather your team color).<br>
+This is controlled by the clien-side 'colored_hearts' config. Default value is false.<br>
+Works with all 16 possible team colors.<br>
+Not compatible with Secret Life.<br>
+Added the 'colored_hearts_hardcore_last_life' client-side config. Default value is true<br>
+Added the 'colored_hearts_hardcore_all_lives' client-side config. Default value is false
