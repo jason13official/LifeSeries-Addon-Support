@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":1.21:runClientNamed" />
+          <option value=":1.21:runClient" />
         </list>
       </option>
       <option name="vmOptions" />

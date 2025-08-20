@@ -306,8 +306,9 @@ public class Blacklist {
         processItemStack(player, stack);
     }
 
-    public void onInventoryUpdated(ServerPlayerEntity player, PlayerInventory inventory) {
+    public void onInventoryUpdated(ServerPlayerEntity player) {
         if (Main.server == null) return;
+        PlayerInventory inventory = player.getInventory();
         if (player.isCreative() && CREATIVE_IGNORE_BLACKLIST) return;
         for (int i = 0; i < inventory.size(); i++) {
             processItemStack(player, inventory.getStack(i));

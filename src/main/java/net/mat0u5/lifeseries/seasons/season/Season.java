@@ -416,7 +416,6 @@ public abstract class Season {
         boogeymanManager.onPlayerFinishJoining(player);
     }
 
-
     public void onPlayerDisconnect(ServerPlayerEntity player) {
     }
 
@@ -427,5 +426,8 @@ public abstract class Season {
     }
 
     public void onUpdatedInventory(ServerPlayerEntity player) {
+        if (blacklist != null) {
+            blacklist.onInventoryUpdated(player);
+        }
     }
 }

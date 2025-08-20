@@ -184,10 +184,12 @@ This command **always** available
 <summary>Other series specific commands</summary>
 
 - `/givelife <player>` - Gives one of your lives to `<player>`. *This command is only available when enabled in the config.* *No permissions required.*
-- 
+
 - `/lives rollLives [<player>]` - Rolls 2-6 lives for everyone or for the `[<player>]`, if specified. *This command is only available when playing Last Life.*
 
 - `/gift <player>` - Gives one free heart to `<player>`. *This command is only available when playing Secret Life.* *No permissions required.*
+
+- `/hunger randomizeFood` - Randomizes food in the Hunger wildcard. *This command is only available when playing Wild Life.*
 
 - `/task` - *These commands are only available when playing Secret Life.*
   - `/task succeed <player>` - Succeeds `<player>`'s task.

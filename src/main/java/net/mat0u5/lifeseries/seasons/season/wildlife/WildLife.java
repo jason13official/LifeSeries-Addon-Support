@@ -335,7 +335,6 @@ public class WildLife extends Season {
     @Override
     public void onUpdatedInventory(ServerPlayerEntity player) {
         super.onUpdatedInventory(player);
-        if (WildcardManager.isActiveWildcard(Wildcards.HUNGER)) return;
         Hunger.updateInventory(player);
     }
 }

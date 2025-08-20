@@ -6,7 +6,6 @@ import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
-import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
@@ -230,9 +229,10 @@ public class PlayerUtils {
         player.sendMessage(text, true);
     }
 
+    public static List<UUID> updateInventoryQueue = new ArrayList<>();
     public static void updatePlayerInventory(ServerPlayerEntity player) {
-        player.getInventory().updateItems();
-        player.currentScreenHandler.sendContentUpdates();
+        if (updateInventoryQueue.contains(player.getUuid())) return;
+        updateInventoryQueue.add(player.getUuid());
     }
 
     public static void resendCommandTree(ServerPlayerEntity player) {
@@ -319,17 +319,33 @@ public class PlayerUtils {
     }
 
     public static void onTick() {
-        if (broadcastCooldown.isEmpty()) return;
-        HashMap<Text, Integer> newCooldowns = new HashMap<>();
-        for (Map.Entry<Text, Integer> entry : broadcastCooldown.entrySet()) {
-            Text key = entry.getKey();
-            Integer value = entry.getValue();
-            value--;
-            if (value > 0) {
-                newCooldowns.put(key, value);
+        if (!broadcastCooldown.isEmpty()) {
+            HashMap<Text, Integer> newCooldowns = new HashMap<>();
+            for (Map.Entry<Text, Integer> entry : broadcastCooldown.entrySet()) {
+                Text key = entry.getKey();
+                Integer value = entry.getValue();
+                value--;
+                if (value > 0) {
+                    newCooldowns.put(key, value);
+                }
             }
+            broadcastCooldown = newCooldowns;
         }
-        broadcastCooldown = newCooldowns;
+
+        if (!updateInventoryQueue.isEmpty()) {
+            for (UUID uuid : updateInventoryQueue) {
+                ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
+                if (player == null) continue;
+
+                player.getInventory().updateItems();
+                player.currentScreenHandler.sendContentUpdates();
+                if (!player.isCreative()) {
+                    player.currentScreenHandler.syncState();
+                    player.playerScreenHandler.syncState();
+                }
+            }
+            updateInventoryQueue.clear();
+        }
     }
 
     public static void broadcastMessage(Text message) {

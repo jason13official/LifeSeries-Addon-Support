@@ -99,7 +99,7 @@ public class Events {
         try {
             playerStartJoining(player);
             currentSeason.onPlayerJoin(player);
-            blacklist.onInventoryUpdated(player, player.getInventory());
+            currentSeason.onUpdatedInventory(player);
             SessionTranscript.playerJoin(player);
             MorphManager.onPlayerJoin(player);
         } catch(Exception e) {Main.LOGGER.error(e.getMessage());}

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.mixin;
 
 import net.mat0u5.lifeseries.Main;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.mat0u5.lifeseries.Main.blacklist;
 import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = PlayerInventory.class, priority = 1)
@@ -58,11 +56,14 @@ public abstract class PlayerInventoryMixin {
 
     @Unique
     private boolean ls$processing = false;
+    @Unique
+    private int ls$skippedCalls = 0;
 
     @Unique
     private void ls$onUpdatedInventory() {
         if (!Main.isLogicalSide()) return;
         if (ls$processing) {
+            ls$skippedCalls++;
             return;
         }
         ls$processing = true;
@@ -70,14 +71,13 @@ public abstract class PlayerInventoryMixin {
         PlayerEntity player = inventory.player;
         try {
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                if (blacklist != null) {
-                    blacklist.onInventoryUpdated(serverPlayer, inventory);
-                }
                 currentSeason.onUpdatedInventory(serverPlayer);
             }
         }
         finally {
             ls$processing = false;
+            //if (ls$skippedCalls != 0) OtherUtils.log(player.getNameForScoreboard()+" skipped " + ls$skippedCalls + " inventory updates.");
+            ls$skippedCalls = 0;
         }
     }
 }

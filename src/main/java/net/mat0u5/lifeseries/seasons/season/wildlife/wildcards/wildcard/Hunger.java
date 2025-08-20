@@ -203,9 +203,9 @@ public class Hunger extends Wildcard {
             *///?}
 
             ComponentChanges changes = stack.getComponentChanges();
-            inventory.setStack(i, new ItemStack(stack.getItem(), stack.getCount()));
-            ItemStack newStack = inventory.getStack(i);
-            newStack.applyChanges(changes);
+            ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());
+            newItem.applyChanges(changes);
+            inventory.setStack(i, newItem);
         }
 
         PlayerUtils.updatePlayerInventory(player);

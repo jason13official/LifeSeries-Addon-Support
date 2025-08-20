@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.Hunger;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkinsServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
@@ -161,6 +162,30 @@ public class WildLifeCommands {
                     )
                 )
         );
+        dispatcher.register(
+            literal("hunger")
+                .requires(source -> isAllowed() && (isAdmin(source.getPlayer()) || (source.getEntity() == null)))
+                .then(literal("randomizeFood")
+                        .executes(context -> randomizeFood(context.getSource()))
+                )
+        );
+    }
+
+    public static int randomizeFood(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+
+        if (!WildcardManager.isActiveWildcard(Wildcards.HUNGER)) {
+            source.sendError(Text.of("The Hunger wildcard is not active right now."));
+            return -1;
+        }
+
+        OtherUtils.sendCommandFeedback(source, Text.of("§7Randomizing food..."));
+
+        if (WildcardManager.activeWildcards.get(Wildcards.HUNGER) instanceof Hunger hungerWildcard) {
+            hungerWildcard.newFoodRules();
+        }
+
+        return 1;
     }
 
     public static int requestSnailName(ServerCommandSource source, String name) {

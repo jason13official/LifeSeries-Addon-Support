@@ -100,7 +100,6 @@ public class WildcardManager {
         if (!isActiveWildcard(Wildcards.TRIVIA)) {
             TriviaWildcard.resetPlayerOnBotSpawn(player);
         }
-        TaskScheduler.scheduleTask(20, () -> Hunger.updateInventory(player));
 
         MorphManager.resetMorph(player);
     }
