@@ -12,6 +12,8 @@ public abstract class DefaultSmallScreen extends DefaultScreen {
         super(name, scaleX, scaleY);
         this.BG_WIDTH = (int) (148 * scaleX);
         this.BG_HEIGHT = (int) (67 * scaleY);
+        this.BG_WIDTH_UNSCALED = 148;
+        this.BG_HEIGHT_UNSCALED = 67;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         calculateCoordinates();
@@ -21,6 +23,8 @@ public abstract class DefaultSmallScreen extends DefaultScreen {
         super(name);
         this.BG_WIDTH = 148;
         this.BG_HEIGHT = 67;
+        this.BG_WIDTH_UNSCALED = 148;
+        this.BG_HEIGHT_UNSCALED = 67;
         calculateCoordinates();
     }
 
@@ -31,14 +35,14 @@ public abstract class DefaultSmallScreen extends DefaultScreen {
             RenderUtils.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT);
         }
         else {
-            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, scaleX, scaleY);
+            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH_UNSCALED, BG_HEIGHT_UNSCALED, scaleX, scaleY);
         }
         //?} else {
         /*if (!isScaled()) {
         RenderUtils.drawTexture(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, 256, 256);
         }
         else {
-        RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH, BG_HEIGHT, 256, 256, scaleX, scaleY);
+        RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE, startX, startY, 0, 0, BG_WIDTH_UNSCALED, BG_HEIGHT_UNSCALED, 256, 256, scaleX, scaleY);
         }
         *///?}
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);

@@ -130,6 +130,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_SUPERSPEED_STEP = new ConfigFileEntry<>(
             "wildcard_superpowers_superspeed_step", false, "season.superpowers", "Superspeed: Step Up Blocks", "Controls whether players with the superspeed power active can step up blocks without jumping (like when riding a horse)."
     );
+    public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
+            "wildcard_superpowers_disable_intro_theme", false, "season.superpowers", "Superspeed: Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
+    );
 
     public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
             "group_general", null, ConfigTypes.TEXT, "{season.general}", "General", ""
@@ -212,6 +215,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_MOBSWAP_SPAWN_MOBS
                 ,WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER
 
+                ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN

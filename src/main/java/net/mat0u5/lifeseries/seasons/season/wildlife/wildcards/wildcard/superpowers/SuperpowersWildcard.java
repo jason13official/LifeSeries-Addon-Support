@@ -17,6 +17,7 @@ import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class SuperpowersWildcard extends Wildcard {
+    public static boolean WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = false;
     private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
     public static final Map<UUID, Superpowers> assignedSuperpowers = new HashMap<>();
 
@@ -98,7 +99,9 @@ public class SuperpowersWildcard extends Wildcard {
             if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
             pos++;
         }
-        PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
+            PlayerUtils.playSoundToPlayers(allPlayers, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        }
     }
 
     public static void rollRandomSuperpowerForPlayer(ServerPlayerEntity player) {
@@ -115,7 +118,9 @@ public class SuperpowersWildcard extends Wildcard {
         Superpower instance = power.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
 
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        }
     }
 
     public static void setSuperpower(ServerPlayerEntity player, Superpowers superpower) {
@@ -124,7 +129,9 @@ public class SuperpowersWildcard extends Wildcard {
         }
         Superpower instance = superpower.getInstance(player);
         if (instance != null) playerSuperpowers.put(player.getUuid(), instance);
-        PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        if (!WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME) {
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","wildlife_superpowers")), 0.2f, 1);
+        }
     }
 
     public static void pressedSuperpowerKey(ServerPlayerEntity player) {

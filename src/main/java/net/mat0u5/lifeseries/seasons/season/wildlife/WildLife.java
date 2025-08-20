@@ -109,15 +109,14 @@ public class WildLife extends Season {
                         ScoreboardUtils.setScore(ScoreHolder.fromName(killer.getNameForScoreboard()), LivesManager.SCOREBOARD_NAME, lives);
                     }
                     else {
+                        broadcastLifeGain(killer);
                         livesManager.addPlayerLife(killer);
                     }
                 }
             }
             else {
                 if (KILLING_DARK_GREENS_GAINS_LIVES) {
-                    if (BROADCAST_LIFE_GAIN) {
-                        PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
-                    }
+                    broadcastLifeGain(killer);
                     livesManager.addPlayerLife(killer);
                 }
             }
@@ -128,12 +127,16 @@ public class WildLife extends Season {
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         if (livesManager.isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
-            if (BROADCAST_LIFE_GAIN) {
-                PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", killer));
-            }
+            broadcastLifeGain(killer);
             livesManager.addPlayerLife(killer);
         }
         super.onClaimKill(killer, victim);
+    }
+
+    public void broadcastLifeGain(ServerPlayerEntity player) {
+        if (BROADCAST_LIFE_GAIN) {
+            PlayerUtils.broadcastMessage(TextUtils.format("{}§7 gained a life for killing a §2dark green§7 player.", player));
+        }
     }
 
     @Override
@@ -207,6 +210,7 @@ public class WildLife extends Season {
         WildcardManager.ACTIVATE_WILDCARD_MINUTE = WildLifeConfig.ACTIVATE_WILDCARD_MINUTE.get(config);
         KILLING_DARK_GREENS_GAINS_LIVES = WildLifeConfig.KILLING_DARK_GREENS_GAINS_LIVES.get(config);
         BROADCAST_LIFE_GAIN = WildLifeConfig.BROADCAST_LIFE_GAIN.get(config);
+        SuperpowersWildcard.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = WildLifeConfig.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get(config);
 
         Snails.loadConfig();
         Snails.loadSnailNames();

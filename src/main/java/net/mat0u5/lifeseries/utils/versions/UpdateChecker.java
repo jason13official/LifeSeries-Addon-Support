@@ -26,8 +26,16 @@ public class UpdateChecker {
     public static String versionName;
     public static String versionDescription;
     public static int version;
+    public static final boolean FAKE_TEST_UPDATE = false;
 
     public static void checkForMajorUpdates() {
+        if (FAKE_TEST_UPDATE) {
+            updateAvailable = true;
+            versionName = "versionName";
+            versionDescription = "versionDescription";
+            version = 2_000_000_000;
+            return;
+        }
         executor.submit(() -> {
             HttpURLConnection connection = null;
             try {

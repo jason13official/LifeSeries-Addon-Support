@@ -15,6 +15,8 @@ public abstract class DefaultScreen extends Screen {
 
     protected int BG_WIDTH;
     protected int BG_HEIGHT;
+    protected int BG_WIDTH_UNSCALED;
+    protected int BG_HEIGHT_UNSCALED;
     protected float scaleX = 1;
     protected float scaleY = 1;
     protected static final int DEFAULT_TEXT_COLOR = TextColors.DEFAULT;
@@ -23,6 +25,8 @@ public abstract class DefaultScreen extends Screen {
         super(name);
         this.BG_WIDTH = (int) (320.0 * scaleX);
         this.BG_HEIGHT = (int) (180.0 * scaleY);
+        this.BG_WIDTH_UNSCALED = 320;
+        this.BG_HEIGHT_UNSCALED = 180;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         calculateCoordinates();
@@ -32,6 +36,8 @@ public abstract class DefaultScreen extends Screen {
         super(name);
         this.BG_WIDTH = 320;
         this.BG_HEIGHT = 180;
+        this.BG_WIDTH_UNSCALED = 320;
+        this.BG_HEIGHT_UNSCALED = 180;
         calculateCoordinates();
     }
 
@@ -102,8 +108,8 @@ public abstract class DefaultScreen extends Screen {
             RenderUtils.drawTexture(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT);
         }
         else {
-            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, scaleX, scaleY);
-            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, scaleX, scaleY);
+            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH_UNSCALED/2, BG_HEIGHT_UNSCALED, scaleX, scaleY);
+            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH_UNSCALED/2, BG_HEIGHT_UNSCALED, scaleX, scaleY);
         }
         //?} else {
         /*if (!isScaled()) {
@@ -111,8 +117,8 @@ public abstract class DefaultScreen extends Screen {
             RenderUtils.drawTexture(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256);
         }
         else {
-            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256, scaleX, scaleY);
-            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH/2, BG_HEIGHT, 256, 256, scaleX, scaleY);
+            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_LEFT, startX, startY, 0, 0, BG_WIDTH_UNSCALED/2, BG_HEIGHT_UNSCALED, 256, 256, scaleX, scaleY);
+            RenderUtils.drawTextureScaled(context, BACKGROUND_TEXTURE_RIGHT, startX+BG_WIDTH/2, startY, 0, 0, BG_WIDTH_UNSCALED/2, BG_HEIGHT_UNSCALED, 256, 256, scaleX, scaleY);
         }
         *///?}
         if (allowCloseButton()) renderClose(context, mouseX, mouseY);
