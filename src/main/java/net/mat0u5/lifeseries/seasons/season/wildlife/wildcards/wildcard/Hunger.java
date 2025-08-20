@@ -127,7 +127,7 @@ public class Hunger extends Wildcard {
     @Override
     public void tick() {
         if (currentSession.sessionLength == null || currentSession.sessionLength - currentSession.passedTime > 6000) {
-            int currentVersion = (int) Math.floor(currentSession.passedTime / SWITCH_DELAY);
+            int currentVersion = (int) Math.floor(currentSession.passedTime / (SWITCH_DELAY));
             if (lastVersion != currentVersion) {
                 lastVersion = currentVersion;
                 newFoodRules();

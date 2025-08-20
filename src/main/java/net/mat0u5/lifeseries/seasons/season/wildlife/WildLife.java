@@ -176,7 +176,7 @@ public class WildLife extends Season {
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof WildLifeConfig config)) return;
-        Hunger.SWITCH_DELAY = WildLifeConfig.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get(config);
+        Hunger.SWITCH_DELAY = 20 * WildLifeConfig.WILDCARD_HUNGER_RANDOMIZE_INTERVAL.get(config);
         Hunger.HUNGER_EFFECT_LEVEL = WildLifeConfig.WILDCARD_HUNGER_EFFECT_LEVEL.get(config);
 
         SizeShifting.MIN_SIZE = WildLifeConfig.WILDCARD_SIZESHIFTING_MIN_SIZE.get(config);
@@ -192,8 +192,8 @@ public class WildLife extends Season {
         TimeDilation.MAX_TICK_RATE = (float) (20.0 * WildLifeConfig.WILDCARD_TIMEDILATION_MAX_SPEED.get(config));
         TimeDilation.MIN_PLAYER_MSPT = (float) (50.0 / WildLifeConfig.WILDCARD_TIMEDILATION_PLAYER_MAX_SPEED.get(config));
 
-        MobSwap.MAX_DELAY = WildLifeConfig.WILDCARD_MOBSWAP_START_SPAWN_DELAY.get(config);
-        MobSwap.MIN_DELAY = WildLifeConfig.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get(config);
+        MobSwap.MAX_DELAY = 20 * WildLifeConfig.WILDCARD_MOBSWAP_START_SPAWN_DELAY.get(config);
+        MobSwap.MIN_DELAY = 20 * WildLifeConfig.WILDCARD_MOBSWAP_END_SPAWN_DELAY.get(config);
         MobSwap.SPAWN_MOBS = WildLifeConfig.WILDCARD_MOBSWAP_SPAWN_MOBS.get(config);
         MobSwap.BOSS_CHANCE_MULTIPLIER = WildLifeConfig.WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER.get(config);
 

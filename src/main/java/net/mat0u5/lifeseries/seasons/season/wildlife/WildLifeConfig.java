@@ -67,7 +67,7 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_sizeshifting_size_change_multiplier", 1.0, "season.sizeshifting", "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_hunger_randomize_interval", 36000, ConfigTypes.SECONDS, "season.hunger", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
+            "wildcard_hunger_randomize_interval", 1800, ConfigTypes.SECONDS, "season.hunger", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
             "wildcard_hunger_effect_level", 3, "season.hunger", "Hunger: Effect Level", "Controls the hunger effect level."
@@ -107,10 +107,10 @@ public class WildLifeConfig extends ConfigManager {
 
 
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_START_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_start_spawn_delay", 7200, ConfigTypes.SECONDS, "season.mobswap", "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
+            "wildcard_mobswap_start_spawn_delay", 360, ConfigTypes.SECONDS, "season.mobswap", "Session Start Spawn Delay", "The delay between mob spawns at the START of the session, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_END_SPAWN_DELAY = new ConfigFileEntry<>(
-            "wildcard_mobswap_end_spawn_delay", 2400, ConfigTypes.SECONDS, "season.mobswap", "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
+            "wildcard_mobswap_end_spawn_delay", 120, ConfigTypes.SECONDS, "season.mobswap", "Session End Spawn Delay", "The delay between mob spawns at the END of the session, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_MOBSWAP_SPAWN_MOBS = new ConfigFileEntry<>(
             "wildcard_mobswap_spawn_mobs", 250, "season.mobswap", "Number of Mobs", "The number of mobs that spawn each cycle."
