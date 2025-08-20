@@ -41,10 +41,5 @@
 	"suggests": {
 		"bil": ">=1.1.10",
 		"polymer-bundled": ">=0.10.0"
-	},
-	"custom": {
-		"loom:injected_interfaces": {
-			"net/minecraft/class_3222": ["net/mat0u5/lifeseries/utils/interfaces/IServerPlayerEntity"]
-		}
 	}
 }

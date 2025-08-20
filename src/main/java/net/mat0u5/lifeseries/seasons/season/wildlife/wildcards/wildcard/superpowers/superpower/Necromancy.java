@@ -111,7 +111,7 @@ public class Necromancy extends Superpower {
     public void tick() {
         for (UUID uuid : perPlayerRessurections) {
             ServerPlayerEntity player = PlayerUtils.getPlayer(uuid);
-            if (player != null && player.ls$isAlive()) {
+            if (player != null && livesManager.isAlive(player)) {
                 perPlayerRessurections.remove(uuid);
                 ressurectedPlayers.remove(uuid);
                 AttributeUtils.resetAttributesOnPlayerJoin(player);

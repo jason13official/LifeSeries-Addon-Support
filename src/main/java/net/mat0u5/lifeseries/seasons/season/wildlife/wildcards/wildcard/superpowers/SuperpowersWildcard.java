@@ -129,7 +129,7 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void pressedSuperpowerKey(ServerPlayerEntity player) {
         if (playerSuperpowers.containsKey(player.getUuid())) {
-            if (player.ls$isAlive()) {
+            if (livesManager.isAlive(player)) {
                 playerSuperpowers.get(player.getUuid()).onKeyPressed();
             }
             else {

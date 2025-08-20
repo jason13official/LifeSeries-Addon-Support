@@ -96,7 +96,7 @@ public class BoogeymanManager {
 
     public boolean isBoogeymanThatCanBeCured(ServerPlayerEntity player, ServerPlayerEntity victim) {
         Boogeyman boogeyman = getBoogeyman(player);
-        return boogeyman != null && !boogeyman.cured && !victim.ls$isOnLastLife(true);
+        return boogeyman != null && !boogeyman.cured && !livesManager.isOnLastLife(victim, true);
     }
 
     public Boogeyman getBoogeyman(ServerPlayerEntity player) {
@@ -277,14 +277,14 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
         if (boogeymen == null) return;
-        if (!player.ls$isAlive()) return;
-        if (player.ls$isOnLastLife(true)) return;
+        if (!livesManager.isAlive(player)) return;
+        if (livesManager.isOnLastLife(player, true)) return;
         PlayerUtils.sendTitle(player,Text.of("§cYou have failed."), 20, 30, 20);
         PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_fail")));
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. They have been dropped to their §cLast Life§7.", player));
         }
-        player.ls$setLives(1);
+        livesManager.setPlayerLives(player, 1);
         boogeyman.failed = true;
         boogeyman.cured = false;
         if (currentSeason instanceof DoubleLife doubleLife) {
@@ -303,7 +303,7 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (!boogeymanChosen) return;
         if (rolledPlayers.contains(player.getUuid())) return;
-        if (!player.ls$isAlive()) return;
+        if (!livesManager.isAlive(player)) return;
         if (boogeymen.size() >= BOOGEYMAN_AMOUNT_MAX) return;
         if (currentSession.statusNotStarted() || currentSession.statusFinished()) return;
         TaskScheduler.scheduleTask(40, () -> {

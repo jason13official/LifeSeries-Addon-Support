@@ -185,13 +185,13 @@ public class LivesCommand {
         ServerPlayerEntity self = source.getPlayer();
 
         if (self == null) return -1;
-        if (!self.ls$hasAssignedLives()) {
+        if (!livesManager.hasAssignedLives(self)) {
             String timeOrLives = normalLife ? "lives" : "time";
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have not been assigned any {} yet", timeOrLives));
             return 1;
         }
 
-        Integer playerLives = self.ls$getLives();
+        Integer playerLives = livesManager.getPlayerLives(self);
         
         if (normalLife) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("You have {} {}", livesManager.getFormattedLives(playerLives), TextUtils.pluralize("life", "lives", playerLives)));
@@ -248,11 +248,11 @@ public class LivesCommand {
         boolean normalLife = isNormalLife();
         String timeOrLives = normalLife ? "lives" : "time";
 
-        if (!target.ls$hasAssignedLives()) {
+        if (!livesManager.hasAssignedLives(target)) {
             source.sendError(TextUtils.formatPlain("{} has not been assigned any {}", target, timeOrLives));
             return -1;
         }
-        Integer lives = target.ls$getLives();
+        Integer lives = livesManager.getPlayerLives(target);
         if (normalLife) {
             OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("{} has {} {}", target, livesManager.getFormattedLives(lives), TextUtils.pluralize("life", "lives", lives)));
         }
@@ -300,7 +300,7 @@ public class LivesCommand {
             }
 
             for (ServerPlayerEntity player : targets) {
-                player.ls$setLives(amount);
+                livesManager.setPlayerLives(player, amount);
             }
         }
         else {
@@ -330,7 +330,7 @@ public class LivesCommand {
             }
 
             for (ServerPlayerEntity player : targets) {
-                player.ls$addToLives(amount);
+                livesManager.addToPlayerLives(player,amount);
             }
         }
         if (currentSeason instanceof DoubleLife doubleLife) {

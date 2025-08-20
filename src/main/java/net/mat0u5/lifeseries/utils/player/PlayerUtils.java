@@ -286,7 +286,7 @@ public class PlayerUtils {
 
                 boolean hidePlayer = false;
 
-                if (!currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS && receivingPlayer.ls$isAlive() && !player.ls$isAlive() && !WatcherManager.isWatcher(player)) {
+                if (!currentSeason.TAB_LIST_SHOW_DEAD_PLAYERS && livesManager.isAlive(receivingPlayer) && !livesManager.isAlive(player) && !WatcherManager.isWatcher(player)) {
                     hidePlayer = true;
                 }
                 if (!currentSeason.WATCHERS_IN_TAB && !WatcherManager.isWatcher(receivingPlayer) && WatcherManager.isWatcher(player)) {

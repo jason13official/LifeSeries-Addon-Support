@@ -4,7 +4,6 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.utils.interfaces.IServerPlayerEntity;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -27,10 +26,11 @@ import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.UUID;
 
-import static net.mat0u5.lifeseries.Main.*;
+import static net.mat0u5.lifeseries.Main.blacklist;
+import static net.mat0u5.lifeseries.Main.currentSeason;
 
 @Mixin(value = ServerPlayerEntity.class, priority = 1)
-public class ServerPlayerEntityMixin implements IServerPlayerEntity {
+public class ServerPlayerEntityMixin {
     @Inject(method = "getRespawnTarget", at = @At("HEAD"))
     private void getRespawnTarget(boolean alive, TeleportTarget.PostDimensionTransition postDimensionTransition, CallbackInfoReturnable<TeleportTarget> cir) {
         if (!Main.isLogicalSide()) return;
@@ -130,48 +130,5 @@ public class ServerPlayerEntityMixin implements IServerPlayerEntity {
     @Unique
     private ServerPlayerEntity ls$get() {
         return (ServerPlayerEntity) (Object) this;
-    }
-
-    /*
-        Injected Interface
-     */
-    @Unique @Override @Nullable
-    public Integer ls$getLives() {
-        return livesManager.getPlayerLives(ls$get());
-    }
-
-    @Unique @Override
-    public boolean ls$hasAssignedLives() {
-        return livesManager.hasAssignedLives(ls$get());
-    }
-
-    @Unique @Override
-    public boolean ls$isAlive() {
-        return livesManager.isAlive(ls$get());
-    }
-
-    @Unique @Override
-    public void ls$addToLives(int amount) {
-        livesManager.addToPlayerLives(ls$get(), amount);
-    }
-
-    @Unique @Override
-    public void ls$setLives(int lives) {
-        livesManager.setPlayerLives(ls$get(), lives);
-    }
-
-    @Unique @Override
-    public boolean ls$isOnLastLife(boolean fallback) {
-        return livesManager.isOnLastLife(ls$get(), fallback);
-    }
-
-    @Unique @Override
-    public boolean ls$isOnSpecificLives(int check, boolean fallback) {
-        return livesManager.isOnSpecificLives(ls$get(), check, fallback);
-    }
-
-    @Unique @Override
-    public boolean ls$isOnAtLeastLives(int check, boolean fallback) {
-        return livesManager.isOnAtLeastLives(ls$get(), check, fallback);
     }
 }

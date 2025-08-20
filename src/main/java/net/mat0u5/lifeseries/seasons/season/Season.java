@@ -223,7 +223,7 @@ public abstract class Season {
     }
 
     public boolean isAllowedToAttack(ServerPlayerEntity attacker, ServerPlayerEntity victim, boolean allowSelfDefense) {
-        if (attacker.ls$isOnLastLife(false)) {
+        if (livesManager.isOnLastLife(attacker, false)) {
             return true;
         }
         if (boogeymanManager.isBoogeymanThatCanBeCured(attacker, victim)) {
@@ -292,7 +292,7 @@ public abstract class Season {
         if (!respawnPositions.containsKey(player.getUuid())) return;
         HashMap<Vec3d, List<Float>> info = respawnPositions.get(player.getUuid());
         respawnPositions.remove(player.getUuid());
-        if (player.ls$isAlive()) return;
+        if (livesManager.isAlive(player)) return;
         for (Map.Entry<Vec3d, List<Float>> entry : info.entrySet()) {
             Vec3d pos = entry.getKey();
             if (pos.y <= PlayerUtils.getServerWorld(player).getBottomY()) continue;
@@ -383,10 +383,10 @@ public abstract class Season {
         AttributeUtils.resetAttributesOnPlayerJoin(player);
         reloadPlayerTeam(player);
         TaskScheduler.scheduleTask(2, () -> PlayerUtils.applyResourcepack(player.getUuid()));
-        if (!player.ls$hasAssignedLives()) {
+        if (!livesManager.hasAssignedLives(player)) {
             assignDefaultLives(player);
         }
-        if (player.ls$hasAssignedLives() && !player.ls$isAlive() && !PermissionManager.isAdmin(player)) {
+        if (livesManager.hasAssignedLives(player) && !livesManager.isAlive(player) && !PermissionManager.isAdmin(player)) {
             player.changeGameMode(GameMode.SPECTATOR);
         }
     }
@@ -394,7 +394,7 @@ public abstract class Season {
     public void assignDefaultLives(ServerPlayerEntity player) {
         Integer lives = getDefaultLives();
         if (lives != null) {
-            player.ls$setLives(lives);
+            livesManager.setPlayerLives(player, lives);
         }
     }
 

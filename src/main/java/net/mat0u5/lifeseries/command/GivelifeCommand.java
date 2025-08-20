@@ -55,11 +55,11 @@ public class GivelifeCommand {
         final ServerPlayerEntity self = source.getPlayer();
         if (self == null) return -1;
         if (target == null) return -1;
-        if (!self.ls$isAlive()) {
+        if (!livesManager.isAlive(self)) {
             source.sendError(Text.of("You do not have any lives to give"));
             return -1;
         }
-        if (!target.ls$isAlive()) {
+        if (!livesManager.isAlive(target)) {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
@@ -67,12 +67,12 @@ public class GivelifeCommand {
             source.sendError(Text.of("You cannot give a life to yourself"));
             return -1;
         }
-        Integer currentLives = self.ls$getLives();
+        Integer currentLives = livesManager.getPlayerLives(self);
         if (currentLives == null || currentLives <= 1) {
             source.sendError(Text.of("You cannot give away your last life"));
             return -1;
         }
-        Integer targetLives = target.ls$getLives();
+        Integer targetLives = livesManager.getPlayerLives(target);
         if (targetLives == null || targetLives >= currentSeason.GIVELIFE_MAX_LIVES) {
             source.sendError(Text.of("That player cannot receive any more lives"));
             return -1;
