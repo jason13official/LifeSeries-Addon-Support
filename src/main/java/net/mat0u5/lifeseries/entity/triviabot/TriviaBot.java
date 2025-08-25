@@ -66,10 +66,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -472,9 +470,9 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return (timeToComplete * 1000L) - timeSinceStart;
     }
 
-    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, BlockPos targetPos, double minDistanceFromTarget) {
+    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, BlockPos targetPos, double distanceFromTarget) {
         if (target == null) return targetPos;
-        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, minDistanceFromTarget, 2, false);
+        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, distanceFromTarget, 2, false);
     }
 
 

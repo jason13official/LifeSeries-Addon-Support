@@ -126,11 +126,11 @@ public class WildLife extends Season {
 
     @Override
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
+        super.onClaimKill(killer, victim);
         if (livesManager.isOnAtLeastLives(victim, 4, false) && KILLING_DARK_GREENS_GAINS_LIVES) {
             broadcastLifeGain(killer);
             livesManager.addPlayerLife(killer);
         }
-        super.onClaimKill(killer, victim);
     }
 
     public void broadcastLifeGain(ServerPlayerEntity player) {

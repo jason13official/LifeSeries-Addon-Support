@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
@@ -18,6 +19,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.File;
 
@@ -230,7 +232,6 @@ public class LifeSeriesCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (player == null) return -1;
 
-        WildcardManager.showRainbowCryptTitle("All wildcards are active!");
         OtherUtils.sendCommandFeedbackQuiet(source, Text.of("Test Command 1"));
 
         return 1;

@@ -9,8 +9,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public class WorldUitls {
 
     public static int findTopSafeY(World world, Vec3d pos) {
@@ -44,13 +42,13 @@ public class WorldUitls {
         world.spawnEntity(lightning);
     }
 
-    public static BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double minDistanceFromTarget, int height, boolean bottomSupport) {
+    public static BlockPos getCloseBlockPos(ServerWorld world, BlockPos targetPos, double distanceFromTarget, int height, boolean bottomSupport) {
         for (int attempts = 0; attempts < 20; attempts++) {
             Vec3d offset = new Vec3d(
                     world.random.nextDouble() * 2 - 1,
-                    1,
+                    0,
                     world.random.nextDouble() * 2 - 1
-            ).normalize().multiply(minDistanceFromTarget);
+            ).normalize().multiply(distanceFromTarget);
 
             BlockPos pos = targetPos.add((int) offset.getX(), 0, (int) offset.getZ());
 

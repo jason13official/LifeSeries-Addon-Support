@@ -179,6 +179,7 @@ public class LimitedLife extends Season {
     public void onClaimKill(ServerPlayerEntity killer, ServerPlayerEntity victim) {
         boolean wasAllowedToAttack = isAllowedToAttack(killer, victim, false);
         boolean wasBoogeyCure = boogeymanManager.isBoogeymanThatCanBeCured(killer, victim);
+        super.onClaimKill(killer, victim);
 
         if (!wasBoogeyCure) {
             if (wasAllowedToAttack) {
@@ -213,8 +214,6 @@ public class LimitedLife extends Season {
                 PlayerUtils.sendTitle(killer, Text.literal(msgKiller).formatted(Formatting.GREEN), 20, 80, 20);
             }
         }
-
-        super.onClaimKill(killer, victim);
     }
 
     @Override

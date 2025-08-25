@@ -643,10 +643,10 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         }
     }
 
-    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, double minDistanceFromTarget) {
+    public static BlockPos getBlockPosNearTarget(ServerPlayerEntity target, double distanceFromTarget) {
         if (target == null) return null;
         BlockPos targetPos = target.getBlockPos();
-        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, minDistanceFromTarget, 1, false);
+        return WorldUitls.getCloseBlockPos(PlayerUtils.getServerWorld(target), targetPos, distanceFromTarget, 1, false);
     }
 
 

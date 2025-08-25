@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.blacklist.Blacklist;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -362,7 +363,6 @@ public abstract class Season {
         if (spawnEggItem == null) return;
         if (spawnEggItem.isEmpty()) return;
 
-        // Drop the spawn egg with a 5% chance
         if (Math.random() <= chance) {
             //? if <=1.21 {
             entity.dropStack(spawnEggItem);
@@ -388,6 +388,12 @@ public abstract class Season {
         }
         if (livesManager.hasAssignedLives(player) && !livesManager.isAlive(player) && !PermissionManager.isAdmin(player)) {
             player.changeGameMode(GameMode.SPECTATOR);
+        }
+
+        if (WatcherManager.isWatcher(player)) {
+            if (this instanceof DoubleLife doubleLife) {
+                doubleLife.resetSoulmate(player);
+            }
         }
     }
 

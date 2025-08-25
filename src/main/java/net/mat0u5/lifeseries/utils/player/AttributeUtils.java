@@ -39,7 +39,7 @@ public class AttributeUtils {
         if (currentSeason.getSeason() == Seasons.SECRET_LIFE) return;
         double currentMaxHealth = getMaxPlayerHealth(player);
         if (DependencyManager.wildLifeModsLoaded() && currentMaxHealth == 13 && TriviaBot.cursedHeartPlayers.contains(player.getUuid())) return;
-        if (currentMaxHealth == 8 && Necromancy.ressurectedPlayers.contains(player.getUuid())) return;
+        if (currentMaxHealth == 8 && Necromancy.isRessurectedPlayer(player)) return;
         resetMaxPlayerHealth(player);
     }
 

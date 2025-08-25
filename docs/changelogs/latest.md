@@ -16,5 +16,11 @@ Added the ability to set your in-game hearts color based on the number of lives 
 This is controlled by the clien-side 'colored_hearts' config. Default value is false.<br>
 Works with all 16 possible team colors.<br>
 Not compatible with Secret Life.<br>
-Added the 'colored_hearts_hardcore_last_life' client-side config. Default value is true<br>
-Added the 'colored_hearts_hardcore_all_lives' client-side config. Default value is false
+Added the 'colored_hearts_hardcore_last_life' client-side config. Default value is true.<br>
+Added the 'colored_hearts_hardcore_all_lives' client-side config. Default value is false.
+
+----------
+
+Watchers can no longer be soulmates.<br>
+Zombies no longer lose their items in between revives.<br>
+Zombies no longer sometimes spawn without full health

@@ -122,7 +122,7 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers", "Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS = new ConfigFileEntry<>(
-            "wildcard_superpowers_zombies_lose_items", true, "season.superpowers", "Necromancy: Zombies Lose Items", "Controls whether zombies keep their items when they get respawned."
+            "wildcard_superpowers_zombies_lose_items", true, "season.superpowers", "Necromancy: Zombies Lose Items", "Controls whether zombies keep their items when they first get respawned."
     );
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN = new ConfigFileEntry<>(
             "wildcard_superpowers_zombies_revive_by_killing_dark_green", false, "season.superpowers", "Necromancy: Zombies Can Revive", "Controls whether zombies can be revived (gain a life) by killing a dark green player."

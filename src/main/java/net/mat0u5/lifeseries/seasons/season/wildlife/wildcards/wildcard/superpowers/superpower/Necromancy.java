@@ -3,34 +3,29 @@ package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpo
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
-import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.AttributeUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
 import static net.mat0u5.lifeseries.Main.*;
 
 public class Necromancy extends Superpower {
-    public static final List<UUID> ressurectedPlayers = new ArrayList<>();
+    private static final List<UUID> ressurectedPlayers = new ArrayList<>();
+    private static final List<UUID> clearedPlayers = new ArrayList<>();
     private List<UUID> perPlayerRessurections = new ArrayList<>();
 
     public Necromancy(ServerPlayerEntity player) {
@@ -76,11 +71,13 @@ public class Necromancy extends Superpower {
                     PlayerUtils.teleport(deadPlayer, updatedPlayerWorld, tpTo);
                     deadPlayer.changeGameMode(GameMode.SURVIVAL);
                     if (seasonConfig instanceof WildLifeConfig config) {
-                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config)) {
+                        if (WildLifeConfig.WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS.get(config) && !clearedPlayers.contains(deadPlayer.getUuid())) {
+                            clearedPlayers.add(deadPlayer.getUuid());
                             deadPlayer.getInventory().clear();
                         }
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
+                    deadPlayer.setHealth(8);
                     WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(deadPlayer), deadPlayer.getPos());
                     ressurectedPlayers.add(deadPlayer.getUuid());
                     perPlayerRessurections.add(deadPlayer.getUuid());
