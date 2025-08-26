@@ -135,6 +135,13 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> BOOGEYMAN_ANNOUNCE_OUTCOME = new ConfigFileEntry<>(
             "boogeyman_announce_outcome", true, "global.boogeyman", "Boogeyman Announce Outcome", "Shows a message in chat when the boogeyman succeeds or fails."
     );
+    public final ConfigFileEntry<Boolean> BOOGEYMAN_INFINITE = new ConfigFileEntry<>(
+            "boogeyman_infinite", false, "{global.boogeyman.infinite}", "Boogeyman Infinite Rolling", "When any boogeyman is cured, a new one will replace them immediatelly."
+    );
+    public final ConfigFileEntry<Integer> BOOGEYMAN_INFINITE_LAST_PICK = new ConfigFileEntry<>(
+            "boogeyman_infinite_last_pick", 1800, ConfigTypes.SECONDS, "global.boogeyman.infinite", "Last Roll Before End Of Session", "Controls how long before the end of session the infinite boogey picking will stop, in seconds."
+    );
+
     public final ConfigFileEntry<Boolean> WATCHERS_IN_TAB = new ConfigFileEntry<>(
             "watchers_in_tab", true, "global.watchers", "Show Watchers In Tab", "Controls whether Watchers should show up in the tab list."
     );

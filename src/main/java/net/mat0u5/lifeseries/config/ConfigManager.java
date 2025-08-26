@@ -81,6 +81,8 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN_MESSAGE
                 ,BOOGEYMAN_CHOOSE_MINUTE
                 ,BOOGEYMAN_ANNOUNCE_OUTCOME
+                    ,BOOGEYMAN_INFINITE // Group
+                ,BOOGEYMAN_INFINITE_LAST_PICK
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW

@@ -41,3 +41,8 @@ Added the 'wildcard_superpowers_power_blacklist' Wild Life config, which allows 
 Added the 'breakup_last_pair_standing' Double Life config. Default value is false.<br>
 Added the 'disable_start_teleport' Double Life config. Default value is false.<br>
 Added the 'soulbound_locator_bar' Double Life config. Default value is false.
+
+----------
+
+Added the 'boogeyman_infinite' global config. After all boogeymen have been cured, new ones will be selected if there is more than 30 minutes in the session. Default value is false.<br>
+Added the 'boogeyman_infinite_last_pick' global config. Controls how long before the end of session the infinite boogey picking will stop, in seconds. Default value is 1800.

@@ -2,13 +2,11 @@ package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
-import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.enums.SessionTimerStates;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.effect.StatusEffect;
@@ -125,13 +123,21 @@ public class Session {
         return OtherUtils.formatTime(sessionLength);
     }
 
-    public String getPassedTime() {
-        return OtherUtils.formatTime((int) passedTime);
+    public String getPassedTimeStr() {
+        return OtherUtils.formatTime(getPassedTime());
     }
 
-    public String getRemainingTime() {
+    public String getRemainingTimeStr() {
         if (sessionLength == null) return "";
-        return OtherUtils.formatTime(sessionLength - ((int) passedTime));
+        return OtherUtils.formatTime(getRemainingTime());
+    }
+
+    public int getPassedTime() {
+        return (int) passedTime;
+    }
+
+    public int getRemainingTime() {
+        return sessionLength - getPassedTime();
     }
 
     public boolean validTime() {
@@ -259,7 +265,7 @@ public class Session {
             message = "Session has not started";
         }
         else if (statusStarted()) {
-            message = getRemainingTime();
+            message = getRemainingTimeStr();
         }
         else if (statusPaused()) {
             message = "Session has been paused";
