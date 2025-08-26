@@ -24,3 +24,9 @@ Added the 'colored_hearts_hardcore_all_lives' client-side config. Default value 
 Watchers can no longer be soulmates.<br>
 Zombies no longer lose their items in between revives.<br>
 Zombies no longer sometimes spawn without full health
+
+----------
+
+Added the StringListConfigEntry config type, which only allows certain string values in its list. (similar to item/block config entries, just more flexible)<br>
+Added the 'wildcard_callback_wildcards_blacklist' Wild Life config entry. Default value is '[hunger]'.<br>
+Fixed a bug in the config gui where text field config entries sometimes would not allow you to save changes even if they didn't have an error value.

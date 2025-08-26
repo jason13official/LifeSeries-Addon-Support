@@ -44,6 +44,7 @@ public class ClientConfigGuiManager {
             String groupInfo = configObject.getGroupInfo();
             ConfigEntry configEntry = handleConfigObject(configObject);
             if (configEntry == null) {
+                Main.LOGGER.error("Config entry is null");
                 continue;
             }
 
@@ -151,6 +152,15 @@ public class ClientConfigGuiManager {
             }
             else if (stringObject.configType == ConfigTypes.ENCHANT_LIST) {
                 return new EnchantListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
+            }
+            else if (stringObject.configType == ConfigTypes.STRING_LIST) {
+                List<String> args = new ArrayList<>(stringObject.args);
+                if (args.size() >= 3) {
+                    args.removeFirst();
+                    args.removeFirst();
+                    args.removeFirst();
+                    return new StringListConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue, args);
+                }
             }
             return new StringConfigEntry(stringObject.id, stringObject.name, stringObject.description, stringObject.stringValue, stringObject.defaultValue);
         }

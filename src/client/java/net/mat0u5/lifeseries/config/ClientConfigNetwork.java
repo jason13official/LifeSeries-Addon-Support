@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.config;
 
-import net.mat0u5.lifeseries.MainClient;
 import net.mat0u5.lifeseries.config.entries.*;
 import net.mat0u5.lifeseries.gui.config.entries.ConfigEntry;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;

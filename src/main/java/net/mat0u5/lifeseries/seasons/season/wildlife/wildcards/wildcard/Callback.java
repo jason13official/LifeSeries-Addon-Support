@@ -5,12 +5,14 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.WildcardManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -28,6 +30,19 @@ public class Callback extends Wildcard {
     private int nextDeactivationTick = -1;
     public static boolean allWildcardsPhaseReached = false;
     private boolean preAllWildcardsPhaseReached = false;
+
+    private static List<Wildcards> blacklistedWildcards = List.of(Wildcards.HUNGER);
+
+    public static void setBlacklist(String blacklist) {
+        blacklistedWildcards = new ArrayList<>();
+        String[] wildcards = blacklist.replace("[","").replace("]","").split(",");
+        for (String wildcardName : wildcards) {
+            Wildcards wildcard = Wildcards.getFromString(wildcardName.trim());
+            if (wildcard == null || wildcard == Wildcards.NULL) continue;
+            blacklistedWildcards.add(wildcard);
+            OtherUtils.log("loaded wildcard blacklist: " + wildcard.name());
+        }
+    }
 
     @Override
     public Wildcards getType() {
@@ -117,7 +132,12 @@ public class Callback extends Wildcard {
         nextDeactivationTick = -1;
         allWildcardsPhaseReached = false;
         preAllWildcardsPhaseReached = false;
-        softActivateWildcard(Wildcards.SIZE_SHIFTING);
+        if (!blacklistedWildcards.contains(Wildcards.SIZE_SHIFTING)) {
+            softActivateWildcard(Wildcards.SIZE_SHIFTING);
+        }
+        else {
+            softActivateWildcard(getRandomInactiveWildcard());
+        }
         super.activate();
     }
 
@@ -156,7 +176,7 @@ public class Callback extends Wildcard {
         List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
         for (Wildcards wildcard : inactiveWildcards) {
             if (wildcard == Wildcards.CALLBACK) continue;
-            if (wildcard == Wildcards.HUNGER) continue;
+            if (blacklistedWildcards.contains(wildcard)) continue;
             Wildcard wildcardInstance = wildcard.getInstance();
             if (wildcardInstance == null) continue;
             WildcardManager.activeWildcards.put(wildcard, wildcardInstance);
@@ -209,7 +229,7 @@ public class Callback extends Wildcard {
     public Wildcards getRandomInactiveWildcard() {
         List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
         inactiveWildcards.remove(Wildcards.CALLBACK);
-        inactiveWildcards.remove(Wildcards.HUNGER);
+        inactiveWildcards.removeIf(blacklistedWildcards::contains);
         if (inactiveWildcards.isEmpty()) return null;
         return inactiveWildcards.get(rnd.nextInt(inactiveWildcards.size()));
     }
@@ -217,7 +237,7 @@ public class Callback extends Wildcard {
     public Wildcards getRandomActiveWildcard() {
         List<Wildcards> activeWildcards = Wildcards.getActiveWildcards();
         activeWildcards.remove(Wildcards.CALLBACK);
-        activeWildcards.remove(Wildcards.HUNGER);
+        activeWildcards.removeIf(blacklistedWildcards::contains);
         if (activeWildcards.isEmpty()) return null;
         if (lastActivatedWildcard != null) {
             activeWildcards.remove(lastActivatedWildcard);

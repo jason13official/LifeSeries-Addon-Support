@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.wildlife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -118,6 +119,7 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Double> WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_mobswap_boss_chance_multiplier", 1.0, "season.mobswap", "Boss Chance Multiplier", "Multiplier for boss chance (wither / warden)."
     );
+
     public static final ConfigFileEntry<Integer> WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE = new ConfigFileEntry<>(
             "wildcard_superpowers_windcharge_max_mace_damage", 2, "season.superpowers", "Wind Charge: Max Mace Damage", "The max amount of damage you can deal with a mace while using the Wind Charge superpower."
     );
@@ -134,6 +136,12 @@ public class WildLifeConfig extends ConfigManager {
             "wildcard_superpowers_disable_intro_theme", false, "season.superpowers", "Superspeed: Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
     );
 
+
+    public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
+            "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback", "Callback: Blacklisted Wildcards", "List of wildcards that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+    );
+
+    //Groups
     public static final ConfigFileEntry<Object> GROUP_GENERAL = new ConfigFileEntry<>(
             "group_general", null, ConfigTypes.TEXT, "{season.general}", "General", ""
     );
@@ -157,6 +165,9 @@ public class WildLifeConfig extends ConfigManager {
     );
     public static final ConfigFileEntry<Object> GROUP_SUPERPOWERS = new ConfigFileEntry<>(
             "group_superpowers", null, ConfigTypes.TEXT, "{season.superpowers}", "Superpowers", ""
+    );
+    public static final ConfigFileEntry<Object> GROUP_CALLBACK = new ConfigFileEntry<>(
+            "group_callback", null, ConfigTypes.TEXT, "{season.callback}", "Callback", ""
     );
 
     public static final ConfigFileEntry<Double> ACTIVATE_WILDCARD_MINUTE = new ConfigFileEntry<>(
@@ -185,6 +196,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,GROUP_TRIVIA //Group
                 ,GROUP_MOBSWAP //Group
                 ,GROUP_SUPERPOWERS //Group
+                ,GROUP_CALLBACK //Group
 
                 //Group stuff
                 ,BROADCAST_LIFE_GAIN
@@ -220,6 +232,8 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_REVIVE_BY_KILLING_DARK_GREEN
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
+
+                ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
         ));
     }
 

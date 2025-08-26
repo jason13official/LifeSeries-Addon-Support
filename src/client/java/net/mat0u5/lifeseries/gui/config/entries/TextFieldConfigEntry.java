@@ -34,6 +34,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
     private void onChanged(String text) {
         onTextChanged(text);
+        postTextChanged();
     }
 
     protected void onTextChanged(String text) {
@@ -43,6 +44,9 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
             }
             textField.setMaxLength(maxTextFieldLength);
         }
+    }
+
+    protected void postTextChanged() {
     }
 
     protected void renderAdditionalContent(DrawContext context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
@@ -107,6 +111,7 @@ public abstract class TextFieldConfigEntry extends ConfigEntry {
 
     public void setText(String text) {
         onTextChanged(text);
+        postTextChanged();
         textField.setText(text);
     }
 

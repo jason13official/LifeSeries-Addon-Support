@@ -18,6 +18,7 @@ public enum ConfigTypes {
     BOOGEYMAN("boogeyman"),
     SECONDS("seconds"),
     MINUTES("minutes"),
+    STRING_LIST("list"),
 
     GROUP("group");
 
@@ -32,7 +33,7 @@ public enum ConfigTypes {
     }
 
     public boolean parentString() {
-        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST;
+        return this == STRING || this == ITEM_LIST || this == BLOCK_LIST || this == EFFECT_LIST || this == ENCHANT_LIST || this == STRING_LIST;
     }
     public boolean parentText() {
         return this == TEXT;

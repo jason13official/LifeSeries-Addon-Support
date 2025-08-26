@@ -1,7 +1,5 @@
 package net.mat0u5.lifeseries.utils.enums;
 
-import net.mat0u5.lifeseries.Main;
-
 public enum PacketNames {
     PACKET(""),
 

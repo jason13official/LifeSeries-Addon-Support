@@ -11,7 +11,7 @@ public class ConfigObject {
     public String id;
     public String name;
     public String description;
-    private List<String> args;
+    public List<String> args;
     public boolean modified = false;
     public ConfigObject(ConfigPayload payload) {
         configType = ConfigTypes.getFromString(payload.configType());

@@ -4,6 +4,8 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
+import java.util.List;
+
 public class ConfigFileEntry<T> {
     public final String key;
     public T defaultValue;
@@ -11,17 +13,24 @@ public class ConfigFileEntry<T> {
     public final String displayName;
     public final String description;
     public final String groupInfo;
+    public final List<String> args;
 
     public ConfigFileEntry(String key, T defaultValue, String groupInfo, String displayName, String description) {
         this(key, defaultValue, getTypeFromValue(defaultValue), groupInfo, displayName, description);
     }
+
     public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description) {
+        this(key, defaultValue, type, groupInfo, displayName, description, null);
+    }
+
+    public ConfigFileEntry(String key, T defaultValue, ConfigTypes type, String groupInfo, String displayName, String description, List<String> args) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.type = type;
         this.displayName = displayName;
         this.description = description;
         this.groupInfo = groupInfo;
+        this.args = args;
     }
 
     public static ConfigTypes getTypeFromValue(Object defaultValue) {

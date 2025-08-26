@@ -42,6 +42,10 @@ public class StringConfigEntry extends TextFieldConfigEntry {
         if (!hasCustomErrors()) {
             clearError();
         }
+    }
+
+    @Override
+    protected void postTextChanged() {
         markChanged();
         updateFieldDimensions();
     }
