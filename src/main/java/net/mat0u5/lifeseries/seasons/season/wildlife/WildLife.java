@@ -208,6 +208,7 @@ public class WildLife extends Season {
         KILLING_DARK_GREENS_GAINS_LIVES = WildLifeConfig.KILLING_DARK_GREENS_GAINS_LIVES.get(config);
         BROADCAST_LIFE_GAIN = WildLifeConfig.BROADCAST_LIFE_GAIN.get(config);
         SuperpowersWildcard.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = WildLifeConfig.WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME.get(config);
+        SuperpowersWildcard.setBlacklist(WildLifeConfig.WILDCARD_SUPERPOWERS_POWER_BLACKLIST.get(config));
         Callback.setBlacklist(WildLifeConfig.WILDCARD_CALLBACK_WILDCARDS_BLACKLIST.get(config));
 
         Snails.loadConfig();

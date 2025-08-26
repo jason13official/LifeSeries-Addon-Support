@@ -40,7 +40,6 @@ public class Callback extends Wildcard {
             Wildcards wildcard = Wildcards.getFromString(wildcardName.trim());
             if (wildcard == null || wildcard == Wildcards.NULL) continue;
             blacklistedWildcards.add(wildcard);
-            OtherUtils.log("loaded wildcard blacklist: " + wildcard.name());
         }
     }
 

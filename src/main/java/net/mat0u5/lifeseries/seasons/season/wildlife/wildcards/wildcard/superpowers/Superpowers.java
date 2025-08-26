@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Superpowers {
-    NONE,
+    NULL,
 
     TIME_CONTROL,
     CREAKING,
@@ -59,7 +59,7 @@ public enum Superpowers {
 
     public static List<Superpowers> getImplemented() {
         List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
-        result.remove(NONE);
+        result.remove(NULL);
         //? if <= 1.21 {
         result.remove(CREAKING);
         result.remove(FLIGHT);
@@ -78,10 +78,24 @@ public enum Superpowers {
         return result;
     }
 
+    public static List<Superpowers> getAll() {
+        List<Superpowers> result = new ArrayList<>(List.of(Superpowers.values()));
+        result.remove(NULL);
+        return result;
+    }
+
+    public static List<String> getAllStr() {
+        List<String> result = new ArrayList<>();
+        for (Superpowers superpower : getAll()) {
+            result.add(superpower.getString());
+        }
+        return result;
+    }
+
     public static Superpowers fromString(String superpower) {
         try {
             return Enum.valueOf(Superpowers.class, superpower.toUpperCase());
         } catch(Exception e) {}
-        return Superpowers.NONE;
+        return Superpowers.NULL;
     }
 }

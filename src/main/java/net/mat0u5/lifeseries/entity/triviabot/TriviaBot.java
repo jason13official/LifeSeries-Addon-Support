@@ -915,4 +915,8 @@ public class TriviaBot extends AmbientEntity implements AnimatedEntity {
         return true;
     }
 
+    @Override
+    public boolean canUsePortals(boolean allowVehicles) {
+        return false;
+    }
 }

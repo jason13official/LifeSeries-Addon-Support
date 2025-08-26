@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Necromancy;
+import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
@@ -13,13 +14,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class SuperpowersWildcard extends Wildcard {
     public static boolean WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = false;
+    public static List<Superpowers> blacklistedPowers = List.of();
     private static final Map<UUID, Superpower> playerSuperpowers = new HashMap<>();
     public static final Map<UUID, Superpowers> assignedSuperpowers = new HashMap<>();
+
+    public static void setBlacklist(String blacklist) {
+        blacklistedPowers = new ArrayList<>();
+        String[] powers = blacklist.replace("[","").replace("]","").split(",");
+        for (String powerName : powers) {
+            Superpowers power = Superpowers.fromString(powerName.trim());
+            if (power == null || power == Superpowers.NULL) continue;
+            blacklistedPowers.add(power);
+        }
+    }
 
     @Override
     public Wildcards getType() {
@@ -58,7 +69,8 @@ public class SuperpowersWildcard extends Wildcard {
 
     public static void rollRandomSuperpowers() {
         resetAllSuperpowers();
-        List<Superpowers> implemented = new java.util.ArrayList<>(Superpowers.getImplemented());
+        List<Superpowers> implemented = new ArrayList<>(Superpowers.getImplemented());
+        blacklistedPowers.forEach(implemented::remove);
         boolean shouldIncludeNecromancy = implemented.contains(Superpowers.NECROMANCY) && Necromancy.shouldBeIncluded();
         boolean shouldRandomizeNecromancy = false;
         double necromancyRandomizeChance = 0;
@@ -175,7 +187,7 @@ public class SuperpowersWildcard extends Wildcard {
             }
             return power.getSuperpower();
         }
-        return Superpowers.NONE;
+        return Superpowers.NULL;
     }
 
     @Nullable

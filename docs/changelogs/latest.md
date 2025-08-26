@@ -30,3 +30,8 @@ Zombies no longer sometimes spawn without full health
 Added the StringListConfigEntry config type, which only allows certain string values in its list. (similar to item/block config entries, just more flexible)<br>
 Added the 'wildcard_callback_wildcards_blacklist' Wild Life config entry. Default value is '[hunger]'.<br>
 Fixed a bug in the config gui where text field config entries sometimes would not allow you to save changes even if they didn't have an error value.
+
+----------
+
+Snails and Trivia Bots can no longer go through nether (and end) portals.<br>
+Added the 'wildcard_superpowers_power_blacklist' Wild Life config, which allows you to prevent some powers from showing up from randomizations. Default value is '[]'.

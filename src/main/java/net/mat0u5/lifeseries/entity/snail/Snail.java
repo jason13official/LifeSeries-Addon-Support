@@ -47,6 +47,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -894,6 +895,16 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         return true;
     }
 
+
+    @Override
+    public boolean canUsePortals(boolean allowVehicles) {
+        return false;
+    }
+
+    @Override
+    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+        return false;
+    }
     /*
         Sounds
      */

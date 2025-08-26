@@ -259,7 +259,7 @@ public class WildLifeCommands {
             return -1;
         }
         Superpowers superpower = Superpowers.fromString(name);
-        if (superpower == Superpowers.NONE) {
+        if (superpower == Superpowers.NULL) {
             source.sendError(Text.of("That superpower doesn't exist"));
             return -1;
         }
@@ -334,7 +334,7 @@ public class WildLifeCommands {
         }
 
         Superpowers superpower = Superpowers.fromString(name);
-        if (superpower == Superpowers.NONE) {
+        if (superpower == Superpowers.NULL) {
             source.sendError(Text.of("That superpower doesn't exist"));
             return -1;
         }

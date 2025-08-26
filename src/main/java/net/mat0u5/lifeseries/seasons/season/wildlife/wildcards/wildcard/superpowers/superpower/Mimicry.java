@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower;
 
-import net.mat0u5.lifeseries.entity.fakeplayer.FakePlayer;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpower;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -45,7 +44,7 @@ public class Mimicry extends Superpower {
                 isLookingAtPlayer = true;
                 Superpowers mimicPower = SuperpowersWildcard.getSuperpower(lookingAtPlayer);
                 if (!PlayerUtils.isFakePlayer(lookingAtPlayer) && mimicPower != null) {
-                    if (mimicPower != Superpowers.NONE && mimicPower != Superpowers.MIMICRY) {
+                    if (mimicPower != Superpowers.NULL && mimicPower != Superpowers.MIMICRY) {
                         mimic = mimicPower.getInstance(player);
                         successfullyMimicked = true;
                         PlayerUtils.displayMessageToPlayer(player, TextUtils.format("Mimicked superpower of {}", lookingAtPlayer), 65);

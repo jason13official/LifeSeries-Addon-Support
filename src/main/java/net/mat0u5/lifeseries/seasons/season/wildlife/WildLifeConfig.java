@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigFileEntry;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.utils.enums.ConfigTypes;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -135,6 +136,9 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME = new ConfigFileEntry<>(
             "wildcard_superpowers_disable_intro_theme", false, "season.superpowers", "Superspeed: Disable Intro Theme", "Disables the theme music that plays when this wildcard is activated."
     );
+    public static final ConfigFileEntry<String> WILDCARD_SUPERPOWERS_POWER_BLACKLIST = new ConfigFileEntry<>(
+            "wildcard_superpowers_power_blacklist", "[]", ConfigTypes.STRING_LIST, "season.superpowers", "Blacklisted Powers", "List of superpowers that cannot be rolled randomly.", Superpowers.getAllStr()
+    );
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
@@ -227,6 +231,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_MOBSWAP_SPAWN_MOBS
                 ,WILDCARD_MOBSWAP_BOSS_CHANCE_MULTIPLIER
 
+                ,WILDCARD_SUPERPOWERS_POWER_BLACKLIST
                 ,WILDCARD_SUPERPOWERS_DISABLE_INTRO_THEME
                 ,WILDCARD_SUPERPOWERS_WINDCHARGE_MAX_MACE_DAMAGE
                 ,WILDCARD_SUPERPOWERS_ZOMBIES_LOSE_ITEMS
