@@ -16,7 +16,7 @@ on:
       platform_changelog:
         description: 'Platform Changelog'
         required: true
-        default: 'No changelog provided'
+        default: '[Click here to open the **full changelog**]()'
         type: string
       changelog:
         description: 'Github and Discord Changelog'
