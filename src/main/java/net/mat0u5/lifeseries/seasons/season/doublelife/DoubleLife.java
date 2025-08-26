@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -44,6 +45,9 @@ public class DoubleLife extends Season {
     public boolean SOULBOUND_FOOD = false;
     public boolean SOULBOUND_EFFECTS = false;
     public boolean SOULBOUND_INVENTORIES = false;
+    public boolean BREAKUP_LAST_PAIR_STANDING = false;
+    public boolean DISABLE_START_TELEPORT = false;
+    public static boolean SOULMATE_LOCATOR_BAR = false;
 
     public SessionAction actionChooseSoulmates = new SessionAction(
             OtherUtils.minutesToTicks(1), "§7Assign soulmates if necessary §f[00:01:00]", "Assign Soulmates if necessary"
@@ -103,9 +107,10 @@ public class DoubleLife extends Season {
     @Override
     public boolean sessionStart() {
         super.sessionStart();
-        currentSession.activeActions.addAll(
-                List.of(actionChooseSoulmates, actionRandomTP)
-        );
+        currentSession.activeActions.add(actionChooseSoulmates);
+        if (!DISABLE_START_TELEPORT) {
+            currentSession.activeActions.add(actionRandomTP);
+        }
         return true;
     }
 
@@ -134,11 +139,14 @@ public class DoubleLife extends Season {
 
     @Override
     public void reload() {
+        SOULMATE_LOCATOR_BAR = DoubleLifeConfig.SOULMATE_LOCATOR_BAR.get(seasonConfig);
         super.reload();
         ANNOUNCE_SOULMATES = DoubleLifeConfig.ANNOUNCE_SOULMATES.get(seasonConfig);
         SOULBOUND_FOOD = DoubleLifeConfig.SOULBOUND_FOOD.get(seasonConfig);
         SOULBOUND_EFFECTS = DoubleLifeConfig.SOULBOUND_EFFECTS.get(seasonConfig);
         SOULBOUND_INVENTORIES = DoubleLifeConfig.SOULBOUND_INVENTORIES.get(seasonConfig);
+        BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get(seasonConfig);
+        DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get(seasonConfig);
         syncAllPlayers();
     }
 
@@ -221,6 +229,12 @@ public class DoubleLife extends Season {
         return PlayerUtils.getPlayer(soulmateUUID);
     }
 
+    @Nullable
+    public UUID getSoulmateUUID(UUID playerUUID) {
+        if (playerUUID == null || !soulmates.containsKey(playerUUID)) return null;
+        return soulmates.get(playerUUID);
+    }
+
     public void setSoulmate(ServerPlayerEntity player1, ServerPlayerEntity player2) {
         soulmates.put(player1.getUuid(), player2.getUuid());
         soulmates.put(player2.getUuid(), player1.getUuid());
@@ -290,6 +304,7 @@ public class DoubleLife extends Season {
     }
 
     public void distributePlayers() {
+        if (DISABLE_START_TELEPORT) return;
         if (server == null) return;
         List<ServerPlayerEntity> players = getNonAssignedPlayers();
         if (players.isEmpty()) return;
@@ -411,6 +426,8 @@ public class DoubleLife extends Season {
         soulmate.damage(PlayerUtils.getServerWorld(soulmate), damageSource, 1000);
         *///?}
 
+
+        TaskScheduler.scheduleTask(1, this::checkForEnding);
     }
 
     public void syncAllPlayers() {
@@ -611,6 +628,37 @@ public class DoubleLife extends Season {
             }
             if (player.hasStatusEffect(effect.getEffectType())) {
                 soulmate.addStatusEffect(player.getStatusEffect(effect.getEffectType()));
+            }
+        }
+    }
+
+    public void checkForEnding() {
+        List<ServerPlayerEntity> remainingPlayers = livesManager.getAlivePlayers();
+        if (remainingPlayers.size() == 2 && BREAKUP_LAST_PAIR_STANDING) {
+            ServerPlayerEntity player1 = remainingPlayers.get(0);
+            ServerPlayerEntity player2 = remainingPlayers.get(1);
+            if (hasSoulmate(player1) && hasSoulmate(player2)) {
+                if (getSoulmate(player1) == player2) {
+                    resetSoulmate(player1);
+                    List<ServerPlayerEntity> allPlayers = PlayerUtils.getAllPlayers();
+                    TaskScheduler.scheduleTask(200, () -> {
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Text.empty(), Text.of("§aYour fate is your own..."), 20, 40, 20);
+                    });
+                    TaskScheduler.scheduleTask(300, () -> {
+                        PlayerUtils.sendTitleWithSubtitleToPlayers(allPlayers, Text.empty(), Text.of("§cThere can only be one winner."), 20, 40, 20);
+                    });
+                    TaskScheduler.scheduleTask(380, () -> {
+                        WorldUitls.summonHarmlessLightning(player1);
+                        WorldUitls.summonHarmlessLightning(player2);
+                        //? if <= 1.21 {
+                        player1.damage(player1.getDamageSources().lightningBolt(), 0.0000001F);
+                        player2.damage(player2.getDamageSources().lightningBolt(), 0.0000001F);
+                        //?} else {
+                        /*player1.damage(PlayerUtils.getServerWorld(player1), player1.getDamageSources().lightningBolt(), 0.0000001F);
+                        player2.damage(PlayerUtils.getServerWorld(player2), player2.getDamageSources().lightningBolt(), 0.0000001F);
+                        *///?}
+                    });
+                }
             }
         }
     }

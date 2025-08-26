@@ -78,7 +78,7 @@ public class Necromancy extends Superpower {
                     }
                     AttributeUtils.setMaxPlayerHealth(deadPlayer, 8);
                     deadPlayer.setHealth(8);
-                    WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(deadPlayer), deadPlayer.getPos());
+                    WorldUitls.summonHarmlessLightning(deadPlayer);
                     ressurectedPlayers.add(deadPlayer.getUuid());
                     perPlayerRessurections.add(deadPlayer.getUuid());
                 }
@@ -95,7 +95,7 @@ public class Necromancy extends Superpower {
             if (player.isSpectator()) continue;
             UUID uuid = player.getUuid();
             if (perPlayerRessurections.contains(uuid) && ressurectedPlayers.contains(uuid)) {
-                WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
+                WorldUitls.summonHarmlessLightning(player);
                 player.changeGameMode(GameMode.SPECTATOR);
                 deadAgain.add(uuid);
             }

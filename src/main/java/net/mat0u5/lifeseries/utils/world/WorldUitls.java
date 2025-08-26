@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.utils.world;
 
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -33,6 +35,10 @@ public class WorldUitls {
                 && world.getBlockState(pos.up()).getCollisionShape(world, pos.up()).isEmpty();
 
         return isSolidBlockBelow && isNonCollisionAbove;
+    }
+
+    public static void summonHarmlessLightning(ServerPlayerEntity player) {
+        summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
     }
 
     public static void summonHarmlessLightning(ServerWorld world, Vec3d pos) {

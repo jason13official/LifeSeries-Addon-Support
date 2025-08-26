@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -101,7 +102,11 @@ public abstract class Season {
         server.getGameRules().get(GameRules.KEEP_INVENTORY).set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
         server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(!NO_HEALING, server);
         //? if >= 1.21.6 {
-        /*server.getGameRules().get(GameRules.LOCATOR_BAR).set(seasonConfig.LOCATOR_BAR.get(seasonConfig), server);
+        /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
+        if (!locatorBarEnabled && this instanceof DoubleLife) {
+            locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
+        }
+        server.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
         *///?}
 
         ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(ScoreboardDisplaySlot.LIST);

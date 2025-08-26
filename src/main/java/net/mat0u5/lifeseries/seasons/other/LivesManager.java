@@ -256,7 +256,7 @@ public class LivesManager {
                 PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), FINAL_DEATH_SOUND);
             }
             if (FINAL_DEATH_LIGHTNING) {
-                WorldUitls.summonHarmlessLightning(PlayerUtils.getServerWorld(player), player.getPos());
+                WorldUitls.summonHarmlessLightning(player);
             }
             showDeathTitle(player);
         }

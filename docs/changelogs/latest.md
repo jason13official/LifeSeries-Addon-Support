@@ -35,3 +35,9 @@ Fixed a bug in the config gui where text field config entries sometimes would no
 
 Snails and Trivia Bots can no longer go through nether (and end) portals.<br>
 Added the 'wildcard_superpowers_power_blacklist' Wild Life config, which allows you to prevent some powers from showing up from randomizations. Default value is '[]'.
+
+----------
+
+Added the 'breakup_last_pair_standing' Double Life config. Default value is false.<br>
+Added the 'disable_start_teleport' Double Life config. Default value is false.<br>
+Added the 'soulbound_locator_bar' Double Life config. Default value is false.
