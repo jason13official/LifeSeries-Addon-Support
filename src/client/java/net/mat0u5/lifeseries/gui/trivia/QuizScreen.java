@@ -286,4 +286,9 @@ public class QuizScreen extends DefaultScreen {
         drawer.addEntity(entityRenderState, scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
     *///?}
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
 }

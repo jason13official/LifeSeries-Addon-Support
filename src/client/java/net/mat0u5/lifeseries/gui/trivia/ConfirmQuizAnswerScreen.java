@@ -50,4 +50,9 @@ public class ConfirmQuizAnswerScreen extends DefaultSmallScreen {
     public void render(DrawContext context, int mouseX, int mouseY) {
         RenderUtils.drawTextCenter(context, textRenderer, Text.of("Submit answer?"), centerX, startY + 20);
     }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
 }

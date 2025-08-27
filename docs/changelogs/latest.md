@@ -46,3 +46,9 @@ Added the 'soulbound_locator_bar' Double Life config. Default value is false.
 
 Added the 'boogeyman_infinite' global config. After all boogeymen have been cured, new ones will be selected if there is more than 30 minutes in the session. Default value is false.<br>
 Added the 'boogeyman_infinite_last_pick' global config. Controls how long before the end of session the infinite boogey picking will stop, in seconds. Default value is 1800.
+
+----------
+
+Session transcripts now get saved in a folder `./transcripts`.<br>
+Session transcripts now track gifted lives and hearts, and starting and ending health in Secret Life.<br>
+Colored hearts now work in Secret Life.

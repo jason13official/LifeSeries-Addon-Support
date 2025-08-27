@@ -10,7 +10,9 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 //? if > 1.21 && <= 1.21.5 {
@@ -46,16 +48,21 @@ public class InGameHudMixin {
 
         String texturePath = identifier.getPath();
         Team playerTeam = ClientUtils.getPlayerTeam();
-        if (!MainClient.COLORED_HEARTS || MainClient.clientCurrentSeason == Seasons.SECRET_LIFE ||
-                playerTeam == null || playerTeam.getColor() == null ||
+        if (!MainClient.COLORED_HEARTS || playerTeam == null || playerTeam.getColor() == null ||
                 !ls$allowedColors.contains(playerTeam.getColor().getName().toLowerCase()) ||
                 !ls$allowedHearts.contains(texturePath)) {
+            if (MainClient.clientCurrentSeason == Seasons.SECRET_LIFE && texturePath.startsWith("hud/heart/container")) {
+                return;
+            }
             //? if <= 1.21 {
             instance.drawGuiTexture(identifier, x, y, u, v);
+            ls$afterHeartDraw(instance, identifier, x, y, u, v);
              //?} else if <= 1.21.5 {
             /*instance.drawGuiTexture(renderLayers, identifier, x, y, u, v);
+            ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
             *///?} else {
             /*instance.drawGuiTexture(renderPipeline, identifier, x, y, u, v);
+            ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
             *///?}
             return;
         }
@@ -70,6 +77,37 @@ public class InGameHudMixin {
             }
         }
         Identifier customHeart = Identifier.of("lifeseries", "textures/gui/hearts/"+color+"_"+heartType+".png");
+        //? if <= 1.21 {
+        instance.drawTexture(customHeart, x, y, 100, u, v, u, v, u, v);
+        ls$afterHeartDraw(instance, identifier, x, y, u, v);
+        //?} else if <= 1.21.5 {
+        /*instance.drawTexture(renderLayers, customHeart, x, y, u, v, u, v, u, v);
+        ls$afterHeartDraw(instance, renderLayers, identifier, x, y, u, v);
+        *///?} else {
+        /*instance.drawTexture(renderPipeline, customHeart, x, y, u, v, u, v, u, v);
+        ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
+        *///?}
+    }
+
+    @Unique
+    //? if <= 1.21 {
+    private void ls$afterHeartDraw(DrawContext instance, Identifier identifier, int x, int y, int u, int v) {
+    //?} else if <= 1.21.5 {
+    /*private void ls$afterHeartDraw(DrawContext instance, Function<Identifier, RenderLayer> renderLayers, Identifier identifier, int x, int y, int u, int v) {
+    *///?} else {
+    /*private void ls$afterHeartDraw(DrawContext instance, RenderPipeline renderPipeline, Identifier identifier, int x, int y, int u, int v) {
+    *///?}
+        if (MainClient.clientCurrentSeason != Seasons.SECRET_LIFE) {
+            return;
+        }
+        String name = identifier.getPath();
+        boolean blinking = name.contains("blinking");
+        boolean half = name.contains("half");
+        String heartName = "container";
+        if (blinking) heartName += "_blinking";
+        if (half) heartName += "_half";
+
+        Identifier customHeart = Identifier.of("lifeseries", "textures/gui/hearts/secretlife/"+heartName+".png");
         //? if <= 1.21 {
         instance.drawTexture(customHeart, x, y, 100, u, v, u, v, u, v);
         //?} else if <= 1.21.5 {

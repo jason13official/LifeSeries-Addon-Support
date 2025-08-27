@@ -9,7 +9,7 @@ import net.mat0u5.lifeseries.utils.player.ScoreboardUtils;
 import net.mat0u5.lifeseries.utils.player.TeamUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -22,8 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.seasonConfig;
+import static net.mat0u5.lifeseries.Main.*;
 import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 public class LivesManager {
@@ -145,8 +144,11 @@ public class LivesManager {
     }
 
     public void resetAllPlayerLivesInner() {
-        ScoreboardUtils.removeObjective(SCOREBOARD_NAME);
         createScoreboards();
+        for (ScoreboardEntry entry : ScoreboardUtils.getScores(SCOREBOARD_NAME)) {
+            ScoreboardUtils.resetScore(ScoreHolder.fromName(entry.owner()), SCOREBOARD_NAME);
+        }
+
         currentSeason.reloadAllPlayerTeams();
     }
 

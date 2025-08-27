@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.session;
 
 import net.mat0u5.lifeseries.Main;
+import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.Task;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
@@ -12,6 +13,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +26,14 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
+
+    public static void logHealth(ServerPlayerEntity player, double health) {
+        addMessageWithTime(TextUtils.formatString("{} is now on {} health.", player, health));
+    }
+
+    public static void giftHeart(ServerPlayerEntity player, ServerPlayerEntity receiver) {
+        addMessageWithTime(TextUtils.formatString("{} gifted a heart to {}.", player, receiver));
+    }
 
     public static void newSuperpower(ServerPlayerEntity player, Superpowers superpower) {
         addMessageWithTime(TextUtils.formatString("{} has been assigned the {} superpower.", player, superpower.getString()));
@@ -158,9 +172,31 @@ public class SessionTranscript {
         return String.join("\n", messages);
     }
 
+    public static void onSessionEnd() {
+        if (currentSeason instanceof SecretLife secretLife) {
+            secretLife.heartsTranscript();
+        }
+        sendTranscriptToAdmins();
+        writeTranscriptToFile();
+    }
+
     public static void sendTranscriptToAdmins() {
         Text sessionTranscript = getTranscriptMessage();
         PlayerUtils.broadcastMessageToAdmins(sessionTranscript);
+    }
+
+    public static void writeTranscriptToFile() {
+        String content = SessionTranscript.getStats();
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        String filename = now.format(formatter) + ".txt";
+        try {
+            Path filePath = Paths.get("transcripts", filename);
+            Files.createDirectories(filePath.getParent());
+            Files.write(filePath, content.getBytes());
+            Main.LOGGER.info("Session transcript file created: " + filePath);
+        }catch(Exception ignored) {}
     }
 
     public static Text getTranscriptMessage() {

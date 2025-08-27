@@ -3,7 +3,9 @@ package net.mat0u5.lifeseries.seasons.season.secretlife;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.Session;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
@@ -273,6 +275,7 @@ public class SecretLife extends Season {
             TaskManager.tasksChosen = false;
             TaskManager.tasksChosenFor.clear();
             TaskManager.submittedOrFailed.clear();
+            TaskScheduler.scheduleTask(1, this::heartsTranscript);
             return true;
         }
         return false;
@@ -291,6 +294,12 @@ public class SecretLife extends Season {
             boolean isOne = playersWithTaskBooks.size() == 1;
             String playerNames = String.join(", ", playersWithTaskBooks);
             PlayerUtils.broadcastMessageToAdmins(TextUtils.formatLoosely("§4{}§c still {} not submitted / failed a task this session.", playerNames, (isOne?"has":"have")));
+        }
+    }
+
+    public void heartsTranscript() {
+        for (ServerPlayerEntity player : livesManager.getAlivePlayers()) {
+            SessionTranscript.logHealth(player, getRoundedHealth(player));
         }
     }
 

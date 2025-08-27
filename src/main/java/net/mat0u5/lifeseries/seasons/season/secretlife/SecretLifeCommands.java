@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -343,6 +344,7 @@ public class SecretLifeCommands {
         secretLife.addPlayerHealth(target, 2);
         Text senderMessage = TextUtils.format("You have gifted a heart to {}", target);
         Text recipientMessage = TextUtils.format("{} gave you a heart", self);
+        SessionTranscript.giftHeart(self, target);
 
         self.sendMessage(senderMessage);
         PlayerUtils.sendTitle(target, recipientMessage, 20, 20, 20);

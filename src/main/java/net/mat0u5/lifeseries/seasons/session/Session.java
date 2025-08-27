@@ -79,7 +79,7 @@ public class Session {
     public void sessionEnd() {
         SessionTranscript.sessionEnd();
         if (status != SessionStatus.FINISHED && status != SessionStatus.NOT_STARTED) {
-            SessionTranscript.sendTranscriptToAdmins();
+            SessionTranscript.onSessionEnd();
             PlayerUtils.broadcastMessage(Text.literal("The session has ended!").formatted(Formatting.GOLD));
         }
         status = SessionStatus.FINISHED;
