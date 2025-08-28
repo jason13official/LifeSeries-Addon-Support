@@ -2,6 +2,8 @@ package net.mat0u5.lifeseries;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.MainConfig;
@@ -27,6 +29,8 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +63,10 @@ public class Main implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing Life Series...");
+		FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
+			ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "lifeseries_datapack"), container, ResourcePackActivationType.ALWAYS_ENABLED);
+		});
+
 		ConfigManager.moveOldMainFileIfExists();
 		SnailSkinsServer.createConfig();
 
