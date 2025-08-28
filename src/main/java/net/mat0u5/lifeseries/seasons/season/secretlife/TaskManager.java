@@ -218,7 +218,7 @@ public class TaskManager {
         });
         TaskScheduler.scheduleTask(130, () -> {
             for (ServerPlayerEntity player : allowedPlayers) {
-                AnimationUtils.playTotemAnimation(player);
+                AnimationUtils.playSecretLifeTotemAnimation(player, type == TaskTypes.RED);
             }
         });
         TaskScheduler.scheduleTask(165, () -> {
@@ -427,7 +427,7 @@ public class TaskManager {
                 PlayerUtils.playSoundToPlayer(player, SoundEvents.UI_BUTTON_CLICK.value());
                 PlayerUtils.sendTitle(player, Text.literal("Accept your fate").formatted(Formatting.RED).formatted(Formatting.BOLD),20,30,0);
             });
-            TaskScheduler.scheduleTask(200, () -> AnimationUtils.playTotemAnimation(player));
+            TaskScheduler.scheduleTask(200, () -> AnimationUtils.playSecretLifeTotemAnimation(player, false));
             TaskScheduler.scheduleTask(240, () -> {
                 assignRandomTaskToPlayer(player, newType);
                 secretKeeperBeingUsed = false;

@@ -27,6 +27,7 @@
     "ServerPlayerInteractionManagerMixin",
     "ServerPlayNetworkHandlerMixin",
     "ServerWaypointMixin",
+    "ServerWorldMixin",
     "SleepManagerMixin",
     "SpawnEggItemMixin",
     "SpawnGroupMixin",

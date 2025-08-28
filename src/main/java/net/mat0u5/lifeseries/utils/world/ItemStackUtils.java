@@ -150,6 +150,7 @@ public class ItemStackUtils {
     }
 
     public static boolean hasCustomComponentEntry(ItemStack itemStack, String componentEntry) {
+        if (itemStack == null) return false;
         NbtComponent nbt = itemStack.getComponents().get(DataComponentTypes.CUSTOM_DATA);
         if (nbt == null) return false;
         return nbt.contains(componentEntry);

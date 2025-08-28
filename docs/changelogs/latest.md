@@ -52,3 +52,9 @@ Added the 'boogeyman_infinite_last_pick' global config. Controls how long before
 Session transcripts now get saved in a folder `./transcripts`.<br>
 Session transcripts now track gifted lives and hearts, and starting and ending health in Secret Life.<br>
 Colored hearts now work in Secret Life.
+
+----------
+
+Resourcepacks are now marked as compatible with all the versions.<br>
+Removed the client-side Secret Life resourcepack, all of its functionality is now handled elsewhere.<br>
+Added the red task totem texture to Secret Life.

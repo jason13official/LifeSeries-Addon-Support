@@ -199,7 +199,7 @@ public class SecretLifeCommands {
 
             if (TaskManager.removePlayersTaskBook(player) || TaskManager.tasksChosen) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
-                AnimationUtils.playTotemAnimation(player);
+                AnimationUtils.playSecretLifeTotemAnimation(player, taskType == TaskTypes.RED);
                 if (targets.size() == 1) {
                     OtherUtils.sendCommandFeedback(source, TextUtils.format("Changed {}'s task", player));
                 }

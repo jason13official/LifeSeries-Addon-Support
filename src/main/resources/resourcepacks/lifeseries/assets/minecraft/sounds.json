@@ -44,6 +44,11 @@
             "secretlife/life"
         ]
     },
+    "secretlife_task_totem": {
+        "sounds": [
+            "secretlife/task_totem"
+        ]
+    },
 
 
     "wildlife_snail_attack1": {

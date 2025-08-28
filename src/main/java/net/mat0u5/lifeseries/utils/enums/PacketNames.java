@@ -44,7 +44,8 @@ public enum PacketNames {
     TRANSCRIPT("transcript"),
     SUPERPOWER_KEY("superpower_key"),
     HOLDING_JUMP("holding_jump"),
-    TRIVIA_ANSWER("trivia_answer");
+    TRIVIA_ANSWER("trivia_answer"),
+    SHOW_TOTEM("show_totem");
 
     public static PacketNames fromName(String name) {
         for (PacketNames packet : PacketNames.values()) {

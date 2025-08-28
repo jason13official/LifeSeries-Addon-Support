@@ -1,24 +1,73 @@
 package net.mat0u5.lifeseries.utils.world;
 
+import net.mat0u5.lifeseries.network.NetworkHandlerServer;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector3f;
 
-//? if >= 1.21.2
-/*import java.awt.Color;*/
+//? if >= 1.21.2 {
+/*import java.awt.Color;
+*///?}
 
 public class AnimationUtils {
     private static int spiralDuration = 175;
     public static void playTotemAnimation(ServerPlayerEntity player) {
         //The animation lasts about 40 ticks.
         player.networkHandler.sendPacket(new EntityStatusS2CPacket(player, (byte) 35));
+    }
+
+    public static void playRealTotemAnimation(ServerPlayerEntity player) {
+        // Visible by other players too
+        PlayerUtils.getServerWorld(player).sendEntityStatus(player, (byte) 35);
+    }
+
+    public static void playSecretLifeTotemAnimation(ServerPlayerEntity player, boolean red) {
+        if (NetworkHandlerServer.wasHandshakeSuccessful(player)) {
+            NetworkHandlerServer.sendStringPacket(player, PacketNames.SHOW_TOTEM, red ? "task_red" : "task");
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("secretlife_task_totem")));
+            return;
+        }
+
+        ItemStack totemItem = getSecretLifeTotemItem(red);
+        ItemStack mainhandItem = player.getMainHandStack().copy();
+        player.setStackInHand(Hand.MAIN_HAND, totemItem);
+        TaskScheduler.scheduleTask(1, () -> {
+            player.networkHandler.sendPacket(new EntityStatusS2CPacket(player, (byte) 35));
+            PlayerUtils.playSoundToPlayer(player, SoundEvent.of(Identifier.of("secretlife_task_totem")));
+        });
+        TaskScheduler.scheduleTask(2, () -> {
+            player.setStackInHand(Hand.MAIN_HAND, mainhandItem);
+        });
+    }
+
+    public static ItemStack getSecretLifeTotemItem(boolean red) {
+        ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultStack();
+        ItemStackUtils.setCustomComponentBoolean(totemItem, "FakeTotem", true);
+        //? if <= 1.21 {
+        totemItem.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(red ? 2 : 1));
+         //?} else {
+        /*totemItem.set(DataComponentTypes.ITEM_MODEL, Identifier.of("lifeseries",red ? "task_red_totem" : "task_totem"));
+        //PlaySoundConsumeEffect playSoundEvent = new PlaySoundConsumeEffect(RegistryEntry.of(SoundEvent.of(Identifier.of("secretlife_task_totem"))));
+        //totemItem.set(DataComponentTypes.DEATH_PROTECTION, new DeathProtectionComponent(List.of(playSoundEvent)));
+        *///?}
+        return totemItem;
     }
 
     public static void createSpiral(ServerPlayerEntity player, int duration) {

@@ -70,7 +70,6 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public void onInitializeClient() {
         FabricLoader.getInstance().getModContainer(Main.MOD_ID).ifPresent(container -> {
             ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "lifeseries"), container, Text.of("Main Life Series Resourcepack"), ResourcePackActivationType.ALWAYS_ENABLED);
-            ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "secretlife"), container, Text.of("Secret Life Resourcepack"), ResourcePackActivationType.NORMAL);
             ResourceManagerHelper.registerBuiltinResourcePack(Identifier.of(Main.MOD_ID, "minimal_armor"), container, Text.of("Minimal Armor Resourcepack"), ResourcePackActivationType.NORMAL);
         });
 

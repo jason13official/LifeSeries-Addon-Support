@@ -24,8 +24,11 @@ import net.mat0u5.lifeseries.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
+import net.mat0u5.lifeseries.utils.world.AnimationUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -213,6 +216,13 @@ public class NetworkHandlerClient {
         }
         if (name == PacketNames.TABLIST_SHOW_EXACT) {
             MainClient.TAB_LIST_SHOW_EXACT_LIVES = value.equalsIgnoreCase("true");
+        }
+        if (name == PacketNames.SHOW_TOTEM) {
+            ItemStack totemItem = Items.TOTEM_OF_UNDYING.getDefaultStack();
+            if (value.equalsIgnoreCase("task") || value.equalsIgnoreCase("task_red")) {
+                totemItem = AnimationUtils.getSecretLifeTotemItem(value.equalsIgnoreCase("task_red"));
+            }
+            MinecraftClient.getInstance().gameRenderer.showFloatingItem(totemItem);
         }
     }
 

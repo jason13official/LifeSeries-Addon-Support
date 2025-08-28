@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -147,5 +148,20 @@ public abstract class LivingEntityMixin {
     private void onDrop(ServerWorld world, DamageSource damageSource, CallbackInfo ci) {
         if (!Main.isLogicalSide()) return;
         Events.onEntityDropItems((LivingEntity) (Object) this, damageSource);
+    }
+
+    //? if <= 1.21 {
+    @Inject(method = "tryUseTotem", at = @At("HEAD"))
+    //?} else {
+    /*@Inject(method = "tryUseDeathProtector", at = @At("HEAD"))
+    *///?}
+    private void stopFakeTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (ItemStackUtils.hasCustomComponentEntry(entity.getMainHandStack(), "FakeTotem")) {
+            entity.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+        }
+        if (ItemStackUtils.hasCustomComponentEntry(entity.getOffHandStack(), "FakeTotem")) {
+            entity.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+        }
     }
 }

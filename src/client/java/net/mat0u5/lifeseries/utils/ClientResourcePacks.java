@@ -11,12 +11,10 @@ import net.minecraft.resource.ResourcePackProfile;
 import static net.mat0u5.lifeseries.MainClient.clientConfig;
 
 public class ClientResourcePacks {
-    private static final String SECRET_LIFE_RESOURCEPACK = "lifeseries:secretlife";
     private static final String MINIMAL_ARMOR_RESOURCEPACK = "lifeseries:minimal_armor";
     public static final String SNAILS_RESOURCEPACK = "file/" + SnailSkinsClient.PACK_NAME;
 
     public static void checkClientPacks() {
-        handleClientResourcepack(SECRET_LIFE_RESOURCEPACK, MainClient.clientCurrentSeason == Seasons.SECRET_LIFE);
         handleClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, ClientConfig.MINIMAL_ARMOR.get(clientConfig));
     }
 
