@@ -1,35 +1,29 @@
-package net.mat0u5.lifeseries.seasons.season.thirdlife;
+package net.mat0u5.lifeseries.seasons.season.pastlife;
 
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.utils.other.OtherUtils;
-import net.mat0u5.lifeseries.utils.player.PermissionManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
-import static net.mat0u5.lifeseries.Main.seasonConfig;
-
-public class ThirdLife extends Season {
+public class PastLife extends Season {
     public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives";
     public static final String COMMANDS_TEXT = "/claimkill, /lives";
     @Override
     public Seasons getSeason() {
-        return Seasons.THIRD_LIFE;
+        return Seasons.PAST_LIFE;
     }
 
     @Override
     public ConfigManager createConfig() {
-        return new ThirdLifeConfig();
+        return new PastLifeConfig();
     }
 
     @Override
     public String getAdminCommands() {
-        return COMMANDS_ADMIN_TEXT;
+        return "";
     }
 
     @Override
     public String getNonAdminCommands() {
-        return COMMANDS_TEXT;
+        return "";
     }
 }

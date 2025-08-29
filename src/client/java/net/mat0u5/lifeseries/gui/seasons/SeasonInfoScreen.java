@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.pastlife.PastLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -25,15 +26,11 @@ public class SeasonInfoScreen extends DefaultScreen {
         this.season = season;
     }
 
-    public Identifier getSeasonLogo() {
-        return Identifier.of("lifeseries","textures/gui/"+season.getId()+".png");
-    }
-
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
         // Background + images
         //? if <= 1.21 {
-        Identifier logo = getSeasonLogo();
+        Identifier logo = season.getLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
@@ -131,6 +128,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.LIMITED_LIFE) commandsTextActual = Text.literal(LimitedLife.COMMANDS_TEXT);
         if (season == Seasons.SECRET_LIFE) commandsTextActual = Text.literal(SecretLife.COMMANDS_TEXT);
         if (season == Seasons.WILD_LIFE) commandsTextActual = Text.literal(WildLife.COMMANDS_TEXT);
+        if (season == Seasons.PAST_LIFE) commandsTextActual = Text.literal(PastLife.COMMANDS_TEXT);
         return commandsTextActual;
     }
 
@@ -143,6 +141,7 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.LIMITED_LIFE) adminCommandsTextActual = Text.literal(LimitedLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.SECRET_LIFE) adminCommandsTextActual = Text.literal(SecretLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.WILD_LIFE) adminCommandsTextActual = Text.literal(WildLife.COMMANDS_ADMIN_TEXT);
+        if (season == Seasons.PAST_LIFE) adminCommandsTextActual = Text.literal(PastLife.COMMANDS_ADMIN_TEXT);
         return adminCommandsTextActual;
     }
 }

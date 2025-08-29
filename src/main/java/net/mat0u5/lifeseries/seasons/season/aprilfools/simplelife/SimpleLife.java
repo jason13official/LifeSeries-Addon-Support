@@ -33,7 +33,7 @@ public class SimpleLife extends ThirdLife {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new SimpleLifeConfig();
     }
 

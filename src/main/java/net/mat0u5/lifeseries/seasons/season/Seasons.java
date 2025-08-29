@@ -6,10 +6,12 @@ import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLife;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.lastlife.LastLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
+import net.mat0u5.lifeseries.seasons.season.pastlife.PastLife;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLife;
 import net.mat0u5.lifeseries.seasons.season.unassigned.UnassignedSeason;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public enum Seasons {
     LIMITED_LIFE("Limited Life", "limitedlife"),
     SECRET_LIFE("Secret Life", "secretlife"),
     WILD_LIFE("Wild Life", "wildlife"),
+    PAST_LIFE("Past Life", "pastlife"),
 
     SIMPLE_LIFE("Simple Life", "simplelife"),
     REAL_LIFE("Real Life", "reallife");
@@ -50,10 +53,15 @@ public enum Seasons {
         if (this == LIMITED_LIFE) return new LimitedLife();
         if (this == SECRET_LIFE) return new SecretLife();
         if (this == WILD_LIFE && DependencyManager.wildLifeModsLoaded()) return new WildLife();
+        if (this == PAST_LIFE) return new PastLife();
 
         if (this == SIMPLE_LIFE) return new SimpleLife();
         if (this == REAL_LIFE) return new RealLife();
         return new UnassignedSeason();
+    }
+
+    public Identifier getLogo() {
+        return Identifier.of("lifeseries","textures/gui/"+this.getId()+".png");
     }
 
     public static Seasons getSeasonFromStringName(String name) {

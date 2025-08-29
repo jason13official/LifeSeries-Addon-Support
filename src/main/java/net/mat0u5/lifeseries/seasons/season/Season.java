@@ -9,7 +9,6 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -71,7 +70,7 @@ public abstract class Season {
     public LivesManager livesManager = createLivesManager();
 
     public abstract Seasons getSeason();
-    public abstract ConfigManager getConfig();
+    public abstract ConfigManager createConfig();
     public abstract String getAdminCommands();
     public abstract String getNonAdminCommands();
 

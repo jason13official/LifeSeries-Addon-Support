@@ -79,7 +79,7 @@ public class DoubleLife extends Season {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new DoubleLifeConfig();
     }
 

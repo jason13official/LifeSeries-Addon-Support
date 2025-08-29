@@ -19,8 +19,8 @@ import java.awt.*;
 public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
 
     private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
-    private static final Identifier TEXTURE_SIMPLELIFE = Identifier.of("lifeseries","textures/gui/simplelife.png");
-    private static final Identifier TEXTURE_REALLIFE = Identifier.of("lifeseries","textures/gui/reallife.png");
+    private static final Identifier TEXTURE_SIMPLELIFE = Seasons.SIMPLE_LIFE.getLogo();
+    private static final Identifier TEXTURE_REALLIFE = Seasons.REAL_LIFE.getLogo();
 
     public static boolean hasSelectedBefore = false;
 

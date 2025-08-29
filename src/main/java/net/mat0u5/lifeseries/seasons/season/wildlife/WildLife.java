@@ -54,7 +54,7 @@ public class WildLife extends Season {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new WildLifeConfig();
     }
 

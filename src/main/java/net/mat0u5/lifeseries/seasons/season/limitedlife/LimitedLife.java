@@ -42,7 +42,7 @@ public class LimitedLife extends Season {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new LimitedLifeConfig();
     }
 

@@ -59,18 +59,19 @@ public class VersionControl {
         *   1.3.6.8     -   1.3.6.26
         *   1.3.6.27    -   1.3.6.37
         *   1.3.7       -   1.3.7.11
-        *   1.3.7.12    -   *
+        *   1.3.7.12
+        *   1.3.7.13    -   *
      */
 
     public static String clientCompatibilityMin() {
         // This is the version that the SERVER needs to have for the current client.
         if (Main.ISOLATED_ENVIROMENT) return MOD_VERSION;
-        return "dev-1.3.7.12";
+        return "dev-1.3.7.13";
     }
 
     public static String serverCompatibilityMin() {
         // This is the version that the CLIENT needs to have for the current server.
         if (Main.ISOLATED_ENVIROMENT) return MOD_VERSION;
-        return "dev-1.3.7.12";
+        return "dev-1.3.7.13";
     }
 }

@@ -25,7 +25,7 @@ public class UnassignedSeason extends Season {
         return Seasons.UNASSIGNED;
     }
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new ConfigManager(null, null) {
             @Override
             public void instantiateProperties() {}

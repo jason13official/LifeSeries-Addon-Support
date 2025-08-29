@@ -29,7 +29,6 @@ import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.versions.UpdateChecker;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
-	public static final String MOD_VERSION = "dev-1.3.7.12";
+	public static final String MOD_VERSION = "dev-1.3.7.13";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MAJOR_UPDATE_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases/latest";
 	public static final String ALL_UPDATES_URL = "https://api.github.com/repos/Mat0u5/LifeSeries/releases";
@@ -78,7 +77,7 @@ public class Main implements ModInitializer {
 		String season = config.getOrCreateProperty("currentSeries", DEFAULT_SEASON.getId());
 
 		parseSeason(season);
-		ConfigManager.createConfigs();
+		Seasons.getSeasons().forEach(seasons -> seasons.getSeasonInstance().createConfig());
 
 		ModRegistries.registerModStuff();
 		if (!ISOLATED_ENVIROMENT) {
@@ -116,7 +115,7 @@ public class Main implements ModInitializer {
 		currentSession.sessionLength = currentSessionLength;
 
 		livesManager = currentSeason.livesManager;
-		seasonConfig = currentSeason.getConfig();
+		seasonConfig = currentSeason.createConfig();
 		blacklist = currentSeason.createBlacklist();
 	}
 

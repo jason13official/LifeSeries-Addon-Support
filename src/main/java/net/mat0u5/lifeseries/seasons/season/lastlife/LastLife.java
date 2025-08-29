@@ -29,7 +29,7 @@ public class LastLife extends Season {
     }
 
     @Override
-    public ConfigManager getConfig() {
+    public ConfigManager createConfig() {
         return new LastLifeConfig();
     }
 

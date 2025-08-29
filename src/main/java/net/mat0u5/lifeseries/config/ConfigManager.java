@@ -3,14 +3,6 @@ package net.mat0u5.lifeseries.config;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.network.NetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.ConfigPayload;
-import net.mat0u5.lifeseries.seasons.season.aprilfools.reallife.RealLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.aprilfools.simplelife.SimpleLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.lastlife.LastLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.thirdlife.ThirdLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.io.*;
@@ -218,18 +210,6 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 Main.LOGGER.info("Failed to move old config file.");
             }
         }
-    }
-
-    public static void createConfigs() {
-        new ThirdLifeConfig();
-        new LastLifeConfig();
-        new DoubleLifeConfig();
-        new LimitedLifeConfig();
-        new SecretLifeConfig();
-        new WildLifeConfig();
-
-        new RealLifeConfig();
-        new SimpleLifeConfig();
     }
 
     private void createFileIfNotExists() {

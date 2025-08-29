@@ -20,17 +20,18 @@ public class ChooseSeasonScreen extends DefaultScreen {
 
     private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
 
-    private static final Identifier TEXTURE_THIRDLIFE = Identifier.of("lifeseries","textures/gui/thirdlife.png");
-    private static final Identifier TEXTURE_LASTLIFE = Identifier.of("lifeseries","textures/gui/lastlife.png");
-    private static final Identifier TEXTURE_DOUBLELIFE = Identifier.of("lifeseries","textures/gui/doublelife.png");
-    private static final Identifier TEXTURE_LIMITEDLIFE = Identifier.of("lifeseries","textures/gui/limitedlife.png");
-    private static final Identifier TEXTURE_SECRETLIFE = Identifier.of("lifeseries","textures/gui/secretlife.png");
-    private static final Identifier TEXTURE_WILDLIFE = Identifier.of("lifeseries","textures/gui/wildlife.png");
+    private static final Identifier TEXTURE_THIRDLIFE = Seasons.THIRD_LIFE.getLogo();
+    private static final Identifier TEXTURE_LASTLIFE = Seasons.LAST_LIFE.getLogo();
+    private static final Identifier TEXTURE_DOUBLELIFE = Seasons.DOUBLE_LIFE.getLogo();
+    private static final Identifier TEXTURE_LIMITEDLIFE = Seasons.LIMITED_LIFE.getLogo();
+    private static final Identifier TEXTURE_SECRETLIFE = Seasons.SECRET_LIFE.getLogo();
+    private static final Identifier TEXTURE_WILDLIFE = Seasons.WILD_LIFE.getLogo();
+    private static final Identifier TEXTURE_PASTLIFE = Seasons.PAST_LIFE.getLogo();
 
     public static boolean hasSelectedBefore = false;
 
     public ChooseSeasonScreen(boolean hasSelectedBefore) {
-        super(Text.literal("Choose Season Screen"), 1, 1.03f);
+        super(Text.literal("Choose Season Screen"), 1f, 1.03f);
         this.hasSelectedBefore = hasSelectedBefore;
     }
 
@@ -43,6 +44,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         int oneFourthX = startX + BG_WIDTH / 4;
         int threeFourthX = startX + (BG_WIDTH / 4)*3;
 
+        int col4_1 = startX + BG_WIDTH / 5 - 10;
+        int col4_2 = startX + (BG_WIDTH / 5)*2 - 5;
+        int col4_3 = startX + (BG_WIDTH / 5)*3 + 5;
+        int col4_4 = startX + (BG_WIDTH / 5)*4 + 10;
+
         // Y
         int startY = (this.height - BG_HEIGHT) / 2;
 
@@ -52,9 +58,10 @@ public class ChooseSeasonScreen extends DefaultScreen {
             if (Math.abs(x - threeFourthX) < 32) return 3;
         }
         if (Math.abs(y - (startY + 96 + 32)) < 32) {
-            if (Math.abs(x - oneFourthX) < 32) return 4;
-            if (Math.abs(x - centerX) < 32) return 5;
-            if (Math.abs(x - threeFourthX) < 32) return 6;
+            if (Math.abs(x - col4_1) < 32) return 4;
+            if (Math.abs(x - col4_2) < 32) return 5;
+            if (Math.abs(x - col4_3) < 32) return 6;
+            if (Math.abs(x - col4_4) < 32) return 7;
         }
 
         Text aprilFools = Text.of("April Fools Seasons");
@@ -63,7 +70,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
         Rectangle rect = new Rectangle(endX-9-textWidth, endY-9-textHeight, textWidth+1, textHeight+1);
 
         if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) {
-            return 7;
+            return -1;
         }
 
         return 0;
@@ -73,7 +80,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
             int region = getRegion((int) mouseX, (int) mouseY);
-            if (region == 7 && this.client != null) {
+            if (region == -1 && this.client != null) {
                 this.client.setScreen(new ChooseExtraSeasonScreen(hasSelectedBefore));
                 return true;
             }
@@ -85,6 +92,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
                     if (region == 4) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.LIMITED_LIFE.getName()));
                     if (region == 5) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SECRET_LIFE.getName()));
                     if (region == 6) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.WILD_LIFE.getName()));
+                    if (region == 7) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.PAST_LIFE.getName()));
                 }
                 else {
                     if (region == 1) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.THIRD_LIFE.getName());
@@ -93,6 +101,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
                     if (region == 4) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.LIMITED_LIFE.getName());
                     if (region == 5) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.SECRET_LIFE.getName());
                     if (region == 6) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.WILD_LIFE.getName());
+                    if (region == 7) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.PAST_LIFE.getName());
                     if (this.client != null) this.client.setScreen(null);
                 }
                 return true;
@@ -106,6 +115,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         int oneFourthX = startX + BG_WIDTH / 4;
         int threeFourthX = startX + (BG_WIDTH / 4)*3;
 
+        int col4_1 = startX + BG_WIDTH / 5 - 10;
+        int col4_2 = startX + (BG_WIDTH / 5)*2 - 5;
+        int col4_3 = startX + (BG_WIDTH / 5)*3 + 5;
+        int col4_4 = startX + (BG_WIDTH / 5)*4 + 10;
+
         int region = getRegion(mouseX, mouseY);
 
         // Background + images
@@ -116,9 +130,10 @@ public class ChooseSeasonScreen extends DefaultScreen {
             if (region == 2) context.drawTexture(TEXTURE_SELECTED,centerX-32, startY + 32, 0, 0, 64, 64);
             if (region == 3) context.drawTexture(TEXTURE_SELECTED,threeFourthX-32, startY + 32, 0, 0, 64, 64);
 
-            if (region == 4) context.drawTexture(TEXTURE_SELECTED,oneFourthX-32, startY + 96, 0, 0, 64, 64);
-            if (region == 5) context.drawTexture(TEXTURE_SELECTED,centerX-32, startY + 96, 0, 0, 64, 64);
-            if (region == 6) context.drawTexture(TEXTURE_SELECTED,threeFourthX-32, startY + 96, 0, 0, 64, 64);
+            if (region == 4) context.drawTexture(TEXTURE_SELECTED,col4_1-32, startY + 96, 0, 0, 64, 64);
+            if (region == 5) context.drawTexture(TEXTURE_SELECTED,col4_2-32, startY + 96, 0, 0, 64, 64);
+            if (region == 6) context.drawTexture(TEXTURE_SELECTED,col4_3-32, startY + 96, 0, 0, 64, 64);
+            if (region == 7) context.drawTexture(TEXTURE_SELECTED,col4_4-32, startY + 96, 0, 0, 64, 64);
         }
 
         context.getMatrices().push();
@@ -127,9 +142,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         context.drawTexture(TEXTURE_THIRDLIFE, (oneFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256);
         context.drawTexture(TEXTURE_LASTLIFE, (centerX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256);
         context.drawTexture(TEXTURE_DOUBLELIFE, (threeFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256);
-        context.drawTexture(TEXTURE_LIMITEDLIFE, (oneFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
-        context.drawTexture(TEXTURE_SECRETLIFE, (centerX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
-        context.drawTexture(TEXTURE_WILDLIFE, (threeFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
+
+        context.drawTexture(TEXTURE_LIMITEDLIFE, (col4_1-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
+        context.drawTexture(TEXTURE_SECRETLIFE, (col4_2-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
+        context.drawTexture(TEXTURE_WILDLIFE, (col4_3-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
+        context.drawTexture(TEXTURE_PASTLIFE, (col4_4-32) * 4, (startY + 96) * 4, 0, 0, 256, 256);
 
 
         context.getMatrices().pop();
@@ -139,9 +156,10 @@ public class ChooseSeasonScreen extends DefaultScreen {
             if (region == 2) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 3) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, threeFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
 
-            if (region == 4) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, oneFourthX-32, startY + 96, 0, 0, 64, 64, 64, 64);
-            if (region == 5) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-32, startY + 96, 0, 0, 64, 64, 64, 64);
-            if (region == 6) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, threeFourthX-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 4) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, col4_1-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 5) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, col4_2-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 6) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, col4_3-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 7) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, col4_4-32, startY + 96, 0, 0, 64, 64, 64, 64);
         }
 
         context.getMatrices().push();
@@ -150,9 +168,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_THIRDLIFE, (oneFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_LASTLIFE, (centerX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_DOUBLELIFE, (threeFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_LIMITEDLIFE, (oneFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SECRETLIFE, (centerX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_WILDLIFE, (threeFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_LIMITEDLIFE, (col4_1-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SECRETLIFE, (col4_2-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_WILDLIFE, (col4_3-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_PASTLIFE, (col4_4-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
 
 
         context.getMatrices().pop();
@@ -162,9 +182,10 @@ public class ChooseSeasonScreen extends DefaultScreen {
             if (region == 2) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-32, startY + 32, 0, 0, 64, 64, 64, 64);
             if (region == 3) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, threeFourthX-32, startY + 32, 0, 0, 64, 64, 64, 64);
 
-            if (region == 4) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, oneFourthX-32, startY + 96, 0, 0, 64, 64, 64, 64);
-            if (region == 5) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-32, startY + 96, 0, 0, 64, 64, 64, 64);
-            if (region == 6) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, threeFourthX-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 4) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, col4_1-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 5) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, col4_2-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 6) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, col4_3-32, startY + 96, 0, 0, 64, 64, 64, 64);
+            if (region == 7) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, col4_4-32, startY + 96, 0, 0, 64, 64, 64, 64);
         }
 
         context.getMatrices().pushMatrix();
@@ -173,9 +194,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_THIRDLIFE, (oneFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
         context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_LASTLIFE, (centerX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
         context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_DOUBLELIFE, (threeFourthX-32) * 4, (startY + 32) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_LIMITEDLIFE, (oneFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SECRETLIFE, (centerX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_WILDLIFE, (threeFourthX-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_LIMITEDLIFE, (col4_1-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SECRETLIFE, (col4_2-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_WILDLIFE, (col4_3-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_PASTLIFE, (col4_4-32) * 4, (startY + 96) * 4, 0, 0, 256, 256, 256, 256);
 
 
         context.getMatrices().popMatrix();
@@ -195,7 +218,7 @@ public class ChooseSeasonScreen extends DefaultScreen {
         context.fill(rect.x - 1, rect.y, rect.x, rect.y + rect.height, DEFAULT_TEXT_COLOR); // left
         context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, DEFAULT_TEXT_COLOR); // right
 
-        if (region == 7) {
+        if (region == -1) {
             RenderUtils.drawTextLeft(context, this.textRenderer, TextColors.WHITE, aprilFools, rect.x+1, rect.y+1);
         }
         else {
