@@ -41,5 +41,8 @@
 	"suggests": {
 		"bil": ">=1.1.10",
 		"polymer-bundled": ">=0.10.0"
+	},
+	"breaks": {
+		"pastlife": "*"
 	}
 }
