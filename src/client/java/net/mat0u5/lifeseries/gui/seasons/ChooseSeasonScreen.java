@@ -120,11 +120,11 @@ public class ChooseSeasonScreen extends DefaultScreen {
         for (SeasonRegion seasonRegion : seasonRegions) {
             if (seasonRegion.id() == region) {
                 if (hasSelectedBefore && this.client != null) {
-                    this.client.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season().getName()));
+                    this.client.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season()));
                 }
                 else {
                     NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonRegion.season().getName());
-                    if (this.client != null) this.client.setScreen(null);
+                    this.close();
                 }
             }
         }

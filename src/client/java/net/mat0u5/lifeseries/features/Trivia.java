@@ -53,7 +53,7 @@ public class Trivia {
     public static void closeGui() {
         if (MinecraftClient.getInstance().currentScreen == null) return;
         if (MinecraftClient.getInstance().currentScreen instanceof QuizScreen || MinecraftClient.getInstance().currentScreen instanceof ConfirmQuizAnswerScreen) {
-            MinecraftClient.getInstance().setScreen(null);
+            MinecraftClient.getInstance().currentScreen.close();
         }
     }
 

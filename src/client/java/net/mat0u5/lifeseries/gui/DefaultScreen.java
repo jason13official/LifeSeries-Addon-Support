@@ -74,7 +74,7 @@ public abstract class DefaultScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && allowCloseButton()) { // Left-click
             if (isInCloseRegion((int)mouseX, (int)mouseY)) {
-                if (this.client != null) this.client.setScreen(null);
+                this.close();
                 return true;
             }
         }

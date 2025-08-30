@@ -40,7 +40,7 @@ public class RenderUtils {
         /*drawTexture(context, texture, x, y, u, v, width, height, width, height);
         *///?}
     }
-    //? if = 1.21.5 {
+    //? if >= 1.21.2 && <= 1.21.5 {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
@@ -79,12 +79,12 @@ public class RenderUtils {
         //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)/2.0), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - textRenderer.getWidth(text)/2.0), (int)(y / scaleY), textColor, false);
         context.getMatrices().pop();
         //?} else {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - textRenderer.getWidth(text)/2.0), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - textRenderer.getWidth(text)/2.0), (int)(y / scaleY), textColor, false);
         context.getMatrices().popMatrix();
         *///?}
     }
@@ -111,12 +111,12 @@ public class RenderUtils {
         //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX), (int)(y / scaleY), textColor, false);
         context.getMatrices().pop();
         //?} else {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX)), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX), (int)(y / scaleY), textColor, false);
         context.getMatrices().popMatrix();
         *///?}
     }
@@ -149,12 +149,12 @@ public class RenderUtils {
         //? if <= 1.21.5 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - width), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, false);
         context.getMatrices().pop();
         //?} else {
         /*context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);
-        context.drawText(textRenderer, text, (int)(x / (scaleX*scaleX) - width), (int)(y / (scaleY*scaleY)), textColor, false);
+        context.drawText(textRenderer, text, (int)(x / scaleX - width), (int)(y / scaleY), textColor, false);
         context.getMatrices().popMatrix();
         *///?}
     }

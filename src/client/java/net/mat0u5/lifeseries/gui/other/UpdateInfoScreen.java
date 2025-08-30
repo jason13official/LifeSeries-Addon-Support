@@ -40,7 +40,7 @@ public class UpdateInfoScreen extends DefaultScreen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Download on Modrinth"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             Util.getOperatingSystem().open("https://modrinth.com/mod/life-series"); //Same as having a text with a click event, but that doesnt work in GUIs
                         })
                         .position(centerX - 85, endY - 28)

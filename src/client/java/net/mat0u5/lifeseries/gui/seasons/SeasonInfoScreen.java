@@ -35,20 +35,8 @@ public class SeasonInfoScreen extends DefaultScreen {
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
         }
 
-        //? if <= 1.21.5 {
-        context.getMatrices().push();
-        context.getMatrices().scale(1.5f, 1.5f, 1.0f);
-        //?} else {
-        /*context.getMatrices().pushMatrix();
-        context.getMatrices().scale(1.5f, 1.5f);
-        *///?}
         String seasonName = season.getName();
-        RenderUtils.drawTextCenterScaled(context, this.textRenderer, Text.of("§0"+ seasonName), centerX, startY + 10, 1.5f, 1.5f);
-        //? if <= 1.21.5 {
-        context.getMatrices().pop();
-        //?} else {
-        /*context.getMatrices().popMatrix();
-        *///?}
+        RenderUtils.drawTextCenterScaled(context, this.textRenderer, Text.of("§0"+ seasonName), centerX, startY + 10, 2.25f, 2.25f);
 
         int currentY = startY + 40;
         MutableText adminCommandsText = Text.literal("§8Available §nadmin§8 commands: ");
@@ -83,21 +71,9 @@ public class SeasonInfoScreen extends DefaultScreen {
             }
         }
 
-        //? if <= 1.21.5 {
-        context.getMatrices().push();
-        context.getMatrices().scale(1.15f, 1.15f, 1.0f);
-        //?} else {
-        /*context.getMatrices().pushMatrix();
-        context.getMatrices().scale(1.15f, 1.15f);
-        *///?}
         Text howToStart = Text.of("§0§nHow to start a session");
-        RenderUtils.drawTextLeftScaled(context, this.textRenderer, howToStart, startX + 20, currentY+3, 1.15f, 1.15f);
+        RenderUtils.drawTextLeftScaled(context, this.textRenderer, howToStart, startX + 20, currentY+3, 1.3f, 1.3f);
         currentY += textRenderer.fontHeight + 13;
-        //? if <= 1.21.5 {
-        context.getMatrices().pop();
-        //?} else {
-        /*context.getMatrices().popMatrix();
-        *///?}
 
         Text sessionTimer = Text.of("§8Run §3'/session timer set <time>'§8 to set the desired session time.");
         RenderUtils.drawTextLeft(context, this.textRenderer, sessionTimer, startX + 20, currentY);
@@ -135,5 +111,12 @@ public class SeasonInfoScreen extends DefaultScreen {
         if (season == Seasons.WILD_LIFE) adminCommandsTextActual = Text.literal(WildLife.COMMANDS_ADMIN_TEXT);
         if (season == Seasons.PAST_LIFE) adminCommandsTextActual = Text.literal(PastLife.COMMANDS_ADMIN_TEXT);
         return adminCommandsTextActual;
+    }
+
+    @Override
+    public void close() {
+        if (season == Seasons.PAST_LIFE && this.client != null) {
+            this.client.setScreen(new PastLifeInfoScreen());
+        }
     }
 }

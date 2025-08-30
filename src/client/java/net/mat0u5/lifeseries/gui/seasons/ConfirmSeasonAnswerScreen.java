@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.gui.seasons;
 import net.mat0u5.lifeseries.gui.DefaultSmallScreen;
 import net.mat0u5.lifeseries.network.NetworkHandlerClient;
 import net.mat0u5.lifeseries.render.RenderUtils;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.client.gui.DrawContext;
@@ -12,12 +13,12 @@ import net.minecraft.text.Text;
 
 public class ConfirmSeasonAnswerScreen extends DefaultSmallScreen {
     private final Screen parent;
-    private final String seasonName;
+    private final Seasons season;
 
-    public ConfirmSeasonAnswerScreen(Screen parent, String seasonName) {
+    public ConfirmSeasonAnswerScreen(Screen parent, Seasons season) {
         super(Text.literal("Confirm Answer"), 2.2f, 1.6f);
         this.parent = parent;
-        this.seasonName = seasonName;
+        this.season = season;
     }
 
     @Override
@@ -35,8 +36,8 @@ public class ConfirmSeasonAnswerScreen extends DefaultSmallScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
-                            NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonName);
+                            this.close();
+                            NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, season.getName());
                         })
                         .position(fifth2 - 40, startY + BG_HEIGHT - 35)
                         .size(60, 20)
@@ -57,7 +58,7 @@ public class ConfirmSeasonAnswerScreen extends DefaultSmallScreen {
     public void render(DrawContext context, int mouseX, int mouseY) {
         Text prompt1 = Text.of("WARNING: you have already selected a season.");
         Text prompt2 = Text.of("Changing it might cause some saved data to be lost (lives, ...).");
-        Text prompt3 = TextUtils.formatPlain("Change the season to {}?", seasonName);
+        Text prompt3 = TextUtils.formatPlain("Change the season to {}?", season.getName());
         RenderUtils.drawTextCenter(context, textRenderer, prompt1, centerX, startY + 15);
         RenderUtils.drawTextCenter(context, textRenderer, prompt2, centerX, startY + 20 + textRenderer.fontHeight);
         RenderUtils.drawTextCenter(context, textRenderer, prompt3, centerX, startY + 35 + textRenderer.fontHeight*2);

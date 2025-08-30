@@ -22,7 +22,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Size Shifting"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"size_shifting");
                         })
                         .position(oneThirdX - 40, startY  + 45)
@@ -32,7 +32,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Hunger"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"hunger");
                         })
                         .position(oneThirdX - 40, startY  + 75)
@@ -41,7 +41,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Snails"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"snails");
                         })
                         .position(oneThirdX - 40, startY  + 105)
@@ -50,7 +50,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Time Dilation"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"time_dilation");
                         })
                         .position(oneThirdX - 40, startY  + 135)
@@ -65,7 +65,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Trivia"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"trivia");
                         })
                         .position(twoThirdX - 40, startY  + 45)
@@ -75,7 +75,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Mob Swap"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"mob_swap");
                         })
                         .position(twoThirdX - 40, startY  + 75)
@@ -84,7 +84,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Superpowers"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"superpowers");
                         })
                         .position(twoThirdX - 40, startY  + 105)
@@ -93,7 +93,7 @@ public class ChooseWildcardScreen extends DefaultScreen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Callback"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             NetworkHandlerClient.sendStringPacket(PacketNames.SELECTED_WILDCARD,"callback");
                         })
                         .position(twoThirdX - 40, startY  + 135)

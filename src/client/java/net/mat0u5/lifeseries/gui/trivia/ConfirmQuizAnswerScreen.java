@@ -28,7 +28,7 @@ public class ConfirmQuizAnswerScreen extends DefaultSmallScreen {
 
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal("Confirm"), btn -> {
-                            if (this.client != null) this.client.setScreen(null);
+                            this.close();
                             Trivia.sendAnswer(answerIndex);
                         })
                         .position(startX + 8, endY - 28)

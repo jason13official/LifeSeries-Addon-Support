@@ -61,4 +61,5 @@ Added the red task totem texture to Secret Life.
 
 ----------
 
-Added Past Life.
+Added Past Life.<br>
+Added a new info screen when Past Life is selected, saying that there's a separate project on modrinth if you want to play with the versions aspect of Past Life.
