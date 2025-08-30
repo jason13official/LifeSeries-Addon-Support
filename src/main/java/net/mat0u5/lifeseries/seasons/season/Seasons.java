@@ -27,8 +27,8 @@ public enum Seasons {
     WILD_LIFE("Wild Life", "wildlife"),
     PAST_LIFE("Past Life", "pastlife"),
 
-    SIMPLE_LIFE("Simple Life", "simplelife"),
-    REAL_LIFE("Real Life", "reallife");
+    REAL_LIFE("Real Life", "reallife"),
+    SIMPLE_LIFE("Simple Life", "simplelife");
 
     private String name;
     private String id;
@@ -55,8 +55,8 @@ public enum Seasons {
         if (this == WILD_LIFE && DependencyManager.wildLifeModsLoaded()) return new WildLife();
         if (this == PAST_LIFE) return new PastLife();
 
-        if (this == SIMPLE_LIFE) return new SimpleLife();
         if (this == REAL_LIFE) return new RealLife();
+        if (this == SIMPLE_LIFE) return new SimpleLife();
         return new UnassignedSeason();
     }
 
@@ -77,6 +77,10 @@ public enum Seasons {
         List<Seasons> allSeasons = new ArrayList<>(List.of(Seasons.values()));
         allSeasons.remove(UNASSIGNED);
         return allSeasons;
+    }
+
+    public static List<Seasons> getAprilFoolsSeasons() {
+        return new ArrayList<>(List.of(REAL_LIFE, SIMPLE_LIFE));
     }
 
     public static List<String> getSeasonIds() {

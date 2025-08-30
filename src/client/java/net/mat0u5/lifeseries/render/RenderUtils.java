@@ -15,25 +15,32 @@ import java.util.List;
 
 public class RenderUtils {
 
-    public void testDrawX(DrawContext context, int x, int height) {
-        context.fill(x, 0, x+1, height, TextColors.DEBUG);
+    public static void debugX(DrawContext context, int x) {
+        context.fill(x, 0, x+1, context.getScaledWindowHeight(), TextColors.DEBUG);
     }
 
-    public void testDrawY(DrawContext context, int y, int width) {
-        context.fill(0, y, width, y+1, TextColors.DEBUG);
+    public static void debugY(DrawContext context, int y) {
+        context.fill(0, y, context.getScaledWindowWidth(), y+1, TextColors.DEBUG);
     }
 
-    //? if <= 1.21 {
     public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, float scaleX, float scaleY) {
+        //? if <= 1.21 {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
         context.drawTexture(texture, (int) (x / scaleX), (int) (y / scaleY), u, v, width, height);
         context.getMatrices().pop();
+        //?} else {
+        /*drawTextureScaled(context, texture, x, y, u, v, width, height, width, height, scaleX, scaleY);
+        *///?}
     }
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height) {
+        //? if <= 1.21 {
         context.drawTexture(texture, x, y, u, v, width, height);
+        //?} else {
+        /*drawTexture(context, texture, x, y, u, v, width, height, width, height);
+        *///?}
     }
-    //?} else if <= 1.21.5 {
+    //? if = 1.21.5 {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.getMatrices().push();
         context.getMatrices().scale(scaleX, scaleY, 1.0f);
@@ -43,7 +50,7 @@ public class RenderUtils {
     public static void drawTexture(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight) {
         context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
-    *///?} else {
+    *///?} else if >= 1.21.6 {
     /*public static void drawTextureScaled(DrawContext context, Identifier texture, float x, float y, int u, int v, int width, int height, int textureWidth, int textureHeight, float scaleX, float scaleY) {
         context.getMatrices().pushMatrix();
         context.getMatrices().scale(scaleX, scaleY);

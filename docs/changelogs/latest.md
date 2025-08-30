@@ -58,3 +58,7 @@ Colored hearts now work in Secret Life.
 Resourcepacks are now marked as compatible with all the versions.<br>
 Removed the client-side Secret Life resourcepack, all of its functionality is now handled elsewhere.<br>
 Added the red task totem texture to Secret Life.
+
+----------
+
+Added Past Life.

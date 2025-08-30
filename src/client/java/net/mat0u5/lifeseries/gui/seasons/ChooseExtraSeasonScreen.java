@@ -8,42 +8,60 @@ import net.mat0u5.lifeseries.utils.TextColors;
 import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
-//? if >= 1.21.2 && <= 1.21.5
-/*import net.minecraft.client.render.RenderLayer;*/
-//? if >= 1.21.6
-/*import net.minecraft.client.gl.RenderPipelines;*/
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
 
-    private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
-    private static final Identifier TEXTURE_SIMPLELIFE = Seasons.SIMPLE_LIFE.getLogo();
-    private static final Identifier TEXTURE_REALLIFE = Seasons.REAL_LIFE.getLogo();
-
     public static boolean hasSelectedBefore = false;
+    private List<ChooseSeasonScreen.SeasonRegion> seasonRegions = new ArrayList<>();
+    private static final int ROWS = 1;
+    private static final int LOGO_TEXTURE_SIZE = 256;
+    private static final float LOGO_SCALE = 0.2f;
+    private static final int LOGO_SIZE = (int) (LOGO_TEXTURE_SIZE * LOGO_SCALE);
 
     public ChooseExtraSeasonScreen(boolean hasSelectedBefore) {
         super(Text.literal("Choose April Season Screen"), 1.3f, 1.6f);
         this.hasSelectedBefore = hasSelectedBefore;
     }
 
-    public int getRegion(int x, int y) {
-        // X
-        int startX = (this.width - BG_WIDTH) / 2;
-        int endX = startX + BG_WIDTH;
-        int centerX = (startX + endX) / 2;
+    @Override
+    public void init() {
+        super.init();
+        addSeasonRegions();
+    }
 
+    public void addSeasonRegions() {
+        seasonRegions.clear();
+        List<Seasons> seasons = Seasons.getAprilFoolsSeasons();
 
-        // Y
-        int startY = (this.height - BG_HEIGHT) / 2;
+        int PADDING = ChooseSeasonScreen.PADDING;
 
-        if (Math.abs(y - (startY + 60)) < 25) {
-            if (Math.abs(x - (centerX - 30)) < 25) return 2;
-            if (Math.abs(x - (centerX + 30)) < 25) return 3;
+        List<List<Seasons>> rows = ChooseSeasonScreen.splitIntoRows(seasons, ROWS);
+        int currentRegionIndex = 1;
+        int currentY = startY + 35;
+        for (List<Seasons> row : rows) {
+            int columns = row.size();
+            int currentX = startX + (BG_WIDTH - (LOGO_SIZE * columns + PADDING * (columns-1))) / 2;
+            for (Seasons season : row) {
+                seasonRegions.add(ChooseSeasonScreen.getSeasonRegion(currentRegionIndex, season, currentX, currentY, LOGO_SIZE, LOGO_SIZE));
+                currentRegionIndex++;
+                currentX += LOGO_SIZE + PADDING;
+            }
+            currentY += LOGO_SIZE;// Don't add padding (the logos are usually wider than taller anyways)
         }
+    }
 
+
+    public int getRegion(int x, int y) {
+        for (ChooseSeasonScreen.SeasonRegion region : seasonRegions) {
+            if (x >= region.bounds().x && x <= region.bounds().x + region.bounds().width &&
+                    y >= region.bounds().y && y <= region.bounds().y + region.bounds().height) {
+                return region.id();
+            }
+        }
 
         Text goBack = Text.of("Go Back");
         int textWidth = textRenderer.getWidth(goBack);
@@ -51,7 +69,7 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
 
         Rectangle rect = new Rectangle(startX+9, endY-11-textHeight, textWidth+1, textHeight+1);
         if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) {
-            return 1;
+            return -1;
         }
 
         return 0;
@@ -61,71 +79,39 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) { // Left-click
             int region = getRegion((int) mouseX, (int) mouseY);
-            if (region == 1 && this.client != null) {
+            if (region == -1 && this.client != null) {
                 this.client.setScreen(new ChooseSeasonScreen(hasSelectedBefore));
             }
             else if (region != 0) {
-                if (hasSelectedBefore && this.client != null) {
-                    if (region == 2) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.REAL_LIFE.getName()));
-                    if (region == 3) this.client.setScreen(new ConfirmSeasonAnswerScreen(this, Seasons.SIMPLE_LIFE.getName()));
-                }
-                else {
-                    if (region == 2) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.REAL_LIFE.getName());
-                    if (region == 3) NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, Seasons.SIMPLE_LIFE.getName());
-                    if (this.client != null) this.client.setScreen(null);
-                }
+                handleSeasonRegionClick(region);
                 return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    public void handleSeasonRegionClick(int region) {
+        for (ChooseSeasonScreen.SeasonRegion seasonRegion : seasonRegions) {
+            if (seasonRegion.id() == region) {
+                if (hasSelectedBefore && this.client != null) {
+                    this.client.setScreen(new ConfirmSeasonAnswerScreen(this, seasonRegion.season().getName()));
+                }
+                else {
+                    NetworkHandlerClient.sendStringPacket(PacketNames.SET_SEASON, seasonRegion.season().getName());
+                    if (this.client != null) this.client.setScreen(null);
+                }
+            }
+        }
+    }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
-        int region = getRegion(mouseX, mouseY);
+        int currentRegion = getRegion(mouseX, mouseY);
 
         // Background + images
-        //? if <= 1.21 {
-
-        if (region != 0) {
-            if (region == 2) context.drawTexture(TEXTURE_SELECTED,centerX-25-30, startY + 35, 0, 0, 50, 50);
-            if (region == 3) context.drawTexture(TEXTURE_SELECTED,centerX-25+30, startY + 35, 0, 0, 50, 50);
+        for (ChooseSeasonScreen.SeasonRegion seasonRegion : seasonRegions) {
+            ChooseSeasonScreen.renderSeasonRegion(context, seasonRegion, currentRegion, LOGO_TEXTURE_SIZE, LOGO_SCALE);
         }
-
-        context.getMatrices().push();
-        context.getMatrices().scale(0.2f, 0.2f, 1.0f);
-
-        context.drawTexture(TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
-        context.drawTexture(TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256);
-
-        context.getMatrices().pop();
-        //?} else if <= 1.21.5 {
-        /*if (region != 0) {
-            if (region == 2) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-25-30, startY + 35, 0, 0, 50, 50, 64, 64);
-            if (region == 3) context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SELECTED, centerX-25+30, startY + 35, 0, 0, 50, 50, 64, 64);
-        }
-
-        context.getMatrices().push();
-        context.getMatrices().scale(0.2f, 0.2f, 1.0f);
-
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-
-        context.getMatrices().pop();
-        *///?} else {
-        /*if (region != 0) {
-            if (region == 2) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-25-30, startY + 35, 0, 0, 50, 50, 64, 64);
-            if (region == 3) context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SELECTED, centerX-25+30, startY + 35, 0, 0, 50, 50, 64, 64);
-        }
-
-        context.getMatrices().pushMatrix();
-        context.getMatrices().scale(0.2f, 0.2f);
-
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_REALLIFE, (centerX-25-30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_SIMPLELIFE, (centerX-25+30) * 5, (startY + 35) * 5, 0, 0, 256, 256, 256, 256);
-
-        context.getMatrices().popMatrix();
-        *///?}
 
         String prompt = "Select the season you want to play.";
         RenderUtils.drawTextCenter(context, this.textRenderer, Text.of(prompt), centerX, startY + 20);
@@ -141,8 +127,8 @@ public class ChooseExtraSeasonScreen extends DefaultSmallScreen {
         context.fill(rect.x - 1, rect.y, rect.x, rect.y + rect.height, DEFAULT_TEXT_COLOR); // left
         context.fill(rect.x + rect.width, rect.y-1, rect.x + rect.width + 2, rect.y + rect.height, DEFAULT_TEXT_COLOR); // right
 
-        if (region == 1) {
-            RenderUtils.drawTextLeft(context, this.textRenderer, TextColors.WHITE, goBack, rect.x+1, rect.y+1);
+        if (currentRegion == -1) {
+            RenderUtils.drawTextLeft(context, this.textRenderer, TextColors.PURE_WHITE, goBack, rect.x+1, rect.y+1);
         }
         else {
             RenderUtils.drawTextLeft(context, this.textRenderer, DEFAULT_TEXT_COLOR, goBack, rect.x+1, rect.y+1);

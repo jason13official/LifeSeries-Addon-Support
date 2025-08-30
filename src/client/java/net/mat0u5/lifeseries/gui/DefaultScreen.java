@@ -10,8 +10,6 @@ import net.minecraft.util.Identifier;
 public abstract class DefaultScreen extends Screen {
     private static final Identifier BACKGROUND_TEXTURE_LEFT = Identifier.of("lifeseries","textures/gui/gui_left.png");
     private static final Identifier BACKGROUND_TEXTURE_RIGHT = Identifier.of("lifeseries","textures/gui/gui_right.png");
-    private static final Identifier TEXTURE_CLOSE = Identifier.of("lifeseries","textures/gui/close.png");
-    private static final Identifier TEXTURE_SELECTED = Identifier.of("lifeseries","textures/gui/selected.png");
 
     protected int BG_WIDTH;
     protected int BG_HEIGHT;

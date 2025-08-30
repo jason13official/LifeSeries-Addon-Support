@@ -239,6 +239,7 @@ public class NetworkHandlerServer {
 
         Main.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received handshake (from {}): {{}, {}}", player, payload.modVersionStr(), payload.modVersion()));
         handshakeSuccessful.add(player.getUuid());
+        PlayerUtils.resendCommandTree(player);
     }
 
     /*

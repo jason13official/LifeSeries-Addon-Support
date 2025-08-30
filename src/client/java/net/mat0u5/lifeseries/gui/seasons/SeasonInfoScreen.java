@@ -29,19 +29,11 @@ public class SeasonInfoScreen extends DefaultScreen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
         // Background + images
-        //? if <= 1.21 {
         Identifier logo = season.getLogo();
         if (logo != null) {
             RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
             RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 5, 0, 0, 256, 256, 0.25f, 0.25f);
         }
-        //?} else {
-        /*Identifier logo = getSeasonLogo();
-        if (logo != null) {
-            RenderUtils.drawTextureScaled(context, logo, startX+10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
-            RenderUtils.drawTextureScaled(context, logo, endX - 64 - 10, endY - 64 - 10, 0, 0, 256, 256, 256, 256, 0.25f, 0.25f);
-        }
-        *///?}
 
         //? if <= 1.21.5 {
         context.getMatrices().push();

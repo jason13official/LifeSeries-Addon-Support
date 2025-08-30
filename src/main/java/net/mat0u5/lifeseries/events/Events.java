@@ -111,7 +111,7 @@ public class Events {
         try {
             UpdateChecker.onPlayerJoin(player);
             currentSeason.onPlayerFinishJoining(player);
-            TaskScheduler.scheduleTask(20, () -> {
+            TaskScheduler.scheduleTask(10, () -> {
                 NetworkHandlerServer.tryKickFailedHandshake(player);
                 PlayerUtils.resendCommandTree(player);
             });
