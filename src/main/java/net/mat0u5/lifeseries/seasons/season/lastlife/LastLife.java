@@ -18,7 +18,7 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 import static net.mat0u5.lifeseries.Main.seasonConfig;
 
 public class LastLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /givelife, /boogeyman, /lastlife";
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /givelife, /boogeyman";
     public static final String COMMANDS_TEXT = "/claimkill, /lives, /givelife";
     public static int ROLL_MAX_LIVES = 6;
     public static int ROLL_MIN_LIVES = 2;
@@ -63,8 +63,10 @@ public class LastLife extends Season {
     public void reload() {
         super.reload();
         if (!(seasonConfig instanceof LastLifeConfig config)) return;
-        ROLL_MIN_LIVES = config.RANDOM_LIVES_MIN.get(config);
-        ROLL_MAX_LIVES = config.RANDOM_LIVES_MAX.get(config);
+        int minLivesConfig = config.RANDOM_LIVES_MIN.get(config);
+        int maxLivesConfig = config.RANDOM_LIVES_MAX.get(config);
+        ROLL_MIN_LIVES = Math.min(minLivesConfig, maxLivesConfig);
+        ROLL_MAX_LIVES = Math.max(minLivesConfig, maxLivesConfig);
     }
 
     @Override

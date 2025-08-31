@@ -63,3 +63,8 @@ Added the red task totem texture to Secret Life.
 
 Added Past Life.<br>
 Added a new info screen when Past Life is selected, saying that there's a separate project on modrinth if you want to play with the versions aspect of Past Life.
+
+----------
+
+Wild Life animal disguise is no longer broken with Fresh Animations (still kinda broken tho xd).<br>
+Setting the last life min lives to >= the max lives no longer crashes the game.

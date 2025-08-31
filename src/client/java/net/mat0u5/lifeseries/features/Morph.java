@@ -124,6 +124,7 @@ public class Morph {
 
             dummy.setSneaking(player.isSneaking());
             dummy.age = player.age;
+            dummy.setOnGround(player.isOnGround());
 
             morphComponent.morph = morph;
             morphComponent.dummy = dummy;

@@ -242,6 +242,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
 
     public void setBoundPlayer(ServerPlayerEntity player) {
         if (player == null) return;
+        sendAirPacket();
         boundPlayerUUID = player.getUuid();
         updateSnailName();
         sendDisplayEntityPackets(player);
@@ -396,7 +397,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
             }
             if (lastAir != currentAir) {
                 lastAir = currentAir;
-                NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, currentAir);
+                sendAirPacket(currentAir);
             }
             if (currentAir == 0) damageFromDrowning();
         }
@@ -438,7 +439,7 @@ public class Snail extends HostileEntity implements AnimatedEntity {
     }
 
     public void despawn() {
-        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, 300);
+        sendAirPacket();
         if (boundPlayerUUID != null) {
             TriviaWildcard.bots.remove(boundPlayerUUID);
         }
@@ -449,6 +450,14 @@ public class Snail extends HostileEntity implements AnimatedEntity {
         /*this.kill((ServerWorld) getWorld());
         *///?}
         this.discard();
+    }
+
+    public void sendAirPacket() {
+        sendAirPacket(300);
+    }
+
+    public void sendAirPacket(int amount) {
+        NetworkHandlerServer.sendNumberPacket(getBoundPlayer(), PacketNames.SNAIL_AIR, amount);
     }
 
     public void killPathFinders() {

@@ -117,6 +117,8 @@ public class SeasonInfoScreen extends DefaultScreen {
     public void close() {
         if (season == Seasons.PAST_LIFE && this.client != null) {
             this.client.setScreen(new PastLifeInfoScreen());
+            return;
         }
+        super.close();
     }
 }

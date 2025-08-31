@@ -112,11 +112,12 @@ public class LastLifeLivesManager extends LivesManager {
         }
         int minLives = LastLife.ROLL_MIN_LIVES;
         int maxLives = LastLife.ROLL_MAX_LIVES;
-        int displayLives = rnd.nextInt(minLives, maxLives+1);
-        while (displayLives == lastNum) {
+        int displayLives;
+        do {
             // Just so that the random cycle can't have two of the same number in a row
             displayLives = rnd.nextInt(minLives, maxLives+1);
-        }
+        } while(displayLives == lastNum && minLives != maxLives);
+
         int finalDisplayLives = displayLives;
         PlayerUtils.sendTitleToPlayers(lives.keySet(), livesManager.getFormattedLives(finalDisplayLives), 0, 25, 0);
         PlayerUtils.playSoundToPlayers(lives.keySet(), SoundEvents.UI_BUTTON_CLICK.value());
