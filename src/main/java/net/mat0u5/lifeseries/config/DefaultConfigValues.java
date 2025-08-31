@@ -61,7 +61,10 @@ public class DefaultConfigValues {
             "show_health_below_name", false, "global.health", "Show Health Below Name", "Show the HP a player is on below their username."
     );
     public final ConfigFileEntry<Integer> DEFAULT_LIVES = new ConfigFileEntry<>(
-            "default_lives", 3, "global", "Default Lives", "The number of lives every player will have by default."
+            "default_lives", 3, "global.lives", "Default Lives", "The number of lives every player will have by default."
+    );
+    public final ConfigFileEntry<Boolean> ONLY_TAKE_LIVES_IN_SESSION = new ConfigFileEntry<>(
+            "only_take_lives_in_session", false, "global.lives", "Only Lose Lives In Session", "Makes players only lose lives when they die while a session is active."
     );
     public final ConfigFileEntry<Boolean> CUSTOM_ENCHANTER_ALGORITHM = new ConfigFileEntry<>(
             "custom_enchanter_algorithm", false, "global", "Custom Enchanter Algorithm", "Modifies the enchanting table algorithm to allow players to get all enchants even without bookshelves."
@@ -97,13 +100,13 @@ public class DefaultConfigValues {
             "givelife_broadcast", false, "global.givelife", "Broadcast Givelife", "Broadcasts the message when a player gives a life to another player using /givelife"
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = new ConfigFileEntry<>(
-            "tab_list_show_dead_players", true, "global.tablist", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."
+            "tab_list_show_dead_players", true, "global", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_LIVES = new ConfigFileEntry<>(
-            "tab_list_show_lives", false, "{global.tablist.showlives}", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
+            "tab_list_show_lives", false, "{global.lives.showlives}", "Tab List Show Lives", "Controls whether you can see the players' lives in the tab list."
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_EXACT_LIVES = new ConfigFileEntry<>(
-            "tab_list_show_exact_lives", false, "global.tablist.showlives", "Show EXACT Lives", "Shows the actual number of lives when above 4 instead of just '4+'."
+            "tab_list_show_exact_lives", false, "global.lives.showlives", "Show EXACT Lives", "Shows the actual number of lives when above 4 instead of just '4+'."
     );
     public final ConfigFileEntry<Boolean> LOCATOR_BAR = new ConfigFileEntry<>(
             "locator_bar", false, "global", "Locator Bar", "Enables the player Locator Bar."
@@ -162,8 +165,8 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Object> GROUP_SEASON = new ConfigFileEntry<>(
             "group_season", null, ConfigTypes.TEXT, "{season}[no_sidebar, closed]", "Season Specific Settings", ""
     );
-    public final ConfigFileEntry<Object> GROUP_TABLIST = new ConfigFileEntry<>(
-            "group_tablist", null, ConfigTypes.TEXT, "{global.tablist}", "Tab List", ""
+    public final ConfigFileEntry<Object> GROUP_LIVES = new ConfigFileEntry<>(
+            "group_lives", null, ConfigTypes.TEXT, "{global.lives}", "Lives Stuff", ""
     );
     public final ConfigFileEntry<Object> GROUP_BLACKLIST = new ConfigFileEntry<>(
             "group_blacklist", null, ConfigTypes.TEXT, "{global.blacklist}", "Blacklists", ""

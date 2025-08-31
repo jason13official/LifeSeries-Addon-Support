@@ -68,3 +68,8 @@ Added a new info screen when Past Life is selected, saying that there's a separa
 
 Wild Life animal disguise is no longer broken with Fresh Animations (still kinda broken tho xd).<br>
 Setting the last life min lives to >= the max lives no longer crashes the game.
+
+----------
+
+Added the '/boogeyman count' command.<br>
+Added the 'only_take_lives_in_session' global config. Default value is false.

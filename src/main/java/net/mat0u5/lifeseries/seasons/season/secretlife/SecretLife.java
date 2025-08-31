@@ -62,6 +62,7 @@ public class SecretLife extends Season {
 
     @Override
     public ConfigManager createConfig() {
+        TaskManager.initialize();
         return new SecretLifeConfig();
     }
 

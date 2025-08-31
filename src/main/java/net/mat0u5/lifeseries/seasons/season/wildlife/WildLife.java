@@ -55,6 +55,7 @@ public class WildLife extends Season {
 
     @Override
     public ConfigManager createConfig() {
+        Snails.loadConfig();
         return new WildLifeConfig();
     }
 
@@ -66,6 +67,14 @@ public class WildLife extends Season {
     @Override
     public String getNonAdminCommands() {
         return COMMANDS_TEXT;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        Snails.loadConfig();
+        Snails.loadSnailNames();
+        TriviaBot.initializeItemSpawner();
     }
 
     @Override
@@ -162,14 +171,6 @@ public class WildLife extends Season {
     public void sessionEnd() {
         WildcardManager.onSessionEnd();
         super.sessionEnd();
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        Snails.loadConfig();
-        Snails.loadSnailNames();
-        TriviaBot.initializeItemSpawner();
     }
 
     @Override

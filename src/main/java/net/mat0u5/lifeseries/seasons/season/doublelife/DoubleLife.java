@@ -70,7 +70,11 @@ public class DoubleLife extends Season {
     @Override
     public void initialize() {
         super.initialize();
-        soulmateConfig = new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_doublelife_soulmates.properties");
+        soulmateConfig = getSoulmateConfig();
+    }
+
+    public StringListConfig getSoulmateConfig() {
+        return new StringListConfig("./config/lifeseries/main", "DO_NOT_MODIFY_doublelife_soulmates.properties");
     }
 
     @Override
@@ -80,6 +84,7 @@ public class DoubleLife extends Season {
 
     @Override
     public ConfigManager createConfig() {
+        getSoulmateConfig();
         return new DoubleLifeConfig();
     }
 

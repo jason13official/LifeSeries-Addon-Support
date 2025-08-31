@@ -32,7 +32,11 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 GROUP_GLOBAL // Group
                 ,GROUP_SEASON // Group
 
+                ,GROUP_LIVES // Group
                 ,DEFAULT_LIVES
+                ,ONLY_TAKE_LIVES_IN_SESSION
+                ,TAB_LIST_SHOW_LIVES // Group
+
                 ,MAX_PLAYER_HEALTH // Group
                 ,KEEP_INVENTORY
 
@@ -49,9 +53,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,GROUP_FINAL_DEATH // Group
                 ,CUSTOM_ENCHANTER_ALGORITHM
                 ,MUTE_DEAD_PLAYERS
-                ,GROUP_TABLIST // Group
-                    ,TAB_LIST_SHOW_DEAD_PLAYERS
-                    ,TAB_LIST_SHOW_LIVES // Group
+                ,TAB_LIST_SHOW_DEAD_PLAYERS
                 ,GROUP_SPAWN_EGG // Group
                 ,GROUP_WATCHERS // Group
 

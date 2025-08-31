@@ -30,6 +30,7 @@ public class LivesManager {
     public static boolean FINAL_DEATH_LIGHTNING = true;
     public static SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
     public static boolean SHOW_DEATH_TITLE = false;
+    public static boolean ONLY_TAKE_LIVES_IN_SESSION = false;
 
     public void createTeams() {
         TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
@@ -315,5 +316,12 @@ public class LivesManager {
             if (isOnSpecificLives(player, 2, false)) return true;
         }
         return false;
+    }
+
+    public static boolean canChangeLivesNaturally() {
+        if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null) {
+            return currentSession.statusStarted();
+        }
+        return true;
     }
 }

@@ -142,6 +142,7 @@ public abstract class Season {
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get(seasonConfig);
         WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
         ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get(seasonConfig);
+        LivesManager.ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
 
         boogeymanManager.onReload();
         createTeams();
@@ -280,7 +281,9 @@ public abstract class Season {
         if (!killedByPlayer) {
             onPlayerDiedNaturally(player);
         }
-        livesManager.removePlayerLife(player);
+        if (LivesManager.canChangeLivesNaturally()) {
+            livesManager.removePlayerLife(player);
+        }
     }
 
     public void onPlayerDiedNaturally(ServerPlayerEntity player) {

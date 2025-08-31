@@ -49,6 +49,11 @@ public class BoogeymanCommand {
                         context.getSource()
                     ))
                 )
+                .then(literal("count")
+                    .executes(context -> boogeyCount(
+                        context.getSource()
+                    ))
+                )
                 .then(literal("add")
                     .then(argument("player", EntityArgumentType.player())
                         .executes(context -> addBoogey(context.getSource(), EntityArgumentType.getPlayer(context, "player")))
@@ -184,6 +189,32 @@ public class BoogeymanCommand {
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen));
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen));
         OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen));
+        return 1;
+    }
+
+    public static int boogeyCount(ServerCommandSource source) {
+        if (checkBanned(source)) return -1;
+        BoogeymanManager bm = getBM();
+        if (bm == null) return -1;
+
+        List<String> allBoogeymen = new ArrayList<>();
+        List<String> curedBoogeymen = new ArrayList<>();
+        List<String> failedBoogeymen = new ArrayList<>();
+        for (Boogeyman boogeyman : bm.boogeymen) {
+            if (boogeyman.cured) {
+                curedBoogeymen.add(boogeyman.name);
+            }
+            else if (boogeyman.failed) {
+                failedBoogeymen.add(boogeyman.name);
+            }
+            else {
+                allBoogeymen.add(boogeyman.name);
+            }
+        }
+
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Remaining Boogeymen: {}", allBoogeymen.size()));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Cured Boogeymen: {}", curedBoogeymen.size()));
+        OtherUtils.sendCommandFeedbackQuiet(source, TextUtils.format("Failed Boogeymen: {}", failedBoogeymen.size()));
         return 1;
     }
 

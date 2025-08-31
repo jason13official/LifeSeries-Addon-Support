@@ -159,6 +159,7 @@ This command **always** available
 
 *This command is only available when the boogeyman has been enabled in the config.*
 - `/boogeyman list` - Shows you the list of all the Boogeymen.
+- `/boogeyman count` - Shows you the **amount** of chosen Boogeymen (useful for debugging and admins which are also players).
 - `/boogeyman clear` - Removes all Boogeymen.
 - `/boogeyman add <player>` - Makes `<player>` the Boogeyman if they aren't one already.
 - `/boogeyman remove <player>` - Makes `<player>` not be the Boogeyman if they were one.
