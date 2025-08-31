@@ -94,10 +94,13 @@ public class DefaultConfigValues {
             "givelife_command_enabled", false, "{global.givelife}", "Enable Givelife Command", "Controls whether the '/givelife' command is available."
     );
     public final ConfigFileEntry<Integer> GIVELIFE_LIVES_MAX = new ConfigFileEntry<>(
-            "givelife_lives_max", 99, "global.givelife", "Max Givelife Lives", "The maximum amount of lives a player can have from other players giving them lives using /givelife"
+            "givelife_lives_max", 99, "global.givelife", "Max Givelife Lives", "The maximum amount of lives a player can have from other players giving them lives using /givelife."
     );
     public final ConfigFileEntry<Boolean> GIVELIFE_BROADCAST = new ConfigFileEntry<>(
-            "givelife_broadcast", false, "global.givelife", "Broadcast Givelife", "Broadcasts the message when a player gives a life to another player using /givelife"
+            "givelife_broadcast", false, "global.givelife", "Broadcast Givelife", "Broadcasts the message when a player gives a life to another player using /givelife."
+    );
+    public final ConfigFileEntry<Boolean> GIVELIFE_CAN_REVIVE = new ConfigFileEntry<>(
+            "givelife_can_revive", false, "global.givelife", "Givelife Can Revive Dead Players", "Controls whether players can revive dead players using /givelife."
     );
     public final ConfigFileEntry<Boolean> TAB_LIST_SHOW_DEAD_PLAYERS = new ConfigFileEntry<>(
             "tab_list_show_dead_players", true, "global", "Tab List Show Dead Players", "Controls whether dead players show up in the tab list."
@@ -153,6 +156,9 @@ public class DefaultConfigValues {
     );
     public final ConfigFileEntry<Boolean> ALLOW_SELF_DEFENSE = new ConfigFileEntry<>(
             "allow_self_defense", true, "global", "Allow Self Defense Kills", "Controls whether self-defense kills should count as unjustified."
+    );
+    public final ConfigFileEntry<Boolean> SEE_FRIENDLY_INVISIBLE_PLAYERS = new ConfigFileEntry<>(
+            "see_friendly_invisible_players", false, "global", "See Friendly Invisible Players", "Controls whether players can see other invisible players on the same life color."
     );
 
 

@@ -51,6 +51,11 @@ public class Hunger extends Wildcard {
 
     public static int HUNGER_EFFECT_LEVEL = 3;
 
+    public static double EFFECT_CHANCE = 0.65;
+    public static int AVG_EFFECT_DURATION = 10;
+    public static double NUTRITION_CHANCE = 0.4;
+    public static double SATURATION_CHANCE = 0.5;
+
     private static final List<RegistryEntry<StatusEffect>> effects = List.of(
             StatusEffects.SPEED,
             StatusEffects.SLOWNESS,
@@ -264,26 +269,30 @@ public class Hunger extends Wildcard {
         else {
             //Random effect
             int hash = getHash(item);
-            if ((hash % 13) % 3 != 0) {
-                int amplifier = hash % 5; // 0 -> 4
-                int duration = ((3 + hash) % 18) * 20; // 1 -> 20 seconds
-                RegistryEntry<StatusEffect> registryEntryEffect = effects.get(hash % effects.size());
+            Random random = new Random(hash); // Use hash as seed for consistent results
+
+            if (random.nextDouble() < EFFECT_CHANCE) {
+                int amplifier = random.nextInt(5); // 0 -> 4
+                int duration = (int) Math.ceil(((random.nextInt(20) + 1) * AVG_EFFECT_DURATION) / 10.0);
+                RegistryEntry<StatusEffect> registryEntryEffect = effects.get(random.nextInt(effects.size()));
                 if (levelLimit.contains(registryEntryEffect) || commonItems.contains(item)) {
                     amplifier = 0;
                 }
                 if (durationLimit.contains(registryEntryEffect)) {
                     duration = 1;
                 }
-                effect = new StatusEffectInstance(registryEntryEffect, duration, amplifier);
+                effect = new StatusEffectInstance(registryEntryEffect, duration*20, amplifier);
             }
 
             // Random nutrition and saturation
             if (!commonItems.contains(item)) {
-                nutrition = hash % 19 - 10; // -10 -> 8
-                saturation = hash % 12 - 7; // -7 -> 4
-                if (nutrition < 0) nutrition = 0;
-                if (saturation < 0) saturation = 0;
-                if (saturation > nutrition) saturation = nutrition;
+                if (random.nextDouble() < NUTRITION_CHANCE) {
+                    nutrition = random.nextInt(8) + 1; // 1 -> 8
+                }
+                if (random.nextDouble() < SATURATION_CHANCE) {
+                    saturation = random.nextInt(4) + 1; // 1 -> 4
+                    if (saturation > nutrition) saturation = nutrition;
+                }
             }
         }
 

@@ -16,6 +16,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
@@ -27,10 +28,31 @@ import static net.mat0u5.lifeseries.seasons.other.WatcherManager.isWatcher;
 
 public class LivesManager {
     public static final String SCOREBOARD_NAME = "Lives";
-    public static boolean FINAL_DEATH_LIGHTNING = true;
-    public static SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
-    public static boolean SHOW_DEATH_TITLE = false;
-    public static boolean ONLY_TAKE_LIVES_IN_SESSION = false;
+    public boolean FINAL_DEATH_LIGHTNING = true;
+    public SoundEvent FINAL_DEATH_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER;
+    public boolean SHOW_DEATH_TITLE = false;
+    public boolean ONLY_TAKE_LIVES_IN_SESSION = false;
+    public boolean SEE_FRIENDLY_INVISIBLE_PLAYERS = false;
+
+    public void reload() {
+        SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
+        FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
+        FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
+        ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
+        SEE_FRIENDLY_INVISIBLE_PLAYERS = seasonConfig.SEE_FRIENDLY_INVISIBLE_PLAYERS.get(seasonConfig);
+        updateTeams();
+    }
+
+    public void updateTeams() {
+        Collection<Team> allTeams = TeamUtils.getAllTeams();
+        if (allTeams == null) return;
+        for (Team team : allTeams) {
+            String name = team.getName();
+            if (name.startsWith("lives_")) {
+                team.setShowFriendlyInvisibles(SEE_FRIENDLY_INVISIBLE_PLAYERS);
+            }
+        }
+    }
 
     public void createTeams() {
         TeamUtils.createTeam("lives_null", "Unassigned", Formatting.GRAY);
@@ -179,7 +201,7 @@ public class LivesManager {
         ScoreboardUtils.setScore(player, SCOREBOARD_NAME, lives);
     }
 
-    public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target) {
+    public void receiveLifeFromOtherPlayer(Text playerName, ServerPlayerEntity target, boolean isRevive) {
         target.playSoundToPlayer(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 10, 1);
         if (seasonConfig.GIVELIFE_BROADCAST.get(seasonConfig)) {
             PlayerUtils.broadcastMessageExcept(TextUtils.format("{} received a life from {}", target, playerName), target);
@@ -191,6 +213,9 @@ public class LivesManager {
         SessionTranscript.givelife(playerName, target);
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.syncSoulboundLives(target);
+        }
+        if (isRevive && isAlive(target)) {
+            PlayerUtils.safelyPutIntoSurvival(target);
         }
     }
 
@@ -318,7 +343,7 @@ public class LivesManager {
         return false;
     }
 
-    public static boolean canChangeLivesNaturally() {
+    public boolean canChangeLivesNaturally() {
         if (ONLY_TAKE_LIVES_IN_SESSION && currentSession != null) {
             return currentSession.statusStarted();
         }

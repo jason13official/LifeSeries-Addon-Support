@@ -65,6 +65,7 @@ public abstract class Season {
     public boolean MUTE_DEAD_PLAYERS = false;
     public boolean WATCHERS_MUTED = false;
     public boolean ALLOW_SELF_DEFENSE = true;
+    public static boolean GIVELIFE_CAN_REVIVE = false;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public LivesManager livesManager = createLivesManager();
@@ -131,18 +132,15 @@ public abstract class Season {
 
     public void reload() {
         MUTE_DEAD_PLAYERS = seasonConfig.MUTE_DEAD_PLAYERS.get(seasonConfig);
-        LivesManager.SHOW_DEATH_TITLE = seasonConfig.FINAL_DEATH_TITLE_SHOW.get(seasonConfig);
         GIVELIFE_MAX_LIVES = seasonConfig.GIVELIFE_LIVES_MAX.get(seasonConfig);
         TAB_LIST_SHOW_LIVES = seasonConfig.TAB_LIST_SHOW_LIVES.get(seasonConfig);
         TAB_LIST_SHOW_DEAD_PLAYERS = seasonConfig.TAB_LIST_SHOW_DEAD_PLAYERS.get(seasonConfig);
-        LivesManager.FINAL_DEATH_LIGHTNING = seasonConfig.FINAL_DEATH_LIGHTNING.get(seasonConfig);
-        LivesManager.FINAL_DEATH_SOUND = SoundEvent.of(Identifier.of(seasonConfig.FINAL_DEATH_SOUND.get(seasonConfig)));
         TAB_LIST_SHOW_EXACT_LIVES = seasonConfig.TAB_LIST_SHOW_EXACT_LIVES.get(seasonConfig);
         SHOW_HEALTH_BELOW_NAME = seasonConfig.SHOW_HEALTH_BELOW_NAME.get(seasonConfig);
         WATCHERS_IN_TAB = seasonConfig.WATCHERS_IN_TAB.get(seasonConfig);
         WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
         ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get(seasonConfig);
-        LivesManager.ONLY_TAKE_LIVES_IN_SESSION = seasonConfig.ONLY_TAKE_LIVES_IN_SESSION.get(seasonConfig);
+        GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get(seasonConfig);
 
         boogeymanManager.onReload();
         createTeams();
@@ -152,6 +150,7 @@ public abstract class Season {
         reloadPlayers();
         Events.updatePlayerListsNextTick = true;
         WatcherManager.reloadWatchers();
+        livesManager.reload();
     }
 
     public void reloadPlayers() {
@@ -281,7 +280,7 @@ public abstract class Season {
         if (!killedByPlayer) {
             onPlayerDiedNaturally(player);
         }
-        if (LivesManager.canChangeLivesNaturally()) {
+        if (livesManager.canChangeLivesNaturally()) {
             livesManager.removePlayerLife(player);
         }
     }

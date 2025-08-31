@@ -68,12 +68,26 @@ public class WildLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Double> WILDCARD_SIZESHIFTING_SIZE_CHANGE_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_sizeshifting_size_change_multiplier", 1.0, "season.sizeshifting", "Change Multiplier", "The speed with which you change your size during Size Shifting."
     );
+
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_RANDOMIZE_INTERVAL = new ConfigFileEntry<>(
-            "wildcard_hunger_randomize_interval", 1800, ConfigTypes.SECONDS, "season.hunger", "Hunger: Randomize Interval", "The duration between food changes, in seconds."
+            "wildcard_hunger_randomize_interval", 1800, ConfigTypes.SECONDS, "season.hunger", "Randomize Interval", "The duration between food changes, in seconds."
     );
     public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_EFFECT_LEVEL = new ConfigFileEntry<>(
-            "wildcard_hunger_effect_level", 3, "season.hunger", "Hunger: Effect Level", "Controls the hunger effect level."
+            "wildcard_hunger_effect_level", 3, "season.hunger", "Hunger Effect Level", "Controls the hunger effect level."
     );
+    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_NUTRITION_CHANCE = new ConfigFileEntry<>(
+            "wildcard_hunger_nutrition_chance", 0.4, ConfigTypes.PERCENTAGE, "season.hunger", "Nutrition Chance", "Chance for food to have nutrition (give hunger bars)."
+    );
+    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_SATURATION_CHANCE = new ConfigFileEntry<>(
+            "wildcard_hunger_saturation_chance", 0.5, ConfigTypes.PERCENTAGE, "season.hunger", "Saturation Chance", "Chance for food to have saturation (needs to have nutrition to have saturation too btw)."
+    );
+    public static final ConfigFileEntry<Double> WILDCARD_HUNGER_EFFECT_CHANCE = new ConfigFileEntry<>(
+            "wildcard_hunger_effect_chance", 0.65, ConfigTypes.PERCENTAGE, "season.hunger", "Effect Chance", "Chance for food to give a random effect."
+    );
+    public static final ConfigFileEntry<Integer> WILDCARD_HUNGER_AVG_EFFECT_DURATION = new ConfigFileEntry<>(
+            "wildcard_hunger_avg_effect_duration", 10, ConfigTypes.SECONDS, "season.hunger", "Average Random Effect Duration", "Average random effect duration, in seconds."
+    );
+
     public static final ConfigFileEntry<Double> WILDCARD_SNAILS_SPEED_MULTIPLIER = new ConfigFileEntry<>(
             "wildcard_snails_speed_multiplier", 1.0, "season.snails", "Speed Multiplier", "Snail movement speed multiplier."
     );
@@ -142,7 +156,10 @@ public class WildLifeConfig extends ConfigManager {
 
 
     public static final ConfigFileEntry<String> WILDCARD_CALLBACK_WILDCARDS_BLACKLIST = new ConfigFileEntry<>(
-            "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback", "Callback: Blacklisted Wildcards", "List of wildcards that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+            "wildcard_callback_wildcards_blacklist", "[hunger]", ConfigTypes.STRING_LIST, "season.callback", "Blacklisted Wildcards", "List of wildcards that cannot be activated in Callback.", Wildcards.getWildcardsStr()
+    );
+    public static final ConfigFileEntry<Double> WILDCARD_CALLBACK_TURN_OFF = new ConfigFileEntry<>(
+            "wildcard_callback_turn_off", 0.75, ConfigTypes.PERCENTAGE, "season.callback", "Turn Off In Session", "Controls when in the session the callback wildcard turns off (percentage)."
     );
 
     //Groups
@@ -212,6 +229,10 @@ public class WildLifeConfig extends ConfigManager {
 
                 ,WILDCARD_HUNGER_EFFECT_LEVEL
                 ,WILDCARD_HUNGER_RANDOMIZE_INTERVAL
+                ,WILDCARD_HUNGER_NUTRITION_CHANCE
+                ,WILDCARD_HUNGER_SATURATION_CHANCE
+                ,WILDCARD_HUNGER_EFFECT_CHANCE
+                ,WILDCARD_HUNGER_AVG_EFFECT_DURATION
 
                 ,WILDCARD_SNAILS_SPEED_MULTIPLIER
                 ,WILDCARD_SNAILS_DROWN_PLAYERS
@@ -239,6 +260,7 @@ public class WildLifeConfig extends ConfigManager {
                 ,WILDCARD_SUPERPOWERS_SUPERSPEED_STEP
 
                 ,WILDCARD_CALLBACK_WILDCARDS_BLACKLIST
+                ,WILDCARD_CALLBACK_TURN_OFF
         ));
     }
 

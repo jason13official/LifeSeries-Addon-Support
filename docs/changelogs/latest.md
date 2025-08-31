@@ -73,3 +73,13 @@ Setting the last life min lives to >= the max lives no longer crashes the game.
 
 Added the '/boogeyman count' command.<br>
 Added the 'only_take_lives_in_session' global config. Default value is false.
+
+----------
+
+Added the 'givelife_can_revive' global config. Default value is false.<br>
+Added the 'see_friendly_invisible_players' global config. Default value is false.<br><br>
+Added the 'wildcard_callback_turn_off' Wild Life config. Default value is 75%.<br>
+Added the 'wildcard_hunger_nutrition_chance' Wild Life config. Default value is 40%.<br>
+Added the 'wildcard_hunger_saturation_chance' Wild Life config. Default value is 50%.<br>
+Added the 'wildcard_hunger_effect_chance' Wild Life config. Default value is 65%.<br>
+Added the 'wildcard_hunger_avg_effect_duration' Wild Life config. Default value is 10 (seconds).

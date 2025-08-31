@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -59,7 +60,8 @@ public class GivelifeCommand {
             source.sendError(Text.of("You do not have any lives to give"));
             return -1;
         }
-        if (!livesManager.isAlive(target)) {
+        boolean isRevive = !livesManager.isAlive(target);
+        if (!Season.GIVELIFE_CAN_REVIVE && isRevive) {
             source.sendError(Text.of("That player is not alive"));
             return -1;
         }
@@ -95,7 +97,7 @@ public class GivelifeCommand {
         livesManager.removePlayerLife(self);
         livesManager.addToLifeNoUpdate(target);
         AnimationUtils.playTotemAnimation(self);
-        TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target));
+        TaskScheduler.scheduleTask(40, () -> livesManager.receiveLifeFromOtherPlayer(currentPlayerName, target, isRevive));
 
         if (currentSeason instanceof DoubleLife doubleLife) {
             doubleLife.syncSoulboundLives(self);

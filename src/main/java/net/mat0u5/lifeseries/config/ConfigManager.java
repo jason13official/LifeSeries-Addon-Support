@@ -45,6 +45,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 /*,LOCATOR_BAR
                  *///?}
                 ,ALLOW_SELF_DEFENSE
+                ,SEE_FRIENDLY_INVISIBLE_PLAYERS
 
 
                 ,GROUP_BLACKLIST // Group
@@ -87,6 +88,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 ,GIVELIFE_LIVES_MAX
                 ,GIVELIFE_BROADCAST
+                ,GIVELIFE_CAN_REVIVE
 
                 ,TAB_LIST_SHOW_EXACT_LIVES
 

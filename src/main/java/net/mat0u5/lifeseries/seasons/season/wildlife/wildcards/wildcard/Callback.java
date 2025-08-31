@@ -22,7 +22,7 @@ public class Callback extends Wildcard {
     private static final Random rnd = new Random();
     private static int activatedAt = -1;
 
-    private static final double TURN_OFF = 0.75; // When all wildcards stop
+    public static double TURN_OFF = 0.75; // When all wildcards stop
     private static final double INITIAL_ACTIVATION_INTERVAL = 20 * 60 * 5;
     private static final double INITIAL_DEACTIVATION_INTERVAL = 20 * 30;
 
