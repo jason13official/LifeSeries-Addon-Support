@@ -79,6 +79,9 @@ public class DoubleLifeConfig extends ConfigManager {
     public static final ConfigFileEntry<Boolean> SOULMATE_LOCATOR_BAR = new ConfigFileEntry<>(
             "soulbound_locator_bar", false, "season", "Soulmate Locator Bar", "Makes ONLY your soulmate appear on the locator bar."
     );
+    public static final ConfigFileEntry<Boolean> SOULBOUND_BOOGEYMAN = new ConfigFileEntry<>(
+            "soulbound_boogeyman", false, "season.soulbind", "Soulbound Boogeyman (If enabled)", "Makes you become the Bogeyman if your soulmate is one - curing one will cure the other as well."
+    );
 
 
     public static final ConfigFileEntry<Object> GROUP_SOULBIND = new ConfigFileEntry<>(
@@ -101,6 +104,7 @@ public class DoubleLifeConfig extends ConfigManager {
                 ,SOULBOUND_FOOD
                 ,SOULBOUND_EFFECTS
                 ,SOULBOUND_INVENTORIES
+                , SOULBOUND_BOOGEYMAN
         ));
         //? if >= 1.21.6 {
         /*result.add(SOULMATE_LOCATOR_BAR);

@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.doublelife;
 import net.mat0u5.lifeseries.Main;
 import net.mat0u5.lifeseries.config.ConfigManager;
 import net.mat0u5.lifeseries.config.StringListConfig;
+import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
@@ -45,6 +46,7 @@ public class DoubleLife extends Season {
     public boolean SOULBOUND_FOOD = false;
     public boolean SOULBOUND_EFFECTS = false;
     public boolean SOULBOUND_INVENTORIES = false;
+    public static boolean SOULBOUND_BOOGEYMAN = false;
     public boolean BREAKUP_LAST_PAIR_STANDING = false;
     public boolean DISABLE_START_TELEPORT = false;
     public static boolean SOULMATE_LOCATOR_BAR = false;
@@ -86,6 +88,11 @@ public class DoubleLife extends Season {
     public ConfigManager createConfig() {
         getSoulmateConfig();
         return new DoubleLifeConfig();
+    }
+
+    @Override
+    public BoogeymanManager createBoogeymanManager() {
+        return new DoubleLifeBoogeymanManager();
     }
 
     @Override
@@ -152,6 +159,7 @@ public class DoubleLife extends Season {
         SOULBOUND_INVENTORIES = DoubleLifeConfig.SOULBOUND_INVENTORIES.get(seasonConfig);
         BREAKUP_LAST_PAIR_STANDING = DoubleLifeConfig.BREAKUP_LAST_PAIR_STANDING.get(seasonConfig);
         DISABLE_START_TELEPORT = DoubleLifeConfig.DISABLE_START_TELEPORT.get(seasonConfig);
+        SOULBOUND_BOOGEYMAN = DoubleLifeConfig.SOULBOUND_BOOGEYMAN.get(seasonConfig);
         syncAllPlayers();
     }
 

@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import net.mat0u5.lifeseries.seasons.other.LivesManager;
-import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.session.SessionAction;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -289,6 +288,10 @@ public class BoogeymanManager {
             normalPlayers.add(player);
         }
 
+        handleBoogeymanLists(normalPlayers, boogeyPlayers);
+    }
+
+    public void handleBoogeymanLists(List<ServerPlayerEntity> normalPlayers, List<ServerPlayerEntity> boogeyPlayers) {
         PlayerUtils.playSoundToPlayers(normalPlayers, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_no")));
         PlayerUtils.playSoundToPlayers(boogeyPlayers, SoundEvent.of(Identifier.of("minecraft","lastlife_boogeyman_yes")));
         PlayerUtils.sendTitleToPlayers(normalPlayers, Text.literal("NOT the Boogeyman.").formatted(Formatting.GREEN),10,50,20);
@@ -320,6 +323,10 @@ public class BoogeymanManager {
         }
     }
 
+    public void playerFailBoogeymanManually(ServerPlayerEntity player) {
+        playerFailBoogeyman(player);
+    }
+
     public void playerFailBoogeyman(ServerPlayerEntity player) {
         if (!BOOGEYMAN_ENABLED) return;
         Boogeyman boogeyman = getBoogeyman(player);
@@ -334,9 +341,6 @@ public class BoogeymanManager {
         livesManager.setPlayerLives(player, 1);
         boogeyman.failed = true;
         boogeyman.cured = false;
-        if (currentSeason instanceof DoubleLife doubleLife) {
-            doubleLife.syncSoulboundLives(player);
-        }
     }
 
     public void playerLostAllLives(ServerPlayerEntity player) {

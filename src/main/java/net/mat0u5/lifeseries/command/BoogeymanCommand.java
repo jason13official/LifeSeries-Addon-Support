@@ -101,7 +101,7 @@ public class BoogeymanCommand {
         if (!bm.BOOGEYMAN_ANNOUNCE_OUTCOME) {
             OtherUtils.sendCommandFeedback(source, TextUtils.format("§7Failing Boogeyman for {}§7...", target));
         }
-        bm.playerFailBoogeyman(target);
+        bm.playerFailBoogeymanManually(target);
 
         return 1;
     }

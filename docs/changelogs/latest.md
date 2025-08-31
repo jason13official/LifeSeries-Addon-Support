@@ -83,3 +83,7 @@ Added the 'wildcard_hunger_nutrition_chance' Wild Life config. Default value is 
 Added the 'wildcard_hunger_saturation_chance' Wild Life config. Default value is 50%.<br>
 Added the 'wildcard_hunger_effect_chance' Wild Life config. Default value is 65%.<br>
 Added the 'wildcard_hunger_avg_effect_duration' Wild Life config. Default value is 10 (seconds).
+
+----------
+
+Added the 'soulbound_boogeyman' Double Life config. Default value is false.
