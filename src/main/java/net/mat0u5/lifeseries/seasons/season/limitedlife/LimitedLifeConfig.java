@@ -98,6 +98,7 @@ public class LimitedLifeConfig extends ConfigManager {
         defaultEntries.remove(GIVELIFE_COMMAND_ENABLED);
         defaultEntries.remove(GIVELIFE_LIVES_MAX);
         defaultEntries.remove(GIVELIFE_BROADCAST);
+        defaultEntries.remove(GIVELIFE_CAN_REVIVE);
         defaultEntries.remove(TAB_LIST_SHOW_EXACT_LIVES);
         return defaultEntries;
     }

@@ -66,6 +66,7 @@ public abstract class Season {
     public boolean WATCHERS_MUTED = false;
     public boolean ALLOW_SELF_DEFENSE = true;
     public static boolean GIVELIFE_CAN_REVIVE = false;
+    public boolean SHOW_LOGIN_COMMAND_INFO = true;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
     public LivesManager livesManager = createLivesManager();
@@ -141,6 +142,7 @@ public abstract class Season {
         WATCHERS_MUTED = seasonConfig.WATCHERS_MUTED.get(seasonConfig);
         ALLOW_SELF_DEFENSE = seasonConfig.ALLOW_SELF_DEFENSE.get(seasonConfig);
         GIVELIFE_CAN_REVIVE = seasonConfig.GIVELIFE_CAN_REVIVE.get(seasonConfig);
+        SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get(seasonConfig);
 
         boogeymanManager.onReload();
         createTeams();
@@ -411,7 +413,7 @@ public abstract class Season {
     }
 
     public void onPlayerFinishJoining(ServerPlayerEntity player) {
-        if (getSeason() != Seasons.UNASSIGNED) {
+        if (getSeason() != Seasons.UNASSIGNED && SHOW_LOGIN_COMMAND_INFO) {
             if (PermissionManager.isAdmin(player)) {
                 player.sendMessage(TextUtils.formatLoosely("§7{} commands: §r{}", getSeason().getName(), getAdminCommands()));
             }

@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.session.Session;
+import net.mat0u5.lifeseries.utils.enums.PacketNames;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.world.WorldUitls;
 import net.minecraft.entity.Entity;
@@ -283,6 +284,7 @@ public class PlayerUtils {
         for (ServerPlayerEntity receivingPlayer : allPlayers) {
             List<ServerPlayerEntity> visiblePlayers = new ArrayList<>();
             List<UUID> hiddenPlayerUUIDs = new ArrayList<>();
+            List<String> hiddenPlayerNames = new ArrayList<>();
 
             for (ServerPlayerEntity player : allPlayers) {
                 if (player == receivingPlayer) continue;
@@ -298,6 +300,7 @@ public class PlayerUtils {
 
                 if (hidePlayer) {
                     hiddenPlayerUUIDs.add(player.getUuid());
+                    hiddenPlayerNames.add(player.getNameForScoreboard());
                 }
                 else {
                     visiblePlayers.add(player);
@@ -310,6 +313,8 @@ public class PlayerUtils {
                 PlayerRemoveS2CPacket hidePacket = new PlayerRemoveS2CPacket(hiddenPlayerUUIDs);
                 receivingPlayer.networkHandler.sendPacket(hidePacket);
             }
+
+            NetworkHandlerServer.sendStringListPacket(receivingPlayer, PacketNames.UPDATE_HIDDEN_PLAYERS, hiddenPlayerNames);
         }
     }
 

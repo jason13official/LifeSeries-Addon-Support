@@ -87,3 +87,9 @@ Added the 'wildcard_hunger_avg_effect_duration' Wild Life config. Default value 
 ----------
 
 Added the 'soulbound_boogeyman' Double Life config. Default value is false.
+
+----------
+
+Red players can now become boogeymen in Limited Life (non-reds have priority)<br>
+Added the 'show_login_command_info' global config, which controls whether the command info message shows up when players login. Default value is true.<br>
+Players hidden from the tab list using the config now show up in commands (requires the mod to be client-side).

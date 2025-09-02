@@ -317,6 +317,12 @@ public class LivesManager {
         return players;
     }
 
+    public List<ServerPlayerEntity> getRedPlayers() {
+        List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
+        players.removeIf(player -> !isOnLastLife(player, false));
+        return players;
+    }
+
     public List<ServerPlayerEntity> getAlivePlayers() {
         List<ServerPlayerEntity> players = PlayerUtils.getAllFunctioningPlayers();
         players.removeIf(player -> !isAlive(player));

@@ -55,6 +55,8 @@ public class MainClient implements ClientModInitializer, IClientHelper {
     public static long limitedLifeTimeLastUpdated = 0;
     public static long limitedLifeLives = 0;
 
+    public static List<String> hiddenTabPlayers = new ArrayList<>();
+
     public static ClientConfig clientConfig;
 
     //Config
@@ -158,6 +160,7 @@ public class MainClient implements ClientModInitializer, IClientHelper {
         limitedLifeTimerColor = "";
         limitedLifeTimeLastUpdated = 0;
         limitedLifeLives = 0;
+        hiddenTabPlayers = new ArrayList<>();
 
         MorphManager.resetMorphs();
     }

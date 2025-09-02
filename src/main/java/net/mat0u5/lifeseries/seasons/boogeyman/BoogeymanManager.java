@@ -174,10 +174,10 @@ public class BoogeymanManager {
         PlayerUtils.broadcastMessage(Text.literal("A new boogeyman is about to be chosen.").formatted(Formatting.RED));
         PlayerUtils.playSoundToPlayers(PlayerUtils.getAllPlayers(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER);
         TaskScheduler.scheduleTask(100, () -> {
-            List<ServerPlayerEntity> nonRedPlayers = livesManager.getNonRedPlayers();
-            if (nonRedPlayers.isEmpty()) return;
-            Collections.shuffle(nonRedPlayers);
-            TaskScheduler.scheduleTask(180, () -> chooseBoogeymen(nonRedPlayers, BoogeymanRollType.INFINITE));
+            List<ServerPlayerEntity> allowedPlayers = getAllowedBoogeyPlayers();
+            if (allowedPlayers.isEmpty()) return;
+            Collections.shuffle(allowedPlayers);
+            TaskScheduler.scheduleTask(180, () -> chooseBoogeymen(allowedPlayers, BoogeymanRollType.INFINITE));
         });
     }
 
@@ -242,36 +242,13 @@ public class BoogeymanManager {
         if (!BOOGEYMAN_ENABLED) return;
         if (BOOGEYMAN_AMOUNT_MAX <= 0) return;
         if (BOOGEYMAN_AMOUNT_MAX < BOOGEYMAN_AMOUNT_MIN) return;
-        List<ServerPlayerEntity> nonRedPlayers = livesManager.getNonRedPlayers();
-        Collections.shuffle(nonRedPlayers);
 
         List<ServerPlayerEntity> normalPlayers = new ArrayList<>();
         List<ServerPlayerEntity> boogeyPlayers = new ArrayList<>();
 
-        int chooseBoogeymen = getBoogeymanAmount(rollType);
 
         if (rollType != BoogeymanRollType.INFINITE) {
-            for (ServerPlayerEntity player : nonRedPlayers) {
-                // First loop for the forced boogeymen
-                if (!allowedPlayers.contains(player)) continue;
-                if (rolledPlayers.contains(player.getUuid())) continue;
-                if (BOOGEYMAN_IGNORE.contains(player.getNameForScoreboard().toLowerCase())) continue;
-                if (BOOGEYMAN_FORCE.contains(player.getNameForScoreboard().toLowerCase())) {
-                    boogeyPlayers.add(player);
-                    chooseBoogeymen--;
-                }
-            }
-            for (ServerPlayerEntity player : nonRedPlayers) {
-                // Second loop for the non-forced boogeymen
-                if (chooseBoogeymen <= 0) break;
-                if (!allowedPlayers.contains(player)) continue;
-                if (rolledPlayers.contains(player.getUuid())) continue;
-                if (BOOGEYMAN_IGNORE.contains(player.getNameForScoreboard().toLowerCase())) continue;
-                if (BOOGEYMAN_FORCE.contains(player.getNameForScoreboard().toLowerCase())) continue;
-
-                boogeyPlayers.add(player);
-                chooseBoogeymen--;
-            }
+            boogeyPlayers.addAll(getRandomBoogeyPlayers(allowedPlayers, rollType));
         }
         else {
             // Infinite mode, just pick one from the allowed players
@@ -289,6 +266,41 @@ public class BoogeymanManager {
         }
 
         handleBoogeymanLists(normalPlayers, boogeyPlayers);
+    }
+
+    public List<ServerPlayerEntity> getRandomBoogeyPlayers(List<ServerPlayerEntity> allowedPlayers, BoogeymanRollType rollType) {
+        List<ServerPlayerEntity> boogeyPlayers = new ArrayList<>();
+        List<ServerPlayerEntity> nonRedPlayers = livesManager.getNonRedPlayers();
+        Collections.shuffle(nonRedPlayers);
+        int chooseBoogeymen = getBoogeymanAmount(rollType);
+
+        for (ServerPlayerEntity player : nonRedPlayers) {
+            // First loop for the forced boogeymen
+            if (!allowedPlayers.contains(player)) continue;
+            if (rolledPlayers.contains(player.getUuid())) continue;
+            if (BOOGEYMAN_IGNORE.contains(player.getNameForScoreboard().toLowerCase())) continue;
+            if (BOOGEYMAN_FORCE.contains(player.getNameForScoreboard().toLowerCase())) {
+                boogeyPlayers.add(player);
+                chooseBoogeymen--;
+            }
+        }
+        for (ServerPlayerEntity player : nonRedPlayers) {
+            // Second loop for the non-forced boogeymen
+            if (chooseBoogeymen <= 0) break;
+            if (!allowedPlayers.contains(player)) continue;
+            if (rolledPlayers.contains(player.getUuid())) continue;
+            if (BOOGEYMAN_IGNORE.contains(player.getNameForScoreboard().toLowerCase())) continue;
+            if (BOOGEYMAN_FORCE.contains(player.getNameForScoreboard().toLowerCase())) continue;
+            if (boogeyPlayers.contains(player)) continue;
+
+            boogeyPlayers.add(player);
+            chooseBoogeymen--;
+        }
+        return boogeyPlayers;
+    }
+
+    public List<ServerPlayerEntity> getAllowedBoogeyPlayers() {
+        return livesManager.getNonRedPlayers();
     }
 
     public void handleBoogeymanLists(List<ServerPlayerEntity> normalPlayers, List<ServerPlayerEntity> boogeyPlayers) {

@@ -12,6 +12,8 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.*;
@@ -63,5 +65,32 @@ public class LimitedLifeBoogeymanManager extends BoogeymanManager {
         if (BOOGEYMAN_ANNOUNCE_OUTCOME) {
             PlayerUtils.broadcastMessage(TextUtils.format("{}§7 failed to kill a player while being the §cBoogeyman§7. Their time has been dropped to {}", player, setTo));
         }
+    }
+
+    @Override
+    public List<ServerPlayerEntity> getRandomBoogeyPlayers(List<ServerPlayerEntity> allowedPlayers, BoogeymanRollType rollType) {
+        List<ServerPlayerEntity> boogeyPlayers = super.getRandomBoogeyPlayers(allowedPlayers, rollType);
+        int chooseBoogeymen = getBoogeymanAmount(rollType) - boogeyPlayers.size();
+        if (chooseBoogeymen > 0) {
+            for (ServerPlayerEntity player : livesManager.getRedPlayers()) {
+                // Third loop for red boogeymen if necessary
+                if (chooseBoogeymen <= 0) break;
+                if (!allowedPlayers.contains(player)) continue;
+                if (rolledPlayers.contains(player.getUuid())) continue;
+                if (BOOGEYMAN_IGNORE.contains(player.getNameForScoreboard().toLowerCase())) continue;
+                if (BOOGEYMAN_FORCE.contains(player.getNameForScoreboard().toLowerCase())) continue;
+                if (boogeyPlayers.contains(player)) continue;
+
+                boogeyPlayers.add(player);
+                chooseBoogeymen--;
+            }
+        }
+
+        return boogeyPlayers;
+    }
+
+    @Override
+    public List<ServerPlayerEntity> getAllowedBoogeyPlayers() {
+        return livesManager.getAlivePlayers();
     }
 }

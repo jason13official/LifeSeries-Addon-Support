@@ -197,7 +197,8 @@ public class SecretLifeCommands {
         for (ServerPlayerEntity player : targets) {
             TaskManager.preAssignedTasks.put(player.getUuid(), new Task(task, taskType));
 
-            if (TaskManager.removePlayersTaskBook(player) || TaskManager.tasksChosen) {
+            boolean inSession = TaskManager.tasksChosen && !currentSession.statusFinished();
+            if (TaskManager.removePlayersTaskBook(player) || inSession) {
                 TaskManager.assignRandomTaskToPlayer(player, taskType);
                 AnimationUtils.playSecretLifeTotemAnimation(player, taskType == TaskTypes.RED);
                 if (targets.size() == 1) {

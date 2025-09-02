@@ -9,6 +9,7 @@
     "AbstractClientPlayerEntityMixin",
     "AbstractSoundInstanceMixin",
     "CameraMixin",
+    "ClientCommandSourceMixin",
     "ClientCommonNetworkHandlerMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",

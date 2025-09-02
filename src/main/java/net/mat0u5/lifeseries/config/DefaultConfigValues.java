@@ -160,6 +160,9 @@ public class DefaultConfigValues {
     public final ConfigFileEntry<Boolean> SEE_FRIENDLY_INVISIBLE_PLAYERS = new ConfigFileEntry<>(
             "see_friendly_invisible_players", false, "global", "See Friendly Invisible Players", "Controls whether players can see other invisible players on the same life color."
     );
+    public final ConfigFileEntry<Boolean> SHOW_LOGIN_COMMAND_INFO = new ConfigFileEntry<>(
+            "show_login_command_info", true, "global", "Show Command Info On Login", "Controls whether players get a message in chat showing the available commands when the login."
+    );
 
 
     /*
