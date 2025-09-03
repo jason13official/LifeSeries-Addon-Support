@@ -96,7 +96,7 @@ public class TaskManager {
         locationsConfig.deleteLocations();
     }
 
-    public static Task getRandomTask(TaskTypes type) {
+    public static Task getRandomTask(ServerPlayerEntity owner, TaskTypes type) {
         String selectedTask = "";
 
         if (easyTasks.isEmpty()) {
@@ -110,21 +110,35 @@ public class TaskManager {
             SecretLifeUsedTasks.deleteAllTasks(usedTasksConfig, hardTasks);
         }
 
+        //TODO test
         if (type == TaskTypes.EASY && !easyTasks.isEmpty()) {
-            selectedTask = easyTasks.get(rnd.nextInt(easyTasks.size()));
-            easyTasks.remove(selectedTask);
+            selectedTask = getRandomTask(owner, type, easyTasks);
+            if (!selectedTask.isEmpty()) easyTasks.remove(selectedTask);
         }
         else if (type == TaskTypes.HARD && !hardTasks.isEmpty()) {
-            selectedTask = hardTasks.get(rnd.nextInt(hardTasks.size()));
-            hardTasks.remove(selectedTask);
+            selectedTask = getRandomTask(owner, type, hardTasks);
+            if (!selectedTask.isEmpty()) hardTasks.remove(selectedTask);
         }
         else if (type == TaskTypes.RED && !redTasks.isEmpty()) {
-            selectedTask = redTasks.get(rnd.nextInt(redTasks.size()));
+            selectedTask = getRandomTask(owner, type, redTasks);
         }
+
         if (type != TaskTypes.RED && !selectedTask.isEmpty()) {
             SecretLifeUsedTasks.addUsedTask(usedTasksConfig, selectedTask);
         }
         return new Task(selectedTask, type);
+    }
+
+    public static String getRandomTask(ServerPlayerEntity owner, TaskTypes type, List<String> tasks) {
+        List<String> tasksCopy = new ArrayList<>(tasks);
+        Collections.shuffle(tasksCopy);
+        for (String taskCandidate : tasksCopy) {
+            Task testTask = new Task(taskCandidate, type);
+            if (testTask.isValid(owner)) {
+                return taskCandidate;
+            }
+        }
+        return "";
     }
 
     public static List<Task> getAllTasks(TaskTypes type) {
@@ -141,7 +155,7 @@ public class TaskManager {
 
     public static ItemStack getTaskBook(ServerPlayerEntity player, Task task) {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
-        List<RawFilteredPair<Text>> lines = task.getBookLines();
+        List<RawFilteredPair<Text>> lines = task.getBookLines(player);
         WrittenBookContentComponent bookContent = new WrittenBookContentComponent(
             RawFilteredPair.of(TextUtils.formatString("§c{}'s Secret Task", player)),
                 "Secret Keeper",
@@ -176,7 +190,7 @@ public class TaskManager {
             preAssignedTasks.remove(player.getUuid());
         }
         else {
-            task = getRandomTask(type);
+            task = getRandomTask(player, type);
         }
         ItemStack book = getTaskBook(player, task);
         if (!player.giveItemStack(book)) {

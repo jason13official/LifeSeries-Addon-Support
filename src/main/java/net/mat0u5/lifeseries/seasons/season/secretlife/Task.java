@@ -9,27 +9,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static net.mat0u5.lifeseries.Main.currentSeason;
 import static net.mat0u5.lifeseries.Main.livesManager;
 
 public class Task {
     public String rawTask;
     public TaskTypes type;
-    public static boolean anyGreenPlayers = true;
-    public static boolean anyYellowPlayers = true;
+    public boolean anyPlayers = true;
+    public boolean anyGreenPlayers = true;
+    public boolean anyYellowPlayers = true;
     public Task(String task, TaskTypes type) {
         this.rawTask = task;
         this.type = type;
     }
 
-    public static void checkPlayerColors() {
-        anyGreenPlayers = livesManager.anyGreenPlayers();
-        anyYellowPlayers = livesManager.anyYellowPlayers();
+    public void checkPlayerColors(ServerPlayerEntity owner) {
+        anyGreenPlayers = livesManager.anyGreenPlayers(owner);
+        anyYellowPlayers = livesManager.anyYellowPlayers(owner);
+        anyPlayers = livesManager.anyAlivePlayers(owner);
     }
 
-    public boolean isValid() {
+    public boolean isValid(ServerPlayerEntity owner) {
         if (rawTask == null) return false;
         if (rawTask.isEmpty()) return false;
+        checkPlayerColors(owner);
+        if (rawTask.contains("${random_player}") && !anyPlayers) return false;
         if (rawTask.contains("${green/yellow}") && !anyGreenPlayers && !anyYellowPlayers) return false;
         if (rawTask.contains("${green}") && !anyGreenPlayers) return false;
         if (rawTask.contains("${yellow}") && !anyYellowPlayers) return false;
@@ -44,20 +47,24 @@ public class Task {
     ${yellow} - Replaced with "yellow". Tasks are only available when a yellow player is alive.
     ${kill_not_permitted} - For red tasks. If its present, and the task owner kills a person, they will NOT get the 10 hearts for killing someone.
      */
-    public List<RawFilteredPair<Text>> getBookLines() {
+    public List<RawFilteredPair<Text>> getBookLines(ServerPlayerEntity owner) {
         List<RawFilteredPair<Text>> lines = new ArrayList<>();
         for (String page : rawTask.split("\\\\p")) {
-            page = formatString(page);
+            page = formatString(owner, page);
             lines.add(RawFilteredPair.of(Text.of(page)));
         }
         return lines;
     }
 
-    public String formatString(String page) {
+    public String formatString(ServerPlayerEntity owner, String page) {
+        checkPlayerColors(owner);
         if (page.contains("${random_player}")) {
             List<ServerPlayerEntity> players = livesManager.getAlivePlayers();
-            Collections.shuffle(players);
-            page = page.replaceAll("\\$\\{random_player}",players.getFirst().getNameForScoreboard());
+            players.remove(owner);
+            if (!players.isEmpty()) {
+                Collections.shuffle(players);
+                page = page.replaceAll("\\$\\{random_player}",players.getFirst().getNameForScoreboard());
+            }
         }
         if (page.contains("${green/yellow}")) {
             if (anyGreenPlayers) page = page.replaceAll("\\$\\{green/yellow}","green");

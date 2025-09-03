@@ -136,7 +136,6 @@ public class BoogeymanManager {
     }
 
     public void resetBoogeymen() {
-        if (!BOOGEYMAN_ENABLED) return;
         if (server == null) return;
         for (Boogeyman boogeyman : boogeymen) {
             ServerPlayerEntity player = PlayerUtils.getPlayer(boogeyman.uuid);
@@ -377,6 +376,9 @@ public class BoogeymanManager {
 
     public void onReload() {
         BOOGEYMAN_ENABLED = seasonConfig.BOOGEYMAN.get(seasonConfig);
+        if (!BOOGEYMAN_ENABLED) {
+            onDisabledBoogeyman();
+        }
         BOOGEYMAN_CHANCE_MULTIPLIER = seasonConfig.BOOGEYMAN_CHANCE_MULTIPLIER.get(seasonConfig);
         BOOGEYMAN_AMOUNT_MIN = seasonConfig.BOOGEYMAN_MIN_AMOUNT.get(seasonConfig);
         BOOGEYMAN_AMOUNT_MAX = seasonConfig.BOOGEYMAN_MAX_AMOUNT.get(seasonConfig);
@@ -393,6 +395,10 @@ public class BoogeymanManager {
         BOOGEYMAN_ANNOUNCE_OUTCOME = seasonConfig.BOOGEYMAN_ANNOUNCE_OUTCOME.get(seasonConfig);
         BOOGEYMAN_INFINITE = seasonConfig.BOOGEYMAN_INFINITE.get(seasonConfig);
         BOOGEYMAN_INFINITE_LAST_PICK = seasonConfig.BOOGEYMAN_INFINITE_LAST_PICK.get(seasonConfig);
+    }
+
+    public void onDisabledBoogeyman() {
+        resetBoogeymen();
     }
 
     public enum BoogeymanRollType {

@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.other.LivesManager;
 import net.mat0u5.lifeseries.seasons.other.WatcherManager;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
+import net.mat0u5.lifeseries.seasons.secretsociety.SecretSociety;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -69,6 +70,7 @@ public abstract class Season {
     public boolean SHOW_LOGIN_COMMAND_INFO = true;
 
     public BoogeymanManager boogeymanManager = createBoogeymanManager();
+    public SecretSociety secretSociety = createSecretSociety();
     public LivesManager livesManager = createLivesManager();
 
     public abstract Seasons getSeason();
@@ -82,6 +84,9 @@ public abstract class Season {
 
     public BoogeymanManager createBoogeymanManager() {
         return new BoogeymanManager();
+    }
+    public SecretSociety createSecretSociety() {
+        return new SecretSociety();
     }
 
     public LivesManager createLivesManager() {
