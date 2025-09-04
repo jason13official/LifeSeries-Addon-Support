@@ -132,6 +132,14 @@ public class SessionTranscript {
         addMessageWithTime(TextUtils.formatString("Boogeymen chosen: {}", names));
     }
 
+    public static void membersChosen(List<ServerPlayerEntity> players) {
+        List<String> names = new ArrayList<>();
+        for (ServerPlayerEntity player : players) {
+            names.add(player.getNameForScoreboard());
+        }
+        addMessageWithTime(TextUtils.formatString("Secret Society members chosen: {}", names));
+    }
+
     public static void sessionStart() {
         addMessageWithTime("-----  Session started!  -----");
     }
