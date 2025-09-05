@@ -73,9 +73,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
         , KEEP_INVENTORY
 
         , WORLDBORDER_SIZE
-        //? if >= 1.21.6 {
-        /*,LOCATOR_BAR
-         *///?}
+        , LOCATOR_BAR
         , ALLOW_SELF_DEFENSE
         , SEE_FRIENDLY_INVISIBLE_PLAYERS
         , SHOW_LOGIN_COMMAND_INFO

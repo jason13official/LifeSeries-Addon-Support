@@ -17,8 +17,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
-//? if >= 1.21.4
-/*import java.net.URI;*/
 
 public class TextUtils {
 

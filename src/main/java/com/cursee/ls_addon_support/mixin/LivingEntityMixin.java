@@ -28,13 +28,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//? if = 1.21.2 {
-/*import java.util.function.DoubleSupplier;
-import java.util.function.Predicate;
-*///?}
-//? if >= 1.21.2
-/*import net.minecraft.entity.mob.CreakingEntity;*/
-
 @Mixin(value = LivingEntity.class, priority = 1)
 public abstract class LivingEntityMixin {
 

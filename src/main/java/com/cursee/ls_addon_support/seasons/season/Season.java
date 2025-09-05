@@ -58,8 +58,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
 
 public abstract class Season {
 
@@ -127,13 +125,11 @@ public abstract class Season {
     server.getGameRules().get(GameRules.KEEP_INVENTORY)
         .set(seasonConfig.KEEP_INVENTORY.get(seasonConfig), server);
     server.getGameRules().get(GameRules.NATURAL_REGENERATION).set(!NO_HEALING, server);
-    //? if >= 1.21.6 {
-        /*boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
-        if (!locatorBarEnabled && this instanceof DoubleLife) {
-            locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
-        }
-        server.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
-        *///?}
+    boolean locatorBarEnabled = seasonConfig.LOCATOR_BAR.get(seasonConfig);
+    if (!locatorBarEnabled && this instanceof DoubleLife) {
+      locatorBarEnabled = DoubleLife.SOULMATE_LOCATOR_BAR;
+    }
+    server.getGameRules().get(GameRules.LOCATOR_BAR).set(locatorBarEnabled, server);
 
     ScoreboardObjective currentListObjective = ScoreboardUtils.getObjectiveInSlot(
         ScoreboardDisplaySlot.LIST);

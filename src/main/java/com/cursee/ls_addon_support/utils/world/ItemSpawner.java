@@ -17,7 +17,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-//? if >= 1.21.2
 import net.minecraft.loot.context.LootWorldContext;
 
 public class ItemSpawner {
