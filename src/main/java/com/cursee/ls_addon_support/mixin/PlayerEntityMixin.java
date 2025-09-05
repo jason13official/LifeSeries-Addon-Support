@@ -34,8 +34,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
 
 @Mixin(value = PlayerEntity.class, priority = 1)
 public abstract class PlayerEntityMixin {

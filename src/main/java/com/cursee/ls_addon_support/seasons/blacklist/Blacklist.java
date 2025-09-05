@@ -411,13 +411,11 @@ public class Blacklist {
           remove = false;
         }
       }
-      //? if >= 1.21.2 {
-            /*if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
-                if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
-                    remove = false;
-                }
-            }
-            *///?}
+      if (ItemStackUtils.hasCustomComponentEntry(itemStack, "FlightSuperpower")) {
+        if (SuperpowersWildcard.hasActivePower(player, Superpowers.FLIGHT)) {
+          remove = false;
+        }
+      }
       if (remove) {
         itemStack.setCount(0);
         player.getInventory().updateItems();

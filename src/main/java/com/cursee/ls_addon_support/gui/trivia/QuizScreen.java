@@ -23,11 +23,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//? if <= 1.21
-import com.mojang.blaze3d.systems.RenderSystem;
-//? if <= 1.21.5
-import net.minecraft.client.render.DiffuseLighting;
-//? if >= 1.21.6 {
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.gl.RenderPipelines;

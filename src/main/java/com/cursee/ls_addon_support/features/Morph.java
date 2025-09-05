@@ -8,8 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
-//? if >= 1.21.2
-/*import net.minecraft.entity.SpawnReason;*/
 
 public class Morph {
 

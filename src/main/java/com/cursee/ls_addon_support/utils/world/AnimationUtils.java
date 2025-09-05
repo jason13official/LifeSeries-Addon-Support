@@ -21,10 +21,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector3f;
 
-//? if >= 1.21.2 {
-/*import java.awt.Color;
- *///?}
-
 public class AnimationUtils {
 
   private static int spiralDuration = 175;

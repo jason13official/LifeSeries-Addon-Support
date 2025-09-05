@@ -51,8 +51,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >= 1.21.2
-/*import net.minecraft.server.world.ServerWorld;*/
 
 public class WildLife extends Season {
 

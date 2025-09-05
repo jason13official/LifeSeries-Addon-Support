@@ -14,11 +14,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-//?}
-//? if >= 1.21.2 {
-/*import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
-import net.minecraft.registry.RegistryKey;
-*///?}
 
 public class MobRegistry {
 

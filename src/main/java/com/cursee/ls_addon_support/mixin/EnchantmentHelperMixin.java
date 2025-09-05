@@ -30,8 +30,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >= 1.21.2
-/*import net.mat0u5.lifeseries.utils.player.PlayerUtils;*/
 
 @Mixin(value = EnchantmentHelper.class, priority = 1)
 public class EnchantmentHelperMixin {

@@ -15,6 +15,7 @@ import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.Si
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.TimeDilation;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
+import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.TimeControl;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import com.cursee.ls_addon_support.seasons.session.SessionAction;
@@ -35,8 +36,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-//? if >= 1.21.2
-/*import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;*/
 
 public class WildcardManager {
 
@@ -261,9 +260,7 @@ public class WildcardManager {
       if (!isActiveWildcard(Wildcards.MOB_SWAP)) {
         MobSwap.killMobSwapMobs();
       }
-      //? if >= 1.21.2 {
-      /*Creaking.killUnassignedMobs();
-       *///?}
+      Creaking.killUnassignedMobs();
     }
 
       if (TimeControl.changedSpeedFor > 0) {

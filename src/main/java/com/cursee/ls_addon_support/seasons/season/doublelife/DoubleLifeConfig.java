@@ -119,9 +119,7 @@ public class DoubleLifeConfig extends ConfigManager {
         , SOULBOUND_INVENTORIES
         , SOULBOUND_BOOGEYMAN
     ));
-    //? if >= 1.21.6 {
-    /*result.add(SOULMATE_LOCATOR_BAR);
-     *///?}
+    result.add(SOULMATE_LOCATOR_BAR);
     return result;
   }
 

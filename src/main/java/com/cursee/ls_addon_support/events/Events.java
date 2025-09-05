@@ -32,6 +32,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -50,8 +51,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-//? if >= 1.21.2
-/*import net.fabricmc.fabric.api.event.player.*;*/
 
 public class Events {
 
@@ -81,9 +80,7 @@ public class Events {
       return Events.onBlockAttack((ServerPlayerEntity) player, world, pos);
     });
     UseBlockCallback.EVENT.register(Events::onBlockUse);
-    //? if >= 1.21.2 {
-    /*UseItemCallback.EVENT.register(Events::onItemUse);
-     *///?}
+    UseItemCallback.EVENT.register(Events::onItemUse);
     ServerPlayConnectionEvents.JOIN.register(
         (handler, sender, server) -> onPlayerJoin(handler.getPlayer()));
     ServerPlayConnectionEvents.DISCONNECT.register(

@@ -3,6 +3,8 @@ package com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.s
 import com.cursee.ls_addon_support.dependencies.DependencyManager;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AnimalDisguise;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.AstralProjection;
+import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Creaking;
+import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Flight;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Invisibility;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Listening;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.Mimicry;
@@ -124,10 +126,8 @@ public enum Superpowers {
       if (this == NECROMANCY) {
           return new Necromancy(player);
       }
-    //? if >= 1.21.2 {
-        /*if (this == CREAKING) return new Creaking(player);
-        if (this == FLIGHT) return new Flight(player);
-        *///?}
+    if (this == CREAKING) return new Creaking(player);
+    if (this == FLIGHT) return new Flight(player);
     if (DependencyManager.voicechatLoaded()) {
         if (this == LISTENING) {
             return new Listening(player);

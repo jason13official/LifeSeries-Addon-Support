@@ -16,10 +16,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
-//? if >= 1.21.2
 import net.minecraft.util.math.ColorHelper;
 
-//? if >= 1.21.6
 import net.minecraft.client.gl.RenderPipelines;
 
 public class EffectListConfigEntry extends StringListPopupConfigEntry<RegistryEntry<StatusEffect>> {

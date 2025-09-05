@@ -20,9 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
-//? if >= 1.21.2
 import net.minecraft.enchantment.EnchantmentHelper;
-//? if >= 1.21.4
 import java.util.Optional;
 
 public class ItemStackUtils {

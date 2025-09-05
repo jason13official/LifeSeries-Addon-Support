@@ -22,11 +22,7 @@ public class LivingEntityMixin {
   }
 
   @ModifyArg(
-      //? if <= 1.21 {
-      method = "travel",
-      //?} else {
-      /*method = "travelMidAir",
-      *///?}
+      method = "travelMidAir",
       at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyMovementInput(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"),
       index = 1
   )

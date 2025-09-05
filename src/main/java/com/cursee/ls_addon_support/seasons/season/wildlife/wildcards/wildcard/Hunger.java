@@ -146,9 +146,7 @@ public class Hunger extends Wildcard {
         }
 
       stack.set(DataComponentTypes.FOOD, stack.getDefaultComponents().get(DataComponentTypes.FOOD));
-      //? if >= 1.21.2 {
-      /*stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
-       *///?}
+      stack.set(DataComponentTypes.CONSUMABLE, stack.getDefaultComponents().get(DataComponentTypes.CONSUMABLE));
 
       ComponentChanges changes = stack.getComponentChanges();
       ItemStack newItem = new ItemStack(stack.getItem(), stack.getCount());

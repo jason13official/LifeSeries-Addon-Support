@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >= 1.21.2
 import net.minecraft.component.MergedComponentMap;
 
 @Mixin(value = Item.class, priority = 1)
