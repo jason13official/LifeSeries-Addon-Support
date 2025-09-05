@@ -1,48 +1,37 @@
 {
 	"schemaVersion": 1,
-	"id": "lifeseries",
-	"version": "${version}+${minecraftVersion}",
-	"name": "Life Series",
-	"description": "A one-to-one recreation of Grian's Life Series in fabric.",
+	"id": "ls_addon_support",
+	"version": "${version}",
+	"name": "LS Addon Support",
+	"description": "A re-implementation of Mat0u5's LifeSeries, with support for new Wildcards",
 	"authors": [
-		"Mat0u5"
+		"Jason13, MicrowavedLion"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/Mat0u5/LifeSeries"
+		"homepage": "https://github.com/jason13official/LifeSeries-Addon-Support",
+		"sources": "https://github.com/jason13official/LifeSeries-Addon-Support"
 	},
-	"license": "MIT",
-	"icon": "assets/icon.png",
+	"license": "CC0-1.0",
+	"icon": "assets/ls_addon_support/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.mat0u5.lifeseries.Main"
+			"com.cursee.ls_addon_support.LSAddonSupport"
 		],
 		"client": [
-			"net.mat0u5.lifeseries.MainClient"
-		],
-		"voicechat": [
-			"net.mat0u5.lifeseries.voicechat.VoicechatMain"
+			"com.cursee.ls_addon_support.LSAddonSupportClient"
 		]
 	},
 	"mixins": [
-		"lifeseries.mixins.json",
-		{
-			"config": "lifeseries.client.mixins.json",
-			"environment": "client"
-		}
+		"ls_addon_support.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.21",
-		"minecraft": "${targetVersion}",
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.8",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"bil": ">=1.1.10",
-		"polymer-bundled": ">=0.10.0"
-	},
-	"breaks": {
-		"pastlife": "*"
+		"another-mod": "*"
 	}
 }

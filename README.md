@@ -1,1 +1,0 @@
-# LifeSeries-Addon-Support
