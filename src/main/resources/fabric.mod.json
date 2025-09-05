@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"com.cursee.ls_addon_support.LSAddonSupportClient"
+		],
+		"voicechat": [
+			"com.cursee.ls_addon_support.voicechat.VoicechatMain"
 		]
 	},
 	"mixins": [
