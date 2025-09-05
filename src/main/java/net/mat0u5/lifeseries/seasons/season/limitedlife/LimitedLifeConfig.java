@@ -56,35 +56,45 @@ public class LimitedLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Integer> TIME_DEFAULT = new ConfigFileEntry<>(
-            "time_default", 86400, ConfigTypes.SECONDS, "season.time", "Time Default", "The time with which players start, in seconds."
+            "time_default", 86400, ConfigTypes.SECONDS, "season.time",
+            "Time Default", "The time with which players start, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_YELLOW = new ConfigFileEntry<>(
-            "time_yellow", 57600, ConfigTypes.SECONDS, "season.time", "Time Yellow", "The Green-Yellow time border, in seconds."
+            "time_yellow", 57600, ConfigTypes.SECONDS, "season.time",
+            "Time Yellow", "The Green-Yellow time border, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_RED = new ConfigFileEntry<>(
-            "time_red", 28800, ConfigTypes.SECONDS, "season.time", "Time Red", "The Yellow-Red time border, in seconds."
+            "time_red", 28800, ConfigTypes.SECONDS, "season.time",
+            "Time Red", "The Yellow-Red time border, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_DEATH = new ConfigFileEntry<>(
-            "time_death", -3600, ConfigTypes.SECONDS, "season.time", "Time Death", "Time time you lose for dying, in seconds."
+            "time_death", -3600, ConfigTypes.SECONDS, "season.time",
+            "Time Death", "Time time you lose for dying, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_DEATH_BOOGEYMAN = new ConfigFileEntry<>(
-            "time_death_boogeyman", -7200, ConfigTypes.SECONDS, "season.time", "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds."
+            "time_death_boogeyman", -7200, ConfigTypes.SECONDS, "season.time",
+            "Time Death Boogeyman", "The time you lose for the Boogeyman killing you, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_KILL = new ConfigFileEntry<>(
-            "time_kill", 1800, ConfigTypes.SECONDS, "season.time", "Time Kill", "The time you gain for killing someone, in seconds."
+            "time_kill", 1800, ConfigTypes.SECONDS, "season.time",
+            "Time Kill", "The time you gain for killing someone, in seconds."
     );
     public static final ConfigFileEntry<Integer> TIME_KILL_BOOGEYMAN = new ConfigFileEntry<>(
-            "time_kill_boogeyman", 3600, ConfigTypes.SECONDS, "season.time", "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds."
+            "time_kill_boogeyman", 3600, ConfigTypes.SECONDS, "season.time",
+            "Time Kill Boogeyman", "The time you gain for killing someone while you are the boogeyman, in seconds."
     );
     public static final ConfigFileEntry<Boolean> TICK_OFFLINE_PLAYERS = new ConfigFileEntry<>(
-            "tick_offline_players", false, "season", "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
+            "tick_offline_players", false, "season",
+            "Tick Offline Players", "Controls whether even players that are offline lose time when the session is on."
     );
     public static final ConfigFileEntry<Boolean> BROADCAST_COLOR_CHANGES = new ConfigFileEntry<>(
-            "broadcast_color_changes", false, "season", "Broadcast Color Changes", "Sends a message in chat to all players when someone changes color."
+            "broadcast_color_changes", false, "season",
+            "Broadcast Color Changes", "Sends a message in chat to all players when someone changes color."
     );
 
     public static final ConfigFileEntry<Object> GROUP_TIME = new ConfigFileEntry<>(
-            "group_time", null, ConfigTypes.TEXT, "{season.time}", "Time Rewards / Punishments", ""
+            "group_time", null, ConfigTypes.TEXT, "{season.time}",
+            "Time Rewards / Punishments", ""
     );
 
     public LimitedLifeConfig() {

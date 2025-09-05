@@ -58,34 +58,43 @@ public class DoubleLifeConfig extends ConfigManager {
     );
 
     public static final ConfigFileEntry<Boolean> ANNOUNCE_SOULMATES = new ConfigFileEntry<>(
-            "announce_soulmates", false, "season", "Announce Soulmates", "Tells you who your soulmate is instead of it saying 'Your soulmate is ????'"
+            "announce_soulmates", false, "season",
+            "Announce Soulmates", "Tells you who your soulmate is instead of it saying 'Your soulmate is ????'"
     );
 
     public static final ConfigFileEntry<Boolean> SOULBOUND_FOOD = new ConfigFileEntry<>(
-            "soulbound_food", false, "season.soulbind", "Soulbound Food", "Makes your food bar shared with your soulmate, just like the health bar."
+            "soulbound_food", false, "season.soulbind",
+            "Soulbound Food", "Makes your food bar shared with your soulmate, just like the health bar."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_EFFECTS = new ConfigFileEntry<>(
-            "soulbound_effects", false, "season.soulbind", "Soulbound Effects", "Makes your effects be shared with your soulmate."
+            "soulbound_effects", false, "season.soulbind",
+            "Soulbound Effects", "Makes your effects be shared with your soulmate."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_INVENTORIES = new ConfigFileEntry<>(
-            "soulbound_inventories", false, "season.soulbind", "Soulbound Inventories", "Makes your inventory be shared with your soulmate. \nWARNING: There could be some ways of abusing this (duping etc). Use with caution."
+            "soulbound_inventories", false, "season.soulbind",
+            "Soulbound Inventories", "Makes your inventory be shared with your soulmate. \nWARNING: There could be some ways of abusing this (duping etc). Use with caution."
     );
     public static final ConfigFileEntry<Boolean> BREAKUP_LAST_PAIR_STANDING = new ConfigFileEntry<>(
-            "breakup_last_pair_standing", false, "season", "Breakup Last Pair Standing", "Once only two players are left, they will be broken up as soulmates for a final showdown."
+            "breakup_last_pair_standing", false, "season",
+            "Breakup Last Pair Standing", "Once only two players are left, they will be broken up as soulmates for a final showdown."
     );
     public static final ConfigFileEntry<Boolean> DISABLE_START_TELEPORT = new ConfigFileEntry<>(
-            "disable_start_teleport", false, "season", "Disable Start Teleport", "Disables the player spreading over the map when the first session starts."
+            "disable_start_teleport", false, "season",
+            "Disable Start Teleport", "Disables the player spreading over the map when the first session starts."
     );
     public static final ConfigFileEntry<Boolean> SOULMATE_LOCATOR_BAR = new ConfigFileEntry<>(
-            "soulbound_locator_bar", false, "season", "Soulmate Locator Bar", "Makes ONLY your soulmate appear on the locator bar."
+            "soulbound_locator_bar", false, "season",
+            "Soulmate Locator Bar", "Makes ONLY your soulmate appear on the locator bar."
     );
     public static final ConfigFileEntry<Boolean> SOULBOUND_BOOGEYMAN = new ConfigFileEntry<>(
-            "soulbound_boogeyman", false, "season.soulbind", "Soulbound Boogeyman (If enabled)", "Makes you become the Bogeyman if your soulmate is one - curing one will cure the other as well."
+            "soulbound_boogeyman", false, "season.soulbind",
+            "Soulbound Boogeyman (If enabled)", "Makes you become the Bogeyman if your soulmate is one - curing one will cure the other as well."
     );
 
 
     public static final ConfigFileEntry<Object> GROUP_SOULBIND = new ConfigFileEntry<>(
-            "group_soulbind", null, ConfigTypes.TEXT, "{season.soulbind}", "More Soulbind Options", ""
+            "group_soulbind", null, ConfigTypes.TEXT, "{season.soulbind}",
+            "More Soulbind Options", ""
     );
 
     public DoubleLifeConfig() {

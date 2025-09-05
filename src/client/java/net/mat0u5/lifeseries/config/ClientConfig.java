@@ -15,29 +15,37 @@ public class ClientConfig extends ConfigManager {
     }
 
     public static final ConfigFileEntry<Boolean> MINIMAL_ARMOR = new ConfigFileEntry<>(
-            "minimal_armor", true, "", "Minimal Armor Resourcepack", "Enables the minimal armor resourcepack."
+            "minimal_armor", true, "",
+            "Minimal Armor Resourcepack", "Enables the minimal armor resourcepack."
     );
     public static final ConfigFileEntry<Boolean> SESSION_TIMER = new ConfigFileEntry<>(
-            "session_timer", true, "", "Session Timer", "Enables the session timer in the bottom right of the screen."
+            "session_timer", true, "",
+            "Session Timer", "Enables the session timer in the bottom right of the screen."
     );
     public static final ConfigFileEntry<Boolean> SESSION_TIMER_LIMITEDLIFE = new ConfigFileEntry<>(
-            "session_timer_limitedlife", false, "", "Session Timer", "Enables the session timer in the bottom right of the screen."
+            "session_timer_limitedlife", false, "",
+            "Session Timer", "Enables the session timer in the bottom right of the screen."
     );
     public static final ConfigFileEntry<Boolean> COLORBLIND_SUPPORT = new ConfigFileEntry<>(
-            "colorblind_support", false, "", "Colorblind Support", "Enables a feature that shows the team color name next to a players' usernames."
+            "colorblind_support", false, "",
+            "Colorblind Support", "Enables a feature that shows the team color name next to a players' usernames."
     );
     public static final ConfigFileEntry<String> RUN_COMMAND = new ConfigFileEntry<>(
-            "run_command", "/lifeseries config", "", "Keybind Command", "Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions."
+            "run_command", "/lifeseries config", "",
+            "Keybind Command", "Pressing the 'Keybind Command' keybind will run this command. Only available in dev versions."
     );
 
     public static final ConfigFileEntry<Boolean> COLORED_HEARTS = new ConfigFileEntry<>(
-            "colored_hearts", false, "{coloredhearts}", "Colored Hearts Based on Lives", "Makes your hearts the same color as how many lives you have."
+            "colored_hearts", false, "{coloredhearts}",
+            "Colored Hearts Based on Lives", "Makes your hearts the same color as how many lives you have."
     );
     public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_LAST_LIFE = new ConfigFileEntry<>(
-            "colored_hearts_hardcore_last_life", true, "coloredhearts", "Show Last Life as Hardcore", "When you are on your last life, the hearts will appear as though you are in hardcore."
+            "colored_hearts_hardcore_last_life", true, "coloredhearts",
+            "Show Last Life as Hardcore", "When you are on your last life, the hearts will appear as though you are in hardcore."
     );
     public static final ConfigFileEntry<Boolean> COLORED_HEARTS_HARDCORE_ALL_LIVES = new ConfigFileEntry<>(
-            "colored_hearts_hardcore_all_lives", false, "coloredhearts", "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
+            "colored_hearts_hardcore_all_lives", false, "coloredhearts",
+            "Show All Lives as Hardcore", "Hearts will always appear as though you are in hardcore."
     );
 
     @Override

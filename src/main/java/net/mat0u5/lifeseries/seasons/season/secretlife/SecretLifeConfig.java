@@ -51,38 +51,49 @@ public class SecretLifeConfig extends ConfigManager {
 
 
     public static final ConfigFileEntry<Boolean> PLAYERS_DROP_TASK_ON_DEATH = new ConfigFileEntry<>(
-            "players_drop_task_on_death", false, "season", "Drop Task On Death", "Decides whether players drop their secret task book on death or if they keep it."
+            "players_drop_task_on_death", false, "season",
+            "Drop Task On Death", "Decides whether players drop their secret task book on death or if they keep it."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_EASY_PASS = new ConfigFileEntry<>(
-            "task_health_easy_pass", 20, ConfigTypes.HEARTS, "season.health", "Task Health Easy Pass", "The health you gain for passing an easy task."
+            "task_health_easy_pass", 20, ConfigTypes.HEARTS, "season.health",
+            "Task Health Easy Pass", "The health you gain for passing an easy task."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_EASY_FAIL = new ConfigFileEntry<>(
-            "task_health_easy_fail", 0, ConfigTypes.HEARTS, "season.health", "Task Health Easy Fail", "The health you lose for failing an easy task."
+            "task_health_easy_fail", 0, ConfigTypes.HEARTS, "season.health",
+            "Task Health Easy Fail", "The health you lose for failing an easy task."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_HARD_PASS = new ConfigFileEntry<>(
-            "task_health_hard_pass", 40, ConfigTypes.HEARTS, "season.health", "Task Health Hard Pass", "The health you gain for passing a hard task."
+            "task_health_hard_pass", 40, ConfigTypes.HEARTS, "season.health",
+            "Task Health Hard Pass", "The health you gain for passing a hard task."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_HARD_FAIL = new ConfigFileEntry<>(
-            "task_health_hard_fail", -20, ConfigTypes.HEARTS, "season.health", "Task Health Hard Fail", "The health you lose for failing a hard task."
+            "task_health_hard_fail", -20, ConfigTypes.HEARTS, "season.health",
+            "Task Health Hard Fail", "The health you lose for failing a hard task."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_RED_PASS = new ConfigFileEntry<>(
-            "task_health_red_pass", 10, ConfigTypes.HEARTS, "season.health", "Task Health Red Pass", "The health you gain for passing a red task."
+            "task_health_red_pass", 10, ConfigTypes.HEARTS, "season.health",
+            "Task Health Red Pass", "The health you gain for passing a red task."
     );
     public static final ConfigFileEntry<Integer> TASK_HEALTH_RED_FAIL = new ConfigFileEntry<>(
-            "task_health_red_fail", -5, ConfigTypes.HEARTS, "season.health", "Task Health Red Fail", "The health you lose for failing a red task."
+            "task_health_red_fail", -5, ConfigTypes.HEARTS, "season.health",
+            "Task Health Red Fail", "The health you lose for failing a red task."
     );
     public static final ConfigFileEntry<Double> ASSIGN_TASKS_MINUTE = new ConfigFileEntry<>(
-            "assign_tasks_minute", 1.0, ConfigTypes.MINUTES, "season", "Assign Tasks Time", "The number of minutes (in the session) after which the tasks get assigned."
+            "assign_tasks_minute", 1.0, ConfigTypes.MINUTES, "season",
+            "Assign Tasks Time", "The number of minutes (in the session) after which the tasks get assigned."
     );
     public static final ConfigFileEntry<Integer> MAX_PLAYER_KILL_HEALTH = new ConfigFileEntry<>(
-            "max_player_kill_health", 1000, ConfigTypes.HEARTS, "season", "Max Health After Killing", "The maximum health a player can have after killing a player (since killing gives hearts)."
+            "max_player_kill_health", 1000, ConfigTypes.HEARTS, "season",
+            "Max Health After Killing", "The maximum health a player can have after killing a player (since killing gives hearts)."
     );
     public static final ConfigFileEntry<Boolean> BROADCAST_SECRET_KEEPER = new ConfigFileEntry<>(
-            "beoadcast_secret_keeper", false, "season", "Secret Keeper Broadcast", "Makes the secret keeper broadcast a message in chat when someone succeeds, fails or rerolls a task."
+            "beoadcast_secret_keeper", false, "season",
+            "Secret Keeper Broadcast", "Makes the secret keeper broadcast a message in chat when someone succeeds, fails or rerolls a task."
     );
 
     public static final ConfigFileEntry<Object> GROUP_HEALTH = new ConfigFileEntry<>(
-            "group_health", null, ConfigTypes.TEXT, "{season.health}", "Health Rewards / Punishments", ""
+            "group_health", null, ConfigTypes.TEXT, "{season.health}",
+            "Health Rewards / Punishments", ""
     );
 
     public SecretLifeConfig() {
