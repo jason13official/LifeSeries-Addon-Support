@@ -3,6 +3,7 @@ package com.cursee.ls_addon_support.mixin;
 import com.cursee.ls_addon_support.entity.fakeplayer.FakeClientConnection;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import io.netty.channel.ChannelFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
@@ -31,28 +32,14 @@ public class ServerCommonNetworkHandlerMixin {
     }
   }
 
-  //? if <= 1.21.5 {
   @WrapOperation(
       method = "send",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V")
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
   )
-  public void send(ClientConnection instance, Packet<?> packet, PacketCallbacks callbacks,
-      boolean flush, Operation<Void> original) {
-      if (connection instanceof FakeClientConnection) {
-          return;
-      }
-    original.call(instance, packet, callbacks, flush);
+  public void send(ClientConnection instance, Packet packet, ChannelFutureListener channelFutureListener, boolean b, Operation<Void> original) {
+    if (connection instanceof FakeClientConnection) return;
+    original.call(instance, packet, channelFutureListener, b);
   }
-  //?} else {
-    /*@WrapOperation(
-            method = "send",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V")
-    )
-    public void send(ClientConnection instance, Packet packet, ChannelFutureListener channelFutureListener, boolean b, Operation<Void> original) {
-        if (connection instanceof FakeClientConnection) return;
-        original.call(instance, packet, channelFutureListener, b);
-    }
-    *///?}
 
   @Inject(method = "disconnect(Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
   public void disconnect(Text reason, CallbackInfo ci) {

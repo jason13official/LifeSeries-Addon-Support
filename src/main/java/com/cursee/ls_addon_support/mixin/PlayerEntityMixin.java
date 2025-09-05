@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.event.GameEvent;
@@ -49,10 +50,7 @@ public abstract class PlayerEntityMixin {
       Optional.of(GameEvent.BLOCK_PLACE));
 
   @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
-  //? if <=1.21 {
-  private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
-    //?} else
-    /*private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {*/
+  private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }
@@ -67,11 +65,7 @@ public abstract class PlayerEntityMixin {
   }
 
   @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-  //? if <= 1.21 {
-  private void onPreDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-    //?} else {
-    /*private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-     *///?}
+  private void onPreDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }

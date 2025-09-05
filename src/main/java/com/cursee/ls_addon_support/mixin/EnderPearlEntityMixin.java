@@ -12,19 +12,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(value = EnderPearlEntity.class, priority = 1)
 public class EnderPearlEntityMixin {
 
-  //? if <= 1.21 {
   @ModifyArg(
       method = "onCollision",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"),
-      index = 1
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;damage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)Z"),
+      index = 2
   )
-  //?} else {
-        /*@ModifyArg(
-                method = "onCollision",
-                at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;damage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)Z"),
-                index = 2
-        )
-    *///?}
   private float onTargetDamaged(float amount) {
       if (!LSAddonSupport.isLogicalSide()) {
           return amount;

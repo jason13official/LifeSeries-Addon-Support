@@ -15,6 +15,7 @@ import com.cursee.ls_addon_support.utils.player.PermissionManager;
 import com.cursee.ls_addon_support.utils.player.PlayerUtils;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.message.LastSeenMessageList;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.network.packet.c2s.play.ChatCommandSignedC2SPacket;
@@ -81,14 +82,8 @@ public class ServerPlayNetworkHandlerMixin {
     }
   }
 
-  //? if <= 1.21 {
-  @Inject(method = "requestTeleport(DDDFFLjava/util/Set;)V", at = @At("TAIL"))
-  public void requestTeleport(double x, double y, double z, float yaw, float pitch,
-      Set<PositionFlag> flags, CallbackInfo ci) {
-    //?} else {
-    /*@Inject(method = "requestTeleport(Lnet/minecraft/entity/player/PlayerPosition;Ljava/util/Set;)V", at = @At("TAIL"))
-    public void requestTeleport(PlayerPosition pos, Set<PositionFlag> flags, CallbackInfo ci) {
-    *///?}
+  @Inject(method = "requestTeleport(Lnet/minecraft/entity/player/PlayerPosition;Ljava/util/Set;)V", at = @At("TAIL"))
+  public void requestTeleport(PlayerPosition pos, Set<PositionFlag> flags, CallbackInfo ci) {
     ServerPlayNetworkHandler handler = (ServerPlayNetworkHandler) (Object) this;
     ServerPlayerEntity player = handler.getPlayer();
     if (player instanceof FakePlayer) {

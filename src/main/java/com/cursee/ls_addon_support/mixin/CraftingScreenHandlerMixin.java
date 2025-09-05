@@ -10,6 +10,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,15 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class CraftingScreenHandlerMixin {
 
   @Inject(method = "updateResult", at = @At("HEAD"), cancellable = true)
-  //? if <= 1.21 {
-  private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, World world,
-      PlayerEntity player,
-      RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory,
-      RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
-    //?} else {
-    /*private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, ServerWorld world, PlayerEntity player,
-            RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
-    *///?}
+  private static void blockPreviewIfNoCraftingItemPresent(ScreenHandler handler, ServerWorld world, PlayerEntity player,
+      RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }

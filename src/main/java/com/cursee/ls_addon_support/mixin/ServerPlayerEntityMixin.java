@@ -9,6 +9,7 @@ import com.cursee.ls_addon_support.seasons.other.WatcherManager;
 import com.cursee.ls_addon_support.seasons.season.doublelife.DoubleLife;
 import com.cursee.ls_addon_support.utils.other.TaskScheduler;
 import com.cursee.ls_addon_support.utils.player.PlayerUtils;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.UUID;
@@ -101,19 +102,11 @@ public class ServerPlayerEntityMixin {
   private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
     ls$onUpdatedEffects(effect, true);
   }
-  //?} else {
-    /*@Inject(method = "onStatusEffectsRemoved", at = @At("TAIL"))
-    private void onStatusEffectRemoved(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
-        for (StatusEffectInstance effect : effects) {
-            ls$onUpdatedEffects(effect, false);
-        }
-    }
-    *///?}
 
-  //? if <= 1.21 {
-  @Inject(method = "onStatusEffectRemoved", at = @At("TAIL"))
-  private void onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
-    ls$onUpdatedEffects(effect, false);
+  private void onStatusEffectRemoved(Collection<StatusEffectInstance> effects, CallbackInfo ci) {
+    for (StatusEffectInstance effect : effects) {
+      ls$onUpdatedEffects(effect, false);
+    }
   }
 
   @Inject(method = "onStatusEffectUpgraded", at = @At("TAIL"))

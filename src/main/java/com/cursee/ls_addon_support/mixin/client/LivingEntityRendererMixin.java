@@ -13,16 +13,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LivingEntityRenderer.class, priority = 1)
 public abstract class LivingEntityRendererMixin {
 
-  //? if <= 1.21 {
-  @Inject(method = "getShadowRadius(Lnet/minecraft/entity/LivingEntity;)F", at = @At("HEAD"), cancellable = true)
-  public <T extends LivingEntity> void stopShadow(T livingEntity,
-      CallbackInfoReturnable<Float> cir) {
-    if (livingEntity instanceof PlayerEntity player) {
-      MorphComponent morphComponent = MorphManager.getComponent(player);
-      if (morphComponent != null && morphComponent.isMorphed()) {
-        cir.setReturnValue(0.0F);
-      }
-    }
-  }
-  //?}
+//  //? if <= 1.21 {
+//  @Inject(method = "getShadowRadius(Lnet/minecraft/entity/LivingEntity;)F", at = @At("HEAD"), cancellable = true)
+//  public <T extends LivingEntity> void stopShadow(T livingEntity,
+//      CallbackInfoReturnable<Float> cir) {
+//    if (livingEntity instanceof PlayerEntity player) {
+//      MorphComponent morphComponent = MorphManager.getComponent(player);
+//      if (morphComponent != null && morphComponent.isMorphed()) {
+//        cir.setReturnValue(0.0F);
+//      }
+//    }
+//  }
+//  //?}
 }

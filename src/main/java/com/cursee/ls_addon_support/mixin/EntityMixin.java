@@ -24,11 +24,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if >= 1.21.2 {
-/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerWorld;
-*///?}
 
 @Mixin(value = Entity.class, priority = 1)
 public abstract class EntityMixin implements IEntityDataSaver, IMorph {
@@ -103,15 +102,9 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     }
   }
 
-  //? if <= 1.21 {
-  @Inject(method = "dropStack(Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
+  @Inject(method = "dropStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
       at = @At("HEAD"), cancellable = true)
-  public void dropStack(ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    //?} else {
-        /*@Inject(method = "dropStack(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;F)Lnet/minecraft/entity/ItemEntity;",
-                at = @At("HEAD"), cancellable = true)
-        public void dropStack(ServerWorld world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
-    *///?}
+  public void dropStack(ServerWorld world, ItemStack stack, float yOffset, CallbackInfoReturnable<ItemEntity> cir) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }
@@ -123,8 +116,7 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
     }
   }
 
-  //? if >= 1.21.2 {
-    /*@WrapOperation(
+  @WrapOperation(
             method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z")
     )
@@ -135,5 +127,4 @@ public abstract class EntityMixin implements IEntityDataSaver, IMorph {
             return original.call(instance);
         }
     }
-    *///?}
 }
