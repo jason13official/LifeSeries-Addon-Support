@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanCommand;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeCommands;
+import net.mat0u5.lifeseries.seasons.secretsociety.SocietyCommands;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 
@@ -33,6 +34,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(GivelifeCommand::register);
         CommandRegistrationCallback.EVENT.register(SelfMessageCommand::register);
         CommandRegistrationCallback.EVENT.register(WatcherCommand::register);
+        CommandRegistrationCallback.EVENT.register(SocietyCommands::register);
     }
 
     private static void registerEvents() {

@@ -148,6 +148,26 @@ public class DefaultConfigValues {
             "boogeyman_infinite_last_pick", 1800, ConfigTypes.SECONDS, "global.boogeyman.infinite", "Last Roll Before End Of Session", "Controls how long before the end of session the infinite boogey picking will stop, in seconds."
     );
 
+
+    public final ConfigFileEntry<Boolean> SECRET_SOCIETY = new ConfigFileEntry<>(
+            "secret_society", false, "{global.society}", "Secret Society Enabled", "Enables the Secret Society in the session."
+    );
+    public final ConfigFileEntry<Integer> SECRET_SOCIETY_MEMBER_AMOUNT = new ConfigFileEntry<>(
+            "secret_society_member_amount", 3, "global.society", "Member Amount", "The number of players that are a part of the Secret Society"
+    );
+    public final ConfigFileEntry<Double> SECRET_SOCIETY_START_TIME = new ConfigFileEntry<>(
+            "secret_society_start_time", 5.0, ConfigTypes.MINUTES, "global.society", "Society Start Time", "Controls when in the session the Society will start, in minutes."
+    );
+    public final ConfigFileEntry<String> SECRET_SOCIETY_FORCE = new ConfigFileEntry<>(
+            "secret_society_force", "[]", "global.society", "Member Force List", "A list of players that are forced to become a Member in the society."
+    );
+    public final ConfigFileEntry<String> SECRET_SOCIETY_IGNORE = new ConfigFileEntry<>(
+            "secret_society_ignore", "[]", "global.society", "Member Ignore List", "A list of players that cannot become a Member in the society."
+    );
+    public final ConfigFileEntry<String> SECRET_SOCIETY_WORDS = new ConfigFileEntry<>(
+            "secret_society_words", "[Hammer, Magnet, Throne, Gravity, Puzzle, Spiral, Pivot, Flare]", "global.society", "Random Words", "List of words that can be picked as the secret word."
+    );
+
     public final ConfigFileEntry<Boolean> WATCHERS_IN_TAB = new ConfigFileEntry<>(
             "watchers_in_tab", true, "global.watchers", "Show Watchers In Tab", "Controls whether Watchers should show up in the tab list."
     );

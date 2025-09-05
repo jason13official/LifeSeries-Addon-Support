@@ -17,7 +17,6 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class SocietyCommands {
 
-
     public static SecretSociety get() {
         return currentSeason.secretSociety;
     }
@@ -58,7 +57,7 @@ public class SocietyCommands {
     }
 
     public static int societyBegin(ServerCommandSource source, String word) {
-        if (!isAllowed()) return -1;
+        if (checkBanned(source)) return -1;
         SecretSociety society = get();
         if (society == null) return -1;
 
@@ -68,7 +67,7 @@ public class SocietyCommands {
     }
 
     public static int societyFail(ServerCommandSource source) {
-        if (!isAllowed()) return -1;
+        if (checkBanned(source)) return -1;
         SecretSociety society = get();
         if (society == null) return -1;
         ServerPlayerEntity self = source.getPlayer();
@@ -90,7 +89,7 @@ public class SocietyCommands {
     }
 
     public static int societySuccess(ServerCommandSource source) {
-        if (!isAllowed()) return -1;
+        if (checkBanned(source)) return -1;
         SecretSociety society = get();
         if (society == null) return -1;
         ServerPlayerEntity self = source.getPlayer();
@@ -112,7 +111,7 @@ public class SocietyCommands {
     }
 
     public static int initiate(ServerCommandSource source) {
-        if (!isAllowed()) return -1;
+        if (checkBanned(source)) return -1;
         SecretSociety society = get();
         if (society == null) return -1;
         ServerPlayerEntity self = source.getPlayer();

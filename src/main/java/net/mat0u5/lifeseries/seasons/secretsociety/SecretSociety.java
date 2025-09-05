@@ -25,7 +25,7 @@ public class SecretSociety {
     public int MEMBER_COUNT = 3;
     public List<String> FORCE_MEMBERS = new ArrayList<>();
     public List<String> IGNORE_MEMBERS = new ArrayList<>();
-    public List<String> POSSIBLE_WORDS = List.of("Hammer","Magnet","Throne","Gravity","Puzzle","Spiral","Pivot","Flare");
+    public List<String> POSSIBLE_WORDS = new ArrayList<>(List.of("Hammer","Magnet","Throne","Gravity","Puzzle","Spiral","Pivot","Flare"));
 
     public static final int INITIATE_MESSAGE_DELAYS = 15*20;
     public List<SocietyMember> members = new ArrayList<>();
@@ -35,10 +35,25 @@ public class SecretSociety {
     public Random rnd = new Random();
 
     public void onReload() {
-        //SOCIETY_ENABLED =
-        //START_TIME =
+        SOCIETY_ENABLED = seasonConfig.SECRET_SOCIETY.get(seasonConfig);
         if (!SOCIETY_ENABLED) {
             onDisabledSociety();
+        }
+
+        MEMBER_COUNT = seasonConfig.SECRET_SOCIETY_MEMBER_AMOUNT.get(seasonConfig);
+        START_TIME = seasonConfig.SECRET_SOCIETY_START_TIME.get(seasonConfig);
+
+        FORCE_MEMBERS.clear();
+        IGNORE_MEMBERS.clear();
+        POSSIBLE_WORDS.clear();
+        for (String name : seasonConfig.SECRET_SOCIETY_FORCE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+            if (!name.isEmpty()) FORCE_MEMBERS.add(name.toLowerCase());
+        }
+        for (String name : seasonConfig.SECRET_SOCIETY_IGNORE.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+            if (!name.isEmpty()) IGNORE_MEMBERS.add(name.toLowerCase());
+        }
+        for (String name : seasonConfig.SECRET_SOCIETY_WORDS.get(seasonConfig).replaceAll("\\[","").replaceAll("]","").replaceAll(" ","").trim().split(",")) {
+            if (!name.isEmpty()) POSSIBLE_WORDS.add(name.toLowerCase());
         }
     }
 
@@ -127,14 +142,15 @@ public class SecretSociety {
 
     public List<ServerPlayerEntity> getRandomMembers(List<ServerPlayerEntity> allowedPlayers) {
         List<ServerPlayerEntity> memberPlayers = new ArrayList<>();
+        int remainingMembers = MEMBER_COUNT;
         for (ServerPlayerEntity player : allowedPlayers) {
             if (IGNORE_MEMBERS.contains(player.getNameForScoreboard().toLowerCase())) continue;
             if (FORCE_MEMBERS.contains(player.getNameForScoreboard().toLowerCase())) {
                 memberPlayers.add(player);
+                remainingMembers--;
             }
         }
 
-        int remainingMembers = MEMBER_COUNT;
         for (ServerPlayerEntity player : allowedPlayers) {
             if (remainingMembers <= 0) break;
             if (IGNORE_MEMBERS.contains(player.getNameForScoreboard().toLowerCase())) continue;

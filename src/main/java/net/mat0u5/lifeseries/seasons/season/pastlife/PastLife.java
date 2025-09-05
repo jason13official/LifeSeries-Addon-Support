@@ -5,8 +5,8 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 
 public class PastLife extends Season {
-    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives";
-    public static final String COMMANDS_TEXT = "/claimkill, /lives";
+    public static final String COMMANDS_ADMIN_TEXT = "/lifeseries, /session, /claimkill, /lives, /boogeyman, /society, /pastlife";
+    public static final String COMMANDS_TEXT = "/claimkill, /lives, /society, /initiate";
     @Override
     public Seasons getSeason() {
         return Seasons.PAST_LIFE;

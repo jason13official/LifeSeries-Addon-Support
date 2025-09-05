@@ -51,6 +51,7 @@ public abstract class ConfigManager extends DefaultConfigValues {
 
                 ,GROUP_BLACKLIST // Group
                 ,BOOGEYMAN // Group
+                ,SECRET_SOCIETY //Group
                 ,GIVELIFE_COMMAND_ENABLED // Group
                 ,GROUP_FINAL_DEATH // Group
                 ,CUSTOM_ENCHANTER_ALGORITHM
@@ -79,6 +80,12 @@ public abstract class ConfigManager extends DefaultConfigValues {
                 ,BOOGEYMAN_ANNOUNCE_OUTCOME
                     ,BOOGEYMAN_INFINITE // Group
                 ,BOOGEYMAN_INFINITE_LAST_PICK
+
+                ,SECRET_SOCIETY_MEMBER_AMOUNT
+                ,SECRET_SOCIETY_START_TIME
+                ,SECRET_SOCIETY_WORDS
+                ,SECRET_SOCIETY_FORCE
+                ,SECRET_SOCIETY_IGNORE
 
                 ,PLAYERS_DROP_ITEMS_ON_FINAL_DEATH
                 ,FINAL_DEATH_TITLE_SHOW
