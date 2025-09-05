@@ -40,11 +40,10 @@ public class BoogeymanManager {
     public List<UUID> rolledPlayers = new ArrayList<>();
     public boolean boogeymanChosen = false;
 
-    public List<SessionAction> getSessionActions() {
-        if (!BOOGEYMAN_ENABLED) return new ArrayList<>();
-        List<SessionAction> actions = new ArrayList<>();
+    public void addSessionActions() {
+        if (!BOOGEYMAN_ENABLED) return;
         if (BOOGEYMAN_CHOOSE_MINUTE >= 5) {
-            actions.add(
+            currentSession.activeActions.add(
                 new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-5)) {
                     @Override
                     public void trigger() {
@@ -57,7 +56,7 @@ public class BoogeymanManager {
             );
         }
         if (BOOGEYMAN_CHOOSE_MINUTE >= 1) {
-            actions.add(
+            currentSession.activeActions.add(
                 new SessionAction(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE-1)) {
                     @Override
                     public void trigger() {
@@ -69,7 +68,7 @@ public class BoogeymanManager {
                 }
             );
         }
-        actions.add(
+        currentSession.activeActions.add(
                 new SessionAction(
                         OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE),TextUtils.formatString("§7Choose Boogeymen §f[{}]", OtherUtils.formatTime(OtherUtils.minutesToTicks(BOOGEYMAN_CHOOSE_MINUTE))), "Choose Boogeymen"
                 ) {
@@ -81,7 +80,6 @@ public class BoogeymanManager {
                     }
                 }
         );
-        return actions;
     }
 
     public boolean isBoogeyman(ServerPlayerEntity player) {

@@ -255,7 +255,8 @@ public abstract class Season {
 
     public boolean sessionStart() {
         boogeymanManager.resetBoogeymen();
-        currentSession.activeActions.addAll(boogeymanManager.getSessionActions());
+        boogeymanManager.addSessionActions();
+        secretSociety.addSessionActions();
         return true;
     }
 
