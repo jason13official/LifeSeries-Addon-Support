@@ -1,8 +1,6 @@
-package net.mat0u5.lifeseries.command;
+package net.mat0u5.lifeseries.seasons.boogeyman;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.mat0u5.lifeseries.seasons.boogeyman.Boogeyman;
-import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.other.TextUtils;
 import net.minecraft.command.CommandRegistryAccess;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.mat0u5.lifeseries.Main.currentSeason;
-import static net.mat0u5.lifeseries.Main.livesManager;
 import static net.mat0u5.lifeseries.utils.player.PermissionManager.isAdmin;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;

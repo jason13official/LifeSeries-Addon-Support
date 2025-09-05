@@ -150,6 +150,7 @@ public abstract class Season {
         SHOW_LOGIN_COMMAND_INFO = seasonConfig.SHOW_LOGIN_COMMAND_INFO.get(seasonConfig);
 
         boogeymanManager.onReload();
+        secretSociety.onReload();
         createTeams();
         createScoreboards();
         updateStuff();

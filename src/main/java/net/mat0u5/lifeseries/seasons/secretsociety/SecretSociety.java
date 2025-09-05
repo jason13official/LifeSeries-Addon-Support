@@ -67,6 +67,7 @@ public class SecretSociety {
         }
 
         societyStarted = true;
+        SessionTranscript.societyStarted();
         ticks = 0;
         resetMembers();
         chooseMembers(PlayerUtils.getAllFunctioningPlayers());
@@ -104,7 +105,7 @@ public class SecretSociety {
         }
 
         memberPlayers.forEach(this::addMember);
-        SessionTranscript.membersChosen(memberPlayers);
+        SessionTranscript.societyMembersChosen(memberPlayers);
 
         PlayerUtils.playSoundToPlayers(nonMemberPlayers, SoundEvent.of(Identifier.of("minecraft","secretlife_task")));
         PlayerUtils.playSoundToPlayers(memberPlayers, SoundEvent.of(Identifier.of("minecraft","secretlife_task")));
@@ -167,6 +168,7 @@ public class SecretSociety {
         if (member.initialized) return;
         member.initialized = true;
         afterInitialize(player);
+        SessionTranscript.societyMemberInitialized(player);
     }
 
     public void afterInitialize(ServerPlayerEntity player) {
@@ -242,5 +244,17 @@ public class SecretSociety {
 
     public void onDisabledSociety() {
         endSociety();
+    }
+
+    public void endSuccess() {
+        societyStarted = false;
+        SessionTranscript.societyEnded();
+        //TODO
+    }
+
+    public void endFail() {
+        societyStarted = false;
+        SessionTranscript.societyEnded();
+        //TODO
     }
 }

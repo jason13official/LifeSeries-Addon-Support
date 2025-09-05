@@ -27,6 +27,30 @@ import static net.mat0u5.lifeseries.Main.currentSession;
 public class SessionTranscript {
     public static final List<String> messages = new ArrayList<>();
 
+    public static void societyEndSuccess(ServerPlayerEntity player) {
+        addMessageWithTime(TextUtils.formatString("{} has marked the Secret Society as successful.", player));
+    }
+    public static void societyEndFail(ServerPlayerEntity player) {
+        addMessageWithTime(TextUtils.formatString("{} has marked the Secret Society as failed.", player));
+    }
+    public static void societyMemberInitialized(ServerPlayerEntity player) {
+        addMessageWithTime(TextUtils.formatString("{} has been initialized into the Secret Society.", player));
+    }
+
+    public static void societyMembersChosen(List<ServerPlayerEntity> players) {
+        List<String> names = new ArrayList<>();
+        for (ServerPlayerEntity player : players) {
+            names.add(player.getNameForScoreboard());
+        }
+        addMessageWithTime(TextUtils.formatString("Secret Society members chosen: {}", names));
+    }
+    public static void societyStarted() {
+        addMessageWithTime(TextUtils.formatString("The Secret Society has started."));
+    }
+    public static void societyEnded() {
+        addMessageWithTime(TextUtils.formatString("The Secret Society has ended."));
+    }
+
     public static void logHealth(ServerPlayerEntity player, double health) {
         addMessageWithTime(TextUtils.formatString("{} is now on {} health.", player, health));
     }
@@ -130,14 +154,6 @@ public class SessionTranscript {
             names.add(player.getNameForScoreboard());
         }
         addMessageWithTime(TextUtils.formatString("Boogeymen chosen: {}", names));
-    }
-
-    public static void membersChosen(List<ServerPlayerEntity> players) {
-        List<String> names = new ArrayList<>();
-        for (ServerPlayerEntity player : players) {
-            names.add(player.getNameForScoreboard());
-        }
-        addMessageWithTime(TextUtils.formatString("Secret Society members chosen: {}", names));
     }
 
     public static void sessionStart() {
