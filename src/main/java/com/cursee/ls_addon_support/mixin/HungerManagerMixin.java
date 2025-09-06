@@ -55,11 +55,7 @@ public class HungerManagerMixin implements IHungerManager {
   }
 
   @Inject(method = "update", at = @At("HEAD"))
-  //? if <= 1.21 {
-  private void updateHead(PlayerEntity player, CallbackInfo ci) {
-    //?} else {
-    /*private void updateHead(ServerPlayerEntity player, CallbackInfo ci) {
-     *///?}
+  private void updateHead(ServerPlayerEntity player, CallbackInfo ci) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }
@@ -71,11 +67,7 @@ public class HungerManagerMixin implements IHungerManager {
   }
 
   @Inject(method = "update", at = @At("TAIL"))
-  //? if <= 1.21 {
-  private void updateTail(PlayerEntity player, CallbackInfo ci) {
-    //?} else {
-    /*private void updateTail(ServerPlayerEntity player, CallbackInfo ci) {
-     *///?}
+  private void updateTail(ServerPlayerEntity player, CallbackInfo ci) {
       if (!LSAddonSupport.isLogicalSide()) {
           return;
       }
