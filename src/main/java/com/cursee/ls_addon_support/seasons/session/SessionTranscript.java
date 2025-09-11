@@ -6,7 +6,6 @@ import static com.cursee.ls_addon_support.LSAddonSupport.currentSession;
 import com.cursee.ls_addon_support.LSAddonSupport;
 import com.cursee.ls_addon_support.seasons.season.secretlife.SecretLife;
 import com.cursee.ls_addon_support.seasons.season.secretlife.Task;
-import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.Wildcards;
 import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import com.cursee.ls_addon_support.utils.other.OtherUtils;
 import com.cursee.ls_addon_support.utils.other.TextUtils;
@@ -87,11 +86,11 @@ public class SessionTranscript {
     addMessageWithTime("[Wildcard] Mobs have been swapped.");
   }
 
-  public static void deactivateWildcard(Wildcards type) {
+  public static void deactivateWildcard(String type) {
     addMessageWithTime(TextUtils.formatString("Deactivated Wildcard: {}", type));
   }
 
-  public static void activateWildcard(Wildcards type) {
+  public static void activateWildcard(String type) {
     addMessageWithTime(TextUtils.formatString("Activated Wildcard: {}", type));
   }
 

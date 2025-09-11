@@ -13,5 +13,5 @@ public interface IClientHelper {
 
   Seasons getCurrentSeason();
 
-  List<Wildcards> getActiveWildcards();
+  List<String> getActiveWildcards();
 }

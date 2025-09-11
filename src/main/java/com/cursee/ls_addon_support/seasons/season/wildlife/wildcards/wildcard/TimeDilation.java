@@ -97,7 +97,7 @@ public class TimeDilation extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.TIME_DILATION;
   }
 

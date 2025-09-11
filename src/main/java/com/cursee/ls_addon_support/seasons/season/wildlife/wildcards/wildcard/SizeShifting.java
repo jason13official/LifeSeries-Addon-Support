@@ -113,7 +113,7 @@ public class SizeShifting extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.SIZE_SHIFTING;
   }
 

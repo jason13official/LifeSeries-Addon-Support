@@ -148,7 +148,7 @@ public class Snails extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.SNAILS;
   }
 

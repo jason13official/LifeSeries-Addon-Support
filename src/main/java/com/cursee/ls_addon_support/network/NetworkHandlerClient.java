@@ -144,7 +144,7 @@ public class NetworkHandlerClient {
     }
 
     if (name == PacketNames.ACTIVE_WILDCARDS) {
-      List<Wildcards> newList = new ArrayList<>();
+      List<String> newList = new ArrayList<>();
       for (String wildcardStr : value.split("__")) {
         newList.add(Wildcards.getFromString(wildcardStr));
       }

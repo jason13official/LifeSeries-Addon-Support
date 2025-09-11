@@ -182,8 +182,8 @@ public class NetworkHandlerServer {
     }
     if (PermissionManager.isAdmin(player)) {
       if (name == PacketNames.SELECTED_WILDCARD) {
-        Wildcards wildcard = Wildcards.getFromString(value);
-        if (wildcard != null && wildcard != Wildcards.NULL) {
+        String wildcard = Wildcards.getFromString(value);
+        if (wildcard != null && !wildcard.equals(Wildcards.NULL)) {
           WildcardManager.chosenWildcard(wildcard);
         }
       }
@@ -367,8 +367,8 @@ public class NetworkHandlerServer {
       sendNumberPacket(player, PacketNames.PLAYER_MIN_MSPT, TimeDilation.MIN_PLAYER_MSPT);
 
       List<String> activeWildcards = new ArrayList<>();
-      for (Wildcards wildcard : WildcardManager.activeWildcards.keySet()) {
-        activeWildcards.add(wildcard.getStringName());
+      for (String wildcard : WildcardManager.activeWildcards.keySet()) {
+        activeWildcards.add(wildcard.toLowerCase());
       }
       sendStringPacket(player, PacketNames.ACTIVE_WILDCARDS, String.join("__", activeWildcards));
     }

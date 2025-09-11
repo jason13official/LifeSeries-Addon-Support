@@ -479,8 +479,8 @@ public class WildLifeCommands {
       OtherUtils.sendCommandFeedback(source, Text.of("Deactivated all wildcards"));
       return 1;
     }
-    Wildcards wildcard = Wildcards.getFromString(wildcardName);
-    if (wildcard == Wildcards.NULL) {
+    String wildcard = Wildcards.getFromString(wildcardName);
+    if (wildcard.equals(Wildcards.NULL)) {
       source.sendError(Text.of("That Wildcard doesn't exist"));
       return -1;
     }
@@ -503,12 +503,12 @@ public class WildLifeCommands {
           return -1;
       }
     if (wildcardName.equalsIgnoreCase("*")) {
-      List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
-      for (Wildcards wildcard : inactiveWildcards) {
-          if (wildcard == Wildcards.CALLBACK) {
+      List<String> inactiveWildcards = Wildcards.getInactiveWildcards();
+      for (String wildcard : inactiveWildcards) {
+          if (wildcard.equals(Wildcards.CALLBACK)) {
               continue;
           }
-        Wildcard wildcardInstance = wildcard.getInstance();
+        Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
           if (wildcardInstance == null) {
               continue;
           }
@@ -530,8 +530,8 @@ public class WildLifeCommands {
       OtherUtils.sendCommandFeedback(source, Text.of("Activated all wildcards (Except Callback)"));
       return 1;
     }
-    Wildcards wildcard = Wildcards.getFromString(wildcardName);
-    if (wildcard == Wildcards.NULL) {
+    String wildcard = Wildcards.getFromString(wildcardName);
+    if (wildcard.equals(Wildcards.NULL)) {
       source.sendError(Text.of("That Wildcard doesn't exist"));
       return -1;
     }
@@ -539,7 +539,7 @@ public class WildLifeCommands {
       source.sendError(Text.of("That Wildcard is already active"));
       return -1;
     }
-    Wildcard actualWildcard = wildcard.getInstance();
+    Wildcard actualWildcard = Wildcards.getInstance(wildcard);
     if (actualWildcard == null) {
       source.sendError(Text.of("That Wildcard has not been implemented yet"));
       return -1;

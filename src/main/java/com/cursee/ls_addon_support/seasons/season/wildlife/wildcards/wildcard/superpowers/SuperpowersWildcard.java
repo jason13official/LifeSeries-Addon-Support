@@ -204,7 +204,7 @@ public class SuperpowersWildcard extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.SUPERPOWERS;
   }
 

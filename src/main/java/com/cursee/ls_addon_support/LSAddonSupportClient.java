@@ -27,7 +27,7 @@ public class LSAddonSupportClient implements ClientModInitializer, IClientHelper
 
   public static Seasons clientCurrentSeason = LSAddonSupport.DEFAULT_SEASON;
   public static SessionStatus clientSessionStatus = SessionStatus.NOT_STARTED;
-  public static List<Wildcards> clientActiveWildcards = new ArrayList<>();
+  public static List<String> clientActiveWildcards = new ArrayList<>();
   public static long TIME_DILATION_TIMESTAMP = 0;
   public static long SUPERPOWER_COOLDOWN_TIMESTAMP = 0;
   public static long MIMICRY_COOLDOWN_TIMESTAMP = 0;
@@ -169,7 +169,7 @@ public class LSAddonSupportClient implements ClientModInitializer, IClientHelper
   }
 
   @Override
-  public List<Wildcards> getActiveWildcards() {
+  public List<String> getActiveWildcards() {
     return clientActiveWildcards;
   }
 }

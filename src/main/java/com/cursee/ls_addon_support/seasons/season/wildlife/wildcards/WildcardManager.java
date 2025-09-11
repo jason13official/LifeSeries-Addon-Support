@@ -39,11 +39,11 @@ import net.minecraft.util.Formatting;
 
 public class WildcardManager {
 
-  public static final Map<Wildcards, Wildcard> activeWildcards = new HashMap<>();
+  public static final Map<String, Wildcard> activeWildcards = new HashMap<>();
   public static final Random rnd = new Random();
   private static final List<String> allColorCodes = List.of("6", "9", "a", "b", "c", "d", "e");
   public static double ACTIVATE_WILDCARD_MINUTE = 2.5;
-  public static Wildcards chosenWildcard = null;
+  public static String chosenWildcard = null;
 
   public static List<SessionAction> getActions() {
     List<SessionAction> result = new ArrayList<>();
@@ -84,7 +84,7 @@ public class WildcardManager {
     return null;
   }
 
-  public static void chosenWildcard(Wildcards wildcard) {
+  public static void chosenWildcard(String wildcard) {
     PlayerUtils.broadcastMessageToAdmins(
         TextUtils.format("The {} wildcard has been selected for this session.", wildcard));
     PlayerUtils.broadcastMessageToAdmins(
@@ -94,31 +94,14 @@ public class WildcardManager {
 
   public static void chooseRandomWildcard() {
     if (chosenWildcard != null) {
-      activeWildcards.put(chosenWildcard, chosenWildcard.getInstance());
+      activeWildcards.put(chosenWildcard, Wildcards.getInstance(chosenWildcard));
       return;
     }
-    int index = rnd.nextInt(7);
-      if (index == 0) {
-          activeWildcards.put(Wildcards.SIZE_SHIFTING, new SizeShifting());
-      }
-      if (index == 1) {
-          activeWildcards.put(Wildcards.HUNGER, new Hunger());
-      }
-      if (index == 2) {
-          activeWildcards.put(Wildcards.TIME_DILATION, new TimeDilation());
-      }
-      if (index == 3) {
-          activeWildcards.put(Wildcards.SNAILS, new Snails());
-      }
-      if (index == 4) {
-          activeWildcards.put(Wildcards.MOB_SWAP, new MobSwap());
-      }
-      if (index == 5) {
-          activeWildcards.put(Wildcards.TRIVIA, new TriviaWildcard());
-      }
-      if (index == 6) {
-          activeWildcards.put(Wildcards.SUPERPOWERS, new SuperpowersWildcard());
-      }
+    List<String> availableWildcards = Wildcards.getWildcards();
+    if (!availableWildcards.isEmpty()) {
+      String randomWildcard = availableWildcards.get(rnd.nextInt(availableWildcards.size()));
+      activeWildcards.put(randomWildcard, Wildcards.getInstance(randomWildcard));
+    }
   }
 
   public static void onPlayerJoin(ServerPlayerEntity player) {
@@ -319,7 +302,7 @@ public class WildcardManager {
     chosenWildcard = null;
   }
 
-  public static boolean isActiveWildcard(Wildcards wildcard) {
+  public static boolean isActiveWildcard(String wildcard) {
     return activeWildcards.containsKey(wildcard);
   }
 

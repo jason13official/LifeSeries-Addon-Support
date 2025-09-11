@@ -11,99 +11,82 @@ import com.cursee.ls_addon_support.seasons.season.wildlife.wildcards.wildcard.tr
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Wildcards {
-  NULL,
-  SIZE_SHIFTING,
-  HUNGER,
-  SNAILS,
-  TIME_DILATION,
-  TRIVIA,
-  MOB_SWAP,
-  SUPERPOWERS,
-  CALLBACK;
+public class Wildcards {
+  public static final String NULL = "NULL";
+  public static final String SIZE_SHIFTING = "SIZE_SHIFTING";
+  public static final String HUNGER = "HUNGER";
+  public static final String SNAILS = "SNAILS";
+  public static final String TIME_DILATION = "TIME_DILATION";
+  public static final String TRIVIA = "TRIVIA";
+  public static final String MOB_SWAP = "MOB_SWAP";
+  public static final String SUPERPOWERS = "SUPERPOWERS";
+  public static final String CALLBACK = "CALLBACK";
 
-
-  public static Wildcards getFromString(String wildcard) {
-    try {
-      return Enum.valueOf(Wildcards.class, wildcard.toUpperCase());
-    } catch (Exception e) {
-    }
-    return Wildcards.NULL;
+  static {
+    registerBuiltInWildcards();
   }
 
-  public static List<Wildcards> getWildcards() {
-    List<Wildcards> wildcards = new ArrayList<>(List.of(Wildcards.values()));
-    wildcards.remove(Wildcards.NULL);
+  private static void registerBuiltInWildcards() {
+    WildcardRegistry.register(SIZE_SHIFTING, SizeShifting::new);
+    WildcardRegistry.register(HUNGER, Hunger::new);
+    WildcardRegistry.register(SNAILS, Snails::new);
+    WildcardRegistry.register(TIME_DILATION, TimeDilation::new);
+    WildcardRegistry.register(TRIVIA, TriviaWildcard::new);
+    WildcardRegistry.register(MOB_SWAP, MobSwap::new);
+    WildcardRegistry.register(SUPERPOWERS, SuperpowersWildcard::new);
+    WildcardRegistry.register(CALLBACK, Callback::new);
+  }
+
+
+  public static String getFromString(String wildcard) {
+    if (WildcardRegistry.isRegistered(wildcard)) {
+      return wildcard.toUpperCase();
+    }
+    return NULL;
+  }
+
+  public static List<String> getWildcards() {
+    List<String> wildcards = new ArrayList<>(WildcardRegistry.getAllWildcardIds());
+    wildcards.remove(NULL);
     return wildcards;
   }
 
   public static List<String> getWildcardsStr() {
     List<String> result = new ArrayList<>();
-    for (Wildcards wildcard : getWildcards()) {
-      String name = wildcard.getStringName();
-      result.add(name);
+    for (String wildcard : getWildcards()) {
+      result.add(wildcard.toLowerCase());
     }
     return result;
   }
 
-  public static List<Wildcards> getActiveWildcards() {
+  public static List<String> getActiveWildcards() {
     return new ArrayList<>(WildcardManager.activeWildcards.keySet());
   }
 
-  public static List<Wildcards> getInactiveWildcards() {
-    List<Wildcards> result = new ArrayList<>(getWildcards());
+  public static List<String> getInactiveWildcards() {
+    List<String> result = new ArrayList<>(getWildcards());
     result.removeAll(getActiveWildcards());
     return result;
   }
 
   public static List<String> getInactiveWildcardsStr() {
     List<String> result = new ArrayList<>();
-    for (Wildcards wildcard : getInactiveWildcards()) {
-      String name = wildcard.getStringName();
-      result.add(name);
+    for (String wildcard : getInactiveWildcards()) {
+      result.add(wildcard.toLowerCase());
     }
     return result;
   }
 
   public static List<String> getActiveWildcardsStr() {
     List<String> result = new ArrayList<>();
-    for (Wildcards wildcard : getActiveWildcards()) {
-      String name = wildcard.getStringName();
-      result.add(name);
+    for (String wildcard : getActiveWildcards()) {
+      result.add(wildcard.toLowerCase());
     }
     return result;
   }
 
-  public Wildcard getInstance() {
-      if (this == SIZE_SHIFTING) {
-          return new SizeShifting();
-      }
-      if (this == HUNGER) {
-          return new Hunger();
-      }
-      if (this == SNAILS) {
-          return new Snails();
-      }
-      if (this == TIME_DILATION) {
-          return new TimeDilation();
-      }
-      if (this == TRIVIA) {
-          return new TriviaWildcard();
-      }
-      if (this == MOB_SWAP) {
-          return new MobSwap();
-      }
-      if (this == SUPERPOWERS) {
-          return new SuperpowersWildcard();
-      }
-      if (this == CALLBACK) {
-          return new Callback();
-      }
-    return null;
-  }
-
-  public String getStringName() {
-    return this.toString().toLowerCase();
+  public static Wildcard getInstance(String wildcardId) {
+    return WildcardRegistry.createInstance(wildcardId);
   }
 
 }

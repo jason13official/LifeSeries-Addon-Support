@@ -321,7 +321,7 @@ public class MobSwap extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.MOB_SWAP;
   }
 

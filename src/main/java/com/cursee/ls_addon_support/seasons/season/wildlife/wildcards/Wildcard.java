@@ -10,7 +10,7 @@ public abstract class Wildcard {
 
   public boolean active = false;
 
-  public abstract Wildcards getType();
+  public abstract String getId();
 
   public void activate() {
     WildLife season = getSeason();
@@ -18,8 +18,8 @@ public abstract class Wildcard {
           return;
       }
     active = true;
-    LSAddonSupport.LOGGER.info("[WildLife] Activated Wildcard: {}", getType());
-    SessionTranscript.activateWildcard(getType());
+    LSAddonSupport.LOGGER.info("[WildLife] Activated Wildcard: {}", getId());
+    SessionTranscript.activateWildcard(getId());
   }
 
   public void deactivate() {
@@ -28,8 +28,8 @@ public abstract class Wildcard {
           return;
       }
     active = false;
-    LSAddonSupport.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getType());
-    SessionTranscript.deactivateWildcard(getType());
+    LSAddonSupport.LOGGER.info("[WildLife] Dectivated Wildcard: {}", getId());
+    SessionTranscript.deactivateWildcard(getId());
   }
 
   public void tickSessionOn() {

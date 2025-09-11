@@ -24,18 +24,18 @@ public class Callback extends Wildcard {
   public static double TURN_OFF = 0.75; // When all wildcards stop
   public static boolean allWildcardsPhaseReached = false;
   private static int activatedAt = -1;
-  private static List<Wildcards> blacklistedWildcards = List.of(Wildcards.HUNGER);
+  private static List<String> blacklistedWildcards = List.of(Wildcards.HUNGER);
   private int nextActivationTick = -1;
   private int nextDeactivationTick = -1;
   private boolean preAllWildcardsPhaseReached = false;
-  private Wildcards lastActivatedWildcard;
+  private String lastActivatedWildcard;
 
   public static void setBlacklist(String blacklist) {
     blacklistedWildcards = new ArrayList<>();
     String[] wildcards = blacklist.replace("[", "").replace("]", "").split(",");
     for (String wildcardName : wildcards) {
-      Wildcards wildcard = Wildcards.getFromString(wildcardName.trim());
-        if (wildcard == null || wildcard == Wildcards.NULL) {
+      String wildcard = Wildcards.getFromString(wildcardName.trim());
+        if (wildcard == null || wildcard.equals(Wildcards.NULL)) {
             continue;
         }
       blacklistedWildcards.add(wildcard);
@@ -43,7 +43,7 @@ public class Callback extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.CALLBACK;
   }
 
@@ -190,15 +190,15 @@ public class Callback extends Wildcard {
   }
 
   public void activateAllWildcards() {
-    List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
-    for (Wildcards wildcard : inactiveWildcards) {
-        if (wildcard == Wildcards.CALLBACK) {
+    List<String> inactiveWildcards = Wildcards.getInactiveWildcards();
+    for (String wildcard : inactiveWildcards) {
+        if (wildcard.equals(Wildcards.CALLBACK)) {
             continue;
         }
         if (blacklistedWildcards.contains(wildcard)) {
             continue;
         }
-      Wildcard wildcardInstance = wildcard.getInstance();
+      Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
         if (wildcardInstance == null) {
             continue;
         }
@@ -221,7 +221,7 @@ public class Callback extends Wildcard {
 
   public void deactivateAllWildcards() {
     for (Wildcard wildcard : WildcardManager.activeWildcards.values()) {
-        if (wildcard.getType() == Wildcards.CALLBACK) {
+        if (wildcard.getId().equals(Wildcards.CALLBACK)) {
             continue;
         }
       wildcard.deactivate();
@@ -234,11 +234,11 @@ public class Callback extends Wildcard {
   }
 
   public void activateRandomWildcard() {
-    Wildcards wildcard = getRandomInactiveWildcard();
+    String wildcard = getRandomInactiveWildcard();
       if (wildcard == null) {
           return;
       }
-    Wildcard wildcardInstance = wildcard.getInstance();
+    Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
       if (wildcardInstance == null) {
           return;
       }
@@ -248,7 +248,7 @@ public class Callback extends Wildcard {
   }
 
   public void deactivateRandomWildcard() {
-    Wildcards wildcard = getRandomActiveWildcard();
+    String wildcard = getRandomActiveWildcard();
       if (wildcard == null) {
           return;
       }
@@ -262,8 +262,8 @@ public class Callback extends Wildcard {
     NetworkHandlerServer.sendUpdatePackets();
   }
 
-  public Wildcards getRandomInactiveWildcard() {
-    List<Wildcards> inactiveWildcards = Wildcards.getInactiveWildcards();
+  public String getRandomInactiveWildcard() {
+    List<String> inactiveWildcards = Wildcards.getInactiveWildcards();
     inactiveWildcards.remove(Wildcards.CALLBACK);
     inactiveWildcards.removeIf(blacklistedWildcards::contains);
       if (inactiveWildcards.isEmpty()) {
@@ -272,8 +272,8 @@ public class Callback extends Wildcard {
     return inactiveWildcards.get(rnd.nextInt(inactiveWildcards.size()));
   }
 
-  public Wildcards getRandomActiveWildcard() {
-    List<Wildcards> activeWildcards = Wildcards.getActiveWildcards();
+  public String getRandomActiveWildcard() {
+    List<String> activeWildcards = Wildcards.getActiveWildcards();
     activeWildcards.remove(Wildcards.CALLBACK);
     activeWildcards.removeIf(blacklistedWildcards::contains);
       if (activeWildcards.isEmpty()) {
@@ -288,11 +288,11 @@ public class Callback extends Wildcard {
     return activeWildcards.get(rnd.nextInt(activeWildcards.size()));
   }
 
-  public void softActivateWildcard(Wildcards wildcard) {
+  public void softActivateWildcard(String wildcard) {
       if (WildcardManager.isActiveWildcard(wildcard)) {
           return;
       }
-    Wildcard wildcardInstance = wildcard.getInstance();
+    Wildcard wildcardInstance = Wildcards.getInstance(wildcard);
       if (wildcardInstance == null) {
           return;
       }

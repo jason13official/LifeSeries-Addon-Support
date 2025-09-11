@@ -245,7 +245,7 @@ public class Hunger extends Wildcard {
   }
 
   @Override
-  public Wildcards getType() {
+  public String getId() {
     return Wildcards.HUNGER;
   }
 
